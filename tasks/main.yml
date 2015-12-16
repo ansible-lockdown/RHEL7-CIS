@@ -1,0 +1,28 @@
+---
+# tasks file for RHEL7-CIS
+- include: section1.yml
+  when: rhel7cis_section1
+
+- include: section2.yml
+  when: rhel7cis_section2
+
+- include: section3.yml
+  when: rhel7cis_section3
+
+- include: section4.yml
+  when: rhel7cis_section4
+
+- include: section5.yml
+  when: rhel7cis_section5
+
+- include: section6.yml
+  when: rhel7cis_section6
+
+- include: section7.yml
+  when: rhel7cis_section7
+
+- include: section8.yml
+  when: rhel7cis_section8
+
+- include: section9.yml
+  when: rhel7cis_section9

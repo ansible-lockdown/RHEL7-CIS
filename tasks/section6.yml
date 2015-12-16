@@ -1,0 +1,620 @@
+- name: "SCORED | 6.1.1 | AUDIT | Enable anacron Daemon"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.1.1
+
+- name: "SCORED | 6.1.1 | PATCH | Enable anacron Daemon"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.1
+
+- name: "SCORED | 6.1.2 | AUDIT | Enable crond Daemon"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.1.2
+
+- name: "SCORED | 6.1.2 | PATCH | Enable crond Daemon"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.2
+
+- name: "SCORED | 6.1.3 | AUDIT | Set User/Group Owner and Permission on /etc/anacrontab"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.1.3
+
+- name: "SCORED | 6.1.3 | PATCH | Set User/Group Owner and Permission on /etc/anacrontab"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.3
+
+- name: "SCORED | 6.1.4 | AUDIT | Set User/Group Owner and Permission on /etc/crontab"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.1.4
+
+- name: "SCORED | 6.1.4 | PATCH | Set User/Group Owner and Permission on /etc/crontab"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.4
+
+- name: "SCORED | 6.1.5 | AUDIT | Set User/Group Owner and Permission on /etc/cron.hourly"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.1.5
+
+- name: "SCORED | 6.1.5 | PATCH | Set User/Group Owner and Permission on /etc/cron.hourly"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.5
+
+- name: "SCORED | 6.1.6 | AUDIT | Set User/Group Owner and Permission on /etc/cron.daily"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.1.6
+
+- name: "SCORED | 6.1.6 | PATCH | Set User/Group Owner and Permission on /etc/cron.daily"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.6
+
+- name: "SCORED | 6.1.7 | AUDIT | Set User/Group Owner and Permission on /etc/cron.weekly"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.1.7
+
+- name: "SCORED | 6.1.7 | PATCH | Set User/Group Owner and Permission on /etc/cron.weekly"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.7
+
+- name: "SCORED | 6.1.8 | AUDIT | Set User/Group Owner and Permission on /etc/cron.monthly"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.1.8
+
+- name: "SCORED | 6.1.8 | PATCH | Set User/Group Owner and Permission on /etc/cron.monthly"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.8
+
+- name: "SCORED | 6.1.9 | AUDIT | Set User/Group Owner and Permission on /etc/cron.d"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.1.9
+
+- name: "SCORED | 6.1.9 | PATCH | Set User/Group Owner and Permission on /etc/cron.d"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.9
+
+- name: "SCORED | 6.1.10 | AUDIT | Restrict at Daemon"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.1.10
+
+- name: "SCORED | 6.1.10 | PATCH | Restrict at Daemon"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.10
+
+- name: "SCORED | 6.1.11 | AUDIT | Restrict at/cron to Authorized Users"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.1.11
+
+- name: "SCORED | 6.1.11 | PATCH | Restrict at/cron to Authorized Users"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.11
+
+- name: "SCORED | 6.2.1 | AUDIT | Set SSH Protocol to 2"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.2.1
+
+- name: "SCORED | 6.2.1 | PATCH | Set SSH Protocol to 2"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.1
+
+- name: "SCORED | 6.2.2 | AUDIT | Set LogLevel to INFO"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.2.2
+
+- name: "SCORED | 6.2.2 | PATCH | Set LogLevel to INFO"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.2
+
+- name: "SCORED | 6.2.3 | AUDIT | Set Permissions on /etc/ssh/sshd_config"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.2.3
+
+- name: "SCORED | 6.2.3 | PATCH | Set Permissions on /etc/ssh/sshd_config"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.3
+
+- name: "SCORED | 6.2.4 | AUDIT | Disable SSH X11 Forwarding"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.2.4
+
+- name: "SCORED | 6.2.4 | PATCH | Disable SSH X11 Forwarding"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.4
+
+- name: "SCORED | 6.2.5 | AUDIT | Set SSH MaxAuthTries to 4 or Less"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.2.5
+
+- name: "SCORED | 6.2.5 | PATCH | Set SSH MaxAuthTries to 4 or Less"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.5
+
+- name: "SCORED | 6.2.6 | AUDIT | Set SSH IgnoreRhosts to Yes"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.2.6
+
+- name: "SCORED | 6.2.6 | PATCH | Set SSH IgnoreRhosts to Yes"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.6
+
+- name: "SCORED | 6.2.7 | AUDIT | Set SSH HostbasedAuthentication to No"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.2.7
+
+- name: "SCORED | 6.2.7 | PATCH | Set SSH HostbasedAuthentication to No"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.7
+
+- name: "SCORED | 6.2.8 | AUDIT | Disable SSH Root Login"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.2.8
+
+- name: "SCORED | 6.2.8 | PATCH | Disable SSH Root Login"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.8
+
+- name: "SCORED | 6.2.9 | AUDIT | Set SSH PermitEmptyPasswords to No"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.2.9
+
+- name: "SCORED | 6.2.9 | PATCH | Set SSH PermitEmptyPasswords to No"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.9
+
+- name: "SCORED | 6.2.10 | AUDIT | Do Not Allow Users to Set Environment Options"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.2.10
+
+- name: "SCORED | 6.2.10 | PATCH | Do Not Allow Users to Set Environment Options"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.10
+
+- name: "SCORED | 6.2.11 | AUDIT | Use Only Approved Cipher in Counter Mode"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.2.11
+
+- name: "SCORED | 6.2.11 | PATCH | Use Only Approved Cipher in Counter Mode"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.11
+
+- name: "SCORED | 6.2.12 | AUDIT | Set Idle Timeout Interval for User Login"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.2.12
+
+- name: "SCORED | 6.2.12 | PATCH | Set Idle Timeout Interval for User Login"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.12
+
+- name: "SCORED | 6.2.13 | AUDIT | Limit Access via SSH"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.2.13
+
+- name: "SCORED | 6.2.13 | PATCH | Limit Access via SSH"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.13
+
+- name: "SCORED | 6.2.14 | AUDIT | Set SSH Banner"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.2.14
+
+- name: "SCORED | 6.2.14 | PATCH | Set SSH Banner"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.14
+
+- name: "SCORED | 6.3.1 | AUDIT | Upgrade Password Hashing Algorithm to SHA-512"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.3.1
+
+- name: "SCORED | 6.3.1 | PATCH | Upgrade Password Hashing Algorithm to SHA-512"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.3.1
+
+- name: "SCORED | 6.3.2 | AUDIT | Set Password Creation Requirement Parameters Using pam_pwquality"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.3.2
+
+- name: "SCORED | 6.3.2 | PATCH | Set Password Creation Requirement Parameters Using pam_pwquality"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.3.2
+
+- name: "NOTSCORED | 6.3.3 | AUDIT | Set Lockout for Failed Password Attempts"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.3.3
+
+- name: "NOTSCORED | 6.3.3 | PATCH | Set Lockout for Failed Password Attempts"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.3.3
+
+- name: "SCORED | 6.3.4 | AUDIT | Limit Password Reuse"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.3.4
+
+- name: "SCORED | 6.3.4 | PATCH | Limit Password Reuse"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.3.4
+
+- name: "NOTSCORED | 6.4 | AUDIT | Restrict root Login to System Console"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.4
+
+- name: "NOTSCORED | 6.4 | PATCH | Restrict root Login to System Console"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.4
+
+- name: "SCORED | 6.5 | AUDIT | Restrict Access to the su Command"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.5
+
+- name: "SCORED | 6.5 | PATCH | Restrict Access to the su Command"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.5
+

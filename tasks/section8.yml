@@ -1,0 +1,60 @@
+- name: "SCORED | 8.1 | AUDIT | Set Warning Banner for Standard Login Services"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_8.1
+
+- name: "SCORED | 8.1 | PATCH | Set Warning Banner for Standard Login Services"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_8.1
+
+- name: "SCORED | 8.2 | AUDIT | Remove OS Information from Login Warning Banners"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_8.2
+
+- name: "SCORED | 8.2 | PATCH | Remove OS Information from Login Warning Banners"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_8.2
+
+- name: "NOTSCORED | 8.3 | AUDIT | Set GNOME Warning Banner"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_8.3
+
+- name: "NOTSCORED | 8.3 | PATCH | Set GNOME Warning Banner"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_8.3
+

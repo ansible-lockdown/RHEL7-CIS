@@ -1,0 +1,320 @@
+- name: "SCORED | 3.1 | AUDIT | Set Daemon umask"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_3.1
+
+- name: "SCORED | 3.1 | PATCH | Set Daemon umask"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_3.1
+
+- name: "SCORED | 3.2 | AUDIT | Remove the X Window System"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_3.2
+
+- name: "SCORED | 3.2 | PATCH | Remove the X Window System"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_3.2
+
+- name: "SCORED | 3.3 | AUDIT | Disable Avahi Server"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_3.3
+
+- name: "SCORED | 3.3 | PATCH | Disable Avahi Server"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_3.3
+
+- name: "NOTSCORED | 3.4 | AUDIT | Disable Print Server - CUPS"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_3.4
+
+- name: "NOTSCORED | 3.4 | PATCH | Disable Print Server - CUPS"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_3.4
+
+- name: "SCORED | 3.5 | AUDIT | Remove DHCP Server"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_3.5
+
+- name: "SCORED | 3.5 | PATCH | Remove DHCP Server"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_3.5
+
+- name: "SCORED | 3.6 | AUDIT | Configure Network Time Protocol (NTP)"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_3.6
+
+- name: "SCORED | 3.6 | PATCH | Configure Network Time Protocol (NTP)"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_3.6
+
+- name: "NOTSCORED | 3.7 | AUDIT | Remove LDAP"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_3.7
+
+- name: "NOTSCORED | 3.7 | PATCH | Remove LDAP"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_3.7
+
+- name: "NOTSCORED | 3.8 | AUDIT | Disable NFS and RPC"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_3.8
+
+- name: "NOTSCORED | 3.8 | PATCH | Disable NFS and RPC"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_3.8
+
+- name: "NOTSCORED | 3.9 | AUDIT | Remove DNS Server"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_3.9
+
+- name: "NOTSCORED | 3.9 | PATCH | Remove DNS Server"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_3.9
+
+- name: "NOTSCORED | 3.10 | AUDIT | Remove FTP Server"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_3.10
+
+- name: "NOTSCORED | 3.10 | PATCH | Remove FTP Server"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_3.10
+
+- name: "NOTSCORED | 3.11 | AUDIT | Remove HTTP Server"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_3.11
+
+- name: "NOTSCORED | 3.11 | PATCH | Remove HTTP Server"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_3.11
+
+- name: "NOTSCORED | 3.12 | AUDIT | Remove Dovecot (IMAP and POP3 services)"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_3.12
+
+- name: "NOTSCORED | 3.12 | PATCH | Remove Dovecot (IMAP and POP3 services)"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_3.12
+
+- name: "NOTSCORED | 3.13 | AUDIT | Remove Samba"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_3.13
+
+- name: "NOTSCORED | 3.13 | PATCH | Remove Samba"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_3.13
+
+- name: "NOTSCORED | 3.14 | AUDIT | Remove HTTP Proxy Server"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_3.14
+
+- name: "NOTSCORED | 3.14 | PATCH | Remove HTTP Proxy Server"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_3.14
+
+- name: "NOTSCORED | 3.15 | AUDIT | Remove SNMP Server"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_3.15
+
+- name: "NOTSCORED | 3.15 | PATCH | Remove SNMP Server"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_3.15
+
+- name: "SCORED | 3.16 | AUDIT | Configure Mail Transfer Agent for Local-Only Mode"
+  command: true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_3.16
+
+- name: "SCORED | 3.16 | PATCH | Configure Mail Transfer Agent for Local-Only Mode"
+  command: true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_3.16
+
