@@ -1,5 +1,5 @@
 - name: "NOTSCORED | 9.1.1 | AUDIT | Verify System File Permissions"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -10,14 +10,14 @@
       - rule_9.1.1
 
 - name: "NOTSCORED | 9.1.1 | PATCH | Verify System File Permissions"
-  command: true
+  command: /bin/true
   tags:
       - level2
       - patch
       - rule_9.1.1
 
 - name: "SCORED | 9.1.2 | AUDIT | Verify Permissions on /etc/passwd"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -29,7 +29,7 @@
       - rule_9.1.2
 
 - name: "SCORED | 9.1.2 | PATCH | Verify Permissions on /etc/passwd"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -37,7 +37,7 @@
       - rule_9.1.2
 
 - name: "SCORED | 9.1.3 | AUDIT | Verify Permissions on /etc/shadow"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -49,7 +49,7 @@
       - rule_9.1.3
 
 - name: "SCORED | 9.1.3 | PATCH | Verify Permissions on /etc/shadow"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -57,7 +57,7 @@
       - rule_9.1.3
 
 - name: "SCORED | 9.1.4 | AUDIT | Verify Permissions on /etc/gshadow"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -69,7 +69,7 @@
       - rule_9.1.4
 
 - name: "SCORED | 9.1.4 | PATCH | Verify Permissions on /etc/gshadow"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -77,7 +77,7 @@
       - rule_9.1.4
 
 - name: "SCORED | 9.1.5 | AUDIT | Verify Permissions on /etc/group"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -89,7 +89,7 @@
       - rule_9.1.5
 
 - name: "SCORED | 9.1.5 | PATCH | Verify Permissions on /etc/group"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -97,7 +97,7 @@
       - rule_9.1.5
 
 - name: "SCORED | 9.1.6 | AUDIT | Verify User/Group Ownership on /etc/passwd"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -109,7 +109,7 @@
       - rule_9.1.6
 
 - name: "SCORED | 9.1.6 | PATCH | Verify User/Group Ownership on /etc/passwd"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -117,7 +117,7 @@
       - rule_9.1.6
 
 - name: "SCORED | 9.1.7 | AUDIT | Verify User/Group Ownership on /etc/shadow"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -129,7 +129,7 @@
       - rule_9.1.7
 
 - name: "SCORED | 9.1.7 | PATCH | Verify User/Group Ownership on /etc/shadow"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -137,7 +137,7 @@
       - rule_9.1.7
 
 - name: "SCORED | 9.1.8 | AUDIT | Verify User/Group Ownership on /etc/gshadow"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -149,7 +149,7 @@
       - rule_9.1.8
 
 - name: "SCORED | 9.1.8 | PATCH | Verify User/Group Ownership on /etc/gshadow"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -157,7 +157,7 @@
       - rule_9.1.8
 
 - name: "SCORED | 9.1.9 | AUDIT | Verify User/Group Ownership on /etc/group"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -169,7 +169,7 @@
       - rule_9.1.9
 
 - name: "SCORED | 9.1.9 | PATCH | Verify User/Group Ownership on /etc/group"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -177,7 +177,7 @@
       - rule_9.1.9
 
 - name: "NOTSCORED | 9.1.10 | AUDIT | Find World Writable Files"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -189,7 +189,7 @@
       - rule_9.1.10
 
 - name: "NOTSCORED | 9.1.10 | PATCH | Find World Writable Files"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -197,7 +197,7 @@
       - rule_9.1.10
 
 - name: "SCORED | 9.1.11 | AUDIT | Find Un-owned Files and Directories"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -209,7 +209,7 @@
       - rule_9.1.11
 
 - name: "SCORED | 9.1.11 | PATCH | Find Un-owned Files and Directories"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -217,7 +217,7 @@
       - rule_9.1.11
 
 - name: "SCORED | 9.1.12 | AUDIT | Find Un-grouped Files and Directories"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -229,7 +229,7 @@
       - rule_9.1.12
 
 - name: "SCORED | 9.1.12 | PATCH | Find Un-grouped Files and Directories"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -237,7 +237,7 @@
       - rule_9.1.12
 
 - name: "NOTSCORED | 9.1.13 | AUDIT | Find SUID System Executables"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -249,7 +249,7 @@
       - rule_9.1.13
 
 - name: "NOTSCORED | 9.1.13 | PATCH | Find SUID System Executables"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -257,7 +257,7 @@
       - rule_9.1.13
 
 - name: "NOTSCORED | 9.1.14 | AUDIT | Find SGID System Executables"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -269,7 +269,7 @@
       - rule_9.1.14
 
 - name: "NOTSCORED | 9.1.14 | PATCH | Find SGID System Executables"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -277,7 +277,7 @@
       - rule_9.1.14
 
 - name: "SCORED | 9.2.1 | AUDIT | Ensure Password Fields are Not Empty"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -289,15 +289,15 @@
       - rule_9.2.1
 
 - name: "SCORED | 9.2.1 | PATCH | Ensure Password Fields are Not Empty"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_9.2.1
 
-- name: "SCORED | 9.2.2 | AUDIT | Verify No Legacy "+" Entries Exist in /etc/passwd File"
-  command: true
+- name: "SCORED | 9.2.2 | AUDIT | Verify No Legacy '+' Entries Exist in /etc/passwd File"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -308,16 +308,16 @@
       - audit
       - rule_9.2.2
 
-- name: "SCORED | 9.2.2 | PATCH | Verify No Legacy "+" Entries Exist in /etc/passwd File"
-  command: true
+- name: "SCORED | 9.2.2 | PATCH | Verify No Legacy '+' Entries Exist in /etc/passwd File"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_9.2.2
 
-- name: "SCORED | 9.2.3 | AUDIT | Verify No Legacy "+" Entries Exist in /etc/shadow File"
-  command: true
+- name: "SCORED | 9.2.3 | AUDIT | Verify No Legacy '+' Entries Exist in /etc/shadow File"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -328,16 +328,16 @@
       - audit
       - rule_9.2.3
 
-- name: "SCORED | 9.2.3 | PATCH | Verify No Legacy "+" Entries Exist in /etc/shadow File"
-  command: true
+- name: "SCORED | 9.2.3 | PATCH | Verify No Legacy '+' Entries Exist in /etc/shadow File"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_9.2.3
 
-- name: "SCORED | 9.2.4 | AUDIT | Verify No Legacy "+" Entries Exist in /etc/group File"
-  command: true
+- name: "SCORED | 9.2.4 | AUDIT | Verify No Legacy '+' Entries Exist in /etc/group File"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -348,8 +348,8 @@
       - audit
       - rule_9.2.4
 
-- name: "SCORED | 9.2.4 | PATCH | Verify No Legacy "+" Entries Exist in /etc/group File"
-  command: true
+- name: "SCORED | 9.2.4 | PATCH | Verify No Legacy '+' Entries Exist in /etc/group File"
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -357,7 +357,7 @@
       - rule_9.2.4
 
 - name: "SCORED | 9.2.5 | AUDIT | Verify No UID 0 Accounts Exist Other Than root"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -369,7 +369,7 @@
       - rule_9.2.5
 
 - name: "SCORED | 9.2.5 | PATCH | Verify No UID 0 Accounts Exist Other Than root"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -377,7 +377,7 @@
       - rule_9.2.5
 
 - name: "SCORED | 9.2.6 | AUDIT | Ensure root PATH Integrity"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -389,7 +389,7 @@
       - rule_9.2.6
 
 - name: "SCORED | 9.2.6 | PATCH | Ensure root PATH Integrity"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -397,7 +397,7 @@
       - rule_9.2.6
 
 - name: "SCORED | 9.2.7 | AUDIT | Check Permissions on User Home Directories"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -409,7 +409,7 @@
       - rule_9.2.7
 
 - name: "SCORED | 9.2.7 | PATCH | Check Permissions on User Home Directories"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -417,7 +417,7 @@
       - rule_9.2.7
 
 - name: "SCORED | 9.2.8 | AUDIT | Check User Dot File Permissions"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -429,7 +429,7 @@
       - rule_9.2.8
 
 - name: "SCORED | 9.2.8 | PATCH | Check User Dot File Permissions"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -437,7 +437,7 @@
       - rule_9.2.8
 
 - name: "SCORED | 9.2.9 | AUDIT | Check Permissions on User .netrc Files"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -449,7 +449,7 @@
       - rule_9.2.9
 
 - name: "SCORED | 9.2.9 | PATCH | Check Permissions on User .netrc Files"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -457,7 +457,7 @@
       - rule_9.2.9
 
 - name: "SCORED | 9.2.10 | AUDIT | Check for Presence of User .rhosts Files"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -469,7 +469,7 @@
       - rule_9.2.10
 
 - name: "SCORED | 9.2.10 | PATCH | Check for Presence of User .rhosts Files"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -477,7 +477,7 @@
       - rule_9.2.10
 
 - name: "SCORED | 9.2.11 | AUDIT | Check Groups in /etc/passwd"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -489,7 +489,7 @@
       - rule_9.2.11
 
 - name: "SCORED | 9.2.11 | PATCH | Check Groups in /etc/passwd"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -497,7 +497,7 @@
       - rule_9.2.11
 
 - name: "SCORED | 9.2.12 | AUDIT | Check That Users Are Assigned Valid Home Directories"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -509,7 +509,7 @@
       - rule_9.2.12
 
 - name: "SCORED | 9.2.12 | PATCH | Check That Users Are Assigned Valid Home Directories"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -517,7 +517,7 @@
       - rule_9.2.12
 
 - name: "SCORED | 9.2.13 | AUDIT | Check User Home Directory Ownership"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -529,7 +529,7 @@
       - rule_9.2.13
 
 - name: "SCORED | 9.2.13 | PATCH | Check User Home Directory Ownership"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -537,7 +537,7 @@
       - rule_9.2.13
 
 - name: "SCORED | 9.2.14 | AUDIT | Check for Duplicate UIDs"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -549,7 +549,7 @@
       - rule_9.2.14
 
 - name: "SCORED | 9.2.14 | PATCH | Check for Duplicate UIDs"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -557,7 +557,7 @@
       - rule_9.2.14
 
 - name: "SCORED | 9.2.15 | AUDIT | Check for Duplicate GIDs"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -569,7 +569,7 @@
       - rule_9.2.15
 
 - name: "SCORED | 9.2.15 | PATCH | Check for Duplicate GIDs"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -577,7 +577,7 @@
       - rule_9.2.15
 
 - name: "SCORED | 9.2.16 | AUDIT | Check That Reserved UIDs Are Assigned to System Accounts"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -589,7 +589,7 @@
       - rule_9.2.16
 
 - name: "SCORED | 9.2.16 | PATCH | Check That Reserved UIDs Are Assigned to System Accounts"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -597,7 +597,7 @@
       - rule_9.2.16
 
 - name: "SCORED | 9.2.17 | AUDIT | Check for Duplicate User Names"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -609,7 +609,7 @@
       - rule_9.2.17
 
 - name: "SCORED | 9.2.17 | PATCH | Check for Duplicate User Names"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -617,7 +617,7 @@
       - rule_9.2.17
 
 - name: "SCORED | 9.2.18 | AUDIT | Check for Duplicate Group Names"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -629,7 +629,7 @@
       - rule_9.2.18
 
 - name: "SCORED | 9.2.18 | PATCH | Check for Duplicate Group Names"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -637,7 +637,7 @@
       - rule_9.2.18
 
 - name: "SCORED | 9.2.19 | AUDIT | Check for Presence of User .netrc Files"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -649,7 +649,7 @@
       - rule_9.2.19
 
 - name: "SCORED | 9.2.19 | PATCH | Check for Presence of User .netrc Files"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -657,7 +657,7 @@
       - rule_9.2.19
 
 - name: "SCORED | 9.2.20 | AUDIT | Check for Presence of User .forward Files"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -669,7 +669,7 @@
       - rule_9.2.20
 
 - name: "SCORED | 9.2.20 | PATCH | Check for Presence of User .forward Files"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2

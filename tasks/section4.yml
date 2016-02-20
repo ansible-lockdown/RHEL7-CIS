@@ -1,5 +1,5 @@
 - name: "SCORED | 4.1.1 | AUDIT | Disable IP Forwarding"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -11,7 +11,7 @@
       - rule_4.1.1
 
 - name: "SCORED | 4.1.1 | PATCH | Disable IP Forwarding"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -19,7 +19,7 @@
       - rule_4.1.1
 
 - name: "SCORED | 4.1.2 | AUDIT | Disable Send Packet Redirects"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -31,7 +31,7 @@
       - rule_4.1.2
 
 - name: "SCORED | 4.1.2 | PATCH | Disable Send Packet Redirects"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -39,7 +39,7 @@
       - rule_4.1.2
 
 - name: "SCORED | 4.2.1 | AUDIT | Disable Source Routed Packet Acceptance"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -51,7 +51,7 @@
       - rule_4.2.1
 
 - name: "SCORED | 4.2.1 | PATCH | Disable Source Routed Packet Acceptance"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -59,7 +59,7 @@
       - rule_4.2.1
 
 - name: "SCORED | 4.2.2 | AUDIT | Disable ICMP Redirect Acceptance"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -71,7 +71,7 @@
       - rule_4.2.2
 
 - name: "SCORED | 4.2.2 | PATCH | Disable ICMP Redirect Acceptance"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -79,7 +79,7 @@
       - rule_4.2.2
 
 - name: "SCORED | 4.2.3 | AUDIT | Disable Secure ICMP Redirect Acceptance"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -90,14 +90,14 @@
       - rule_4.2.3
 
 - name: "SCORED | 4.2.3 | PATCH | Disable Secure ICMP Redirect Acceptance"
-  command: true
+  command: /bin/true
   tags:
       - level2
       - patch
       - rule_4.2.3
 
 - name: "SCORED | 4.2.4 | AUDIT | Log Suspicious Packets"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -109,7 +109,7 @@
       - rule_4.2.4
 
 - name: "SCORED | 4.2.4 | PATCH | Log Suspicious Packets"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -117,7 +117,7 @@
       - rule_4.2.4
 
 - name: "SCORED | 4.2.5 | AUDIT | Enable Ignore Broadcast Requests"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -129,7 +129,7 @@
       - rule_4.2.5
 
 - name: "SCORED | 4.2.5 | PATCH | Enable Ignore Broadcast Requests"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -137,7 +137,7 @@
       - rule_4.2.5
 
 - name: "SCORED | 4.2.6 | AUDIT | Enable Bad Error Message Protection"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -149,7 +149,7 @@
       - rule_4.2.6
 
 - name: "SCORED | 4.2.6 | PATCH | Enable Bad Error Message Protection"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -157,7 +157,7 @@
       - rule_4.2.6
 
 - name: "SCORED | 4.2.7 | AUDIT | Enable RFC-recommended Source Route Validation"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -168,14 +168,14 @@
       - rule_4.2.7
 
 - name: "SCORED | 4.2.7 | PATCH | Enable RFC-recommended Source Route Validation"
-  command: true
+  command: /bin/true
   tags:
       - level2
       - patch
       - rule_4.2.7
 
 - name: "SCORED | 4.2.8 | AUDIT | Enable TCP SYN Cookies"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -187,7 +187,7 @@
       - rule_4.2.8
 
 - name: "SCORED | 4.2.8 | PATCH | Enable TCP SYN Cookies"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -195,7 +195,7 @@
       - rule_4.2.8
 
 - name: "NOTSCORED | 4.3.1 | AUDIT | Deactivate Wireless Interfaces"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -207,7 +207,7 @@
       - rule_4.3.1
 
 - name: "NOTSCORED | 4.3.1 | PATCH | Deactivate Wireless Interfaces"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -215,7 +215,7 @@
       - rule_4.3.1
 
 - name: "NOTSCORED | 4.4.1.1 | AUDIT | Disable IPv6 Router Advertisements"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -227,7 +227,7 @@
       - rule_4.4.1.1
 
 - name: "NOTSCORED | 4.4.1.1 | PATCH | Disable IPv6 Router Advertisements"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -235,7 +235,7 @@
       - rule_4.4.1.1
 
 - name: "NOTSCORED | 4.4.1.2 | AUDIT | Disable IPv6 Redirect Acceptance"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -247,7 +247,7 @@
       - rule_4.4.1.2
 
 - name: "NOTSCORED | 4.4.1.2 | PATCH | Disable IPv6 Redirect Acceptance"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -255,7 +255,7 @@
       - rule_4.4.1.2
 
 - name: "NOTSCORED | 4.4.2 | AUDIT | Disable IPv6"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -267,7 +267,7 @@
       - rule_4.4.2
 
 - name: "NOTSCORED | 4.4.2 | PATCH | Disable IPv6"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -275,7 +275,7 @@
       - rule_4.4.2
 
 - name: "NOTSCORED | 4.5.1 | AUDIT | Install TCP Wrappers"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -287,7 +287,7 @@
       - rule_4.5.1
 
 - name: "NOTSCORED | 4.5.1 | PATCH | Install TCP Wrappers"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -295,7 +295,7 @@
       - rule_4.5.1
 
 - name: "NOTSCORED | 4.5.2 | AUDIT | Create /etc/hosts.allow"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -307,7 +307,7 @@
       - rule_4.5.2
 
 - name: "NOTSCORED | 4.5.2 | PATCH | Create /etc/hosts.allow"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -315,7 +315,7 @@
       - rule_4.5.2
 
 - name: "SCORED | 4.5.3 | AUDIT | Verify Permissions on /etc/hosts.allow"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -327,7 +327,7 @@
       - rule_4.5.3
 
 - name: "SCORED | 4.5.3 | PATCH | Verify Permissions on /etc/hosts.allow"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -335,7 +335,7 @@
       - rule_4.5.3
 
 - name: "NOTSCORED | 4.5.4 | AUDIT | Create /etc/hosts.deny"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -347,7 +347,7 @@
       - rule_4.5.4
 
 - name: "NOTSCORED | 4.5.4 | PATCH | Create /etc/hosts.deny"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -355,7 +355,7 @@
       - rule_4.5.4
 
 - name: "SCORED | 4.5.5 | AUDIT | Verify Permissions on /etc/hosts.deny"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -367,7 +367,7 @@
       - rule_4.5.5
 
 - name: "SCORED | 4.5.5 | PATCH | Verify Permissions on /etc/hosts.deny"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -375,7 +375,7 @@
       - rule_4.5.5
 
 - name: "NOTSCORED | 4.6.1 | AUDIT | Disable DCCP"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -387,7 +387,7 @@
       - rule_4.6.1
 
 - name: "NOTSCORED | 4.6.1 | PATCH | Disable DCCP"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -395,7 +395,7 @@
       - rule_4.6.1
 
 - name: "NOTSCORED | 4.6.2 | AUDIT | Disable SCTP"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -407,7 +407,7 @@
       - rule_4.6.2
 
 - name: "NOTSCORED | 4.6.2 | PATCH | Disable SCTP"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -415,7 +415,7 @@
       - rule_4.6.2
 
 - name: "NOTSCORED | 4.6.3 | AUDIT | Disable RDS"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -427,7 +427,7 @@
       - rule_4.6.3
 
 - name: "NOTSCORED | 4.6.3 | PATCH | Disable RDS"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -435,7 +435,7 @@
       - rule_4.6.3
 
 - name: "NOTSCORED | 4.6.4 | AUDIT | Disable TIPC"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -447,7 +447,7 @@
       - rule_4.6.4
 
 - name: "NOTSCORED | 4.6.4 | PATCH | Disable TIPC"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -455,7 +455,7 @@
       - rule_4.6.4
 
 - name: "SCORED | 4.7 | AUDIT | Enable firewalld"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -467,7 +467,7 @@
       - rule_4.7
 
 - name: "SCORED | 4.7 | PATCH | Enable firewalld"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2

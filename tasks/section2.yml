@@ -1,5 +1,5 @@
 - name: "SCORED | 2.1.1 | AUDIT | Remove telnet-server"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -11,7 +11,7 @@
       - rule_2.1.1
 
 - name: "SCORED | 2.1.1 | PATCH | Remove telnet-server"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -19,7 +19,7 @@
       - rule_2.1.1
 
 - name: "SCORED | 2.1.2 | AUDIT | Remove telnet Clients"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -31,7 +31,7 @@
       - rule_2.1.2
 
 - name: "SCORED | 2.1.2 | PATCH | Remove telnet Clients"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -39,7 +39,7 @@
       - rule_2.1.2
 
 - name: "SCORED | 2.1.3 | AUDIT | Remove rsh-server"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -51,7 +51,7 @@
       - rule_2.1.3
 
 - name: "SCORED | 2.1.3 | PATCH | Remove rsh-server"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -59,7 +59,7 @@
       - rule_2.1.3
 
 - name: "SCORED | 2.1.4 | AUDIT | Remove rsh"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -71,7 +71,7 @@
       - rule_2.1.4
 
 - name: "SCORED | 2.1.4 | PATCH | Remove rsh"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -79,7 +79,7 @@
       - rule_2.1.4
 
 - name: "SCORED | 2.1.5 | AUDIT | Remove NIS Client"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -91,7 +91,7 @@
       - rule_2.1.5
 
 - name: "SCORED | 2.1.5 | PATCH | Remove NIS Client"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -99,7 +99,7 @@
       - rule_2.1.5
 
 - name: "SCORED | 2.1.6 | AUDIT | Remove NIS Server"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -111,7 +111,7 @@
       - rule_2.1.6
 
 - name: "SCORED | 2.1.6 | PATCH | Remove NIS Server"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -119,7 +119,7 @@
       - rule_2.1.6
 
 - name: "SCORED | 2.1.7 | AUDIT | Remove tftp"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -131,7 +131,7 @@
       - rule_2.1.7
 
 - name: "SCORED | 2.1.7 | PATCH | Remove tftp"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -139,7 +139,7 @@
       - rule_2.1.7
 
 - name: "SCORED | 2.1.8 | AUDIT | Remove tftp-server"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -151,7 +151,7 @@
       - rule_2.1.8
 
 - name: "SCORED | 2.1.8 | PATCH | Remove tftp-server"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -159,7 +159,7 @@
       - rule_2.1.8
 
 - name: "SCORED | 2.1.9 | AUDIT | Remove talk"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -171,7 +171,7 @@
       - rule_2.1.9
 
 - name: "SCORED | 2.1.9 | PATCH | Remove talk"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -179,7 +179,7 @@
       - rule_2.1.9
 
 - name: "SCORED | 2.1.10 | AUDIT | Remove talk-server"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -191,7 +191,7 @@
       - rule_2.1.10
 
 - name: "SCORED | 2.1.10 | PATCH | Remove talk-server"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -199,7 +199,7 @@
       - rule_2.1.10
 
 - name: "SCORED | 2.1.11 | AUDIT | Remove xinetd"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -210,14 +210,14 @@
       - rule_2.1.11
 
 - name: "SCORED | 2.1.11 | PATCH | Remove xinetd"
-  command: true
+  command: /bin/true
   tags:
       - level2
       - patch
       - rule_2.1.11
 
 - name: "SCORED | 2.1.12 | AUDIT | Disable chargen-dgram"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -229,7 +229,7 @@
       - rule_2.1.12
 
 - name: "SCORED | 2.1.12 | PATCH | Disable chargen-dgram"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -237,7 +237,7 @@
       - rule_2.1.12
 
 - name: "SCORED | 2.1.13 | AUDIT | Disable chargen-stream"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -249,7 +249,7 @@
       - rule_2.1.13
 
 - name: "SCORED | 2.1.13 | PATCH | Disable chargen-stream"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -257,7 +257,7 @@
       - rule_2.1.13
 
 - name: "SCORED | 2.1.14 | AUDIT | Disable daytime-dgram"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -269,7 +269,7 @@
       - rule_2.1.14
 
 - name: "SCORED | 2.1.14 | PATCH | Disable daytime-dgram"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -277,7 +277,7 @@
       - rule_2.1.14
 
 - name: "SCORED | 2.1.15 | AUDIT | Disable daytime-stream"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -289,7 +289,7 @@
       - rule_2.1.15
 
 - name: "SCORED | 2.1.15 | PATCH | Disable daytime-stream"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -297,7 +297,7 @@
       - rule_2.1.15
 
 - name: "SCORED | 2.1.16 | AUDIT | Disable echo-dgram"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -309,7 +309,7 @@
       - rule_2.1.16
 
 - name: "SCORED | 2.1.16 | PATCH | Disable echo-dgram"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -317,7 +317,7 @@
       - rule_2.1.16
 
 - name: "SCORED | 2.1.17 | AUDIT | Disable echo-stream"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -329,7 +329,7 @@
       - rule_2.1.17
 
 - name: "SCORED | 2.1.17 | PATCH | Disable echo-stream"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -337,7 +337,7 @@
       - rule_2.1.17
 
 - name: "SCORED | 2.1.18 | AUDIT | Disable tcpmux-server"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -349,7 +349,7 @@
       - rule_2.1.18
 
 - name: "SCORED | 2.1.18 | PATCH | Disable tcpmux-server"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
