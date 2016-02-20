@@ -251,7 +251,9 @@
       - rule_2.1.12
 
 - name: "SCORED | 2.1.12 | PATCH | Disable chargen-dgram"
-  command: chkconfig chargen-dgram off
+  yum:
+    name: xinetd
+    state: absent
   tags:
       - level1
       - level2
@@ -271,7 +273,9 @@
       - rule_2.1.13
 
 - name: "SCORED | 2.1.13 | PATCH | Disable chargen-stream"
-  command: chkconfig chargen-stream off
+  yum:
+    name: xinetd
+    state: absent
   tags:
       - level1
       - level2
@@ -291,7 +295,9 @@
       - rule_2.1.14
 
 - name: "SCORED | 2.1.14 | PATCH | Disable daytime-dgram"
-  command: chkconfig daytime-dgram off
+  yum:
+    name: xinetd
+    state: absent
   tags:
       - level1
       - level2
@@ -311,7 +317,9 @@
       - rule_2.1.15
 
 - name: "SCORED | 2.1.15 | PATCH | Disable daytime-stream"
-  command: chkconfig daytime-stream off
+  yum:
+    name: xinetd
+    state: absent
   tags:
       - level1
       - level2
@@ -331,7 +339,9 @@
       - rule_2.1.16
 
 - name: "SCORED | 2.1.16 | PATCH | Disable echo-dgram"
-  command: chkconfig echo-dgram off
+  yum:
+    name: xinetd
+    state: absent
   tags:
       - level1
       - level2
@@ -351,7 +361,9 @@
       - rule_2.1.17
 
 - name: "SCORED | 2.1.17 | PATCH | Disable echo-stream"
-  command: chkconfig echo-stream off
+  yum:
+    name: xinetd
+    state: absent
   tags:
       - level1
       - level2
@@ -371,7 +383,9 @@
       - rule_2.1.18
 
 - name: "SCORED | 2.1.18 | PATCH | Disable tcpmux-server"
-  command: chkconfig tcpmux-server off
+  yum:
+    name: xinetd
+    state: absent
   tags:
       - level1
       - level2
