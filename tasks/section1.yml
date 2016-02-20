@@ -1,5 +1,5 @@
 - name: "SCORED | 1.1.1 | AUDIT | Create Separate Partition for /tmp"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -11,7 +11,7 @@
       - rule_1.1.1
 
 - name: "SCORED | 1.1.1 | PATCH | Create Separate Partition for /tmp"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -19,7 +19,7 @@
       - rule_1.1.1
 
 - name: "SCORED | 1.1.2 | AUDIT | Set nodev option for /tmp Partition"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -31,7 +31,7 @@
       - rule_1.1.2
 
 - name: "SCORED | 1.1.2 | PATCH | Set nodev option for /tmp Partition"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -39,7 +39,7 @@
       - rule_1.1.2
 
 - name: "SCORED | 1.1.3 | AUDIT | Set nosuid option for /tmp Partition"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -51,7 +51,7 @@
       - rule_1.1.3
 
 - name: "SCORED | 1.1.3 | PATCH | Set nosuid option for /tmp Partition"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -59,7 +59,7 @@
       - rule_1.1.3
 
 - name: "SCORED | 1.1.4 | AUDIT | Set noexec option for /tmp Partition"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -71,7 +71,7 @@
       - rule_1.1.4
 
 - name: "SCORED | 1.1.4 | PATCH | Set noexec option for /tmp Partition"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -79,7 +79,7 @@
       - rule_1.1.4
 
 - name: "SCORED | 1.1.5 | AUDIT | Create Separate Partition for /var"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -91,7 +91,7 @@
       - rule_1.1.5
 
 - name: "SCORED | 1.1.5 | PATCH | Create Separate Partition for /var"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -99,7 +99,7 @@
       - rule_1.1.5
 
 - name: "SCORED | 1.1.6 | AUDIT | Bind Mount the /var/tmp directory to /tmp"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -111,7 +111,7 @@
       - rule_1.1.6
 
 - name: "SCORED | 1.1.6 | PATCH | Bind Mount the /var/tmp directory to /tmp"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -119,7 +119,7 @@
       - rule_1.1.6
 
 - name: "SCORED | 1.1.7 | AUDIT | Create Separate Partition for /var/log"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -131,7 +131,7 @@
       - rule_1.1.7
 
 - name: "SCORED | 1.1.7 | PATCH | Create Separate Partition for /var/log"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -139,7 +139,7 @@
       - rule_1.1.7
 
 - name: "SCORED | 1.1.8 | AUDIT | Create Separate Partition for /var/log/audit"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -151,7 +151,7 @@
       - rule_1.1.8
 
 - name: "SCORED | 1.1.8 | PATCH | Create Separate Partition for /var/log/audit"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -159,7 +159,7 @@
       - rule_1.1.8
 
 - name: "SCORED | 1.1.9 | AUDIT | Create Separate Partition for /home"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -171,7 +171,7 @@
       - rule_1.1.9
 
 - name: "SCORED | 1.1.9 | PATCH | Create Separate Partition for /home"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -179,7 +179,7 @@
       - rule_1.1.9
 
 - name: "SCORED | 1.1.10 | AUDIT | Add nodev Option to /home"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -191,7 +191,7 @@
       - rule_1.1.10
 
 - name: "SCORED | 1.1.10 | PATCH | Add nodev Option to /home"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -199,7 +199,7 @@
       - rule_1.1.10
 
 - name: "NOTSCORED | 1.1.11 | AUDIT | Add nodev Option to Removable Media Partitions"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -211,7 +211,7 @@
       - rule_1.1.11
 
 - name: "NOTSCORED | 1.1.11 | PATCH | Add nodev Option to Removable Media Partitions"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -219,7 +219,7 @@
       - rule_1.1.11
 
 - name: "NOTSCORED | 1.1.12 | AUDIT | Add noexec Option to Removable Media Partitions"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -231,7 +231,7 @@
       - rule_1.1.12
 
 - name: "NOTSCORED | 1.1.12 | PATCH | Add noexec Option to Removable Media Partitions"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -239,7 +239,7 @@
       - rule_1.1.12
 
 - name: "NOTSCORED | 1.1.13 | AUDIT | Add nosuid Option to Removable Media Partitions"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -251,7 +251,7 @@
       - rule_1.1.13
 
 - name: "NOTSCORED | 1.1.13 | PATCH | Add nosuid Option to Removable Media Partitions"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -259,7 +259,7 @@
       - rule_1.1.13
 
 - name: "SCORED | 1.1.14 | AUDIT | Add nodev Option to /dev/shm Partition"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -271,7 +271,7 @@
       - rule_1.1.14
 
 - name: "SCORED | 1.1.14 | PATCH | Add nodev Option to /dev/shm Partition"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -279,7 +279,7 @@
       - rule_1.1.14
 
 - name: "SCORED | 1.1.15 | AUDIT | Add nosuid Option to /dev/shm Partition"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -291,7 +291,7 @@
       - rule_1.1.15
 
 - name: "SCORED | 1.1.15 | PATCH | Add nosuid Option to /dev/shm Partition"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -299,7 +299,7 @@
       - rule_1.1.15
 
 - name: "SCORED | 1.1.16 | AUDIT | Add noexec Option to /dev/shm Partition"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -311,7 +311,7 @@
       - rule_1.1.16
 
 - name: "SCORED | 1.1.16 | PATCH | Add noexec Option to /dev/shm Partition"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -319,7 +319,7 @@
       - rule_1.1.16
 
 - name: "SCORED | 1.1.17 | AUDIT | Set Sticky Bit on All World-Writable Directories"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -331,7 +331,7 @@
       - rule_1.1.17
 
 - name: "SCORED | 1.1.17 | PATCH | Set Sticky Bit on All World-Writable Directories"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -339,7 +339,7 @@
       - rule_1.1.17
 
 - name: "NOTSCORED | 1.1.18 | AUDIT | Disable Mounting of cramfs Filesystems"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -350,14 +350,14 @@
       - rule_1.1.18
 
 - name: "NOTSCORED | 1.1.18 | PATCH | Disable Mounting of cramfs Filesystems"
-  command: true
+  command: /bin/true
   tags:
       - level2
       - patch
       - rule_1.1.18
 
 - name: "NOTSCORED | 1.1.19 | AUDIT | Disable Mounting of freevxfs Filesystems"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -368,14 +368,14 @@
       - rule_1.1.19
 
 - name: "NOTSCORED | 1.1.19 | PATCH | Disable Mounting of freevxfs Filesystems"
-  command: true
+  command: /bin/true
   tags:
       - level2
       - patch
       - rule_1.1.19
 
 - name: "NOTSCORED | 1.1.20 | AUDIT | Disable Mounting of jffs2 Filesystems"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -386,14 +386,14 @@
       - rule_1.1.20
 
 - name: "NOTSCORED | 1.1.20 | PATCH | Disable Mounting of jffs2 Filesystems"
-  command: true
+  command: /bin/true
   tags:
       - level2
       - patch
       - rule_1.1.20
 
 - name: "NOTSCORED | 1.1.21 | AUDIT | Disable Mounting of hfs Filesystems"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -404,14 +404,14 @@
       - rule_1.1.21
 
 - name: "NOTSCORED | 1.1.21 | PATCH | Disable Mounting of hfs Filesystems"
-  command: true
+  command: /bin/true
   tags:
       - level2
       - patch
       - rule_1.1.21
 
 - name: "NOTSCORED | 1.1.22 | AUDIT | Disable Mounting of hfsplus Filesystems"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -422,14 +422,14 @@
       - rule_1.1.22
 
 - name: "NOTSCORED | 1.1.22 | PATCH | Disable Mounting of hfsplus Filesystems"
-  command: true
+  command: /bin/true
   tags:
       - level2
       - patch
       - rule_1.1.22
 
 - name: "NOTSCORED | 1.1.23 | AUDIT | Disable Mounting of squashfs Filesystems"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -440,14 +440,14 @@
       - rule_1.1.23
 
 - name: "NOTSCORED | 1.1.23 | PATCH | Disable Mounting of squashfs Filesystems"
-  command: true
+  command: /bin/true
   tags:
       - level2
       - patch
       - rule_1.1.23
 
 - name: "NOTSCORED | 1.1.24 | AUDIT | Disable Mounting of udf Filesystems"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -458,14 +458,14 @@
       - rule_1.1.24
 
 - name: "NOTSCORED | 1.1.24 | PATCH | Disable Mounting of udf Filesystems"
-  command: true
+  command: /bin/true
   tags:
       - level2
       - patch
       - rule_1.1.24
 
 - name: "NOTSCORED | 1.2.1 | AUDIT | Configure Connection to the RHN RPM Repositories"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -477,7 +477,7 @@
       - rule_1.2.1
 
 - name: "NOTSCORED | 1.2.1 | PATCH | Configure Connection to the RHN RPM Repositories"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -485,7 +485,7 @@
       - rule_1.2.1
 
 - name: "SCORED | 1.2.2 | AUDIT | Verify Red Hat GPG Key is Installed"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -497,7 +497,7 @@
       - rule_1.2.2
 
 - name: "SCORED | 1.2.2 | PATCH | Verify Red Hat GPG Key is Installed"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -505,7 +505,7 @@
       - rule_1.2.2
 
 - name: "SCORED | 1.2.3 | AUDIT | Verify that gpgcheck is Globally Activated"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -517,7 +517,7 @@
       - rule_1.2.3
 
 - name: "SCORED | 1.2.3 | PATCH | Verify that gpgcheck is Globally Activated"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -525,7 +525,7 @@
       - rule_1.2.3
 
 - name: "NOTSCORED | 1.2.4 | AUDIT | Disable the rhnsd Daemon"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -536,14 +536,14 @@
       - rule_1.2.4
 
 - name: "NOTSCORED | 1.2.4 | PATCH | Disable the rhnsd Daemon"
-  command: true
+  command: /bin/true
   tags:
       - level2
       - patch
       - rule_1.2.4
 
 - name: "NOTSCORED | 1.2.5 | AUDIT | Obtain Software Package Updates with yum"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -555,7 +555,7 @@
       - rule_1.2.5
 
 - name: "NOTSCORED | 1.2.5 | PATCH | Obtain Software Package Updates with yum"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -563,7 +563,7 @@
       - rule_1.2.5
 
 - name: "NOTSCORED | 1.2.6 | AUDIT | Verify Package Integrity Using RPM"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -575,7 +575,7 @@
       - rule_1.2.6
 
 - name: "NOTSCORED | 1.2.6 | PATCH | Verify Package Integrity Using RPM"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -583,7 +583,7 @@
       - rule_1.2.6
 
 - name: "SCORED | 1.3.1 | AUDIT | Install AIDE"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -594,14 +594,14 @@
       - rule_1.3.1
 
 - name: "SCORED | 1.3.1 | PATCH | Install AIDE"
-  command: true
+  command: /bin/true
   tags:
       - level2
       - patch
       - rule_1.3.1
 
 - name: "SCORED | 1.3.2 | AUDIT | Implement Periodic Execution of File Integrity"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -612,14 +612,14 @@
       - rule_1.3.2
 
 - name: "SCORED | 1.3.2 | PATCH | Implement Periodic Execution of File Integrity"
-  command: true
+  command: /bin/true
   tags:
       - level2
       - patch
       - rule_1.3.2
 
 - name: "SCORED | 1.4.1 | AUDIT | Ensure SELinux is not disabled in /boot/grub2/grub.cfg"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -630,14 +630,14 @@
       - rule_1.4.1
 
 - name: "SCORED | 1.4.1 | PATCH | Ensure SELinux is not disabled in /boot/grub2/grub.cfg"
-  command: true
+  command: /bin/true
   tags:
       - level2
       - patch
       - rule_1.4.1
 
 - name: "SCORED | 1.4.2 | AUDIT | Set the SELinux State"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -648,14 +648,14 @@
       - rule_1.4.2
 
 - name: "SCORED | 1.4.2 | PATCH | Set the SELinux State"
-  command: true
+  command: /bin/true
   tags:
       - level2
       - patch
       - rule_1.4.2
 
 - name: "SCORED | 1.4.3 | AUDIT | Set the SELinux Policy"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -666,14 +666,14 @@
       - rule_1.4.3
 
 - name: "SCORED | 1.4.3 | PATCH | Set the SELinux Policy"
-  command: true
+  command: /bin/true
   tags:
       - level2
       - patch
       - rule_1.4.3
 
 - name: "SCORED | 1.4.4 | AUDIT | Remove SETroubleshoot"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -684,14 +684,14 @@
       - rule_1.4.4
 
 - name: "SCORED | 1.4.4 | PATCH | Remove SETroubleshoot"
-  command: true
+  command: /bin/true
   tags:
       - level2
       - patch
       - rule_1.4.4
 
 - name: "SCORED | 1.4.5 | AUDIT | Remove MCS Translation Service (mcstrans)"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -702,14 +702,14 @@
       - rule_1.4.5
 
 - name: "SCORED | 1.4.5 | PATCH | Remove MCS Translation Service (mcstrans)"
-  command: true
+  command: /bin/true
   tags:
       - level2
       - patch
       - rule_1.4.5
 
 - name: "SCORED | 1.4.6 | AUDIT | Check for Unconfined Daemons"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -720,14 +720,14 @@
       - rule_1.4.6
 
 - name: "SCORED | 1.4.6 | PATCH | Check for Unconfined Daemons"
-  command: true
+  command: /bin/true
   tags:
       - level2
       - patch
       - rule_1.4.6
 
 - name: "SCORED | 1.5.1 | AUDIT | Set User/Group Owner on /boot/grub2/grub.cfg"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -739,7 +739,7 @@
       - rule_1.5.1
 
 - name: "SCORED | 1.5.1 | PATCH | Set User/Group Owner on /boot/grub2/grub.cfg"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -747,7 +747,7 @@
       - rule_1.5.1
 
 - name: "SCORED | 1.5.2 | AUDIT | Set Permissions on /boot/grub2/grub.cfg"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -759,7 +759,7 @@
       - rule_1.5.2
 
 - name: "SCORED | 1.5.2 | PATCH | Set Permissions on /boot/grub2/grub.cfg"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -767,7 +767,7 @@
       - rule_1.5.2
 
 - name: "SCORED | 1.5.3 | AUDIT | Set Boot Loader Password"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -779,7 +779,7 @@
       - rule_1.5.3
 
 - name: "SCORED | 1.5.3 | PATCH | Set Boot Loader Password"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -787,7 +787,7 @@
       - rule_1.5.3
 
 - name: "SCORED | 1.6.1 | AUDIT | Restrict Core Dumps"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -799,7 +799,7 @@
       - rule_1.6.1
 
 - name: "SCORED | 1.6.1 | PATCH | Restrict Core Dumps"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -807,7 +807,7 @@
       - rule_1.6.1
 
 - name: "SCORED | 1.6.2 | AUDIT | Enable Randomized Virtual Memory Region Placement"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -819,7 +819,7 @@
       - rule_1.6.2
 
 - name: "SCORED | 1.6.2 | PATCH | Enable Randomized Virtual Memory Region Placement"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
@@ -827,7 +827,7 @@
       - rule_1.6.2
 
 - name: "NOTSCORED | 1.7 | AUDIT | Use the Latest OS Release"
-  command: true
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -839,7 +839,7 @@
       - rule_1.7
 
 - name: "NOTSCORED | 1.7 | PATCH | Use the Latest OS Release"
-  command: true
+  command: /bin/true
   tags:
       - level1
       - level2
