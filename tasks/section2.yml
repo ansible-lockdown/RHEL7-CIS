@@ -99,7 +99,7 @@
       - rule_2.1.5
 
 - name: "SCORED | 2.1.5 | PATCH | Remove NIS Client"
-    yum:
+  yum:
     name: yp-tools
     state: absent
   tags:
@@ -230,7 +230,7 @@
       - rule_2.1.11
 
 - name: "SCORED | 2.1.11 | PATCH | Remove xinetd"
-    yum:
+  yum:
     name: xinetd
     state: absent
   tags:
@@ -239,7 +239,7 @@
       - rule_2.1.11
 
 - name: "SCORED | 2.1.12 | AUDIT | Disable chargen-dgram"
-  command: /bin/true
+  shell: chkconfig --list chargen-dgram | grep 'off'
   register: result
   always_run: yes
   changed_when: no
@@ -251,7 +251,7 @@
       - rule_2.1.12
 
 - name: "SCORED | 2.1.12 | PATCH | Disable chargen-dgram"
-  command: /bin/true
+  command: chkconfig chargen-dgram off
   tags:
       - level1
       - level2
@@ -259,7 +259,7 @@
       - rule_2.1.12
 
 - name: "SCORED | 2.1.13 | AUDIT | Disable chargen-stream"
-  command: /bin/true
+  shell: chkconfig --list chargen-stream | grep 'off'
   register: result
   always_run: yes
   changed_when: no
@@ -271,7 +271,7 @@
       - rule_2.1.13
 
 - name: "SCORED | 2.1.13 | PATCH | Disable chargen-stream"
-  command: /bin/true
+  command: chkconfig chargen-stream off
   tags:
       - level1
       - level2
@@ -279,7 +279,7 @@
       - rule_2.1.13
 
 - name: "SCORED | 2.1.14 | AUDIT | Disable daytime-dgram"
-  command: /bin/true
+  shell: chkconfig --list daytime-dgram | grep 'off'
   register: result
   always_run: yes
   changed_when: no
@@ -291,7 +291,7 @@
       - rule_2.1.14
 
 - name: "SCORED | 2.1.14 | PATCH | Disable daytime-dgram"
-  command: /bin/true
+  command: chkconfig daytime-dgram off
   tags:
       - level1
       - level2
@@ -299,7 +299,7 @@
       - rule_2.1.14
 
 - name: "SCORED | 2.1.15 | AUDIT | Disable daytime-stream"
-  command: /bin/true
+  shell: chkconfig --list daytime-stream | grep 'off'
   register: result
   always_run: yes
   changed_when: no
@@ -311,7 +311,7 @@
       - rule_2.1.15
 
 - name: "SCORED | 2.1.15 | PATCH | Disable daytime-stream"
-  command: /bin/true
+  command: chkconfig daytime-stream off
   tags:
       - level1
       - level2
@@ -319,7 +319,7 @@
       - rule_2.1.15
 
 - name: "SCORED | 2.1.16 | AUDIT | Disable echo-dgram"
-  command: /bin/true
+  shell: chkconfig --list echo-dgram | grep 'off'
   register: result
   always_run: yes
   changed_when: no
@@ -331,7 +331,7 @@
       - rule_2.1.16
 
 - name: "SCORED | 2.1.16 | PATCH | Disable echo-dgram"
-  command: /bin/true
+  command: chkconfig echo-dgram off
   tags:
       - level1
       - level2
@@ -339,7 +339,7 @@
       - rule_2.1.16
 
 - name: "SCORED | 2.1.17 | AUDIT | Disable echo-stream"
-  command: /bin/true
+  shell: chkconfig --list echo-stream | grep 'off'
   register: result
   always_run: yes
   changed_when: no
@@ -351,7 +351,7 @@
       - rule_2.1.17
 
 - name: "SCORED | 2.1.17 | PATCH | Disable echo-stream"
-  command: /bin/true
+  command: chkconfig echo-stream off
   tags:
       - level1
       - level2
@@ -359,7 +359,7 @@
       - rule_2.1.17
 
 - name: "SCORED | 2.1.18 | AUDIT | Disable tcpmux-server"
-  command: /bin/true
+  shell: chkconfig --list tcpmux-server | grep 'off'
   register: result
   always_run: yes
   changed_when: no
@@ -371,7 +371,7 @@
       - rule_2.1.18
 
 - name: "SCORED | 2.1.18 | PATCH | Disable tcpmux-server"
-  command: /bin/true
+  command: chkconfig tcpmux-server off
   tags:
       - level1
       - level2
