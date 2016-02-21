@@ -1,5 +1,5 @@
 - name: "SCORED | 6.1.1 | AUDIT | Enable anacron Daemon"
-  command: /bin/true
+  shell: rpm -q cronie-anacron
   register: result
   always_run: yes
   changed_when: no
@@ -11,7 +11,9 @@
       - rule_6.1.1
 
 - name: "SCORED | 6.1.1 | PATCH | Enable anacron Daemon"
-  command: /bin/true
+  yum:
+      name=cronie-anacron
+      state=installed
   tags:
       - level1
       - level2
@@ -19,7 +21,7 @@
       - rule_6.1.1
 
 - name: "SCORED | 6.1.2 | AUDIT | Enable crond Daemon"
-  command: /bin/true
+  shell: systemctl is-enabled crond | grep enabled
   register: result
   always_run: yes
   changed_when: no
@@ -31,7 +33,7 @@
       - rule_6.1.2
 
 - name: "SCORED | 6.1.2 | PATCH | Enable crond Daemon"
-  command: /bin/true
+  service: name=crond enabled=yes
   tags:
       - level1
       - level2
@@ -39,7 +41,7 @@
       - rule_6.1.2
 
 - name: "SCORED | 6.1.3 | AUDIT | Set User/Group Owner and Permission on /etc/anacrontab"
-  command: /bin/true
+  shell: stat -L -c "%a %u %g" /etc/anacrontab | egrep ".00 0 0"
   register: result
   always_run: yes
   changed_when: no
@@ -51,7 +53,11 @@
       - rule_6.1.3
 
 - name: "SCORED | 6.1.3 | PATCH | Set User/Group Owner and Permission on /etc/anacrontab"
-  command: /bin/true
+  file:
+      dest=/etc/anacrontab
+      owner=root
+      group=root
+      mode=0600
   tags:
       - level1
       - level2
@@ -59,7 +65,7 @@
       - rule_6.1.3
 
 - name: "SCORED | 6.1.4 | AUDIT | Set User/Group Owner and Permission on /etc/crontab"
-  command: /bin/true
+  shell: stat -L -c "%a %u %g" /etc/crontab | egrep ".00 0 0"
   register: result
   always_run: yes
   changed_when: no
@@ -71,7 +77,11 @@
       - rule_6.1.4
 
 - name: "SCORED | 6.1.4 | PATCH | Set User/Group Owner and Permission on /etc/crontab"
-  command: /bin/true
+  file:
+      dest=/etc/crontab
+      owner=root
+      group=root
+      mode=0600
   tags:
       - level1
       - level2
@@ -79,7 +89,7 @@
       - rule_6.1.4
 
 - name: "SCORED | 6.1.5 | AUDIT | Set User/Group Owner and Permission on /etc/cron.hourly"
-  command: /bin/true
+  shell: stat -L -c "%a %u %g" /etc/cron.hourly | egrep ".00 0 0"
   register: result
   always_run: yes
   changed_when: no
@@ -91,7 +101,11 @@
       - rule_6.1.5
 
 - name: "SCORED | 6.1.5 | PATCH | Set User/Group Owner and Permission on /etc/cron.hourly"
-  command: /bin/true
+  file:
+      dest=/etc/cron.hourly
+      owner=root
+      group=root
+      mode=0600
   tags:
       - level1
       - level2
@@ -99,7 +113,7 @@
       - rule_6.1.5
 
 - name: "SCORED | 6.1.6 | AUDIT | Set User/Group Owner and Permission on /etc/cron.daily"
-  command: /bin/true
+  shell: stat -L -c "%a %u %g" /etc/cron.daily | egrep ".00 0 0"
   register: result
   always_run: yes
   changed_when: no
@@ -111,7 +125,11 @@
       - rule_6.1.6
 
 - name: "SCORED | 6.1.6 | PATCH | Set User/Group Owner and Permission on /etc/cron.daily"
-  command: /bin/true
+  file:
+      dest=/etc/cron.daily
+      owner=root
+      group=root
+      mode=0600
   tags:
       - level1
       - level2
@@ -119,7 +137,7 @@
       - rule_6.1.6
 
 - name: "SCORED | 6.1.7 | AUDIT | Set User/Group Owner and Permission on /etc/cron.weekly"
-  command: /bin/true
+  shell: stat -L -c "%a %u %g" /etc/cron.weekly | egrep ".00 0 0"
   register: result
   always_run: yes
   changed_when: no
@@ -131,7 +149,11 @@
       - rule_6.1.7
 
 - name: "SCORED | 6.1.7 | PATCH | Set User/Group Owner and Permission on /etc/cron.weekly"
-  command: /bin/true
+  file:
+      dest=/etc/cron.weekly
+      owner=root
+      group=root
+      mode=0600
   tags:
       - level1
       - level2
@@ -139,7 +161,7 @@
       - rule_6.1.7
 
 - name: "SCORED | 6.1.8 | AUDIT | Set User/Group Owner and Permission on /etc/cron.monthly"
-  command: /bin/true
+  shell: stat -L -c "%a %u %g" /etc/cron.monthly | egrep ".00 0 0"
   register: result
   always_run: yes
   changed_when: no
@@ -151,7 +173,11 @@
       - rule_6.1.8
 
 - name: "SCORED | 6.1.8 | PATCH | Set User/Group Owner and Permission on /etc/cron.monthly"
-  command: /bin/true
+  file:
+      dest=/etc/cron.monthly
+      owner=root
+      group=root
+      mode=0600
   tags:
       - level1
       - level2
@@ -159,7 +185,7 @@
       - rule_6.1.8
 
 - name: "SCORED | 6.1.9 | AUDIT | Set User/Group Owner and Permission on /etc/cron.d"
-  command: /bin/true
+  shell: stat -L -c "%a %u %g" /etc/cron.d | egrep ".00 0 0"
   register: result
   always_run: yes
   changed_when: no
@@ -171,7 +197,12 @@
       - rule_6.1.9
 
 - name: "SCORED | 6.1.9 | PATCH | Set User/Group Owner and Permission on /etc/cron.d"
-  command: /bin/true
+  file:
+      dest=/etc/cron.d
+      state=directory
+      owner=root
+      group=root
+      mode=0600
   tags:
       - level1
       - level2
@@ -179,7 +210,19 @@
       - rule_6.1.9
 
 - name: "SCORED | 6.1.10 | AUDIT | Restrict at Daemon"
-  command: /bin/true
+  shell: stat -L /etc/at.deny > /dev/null
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.1.10
+
+- name: "SCORED | 6.1.10 | AUDIT | Restrict at Daemon"
+  shell: stat -L -c "%a %u %g" /etc/at.allow | egrep ".00 0 0"
   register: result
   always_run: yes
   changed_when: no
@@ -191,7 +234,22 @@
       - rule_6.1.10
 
 - name: "SCORED | 6.1.10 | PATCH | Restrict at Daemon"
-  command: /bin/true
+  file:
+      dest=/etc/at.deny
+      state=absent
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.10
+
+- name: "SCORED | 6.1.10 | PATCH | Restrict at Daemon"
+  file:
+      dest=/etc/at.allow
+      state=touch
+      owner=root
+      group=root
+      mode=0600
   tags:
       - level1
       - level2
@@ -199,7 +257,43 @@
       - rule_6.1.10
 
 - name: "SCORED | 6.1.11 | AUDIT | Restrict at/cron to Authorized Users"
-  command: /bin/true
+  shell: ls -l /etc/cron.deny | grep '^$'
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.1.11
+
+- name: "SCORED | 6.1.11 | AUDIT | Restrict at/cron to Authorized Users"
+  shell: ls -l /etc/at.deny | grep '^$'
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.1.11
+
+- name: "SCORED | 6.1.11 | AUDIT | Restrict at/cron to Authorized Users"
+  shell: ls -l /etc/cron.allow
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_6.1.11
+
+- name: "SCORED | 6.1.11 | AUDIT | Restrict at/cron to Authorized Users"
+  shell: ls -l /etc/at.allow
   register: result
   always_run: yes
   changed_when: no
@@ -211,7 +305,45 @@
       - rule_6.1.11
 
 - name: "SCORED | 6.1.11 | PATCH | Restrict at/cron to Authorized Users"
-  command: /bin/true
+  file:
+      dest=/etc/cron.deny
+      state=absent
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.11
+
+- name: "SCORED | 6.1.11 | PATCH | Restrict at/cron to Authorized Users"
+  file:
+      dest=/etc/at.deny
+      state=absent
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.11
+
+- name: "SCORED | 6.1.11 | PATCH | Restrict at/cron to Authorized Users"
+  file:
+      dest=/etc/cron.allow
+      state=touch
+      owner=root
+      group=root
+      mode=0600
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.11
+
+- name: "SCORED | 6.1.11 | PATCH | Restrict at/cron to Authorized Users"
+  file:
+      dest=/etc/at.allow
+      state=touch
+      owner=root
+      group=root
+      mode=0600
   tags:
       - level1
       - level2
@@ -219,7 +351,7 @@
       - rule_6.1.11
 
 - name: "SCORED | 6.2.1 | AUDIT | Set SSH Protocol to 2"
-  command: /bin/true
+  command: grep "^Protocol 2" /etc/ssh/sshd_config
   register: result
   always_run: yes
   changed_when: no
@@ -231,7 +363,11 @@
       - rule_6.2.1
 
 - name: "SCORED | 6.2.1 | PATCH | Set SSH Protocol to 2"
-  command: /bin/true
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^(#)?Protocol \d'
+      line: 'Protocol 2'
   tags:
       - level1
       - level2
@@ -239,7 +375,7 @@
       - rule_6.2.1
 
 - name: "SCORED | 6.2.2 | AUDIT | Set LogLevel to INFO"
-  command: /bin/true
+  command: grep "^LogLevel INFO" /etc/ssh/sshd_config
   register: result
   always_run: yes
   changed_when: no
@@ -251,7 +387,11 @@
       - rule_6.2.2
 
 - name: "SCORED | 6.2.2 | PATCH | Set LogLevel to INFO"
-  command: /bin/true
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^(#)?LogLevel INFO\d'
+      line: 'LogLevel INFO'
   tags:
       - level1
       - level2
@@ -259,7 +399,7 @@
       - rule_6.2.2
 
 - name: "SCORED | 6.2.3 | AUDIT | Set Permissions on /etc/ssh/sshd_config"
-  command: /bin/true
+  shell: stat -L -c "%a %u %g" /etc/ssh/sshd_config | egrep ".00 0 0"
   register: result
   always_run: yes
   changed_when: no
@@ -271,7 +411,12 @@
       - rule_6.2.3
 
 - name: "SCORED | 6.2.3 | PATCH | Set Permissions on /etc/ssh/sshd_config"
-  command: /bin/true
+  file:
+      dest=/etc/ssh/sshd_config
+      state=file
+      owner=root
+      group=root
+      mode=0600
   tags:
       - level1
       - level2
@@ -279,7 +424,7 @@
       - rule_6.2.3
 
 - name: "SCORED | 6.2.4 | AUDIT | Disable SSH X11 Forwarding"
-  command: /bin/true
+  command: grep "^X11Forwarding no" /etc/ssh/sshd_config
   register: result
   always_run: yes
   changed_when: no
@@ -291,7 +436,11 @@
       - rule_6.2.4
 
 - name: "SCORED | 6.2.4 | PATCH | Disable SSH X11 Forwarding"
-  command: /bin/true
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^(#)?X11Forwarding \d'
+      line: 'X11Forwarding no'
   tags:
       - level1
       - level2
@@ -299,7 +448,7 @@
       - rule_6.2.4
 
 - name: "SCORED | 6.2.5 | AUDIT | Set SSH MaxAuthTries to 4 or Less"
-  command: /bin/true
+  shell: grep "^MaxAuthTries 4" /etc/ssh/sshd_config
   register: result
   always_run: yes
   changed_when: no
@@ -311,7 +460,11 @@
       - rule_6.2.5
 
 - name: "SCORED | 6.2.5 | PATCH | Set SSH MaxAuthTries to 4 or Less"
-  command: /bin/true
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^(#)?MaxAuthTries \d'
+      line: 'MaxAuthTries 4'
   tags:
       - level1
       - level2
@@ -319,7 +472,7 @@
       - rule_6.2.5
 
 - name: "SCORED | 6.2.6 | AUDIT | Set SSH IgnoreRhosts to Yes"
-  command: /bin/true
+  command: grep "^IgnoreRhosts yes" /etc/ssh/sshd_config
   register: result
   always_run: yes
   changed_when: no
@@ -331,7 +484,11 @@
       - rule_6.2.6
 
 - name: "SCORED | 6.2.6 | PATCH | Set SSH IgnoreRhosts to Yes"
-  command: /bin/true
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^IgnoreRhosts'
+      line: 'IgnoreRhosts yes'
   tags:
       - level1
       - level2
@@ -339,7 +496,7 @@
       - rule_6.2.6
 
 - name: "SCORED | 6.2.7 | AUDIT | Set SSH HostbasedAuthentication to No"
-  command: /bin/true
+  command: grep "^HostbasedAuthentication no" /etc/ssh/sshd_config
   register: result
   always_run: yes
   changed_when: no
@@ -351,7 +508,11 @@
       - rule_6.2.7
 
 - name: "SCORED | 6.2.7 | PATCH | Set SSH HostbasedAuthentication to No"
-  command: /bin/true
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^HostbasedAuthentication'
+      line: 'HostbasedAuthentication no'
   tags:
       - level1
       - level2
@@ -359,7 +520,7 @@
       - rule_6.2.7
 
 - name: "SCORED | 6.2.8 | AUDIT | Disable SSH Root Login"
-  command: /bin/true
+  command: grep "^PermitRootLogin no" /etc/ssh/sshd_config
   register: result
   always_run: yes
   changed_when: no
@@ -371,7 +532,11 @@
       - rule_6.2.8
 
 - name: "SCORED | 6.2.8 | PATCH | Disable SSH Root Login"
-  command: /bin/true
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^PermitRootLogin'
+      line: 'PermitRootLogin no'
   tags:
       - level1
       - level2
@@ -379,7 +544,7 @@
       - rule_6.2.8
 
 - name: "SCORED | 6.2.9 | AUDIT | Set SSH PermitEmptyPasswords to No"
-  command: /bin/true
+  command: grep "^PermitEmptyPasswords no" /etc/ssh/sshd_config
   register: result
   always_run: yes
   changed_when: no
@@ -391,7 +556,11 @@
       - rule_6.2.9
 
 - name: "SCORED | 6.2.9 | PATCH | Set SSH PermitEmptyPasswords to No"
-  command: /bin/true
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^PermitEmptyPasswords'
+      line: 'PermitEmptyPasswords no'
   tags:
       - level1
       - level2
@@ -399,7 +568,7 @@
       - rule_6.2.9
 
 - name: "SCORED | 6.2.10 | AUDIT | Do Not Allow Users to Set Environment Options"
-  command: /bin/true
+  command: grep "^PermitUserEnvironment no" /etc/ssh/sshd_config
   register: result
   always_run: yes
   changed_when: no
@@ -411,7 +580,11 @@
       - rule_6.2.10
 
 - name: "SCORED | 6.2.10 | PATCH | Do Not Allow Users to Set Environment Options"
-  command: /bin/true
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^PermitUserEnvironment'
+      line: 'PermitUserEnvironment no'
   tags:
       - level1
       - level2
@@ -419,7 +592,7 @@
       - rule_6.2.10
 
 - name: "SCORED | 6.2.11 | AUDIT | Use Only Approved Cipher in Counter Mode"
-  command: /bin/true
+  command: grep "Ciphers aes128-ctr,aes192-ctr,aes256-ctr" /etc/ssh/sshd_config
   register: result
   always_run: yes
   changed_when: no
@@ -431,7 +604,11 @@
       - rule_6.2.11
 
 - name: "SCORED | 6.2.11 | PATCH | Use Only Approved Cipher in Counter Mode"
-  command: /bin/true
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^Ciphers'
+      line: 'Ciphers aes128-ctr,aes192-ctr,aes256-ctr'
   tags:
       - level1
       - level2
@@ -439,7 +616,7 @@
       - rule_6.2.11
 
 - name: "SCORED | 6.2.12 | AUDIT | Set Idle Timeout Interval for User Login"
-  command: /bin/true
+  command: grep "^ClientAliveInterval" /etc/ssh/sshd_confige
   register: result
   always_run: yes
   changed_when: no
@@ -451,7 +628,11 @@
       - rule_6.2.12
 
 - name: "SCORED | 6.2.12 | PATCH | Set Idle Timeout Interval for User Login"
-  command: /bin/true
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^ClientAliveInterval'
+      line: 'ClientAliveInterval 300'
   tags:
       - level1
       - level2
@@ -459,7 +640,7 @@
       - rule_6.2.12
 
 - name: "SCORED | 6.2.13 | AUDIT | Limit Access via SSH"
-  command: /bin/true
+  command: grep "^AllowGroups" /etc/ssh/sshd_config
   register: result
   always_run: yes
   changed_when: no
@@ -479,7 +660,7 @@
       - rule_6.2.13
 
 - name: "SCORED | 6.2.14 | AUDIT | Set SSH Banner"
-  command: /bin/true
+  command: grep "^Banner /etc/issue.net" /etc/ssh/sshd_config
   register: result
   always_run: yes
   changed_when: no
@@ -491,7 +672,11 @@
       - rule_6.2.14
 
 - name: "SCORED | 6.2.14 | PATCH | Set SSH Banner"
-  command: /bin/true
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^Banner'
+      line: 'Banner /etc/issue.net'
   tags:
       - level1
       - level2
@@ -499,7 +684,7 @@
       - rule_6.2.14
 
 - name: "SCORED | 6.3.1 | AUDIT | Upgrade Password Hashing Algorithm to SHA-512"
-  command: /bin/true
+  shell: authconfig --test | grep hashing | grep sha512
   register: result
   always_run: yes
   changed_when: no
@@ -511,7 +696,7 @@
       - rule_6.3.1
 
 - name: "SCORED | 6.3.1 | PATCH | Upgrade Password Hashing Algorithm to SHA-512"
-  command: /bin/true
+  command: authconfig --passalgo=sha512 --update
   tags:
       - level1
       - level2
