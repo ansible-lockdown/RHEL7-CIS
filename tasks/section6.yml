@@ -363,7 +363,11 @@
       - rule_6.2.1
 
 - name: "SCORED | 6.2.1 | PATCH | Set SSH Protocol to 2"
-  command: /bin/true
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^(#)?Protocol \d'
+      line: 'Protocol 2'
   tags:
       - level1
       - level2
@@ -383,7 +387,11 @@
       - rule_6.2.2
 
 - name: "SCORED | 6.2.2 | PATCH | Set LogLevel to INFO"
-  command: /bin/true
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^(#)?LogLevel INFO\d'
+      line: 'LogLevel INFO'
   tags:
       - level1
       - level2
@@ -428,7 +436,11 @@
       - rule_6.2.4
 
 - name: "SCORED | 6.2.4 | PATCH | Disable SSH X11 Forwarding"
-  command: /bin/true
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^(#)?X11Forwarding \d'
+      line: 'X11Forwarding no'
   tags:
       - level1
       - level2
@@ -436,7 +448,7 @@
       - rule_6.2.4
 
 - name: "SCORED | 6.2.5 | AUDIT | Set SSH MaxAuthTries to 4 or Less"
-  command: /bin/true
+  shell: grep "^MaxAuthTries 4" /etc/ssh/sshd_config
   register: result
   always_run: yes
   changed_when: no
@@ -448,7 +460,11 @@
       - rule_6.2.5
 
 - name: "SCORED | 6.2.5 | PATCH | Set SSH MaxAuthTries to 4 or Less"
-  command: /bin/true
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^(#)?MaxAuthTries \d'
+      line: 'MaxAuthTries 4'
   tags:
       - level1
       - level2
@@ -456,7 +472,7 @@
       - rule_6.2.5
 
 - name: "SCORED | 6.2.6 | AUDIT | Set SSH IgnoreRhosts to Yes"
-  command: /bin/true
+  command: grep "^IgnoreRhosts yes" /etc/ssh/sshd_config
   register: result
   always_run: yes
   changed_when: no
@@ -468,7 +484,11 @@
       - rule_6.2.6
 
 - name: "SCORED | 6.2.6 | PATCH | Set SSH IgnoreRhosts to Yes"
-  command: /bin/true
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^IgnoreRhosts'
+      line: 'IgnoreRhosts yes'
   tags:
       - level1
       - level2
@@ -476,7 +496,7 @@
       - rule_6.2.6
 
 - name: "SCORED | 6.2.7 | AUDIT | Set SSH HostbasedAuthentication to No"
-  command: /bin/true
+  command: grep "^HostbasedAuthentication no" /etc/ssh/sshd_config
   register: result
   always_run: yes
   changed_when: no
@@ -488,7 +508,11 @@
       - rule_6.2.7
 
 - name: "SCORED | 6.2.7 | PATCH | Set SSH HostbasedAuthentication to No"
-  command: /bin/true
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^HostbasedAuthentication'
+      line: 'HostbasedAuthentication no'
   tags:
       - level1
       - level2
@@ -496,7 +520,7 @@
       - rule_6.2.7
 
 - name: "SCORED | 6.2.8 | AUDIT | Disable SSH Root Login"
-  command: /bin/true
+  command: grep "^PermitRootLogin no" /etc/ssh/sshd_config
   register: result
   always_run: yes
   changed_when: no
@@ -508,7 +532,11 @@
       - rule_6.2.8
 
 - name: "SCORED | 6.2.8 | PATCH | Disable SSH Root Login"
-  command: /bin/true
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^PermitRootLogin'
+      line: 'PermitRootLogin no'
   tags:
       - level1
       - level2
@@ -516,7 +544,7 @@
       - rule_6.2.8
 
 - name: "SCORED | 6.2.9 | AUDIT | Set SSH PermitEmptyPasswords to No"
-  command: /bin/true
+  command: grep "^PermitEmptyPasswords no" /etc/ssh/sshd_config
   register: result
   always_run: yes
   changed_when: no
@@ -528,7 +556,11 @@
       - rule_6.2.9
 
 - name: "SCORED | 6.2.9 | PATCH | Set SSH PermitEmptyPasswords to No"
-  command: /bin/true
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^PermitEmptyPasswords'
+      line: 'PermitEmptyPasswords no'
   tags:
       - level1
       - level2
@@ -536,7 +568,7 @@
       - rule_6.2.9
 
 - name: "SCORED | 6.2.10 | AUDIT | Do Not Allow Users to Set Environment Options"
-  command: /bin/true
+  command: grep "^PermitUserEnvironment no" /etc/ssh/sshd_config
   register: result
   always_run: yes
   changed_when: no
@@ -548,7 +580,11 @@
       - rule_6.2.10
 
 - name: "SCORED | 6.2.10 | PATCH | Do Not Allow Users to Set Environment Options"
-  command: /bin/true
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^PermitUserEnvironment'
+      line: 'PermitUserEnvironment no'
   tags:
       - level1
       - level2
@@ -556,7 +592,7 @@
       - rule_6.2.10
 
 - name: "SCORED | 6.2.11 | AUDIT | Use Only Approved Cipher in Counter Mode"
-  command: /bin/true
+  command: grep "Ciphers aes128-ctr,aes192-ctr,aes256-ctr" /etc/ssh/sshd_config
   register: result
   always_run: yes
   changed_when: no
@@ -568,7 +604,11 @@
       - rule_6.2.11
 
 - name: "SCORED | 6.2.11 | PATCH | Use Only Approved Cipher in Counter Mode"
-  command: /bin/true
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^Ciphers'
+      line: 'Ciphers aes128-ctr,aes192-ctr,aes256-ctr'
   tags:
       - level1
       - level2
@@ -576,7 +616,7 @@
       - rule_6.2.11
 
 - name: "SCORED | 6.2.12 | AUDIT | Set Idle Timeout Interval for User Login"
-  command: /bin/true
+  command: grep "^ClientAliveInterval" /etc/ssh/sshd_confige
   register: result
   always_run: yes
   changed_when: no
@@ -588,7 +628,11 @@
       - rule_6.2.12
 
 - name: "SCORED | 6.2.12 | PATCH | Set Idle Timeout Interval for User Login"
-  command: /bin/true
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^ClientAliveInterval'
+      line: 'ClientAliveInterval 300'
   tags:
       - level1
       - level2
@@ -596,7 +640,7 @@
       - rule_6.2.12
 
 - name: "SCORED | 6.2.13 | AUDIT | Limit Access via SSH"
-  command: /bin/true
+  command: grep "^AllowGroups" /etc/ssh/sshd_config
   register: result
   always_run: yes
   changed_when: no
@@ -616,7 +660,7 @@
       - rule_6.2.13
 
 - name: "SCORED | 6.2.14 | AUDIT | Set SSH Banner"
-  command: /bin/true
+  command: grep "^Banner /etc/issue.net" /etc/ssh/sshd_config
   register: result
   always_run: yes
   changed_when: no
@@ -628,7 +672,11 @@
       - rule_6.2.14
 
 - name: "SCORED | 6.2.14 | PATCH | Set SSH Banner"
-  command: /bin/true
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^Banner'
+      line: 'Banner /etc/issue.net'
   tags:
       - level1
       - level2
@@ -636,7 +684,7 @@
       - rule_6.2.14
 
 - name: "SCORED | 6.3.1 | AUDIT | Upgrade Password Hashing Algorithm to SHA-512"
-  command: /bin/true
+  shell: authconfig --test | grep hashing | grep sha512
   register: result
   always_run: yes
   changed_when: no
@@ -648,7 +696,7 @@
       - rule_6.3.1
 
 - name: "SCORED | 6.3.1 | PATCH | Upgrade Password Hashing Algorithm to SHA-512"
-  command: /bin/true
+  command: authconfig --passalgo=sha512 --update
   tags:
       - level1
       - level2
