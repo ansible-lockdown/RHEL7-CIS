@@ -45,7 +45,7 @@
       - rule_3.2
 
 - name: "SCORED | 3.3 | AUDIT | Disable Avahi Server"
-  command: /bin/true
+  command: service avahi-daemon status
   register: result
   always_run: yes
   changed_when: no
