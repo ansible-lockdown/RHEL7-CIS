@@ -339,7 +339,7 @@
       - rule_1.1.17
 
 - name: "NOTSCORED | 1.1.18 | AUDIT | Disable Mounting of cramfs Filesystems"
-  command: /bin/true
+  shell: /sbin/lsmod | grep cramfs
   register: result
   always_run: yes
   changed_when: no
@@ -350,14 +350,18 @@
       - rule_1.1.18
 
 - name: "NOTSCORED | 1.1.18 | PATCH | Disable Mounting of cramfs Filesystems"
-  command: /bin/true
+  lineinfile:
+      dest=/etc/modprobe.d/CIS.conf
+      create=yes
+      regexp='^install cramfs'
+      line='install cramfs /bin/true'
   tags:
       - level2
       - patch
       - rule_1.1.18
 
 - name: "NOTSCORED | 1.1.19 | AUDIT | Disable Mounting of freevxfs Filesystems"
-  command: /bin/true
+  shell: /sbin/lsmod | grep freevxfs
   register: result
   always_run: yes
   changed_when: no
@@ -368,14 +372,18 @@
       - rule_1.1.19
 
 - name: "NOTSCORED | 1.1.19 | PATCH | Disable Mounting of freevxfs Filesystems"
-  command: /bin/true
+  lineinfile:
+      dest=/etc/modprobe.d/CIS.conf
+      create=yes
+      regexp='^install freevxfs'
+      line='install freevxfs /bin/true'
   tags:
       - level2
       - patch
       - rule_1.1.19
 
 - name: "NOTSCORED | 1.1.20 | AUDIT | Disable Mounting of jffs2 Filesystems"
-  command: /bin/true
+  shell: /sbin/lsmod | grep jffs2
   register: result
   always_run: yes
   changed_when: no
@@ -386,14 +394,18 @@
       - rule_1.1.20
 
 - name: "NOTSCORED | 1.1.20 | PATCH | Disable Mounting of jffs2 Filesystems"
-  command: /bin/true
+  lineinfile:
+      dest=/etc/modprobe.d/CIS.conf
+      create=yes
+      regexp='^install jffs2'
+      line='install jffs2 /bin/true'
   tags:
       - level2
       - patch
       - rule_1.1.20
 
 - name: "NOTSCORED | 1.1.21 | AUDIT | Disable Mounting of hfs Filesystems"
-  command: /bin/true
+  shell: /sbin/lsmod | grep hfs
   register: result
   always_run: yes
   changed_when: no
@@ -404,14 +416,18 @@
       - rule_1.1.21
 
 - name: "NOTSCORED | 1.1.21 | PATCH | Disable Mounting of hfs Filesystems"
-  command: /bin/true
+  lineinfile:
+      dest=/etc/modprobe.d/CIS.conf
+      create=yes
+      regexp='^install hfs'
+      line='install hfs /bin/true'
   tags:
       - level2
       - patch
       - rule_1.1.21
 
 - name: "NOTSCORED | 1.1.22 | AUDIT | Disable Mounting of hfsplus Filesystems"
-  command: /bin/true
+  shell: /sbin/lsmod | grep hfsplus
   register: result
   always_run: yes
   changed_when: no
@@ -422,14 +438,18 @@
       - rule_1.1.22
 
 - name: "NOTSCORED | 1.1.22 | PATCH | Disable Mounting of hfsplus Filesystems"
-  command: /bin/true
+  lineinfile:
+      dest=/etc/modprobe.d/CIS.conf
+      create=yes
+      regexp='^install hfsplus'
+      line='install hfsplus /bin/true'
   tags:
       - level2
       - patch
       - rule_1.1.22
 
 - name: "NOTSCORED | 1.1.23 | AUDIT | Disable Mounting of squashfs Filesystems"
-  command: /bin/true
+  shell: /sbin/lsmod | grep squashfs
   register: result
   always_run: yes
   changed_when: no
@@ -440,14 +460,18 @@
       - rule_1.1.23
 
 - name: "NOTSCORED | 1.1.23 | PATCH | Disable Mounting of squashfs Filesystems"
-  command: /bin/true
+  lineinfile:
+      dest=/etc/modprobe.d/CIS.conf
+      create=yes
+      regexp='^install squashfs'
+      line='install squashfs /bin/true'
   tags:
       - level2
       - patch
       - rule_1.1.23
 
 - name: "NOTSCORED | 1.1.24 | AUDIT | Disable Mounting of udf Filesystems"
-  command: /bin/true
+  shell: /sbin/lsmod | grep udf
   register: result
   always_run: yes
   changed_when: no
@@ -458,7 +482,11 @@
       - rule_1.1.24
 
 - name: "NOTSCORED | 1.1.24 | PATCH | Disable Mounting of udf Filesystems"
-  command: /bin/true
+  lineinfile:
+      dest=/etc/modprobe.d/CIS.conf
+      create=yes
+      regexp='^install udf'
+      line='install udf /bin/true'
   tags:
       - level2
       - patch
