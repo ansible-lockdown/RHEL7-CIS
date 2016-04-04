@@ -1,4 +1,4 @@
 *.swp
 .DS_Store
 *test*
-./main.yml
+main.yml
