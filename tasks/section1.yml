@@ -1,28 +1,42 @@
-- name: "SCORED | 1.1.1 | AUDIT | Create Separate Partition for /tmp"
-  command: /bin/true
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - level2
-      - audit
-      - rule_1.1.1
+#- name: "SCORED | 1.1.1 | PATCH | Create Separate Partition for /tmp"
+# Rule 1.1.1 see not_automated.yml
 
-- name: "SCORED | 1.1.1 | PATCH | Create Separate Partition for /tmp"
-  command: /bin/true
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_1.1.1
 
+# List /tmp mount that is missing the 'nosuid' option and ask the sys admin to correct this in /etc/fstab
+# This would be a bit tricky to automatically fix in /etc/fstab.
+# - name: "SCORED | 1.1.2 | AUDIT | Set nodev option for /tmp Partition"
+#   shell: mount | grep 'on /tmp' | grep -v 'nodev'
+#   changed_when: false
+#   failed_when: tmp_mounts_missing_nodev.stderr
+#   register: tmp_mounts_missing_nodev
+#   ignore_errors: yes
+#   tags:
+#       - level1
+#       - level2
+#       - audit
+#       - rule_1.1.2
+
+# - name: "SCORED | 1.1.2 | AUDIT | Set nodev option for /tmp Partition"
+#   debug: var=tmp_mounts_missing_nodev.stdout_lines
+#   when: tmp_mounts_missing_nodev.stdout
+#   ignore_errors: yes
+#   tags:
+#       - level1
+#       - level2
+#       - audit
+#       - rule_1.1.2
+
+# - name: "SCORED | 1.1.2 | AUDIT | Set nodev option for /tmp Partition"
+#   pause: prompt="/tmp is mounted without the 'nodev' option set. This is a finding. Press Enter to continue"
+#   when: tmp_mounts_missing_nodev.stdout and not rhel7stig_fullauto
+#   ignore_errors: yes
+#   tags:
+#       - level1
+#       - level2
+#       - audit
+#       - rule_1.1.2
 - name: "SCORED | 1.1.2 | AUDIT | Set nodev option for /tmp Partition"
   command: /bin/true
-  register: result
-  always_run: yes
-  changed_when: no
   ignore_errors: yes
   tags:
       - level1
@@ -38,17 +52,37 @@
       - patch
       - rule_1.1.2
 
-- name: "SCORED | 1.1.3 | AUDIT | Set nosuid option for /tmp Partition"
-  command: /bin/true
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - level2
-      - audit
-      - rule_1.1.3
+# - name: "SCORED | 1.1.3 | AUDIT | Set nosuid option for /tmp Partition"
+#   shell: mount | grep 'on /tmp' | grep -v 'nosuid'
+#   changed_when: false
+#   failed_when: tmp_mounts_missing_nosuid.stderr
+#   register: tmp_mounts_missing_nosuid
+#   ignore_errors: yes
+#   tags:
+#       - level1
+#       - level2
+#       - audit
+#       - rule_1.1.3
+
+# - name: "SCORED | 1.1.3 | AUDIT | Set nodev option for /tmp Partition"
+#   debug: var=tmp_mounts_missing_nosuid.stdout_lines
+#   when: tmp_mounts_missing_nosuid.stdout
+#   ignore_errors: yes
+#   tags:
+#       - level1
+#       - level2
+#       - audit
+#       - rule_1.1.3
+
+# - name: "SCORED | 1.1.3 | AUDIT | Set nodev option for /tmp Partition"
+#   pause: prompt="/tmp is mounted without the 'nosuid' option set. This is a finding. Press Enter to continue"
+#   when: tmp_mounts_missing_nosuid.stdout and not rhel7stig_fullauto
+#   ignore_errors: yes
+#   tags:
+#       - level1
+#       - level2
+#       - audit
+#       - rule_1.1.3
 
 - name: "SCORED | 1.1.3 | PATCH | Set nosuid option for /tmp Partition"
   command: /bin/true
@@ -78,29 +112,12 @@
       - patch
       - rule_1.1.4
 
-- name: "SCORED | 1.1.5 | AUDIT | Create Separate Partition for /var"
-  command: /bin/true
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - level2
-      - audit
-      - rule_1.1.5
-
-- name: "SCORED | 1.1.5 | PATCH | Create Separate Partition for /var"
-  command: /bin/true
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_1.1.5
+#- name: "SCORED | 1.1.5 | PATCH | Create Separate Partition for /var"
+# Rule 1.1.5 see not_automated.yml
 
 - name: "SCORED | 1.1.6 | AUDIT | Bind Mount the /var/tmp directory to /tmp"
-  command: /bin/true
-  register: result
+  shell: mount | grep "/tmp " | grep /var/tmp
+  register: vartmp_bindmount_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -118,65 +135,14 @@
       - patch
       - rule_1.1.6
 
-- name: "SCORED | 1.1.7 | AUDIT | Create Separate Partition for /var/log"
-  command: /bin/true
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - level2
-      - audit
-      - rule_1.1.7
+#- name: "SCORED | 1.1.7 | PATCH | Create Separate Partition for /var/log"
+# Rule 1.1.7 see not_automated.yml
 
-- name: "SCORED | 1.1.7 | PATCH | Create Separate Partition for /var/log"
-  command: /bin/true
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_1.1.7
+#- name: "SCORED | 1.1.8 | PATCH | Create Separate Partition for /var/log/audit"
+# Rule 1.1.8 see not_automated.yml
 
-- name: "SCORED | 1.1.8 | AUDIT | Create Separate Partition for /var/log/audit"
-  command: /bin/true
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - level2
-      - audit
-      - rule_1.1.8
-
-- name: "SCORED | 1.1.8 | PATCH | Create Separate Partition for /var/log/audit"
-  command: /bin/true
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_1.1.8
-
-- name: "SCORED | 1.1.9 | AUDIT | Create Separate Partition for /home"
-  command: /bin/true
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - level2
-      - audit
-      - rule_1.1.9
-
-- name: "SCORED | 1.1.9 | PATCH | Create Separate Partition for /home"
-  command: /bin/true
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_1.1.9
+#- name: "SCORED | 1.1.9 | PATCH | Create Separate Partition for /home"
+# Rule 1.1.9 see not_automated.yml  command: /bin/true
 
 - name: "SCORED | 1.1.10 | AUDIT | Add nodev Option to /home"
   command: /bin/true
@@ -318,25 +284,8 @@
       - patch
       - rule_1.1.16
 
-- name: "SCORED | 1.1.17 | AUDIT | Set Sticky Bit on All World-Writable Directories"
-  command: /bin/true
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - level2
-      - audit
-      - rule_1.1.17
-
-- name: "SCORED | 1.1.17 | PATCH | Set Sticky Bit on All World-Writable Directories"
-  command: /bin/true
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_1.1.17
+# - name: "SCORED | 1.1.17 | PATCH | Set Sticky Bit on All World-Writable Directories"
+# Rule 1.1.17 see not_automated.yml
 
 - name: "NOTSCORED | 1.1.18 | AUDIT | Disable Mounting of cramfs Filesystems"
   shell: /sbin/lsmod | grep cramfs
@@ -835,11 +784,10 @@
       - rule_1.6.1
 
 - name: "SCORED | 1.6.2 | AUDIT | Enable Randomized Virtual Memory Region Placement"
-  command: /bin/true
-  register: result
-  always_run: yes
+  shell: sysctl kernel.randomize_va_space | awk '{print $3}'
   changed_when: no
-  ignore_errors: yes
+  always_run: yes
+  register: virt_addr_space_randomization_audit
   tags:
       - level1
       - level2
@@ -847,7 +795,12 @@
       - rule_1.6.2
 
 - name: "SCORED | 1.6.2 | PATCH | Enable Randomized Virtual Memory Region Placement"
-  command: /bin/true
+  sysctl:
+    name=kernel.randomize_va_space
+    state=present
+    value=1
+    reload=yes
+  when: virt_addr_space_randomization_audit != 2
   tags:
       - level1
       - level2

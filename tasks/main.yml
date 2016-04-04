@@ -1,5 +1,8 @@
 ---
 # tasks file for RHEL7-CIS
+- include: not_automated.yml
+  when: rhel7cis_notauto
+
 - include: section1.yml
   when: rhel7cis_section1
 

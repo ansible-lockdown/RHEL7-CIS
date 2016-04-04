@@ -1,0 +1,9 @@
+---
+
+  - hosts: all
+    vars:
+      rhel7cis_notauto: true
+    tasks:
+      - name: Test CIS
+        include: tasks/section1.yml
+#        include: tasks/section2.yml
