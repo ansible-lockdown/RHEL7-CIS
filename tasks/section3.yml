@@ -102,6 +102,8 @@
   yum:
       name=dhcp
       state=absent
+  when:
+      rhel7cis_dhcp == false
   tags:
       - level1
       - level2
@@ -184,6 +186,8 @@
   yum:
       name=openldap-servers
       state=absent
+  when:
+      rhel7cis_ldap == false
   tags:
       - level1
       - level2
@@ -226,6 +230,8 @@
   yum:
       name=bind
       state=absent
+  when:
+      rhel7cis_bind == false
   tags:
       - level1
       - level2
@@ -248,6 +254,8 @@
   yum:
       name=vsftpd
       state=absent
+  when:
+      rhel7cis_vsftpd == false  
   tags:
       - level1
       - level2
@@ -270,6 +278,8 @@
   yum:
       name=httpd
       state=absent
+  when:
+      rhel7cis_httpd == false  
   tags:
       - level1
       - level2
@@ -292,6 +302,8 @@
   yum:
       name=dovecot
       state=absent
+  when:
+      rhel7cis_dovecot == false 
   tags:
       - level1
       - level2
@@ -314,6 +326,8 @@
   yum:
       name=samba
       state=absent
+  when:
+      rhel7cis_samba == false 
   tags:
       - level1
       - level2
@@ -336,6 +350,8 @@
   yum:
       name=squid
       state=absent
+  when:
+      rhel7cis_squid == false 
   tags:
       - level1
       - level2
@@ -358,6 +374,8 @@
   yum:
       name=net-snmp
       state=absent
+  when:
+      rhel7cis_net-snmp == false 
   tags:
       - level1
       - level2
