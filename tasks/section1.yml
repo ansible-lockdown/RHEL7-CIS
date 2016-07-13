@@ -790,7 +790,7 @@
       - rule_1.5.3
 
 - name: "SCORED | 1.6.1 | AUDIT | Restrict Core Dumps"
-  command: /bin/true
+  shell: grep "hard core" /etc/security/limits.conf /etc/security/limits.d/*
   register: result
   always_run: yes
   changed_when: no
@@ -802,7 +802,25 @@
       - rule_1.6.1
 
 - name: "SCORED | 1.6.1 | PATCH | Restrict Core Dumps"
-  command: /bin/true
+  lineinfile:
+      state: present
+      dest: /etc/security/limits.conf
+      regexp: 'hard core'
+      line: '* hard core 0'
+      insertbefore: '^# End of file'
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_1.6.1
+
+- name: "SCORED | 1.6.1 | PATCH | Restrict Core Dumps"
+  sysctl:
+      name: fs.suid_dumpable
+      value: 0
+      state: present
+      reload: yes
+      ignoreerrors: yes
   tags:
       - level1
       - level2
