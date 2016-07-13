@@ -20,4 +20,4 @@ rhel7cis_httpd: false
 rhel7cis_dovecot: false
 rhel7cis_samba: false
 rhel7cis_squid: false
-rhel7cis_net-snmp: false
+rhel7cis_net_snmp: false
