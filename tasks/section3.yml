@@ -375,7 +375,7 @@
       name=net-snmp
       state=absent
   when:
-      rhel7cis_net-snmp == false 
+      rhel7cis_net_snmp == false 
   tags:
       - level1
       - level2
