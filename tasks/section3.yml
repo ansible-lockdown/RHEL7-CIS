@@ -57,7 +57,9 @@
       - rule_3.3
 
 - name: "SCORED | 3.3 | PATCH | Disable Avahi Server"
-  command: /bin/true
+  yum:
+      name=avahi
+      state=absent
   tags:
       - level1
       - level2
@@ -65,7 +67,7 @@
       - rule_3.3
 
 - name: "NOTSCORED | 3.4 | AUDIT | Disable Print Server - CUPS"
-  command: /bin/true
+  command: systemctl is-enabled cups
   register: result
   always_run: yes
   changed_when: no
@@ -195,7 +197,19 @@
       - rule_3.7
 
 - name: "NOTSCORED | 3.8 | AUDIT | Disable NFS and RPC"
-  command: /bin/true
+  command: systemctl is-enabled nfs
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_3.8
+
+- name: "NOTSCORED | 3.8 | AUDIT | Disable NFS and RPC"
+  command: systemctl is-enabled rpcbind
   register: result
   always_run: yes
   changed_when: no
@@ -207,7 +221,15 @@
       - rule_3.8
 
 - name: "NOTSCORED | 3.8 | PATCH | Disable NFS and RPC"
-  command: /bin/true
+  command: systemctl disable nfs
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_3.8
+
+- name: "NOTSCORED | 3.8 | PATCH | Disable NFS and RPC"
+  command: systemctl disable rpcbind
   tags:
       - level1
       - level2
