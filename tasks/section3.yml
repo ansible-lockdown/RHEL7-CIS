@@ -222,6 +222,8 @@
 
 - name: "NOTSCORED | 3.8 | PATCH | Disable NFS and RPC"
   command: systemctl disable nfs
+  when:
+      rhel7cis_nfs == false
   tags:
       - level1
       - level2
@@ -230,6 +232,8 @@
 
 - name: "NOTSCORED | 3.8 | PATCH | Disable NFS and RPC"
   command: systemctl disable rpcbind
+  when:
+      rhel7cis_rpc == false
   tags:
       - level1
       - level2
@@ -277,7 +281,7 @@
       name=vsftpd
       state=absent
   when:
-      rhel7cis_vsftpd == false  
+      rhel7cis_vsftpd == false
   tags:
       - level1
       - level2
@@ -301,7 +305,7 @@
       name=httpd
       state=absent
   when:
-      rhel7cis_httpd == false  
+      rhel7cis_httpd == false
   tags:
       - level1
       - level2
@@ -325,7 +329,7 @@
       name=dovecot
       state=absent
   when:
-      rhel7cis_dovecot == false 
+      rhel7cis_dovecot == false
   tags:
       - level1
       - level2
@@ -349,7 +353,7 @@
       name=samba
       state=absent
   when:
-      rhel7cis_samba == false 
+      rhel7cis_samba == false
   tags:
       - level1
       - level2
@@ -373,7 +377,7 @@
       name=squid
       state=absent
   when:
-      rhel7cis_squid == false 
+      rhel7cis_squid == false
   tags:
       - level1
       - level2
@@ -397,7 +401,7 @@
       name=net-snmp
       state=absent
   when:
-      rhel7cis_net_snmp == false 
+      rhel7cis_net_snmp == false
   tags:
       - level1
       - level2

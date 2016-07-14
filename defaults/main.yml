@@ -14,6 +14,8 @@ rhel7cis_section9: true
 #3 Service configuration booleans set true to keep service
 rhel7cis_dhcp: false
 rhel7cis_ldap: false
+rhel7cis_nfs: false
+rhel7cis_rpc: false
 rhel7cis_bind: false
 rhel7cis_vsftpd: false
 rhel7cis_httpd: false
