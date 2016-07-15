@@ -57,7 +57,9 @@
       - rule_3.3
 
 - name: "SCORED | 3.3 | PATCH | Disable Avahi Server"
-  command: /bin/true
+  yum:
+      name=avahi
+      state=absent
   tags:
       - level1
       - level2
@@ -65,7 +67,7 @@
       - rule_3.3
 
 - name: "NOTSCORED | 3.4 | AUDIT | Disable Print Server - CUPS"
-  command: /bin/true
+  command: systemctl is-enabled cups
   register: result
   always_run: yes
   changed_when: no
@@ -102,6 +104,8 @@
   yum:
       name=dhcp
       state=absent
+  when:
+      rhel7cis_dhcp == false
   tags:
       - level1
       - level2
@@ -184,6 +188,8 @@
   yum:
       name=openldap-servers
       state=absent
+  when:
+      rhel7cis_ldap == false
   tags:
       - level1
       - level2
@@ -191,7 +197,19 @@
       - rule_3.7
 
 - name: "NOTSCORED | 3.8 | AUDIT | Disable NFS and RPC"
-  command: /bin/true
+  command: systemctl is-enabled nfs
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_3.8
+
+- name: "NOTSCORED | 3.8 | AUDIT | Disable NFS and RPC"
+  command: systemctl is-enabled rpcbind
   register: result
   always_run: yes
   changed_when: no
@@ -203,7 +221,19 @@
       - rule_3.8
 
 - name: "NOTSCORED | 3.8 | PATCH | Disable NFS and RPC"
-  command: /bin/true
+  command: systemctl disable nfs
+  when:
+      rhel7cis_nfs == false
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_3.8
+
+- name: "NOTSCORED | 3.8 | PATCH | Disable NFS and RPC"
+  command: systemctl disable rpcbind
+  when:
+      rhel7cis_rpc == false
   tags:
       - level1
       - level2
@@ -226,6 +256,8 @@
   yum:
       name=bind
       state=absent
+  when:
+      rhel7cis_bind == false
   tags:
       - level1
       - level2
@@ -248,6 +280,8 @@
   yum:
       name=vsftpd
       state=absent
+  when:
+      rhel7cis_vsftpd == false
   tags:
       - level1
       - level2
@@ -270,6 +304,8 @@
   yum:
       name=httpd
       state=absent
+  when:
+      rhel7cis_httpd == false
   tags:
       - level1
       - level2
@@ -292,6 +328,8 @@
   yum:
       name=dovecot
       state=absent
+  when:
+      rhel7cis_dovecot == false
   tags:
       - level1
       - level2
@@ -314,6 +352,8 @@
   yum:
       name=samba
       state=absent
+  when:
+      rhel7cis_samba == false
   tags:
       - level1
       - level2
@@ -336,6 +376,8 @@
   yum:
       name=squid
       state=absent
+  when:
+      rhel7cis_squid == false
   tags:
       - level1
       - level2
@@ -358,6 +400,8 @@
   yum:
       name=net-snmp
       state=absent
+  when:
+      rhel7cis_net_snmp == false
   tags:
       - level1
       - level2

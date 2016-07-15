@@ -560,7 +560,7 @@
       - rule_1.2.6
 
 - name: "SCORED | 1.3.1 | AUDIT | Install AIDE"
-  command: /bin/true
+  shell: rpm -q aide
   register: result
   always_run: yes
   changed_when: no
@@ -571,14 +571,16 @@
       - rule_1.3.1
 
 - name: "SCORED | 1.3.1 | PATCH | Install AIDE"
-  command: /bin/true
+  yum:
+      name=aide
+      state=installed
   tags:
       - level2
       - patch
       - rule_1.3.1
 
 - name: "SCORED | 1.3.2 | AUDIT | Implement Periodic Execution of File Integrity"
-  command: /bin/true
+  command: grep -r aide /etc/cron.* /etc/crontab
   register: result
   always_run: yes
   changed_when: no
@@ -589,14 +591,26 @@
       - rule_1.3.2
 
 - name: "SCORED | 1.3.2 | PATCH | Implement Periodic Execution of File Integrity"
-  command: /bin/true
+  shell: aide --init && mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+  args:
+      creates: /var/lib/aide/aide.db.gz
+  tags:
+      - level2
+      - patch
+      - rule_1.3.2
+
+- name: "SCORED | 1.3.2 | PATCH | Implement Periodic Execution of File Integrity"
+  cron: 
+      name="aide" weekday="*" minute=0 hour=5
+      user="root" job="/usr/sbin/aide --check"
+      cron_file=aide.cronjob
   tags:
       - level2
       - patch
       - rule_1.3.2
 
 - name: "SCORED | 1.4.1 | AUDIT | Ensure SELinux is not disabled in /boot/grub2/grub.cfg"
-  command: /bin/true
+  shell: grep "^\s*linux" /boot/grub2/grub.cfg|grep -E 'selinux|enforcing'=0
   register: result
   always_run: yes
   changed_when: no
@@ -607,14 +621,14 @@
       - rule_1.4.1
 
 - name: "SCORED | 1.4.1 | PATCH | Ensure SELinux is not disabled in /boot/grub2/grub.cfg"
-  command: /bin/true
+  command: sed -i 's/selinux=0//;s/enforcing=0//' /boot/grub2/grub.cfg
   tags:
       - level2
       - patch
       - rule_1.4.1
 
 - name: "SCORED | 1.4.2 | AUDIT | Set the SELinux State"
-  command: /bin/true
+  shell: getenforce|grep Enforcing
   register: result
   always_run: yes
   changed_when: no
@@ -625,14 +639,18 @@
       - rule_1.4.2
 
 - name: "SCORED | 1.4.2 | PATCH | Set the SELinux State"
-  command: /bin/true
+  lineinfile:
+      state: present
+      dest: /etc/selinux/config
+      regexp: '^SELINUX='
+      line: 'SELINUX=enforcing'
   tags:
       - level2
       - patch
       - rule_1.4.2
 
 - name: "SCORED | 1.4.3 | AUDIT | Set the SELinux Policy"
-  command: /bin/true
+  command: grep 'SELINUXTYPE=targeted' /etc/selinux/config
   register: result
   always_run: yes
   changed_when: no
@@ -643,14 +661,18 @@
       - rule_1.4.3
 
 - name: "SCORED | 1.4.3 | PATCH | Set the SELinux Policy"
-  command: /bin/true
+  lineinfile:
+      state: present
+      dest: /etc/selinux/config
+      regexp: '^SELINUXTYPE='
+      line: 'SELINUXTYPE=targeted'
   tags:
       - level2
       - patch
       - rule_1.4.3
 
 - name: "SCORED | 1.4.4 | AUDIT | Remove SETroubleshoot"
-  command: /bin/true
+  command: rpm -q setroubleshoot
   register: result
   always_run: yes
   changed_when: no
@@ -661,14 +683,16 @@
       - rule_1.4.4
 
 - name: "SCORED | 1.4.4 | PATCH | Remove SETroubleshoot"
-  command: /bin/true
+  yum: 
+      name: setroubleshoot
+      state: absent
   tags:
       - level2
       - patch
       - rule_1.4.4
 
 - name: "SCORED | 1.4.5 | AUDIT | Remove MCS Translation Service (mcstrans)"
-  command: /bin/true
+  command: rpm -q mcstrans
   register: result
   always_run: yes
   changed_when: no
@@ -679,14 +703,16 @@
       - rule_1.4.5
 
 - name: "SCORED | 1.4.5 | PATCH | Remove MCS Translation Service (mcstrans)"
-  command: /bin/true
+  yum: 
+      name: mcstrans
+      state: absent
   tags:
       - level2
       - patch
       - rule_1.4.5
 
 - name: "SCORED | 1.4.6 | AUDIT | Check for Unconfined Daemons"
-  command: /bin/true
+  shell: ps -eZ | egrep "initrc" 
   register: result
   always_run: yes
   changed_when: no
@@ -764,7 +790,7 @@
       - rule_1.5.3
 
 - name: "SCORED | 1.6.1 | AUDIT | Restrict Core Dumps"
-  command: /bin/true
+  shell: grep "hard core" /etc/security/limits.conf /etc/security/limits.d/*
   register: result
   always_run: yes
   changed_when: no
@@ -776,7 +802,25 @@
       - rule_1.6.1
 
 - name: "SCORED | 1.6.1 | PATCH | Restrict Core Dumps"
-  command: /bin/true
+  lineinfile:
+      state: present
+      dest: /etc/security/limits.conf
+      regexp: 'hard core'
+      line: '* hard core 0'
+      insertbefore: '^# End of file'
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_1.6.1
+
+- name: "SCORED | 1.6.1 | PATCH | Restrict Core Dumps"
+  sysctl:
+      name: fs.suid_dumpable
+      value: 0
+      state: present
+      reload: yes
+      ignoreerrors: yes
   tags:
       - level1
       - level2

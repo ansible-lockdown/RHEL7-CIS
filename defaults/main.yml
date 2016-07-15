@@ -10,3 +10,16 @@ rhel7cis_section6: true
 rhel7cis_section7: true
 rhel7cis_section8: true
 rhel7cis_section9: true
+
+#3 Service configuration booleans set true to keep service
+rhel7cis_dhcp: false
+rhel7cis_ldap: false
+rhel7cis_nfs: false
+rhel7cis_rpc: false
+rhel7cis_bind: false
+rhel7cis_vsftpd: false
+rhel7cis_httpd: false
+rhel7cis_dovecot: false
+rhel7cis_samba: false
+rhel7cis_squid: false
+rhel7cis_net_snmp: false

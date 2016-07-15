@@ -366,7 +366,7 @@
       - rule_4.2.8
 
 - name: "NOTSCORED | 4.3.1 | AUDIT | Deactivate Wireless Interfaces"
-  command: /bin/true
+  command: iwconfig
   register: result
   always_run: yes
   changed_when: no
