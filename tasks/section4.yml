@@ -534,7 +534,7 @@
 
 - name: "NOTSCORED | 4.5.2 | AUDIT | Create /etc/hosts.allow"
   command: grep -v '^#' /etc/hosts.allow
-  register: result
+  register: hosts_allow
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -553,7 +553,7 @@
       - rule_4.5.2
 
 - name: "SCORED | 4.5.3 | AUDIT | Verify Permissions on /etc/hosts.allow"
-  command: /bin/true
+  shell: stat -L -c "%a %u %g" /etc/hosts.allow | egrep "644 0 0"
   register: result
   always_run: yes
   changed_when: no
@@ -597,7 +597,7 @@
       - rule_4.5.4
 
 - name: "SCORED | 4.5.5 | AUDIT | Verify Permissions on /etc/hosts.deny"
-  command: /bin/true
+  shell: stat -L -c "%a %u %g" /etc/hosts.allow | egrep "644 0 0"
   register: result
   always_run: yes
   changed_when: no

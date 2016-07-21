@@ -1,4 +1,5 @@
 - name: "NOTSCORED | 9.1.1 | AUDIT | Verify System File Permissions"
+  # rpm -Va --nomtime --nosize --nomd5 --nolinkto > perm_check.log
   command: /bin/true
   register: result
   always_run: yes
@@ -17,7 +18,7 @@
       - rule_9.1.1
 
 - name: "SCORED | 9.1.2 | AUDIT | Verify Permissions on /etc/passwd"
-  command: /bin/true
+  shell: stat -L -c "%a %u %g" /etc/hosts.allow | egrep "644 0 0"
   register: result
   always_run: yes
   changed_when: no
@@ -29,7 +30,9 @@
       - rule_9.1.2
 
 - name: "SCORED | 9.1.2 | PATCH | Verify Permissions on /etc/passwd"
-  command: /bin/true
+  file:
+      dest=/etc/passwd
+      mode=0644
   tags:
       - level1
       - level2
@@ -37,7 +40,7 @@
       - rule_9.1.2
 
 - name: "SCORED | 9.1.3 | AUDIT | Verify Permissions on /etc/shadow"
-  command: /bin/true
+  shell: stat -L -c "%a %u %g" /etc/hosts.allow | egrep "640 0 0"
   register: result
   always_run: yes
   changed_when: no
@@ -49,7 +52,9 @@
       - rule_9.1.3
 
 - name: "SCORED | 9.1.3 | PATCH | Verify Permissions on /etc/shadow"
-  command: /bin/true
+  file:
+      dest=/etc/shadow
+      mode=000
   tags:
       - level1
       - level2
@@ -57,7 +62,7 @@
       - rule_9.1.3
 
 - name: "SCORED | 9.1.4 | AUDIT | Verify Permissions on /etc/gshadow"
-  command: /bin/true
+  shell: stat -L -c "%a %u %g" /etc/hosts.allow | egrep "0 0 0"
   register: result
   always_run: yes
   changed_when: no
@@ -69,7 +74,9 @@
       - rule_9.1.4
 
 - name: "SCORED | 9.1.4 | PATCH | Verify Permissions on /etc/gshadow"
-  command: /bin/true
+  file:
+      dest=/etc/gshadow
+      mode=000
   tags:
       - level1
       - level2
@@ -77,7 +84,7 @@
       - rule_9.1.4
 
 - name: "SCORED | 9.1.5 | AUDIT | Verify Permissions on /etc/group"
-  command: /bin/true
+  shell: stat -L -c "%a %u %g" /etc/hosts.allow | egrep "644 0 0"
   register: result
   always_run: yes
   changed_when: no
@@ -89,7 +96,9 @@
       - rule_9.1.5
 
 - name: "SCORED | 9.1.5 | PATCH | Verify Permissions on /etc/group"
-  command: /bin/true
+  file:
+      dest=/etc/group
+      mode=0644
   tags:
       - level1
       - level2
@@ -97,7 +106,7 @@
       - rule_9.1.5
 
 - name: "SCORED | 9.1.6 | AUDIT | Verify User/Group Ownership on /etc/passwd"
-  command: /bin/true
+  shell: stat -L -c "%u %g" /etc/passwd | egrep "0 0"
   register: result
   always_run: yes
   changed_when: no
@@ -109,7 +118,10 @@
       - rule_9.1.6
 
 - name: "SCORED | 9.1.6 | PATCH | Verify User/Group Ownership on /etc/passwd"
-  command: /bin/true
+  file:
+      dest=/etc/passwd
+      owner=root
+      group=root
   tags:
       - level1
       - level2
@@ -117,7 +129,7 @@
       - rule_9.1.6
 
 - name: "SCORED | 9.1.7 | AUDIT | Verify User/Group Ownership on /etc/shadow"
-  command: /bin/true
+  shell: stat -L -c "%u %g" /etc/shadow | egrep "0 0"
   register: result
   always_run: yes
   changed_when: no
@@ -129,7 +141,10 @@
       - rule_9.1.7
 
 - name: "SCORED | 9.1.7 | PATCH | Verify User/Group Ownership on /etc/shadow"
-  command: /bin/true
+  file:
+      dest=/etc/shadow
+      owner=root
+      group=root
   tags:
       - level1
       - level2
@@ -137,7 +152,7 @@
       - rule_9.1.7
 
 - name: "SCORED | 9.1.8 | AUDIT | Verify User/Group Ownership on /etc/gshadow"
-  command: /bin/true
+  shell: stat -L -c "%u %g" /etc/gshadow | egrep "0 0"
   register: result
   always_run: yes
   changed_when: no
@@ -149,7 +164,10 @@
       - rule_9.1.8
 
 - name: "SCORED | 9.1.8 | PATCH | Verify User/Group Ownership on /etc/gshadow"
-  command: /bin/true
+  file:
+      dest=/etc/gshadow
+      owner=root
+      group=root
   tags:
       - level1
       - level2
@@ -157,7 +175,7 @@
       - rule_9.1.8
 
 - name: "SCORED | 9.1.9 | AUDIT | Verify User/Group Ownership on /etc/group"
-  command: /bin/true
+  shell: stat -L -c "%u %g" /etc/group | egrep "0 0"
   register: result
   always_run: yes
   changed_when: no
@@ -169,7 +187,10 @@
       - rule_9.1.9
 
 - name: "SCORED | 9.1.9 | PATCH | Verify User/Group Ownership on /etc/group"
-  command: /bin/true
+  file:
+      dest=/etc/group
+      owner=root
+      group=root
   tags:
       - level1
       - level2
@@ -277,7 +298,7 @@
       - rule_9.1.14
 
 - name: "SCORED | 9.2.1 | AUDIT | Ensure Password Fields are Not Empty"
-  command: /bin/true
+  shell: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -297,7 +318,7 @@
       - rule_9.2.1
 
 - name: "SCORED | 9.2.2 | AUDIT | Verify No Legacy '+' Entries Exist in /etc/passwd File"
-  command: /bin/true
+  command: /bin/grep '^+:' /etc/passwd
   register: result
   always_run: yes
   changed_when: no
@@ -317,7 +338,7 @@
       - rule_9.2.2
 
 - name: "SCORED | 9.2.3 | AUDIT | Verify No Legacy '+' Entries Exist in /etc/shadow File"
-  command: /bin/true
+  command: /bin/grep '^+:' /etc/shadow
   register: result
   always_run: yes
   changed_when: no
@@ -337,7 +358,7 @@
       - rule_9.2.3
 
 - name: "SCORED | 9.2.4 | AUDIT | Verify No Legacy '+' Entries Exist in /etc/group File"
-  command: /bin/true
+  command: /bin/grep '^+:' /etc/group
   register: result
   always_run: yes
   changed_when: no
