@@ -9,12 +9,13 @@ This role **will make changes to the system** that could break things. This is n
 
 If you want to install this via the `ansible-galaxy` command you'll need to run it like this:
 
-`ansible-galaxy install -p roles -r requirements.yml
+`ansible-galaxy install -p roles -r requirements.yml`
 
 With this in the file requirements.yml:
 
----
+```
 - src: https://github.com/MindPointGroup/RHEL7-CIS.git
+```
 
 Based on [CIS CentOS Linux 7 Benchmark v2.1.0 - 06-02-2016 ](https://community.cisecurity.org/collab/public/index.php).
 
@@ -29,49 +30,36 @@ Role Variables
 --------------
 There are many role variables defined in defaults/main.yml. This list shows the most important.
 
-#3 Service configuration booleans, set to true to keep the service!
-By default the services below will be removed:
-rhel7cis_dhcp: false
-rhel7cis_ldap: false
-rhel7cis_nfs: false
-rhel7cis_rpc: false
-rhel7cis_bind: false
-rhel7cis_vsftpd: false
-rhel7cis_httpd: false
-rhel7cis_dovecot: false
-rhel7cis_samba: false
-rhel7cis_squid: false
-rhel7cis_net_snmp: false
+**rhel7cis_notauto**: Run CIS checks that we typically do NOT want to automate due to the high probability of breaking the system (Default: false)
 
-# These are switches to enable or disable audit point and patches from the relevant chapters in CIS/
-rhel7cis_notauto: true
-1. Initial setup
-rhel7cis_section1: true
+**rhel7cis_section1**: CIS - General Settings (Section 1) (Default: true)
 
-2. Services
-rhel7cis_section2: true
+**rhel7cis_section2**: CIS - Services settings (Section 2) (Default: true)
 
-3. Network Configuration
-rhel7cis_section3: true
+**rhel7cis_section3**: CIS - Network settings (Section 3) (Default: true)
 
-4. Logging and Auditing
-rhel7cis_section4: true
+**rhel7cis_section4**: CIS - Logging and Auditing settings (Section 4) (Default: true)
 
-5. Access, Authentication and Authorization
-rhel7cis_section5: true
+**rhel7cis_section5**: CIS - Access, Authentication and Authorization settings (Section 5) (Default: true)
 
-6. System Maintenance
-rhel7cis_section6: true
+**rhel7cis_section6**: CIS - System Maintenance settings (Section 6) (Default: true)
 
-7. User Accounts and Environment
-rhel7cis_section7: true
+Service variables: These control whether a server should or should not be allowed to continue to run these services.
 
-8.  Warning Banners
-rhel7cis_section8: true
+False (Default) = Disallow service (it will be removed upon playbook run)
+True = Allow service (service will not be removed)
 
-9. System Maintenance
-rhel7cis_section9: true
-
+**rhel7cis_dhcp**: Allow dhcp (Default: false)
+**rhel7cis_ldap**: Allow ldap (Default: false)
+**rhel7cis_nfs**: Allow nfs (Default: false)
+**rhel7cis_rpc**: Allow rpc (Default: false)
+**rhel7cis_bind**: Allow bind (Default: false)
+**rhel7cis_vsftpd**: Allow vsftpd (Default: false)
+**rhel7cis_httpd**: Allow httpd (Apache) (Default: false)
+**rhel7cis_dovecot**: Allow dovecot (Default: false)
+**rhel7cis_samba**: Allow samba (Default: false)
+**rhel7cis_squid**: Allow squid (Default: false)
+**rhel7cis_net_snmp**: Allow SNMP (Default: false)
 
 
 Dependencies
