@@ -1,98 +1,347 @@
-#- name: "SCORED | 1.1.1 | PATCH | Create Separate Partition for /tmp"
-# Rule 1.1.1 see not_automated.yml
-
-
-# List /tmp mount that is missing the 'nosuid' option and ask the sys admin to correct this in /etc/fstab
-# This would be a bit tricky to automatically fix in /etc/fstab.
-# - name: "SCORED | 1.1.2 | AUDIT | Set nodev option for /tmp Partition"
-#   shell: mount | grep 'on /tmp' | grep -v 'nodev'
-#   changed_when: false
-#   failed_when: tmp_mounts_missing_nodev.stderr
-#   register: tmp_mounts_missing_nodev
-#   ignore_errors: yes
-#   tags:
-#       - level1
-#       - level2
-#       - audit
-#       - rule_1.1.2
-
-# - name: "SCORED | 1.1.2 | AUDIT | Set nodev option for /tmp Partition"
-#   debug: var=tmp_mounts_missing_nodev.stdout_lines
-#   when: tmp_mounts_missing_nodev.stdout
-#   ignore_errors: yes
-#   tags:
-#       - level1
-#       - level2
-#       - audit
-#       - rule_1.1.2
-
-# - name: "SCORED | 1.1.2 | AUDIT | Set nodev option for /tmp Partition"
-#   pause: prompt="/tmp is mounted without the 'nodev' option set. This is a finding. Press Enter to continue"
-#   when: tmp_mounts_missing_nodev.stdout and not rhel7stig_fullauto
-#   ignore_errors: yes
-#   tags:
-#       - level1
-#       - level2
-#       - audit
-#       - rule_1.1.2
-- name: "SCORED | 1.1.2 | AUDIT | Set nodev option for /tmp Partition"
-  command: /bin/true
+- name: "SCORED | 1.1.1.1 | AUDIT | Ensure mounting of cramfs filesystems is disabled"
+  shell: modprobe -n -v cramfs
+  register: cramfs_audit
+  always_run: yes
+  changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
+      - scored
       - audit
-      - rule_1.1.2
+      - rule_1.1.1.1
+      - cramfs
 
-- name: "SCORED | 1.1.2 | PATCH | Set nodev option for /tmp Partition"
-  command: /bin/true
+- name: "SCORED | 1.1.1.1 | AUDIT | Ensure mounting of cramfs filesystems is disabled"
+  shell: lsmod | grep cramfs
+  register: cramfs_loaded_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
   tags:
       - level1
-      - level2
+      - scored
+      - audit
+      - rule_1.1.1.1
+      - cramfs
+
+- name: "SCORED | 1.1.1.1 | PATCH | Ensure mounting of cramfs filesystems is disabled"
+  copy:
+      content: install cramfs /bin/true
+      dest: /etc/modprobe.d/disable-cramfs.conf
+      owner: root
+      group: root
+      mode: "0644"
+  tags:
+      - level1
+      - scored
       - patch
-      - rule_1.1.2
+      - rule_1.1.1.1
+      - cramfs
 
-# - name: "SCORED | 1.1.3 | AUDIT | Set nosuid option for /tmp Partition"
-#   shell: mount | grep 'on /tmp' | grep -v 'nosuid'
-#   changed_when: false
-#   failed_when: tmp_mounts_missing_nosuid.stderr
-#   register: tmp_mounts_missing_nosuid
-#   ignore_errors: yes
-#   tags:
-#       - level1
-#       - level2
-#       - audit
-#       - rule_1.1.3
+- name: "SCORED | 1.1.1.2 | AUDIT | Ensure mounting of freevxfs filesystems is disabled"
+  shell: modprobe -n -v freevxfs
+  register: freevxfs_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - audit
+      - rule_1.1.1.2
+      - freevxfs
 
-# - name: "SCORED | 1.1.3 | AUDIT | Set nodev option for /tmp Partition"
-#   debug: var=tmp_mounts_missing_nosuid.stdout_lines
-#   when: tmp_mounts_missing_nosuid.stdout
-#   ignore_errors: yes
-#   tags:
-#       - level1
-#       - level2
-#       - audit
-#       - rule_1.1.3
+- name: "SCORED | 1.1.1.2 | AUDIT | Ensure mounting of freevxfs filesystems is disabled"
+  shell: lsmod | grep freevxfs
+  register: freevxfs_loaded_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - audit
+      - rule_1.1.1.2
+      - freevxfs
 
-# - name: "SCORED | 1.1.3 | AUDIT | Set nodev option for /tmp Partition"
-#   pause: prompt="/tmp is mounted without the 'nosuid' option set. This is a finding. Press Enter to continue"
-#   when: tmp_mounts_missing_nosuid.stdout and not rhel7stig_fullauto
-#   ignore_errors: yes
-#   tags:
-#       - level1
-#       - level2
-#       - audit
-#       - rule_1.1.3
+- name: "SCORED | 1.1.1.2 | PATCH | Ensure mounting of freevxfs filesystems is disabled"
+  copy:
+      content: install freevxfs /bin/true
+      dest: /etc/modprobe.d/disable-freevxfs.conf
+      owner: root
+      group: root
+      mode: "0644"
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_1.1.1.2
+      - freevxfs
 
-- name: "SCORED | 1.1.3 | PATCH | Set nosuid option for /tmp Partition"
+- name: "SCORED | 1.1.1.3 | AUDIT | Ensure mounting of jffs2 filesystems is disabled"
+  shell: modprobe -n -v jffs2
+  register: jffs2_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - audit
+      - rule_1.1.1.3
+      - jffs2
+
+- name: "SCORED | 1.1.1.3 | AUDIT | Ensure mounting of jffs2 filesystems is disabled"
+  shell: lsmod | grep jffs2
+  register: jffs2_loaded_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - audit
+      - rule_1.1.1.3
+      - jffs2
+
+- name: "SCORED | 1.1.1.3 | PATCH | Ensure mounting of jffs2 filesystems is disabled"
+  copy:
+      content: install jffs2 /bin/true
+      dest: /etc/modprobe.d/disable-jffs2.conf
+      owner: root
+      group: root
+      mode: "0644"
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_1.1.1.3
+      - jffs2
+
+- name: "SCORED | 1.1.1.4 | AUDIT | Ensure mounting of hfs filesystems is disabled"
+  shell: modprobe -n -v hfs
+  register: hfs_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - audit
+      - rule_1.1.1.4
+      - hfs
+
+- name: "SCORED | 1.1.1.4 | AUDIT | Ensure mounting of hfs filesystems is disabled"
+  shell: lsmod | grep hfs
+  register: hfs_loaded_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - audit
+      - rule_1.1.1.4
+      - hfs
+
+- name: "SCORED | 1.1.1.4 | PATCH | Ensure mounting of hfs filesystems is disabled"
+  copy:
+      content: install hfs /bin/true
+      dest: /etc/modprobe.d/disable-hfs.conf
+      owner: root
+      group: root
+      mode: "0644"
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_1.1.1.4
+      - hfs
+
+- name: "SCORED | 1.1.1.5 | AUDIT | Ensure mounting of hfsplus filesystems is disabled"
+  shell: modprobe -n -v hfsplus
+  register: hfsplus_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - audit
+      - rule_1.1.1.5
+      - hfsplus
+
+- name: "SCORED | 1.1.1.5 | AUDIT | Ensure mounting of hfsplus filesystems is disabled"
+  shell: lsmod | grep hfsplus
+  register: hfsplus_loaded_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - audit
+      - rule_1.1.1.5
+      - hfsplus
+
+- name: "SCORED | 1.1.1.5 | PATCH | Ensure mounting of hfsplus filesystems is disabled"
+  copy:
+      content: install hfsplus /bin/true
+      dest: /etc/modprobe.d/disable-hfsplus.conf
+      owner: root
+      group: root
+      mode: "0644"
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_1.1.1.5
+      - hfsplus
+
+- name: "SCORED | 1.1.1.6 | AUDIT | Ensure mounting of squashfs filesystems is disabled"
+  shell: modprobe -n -v squashfs
+  register: squashfs_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - audit
+      - rule_1.1.1.6
+      - squashfs
+
+- name: "SCORED | 1.1.1.6 | AUDIT | Ensure mounting of squashfs filesystems is disabled"
+  shell: lsmod | grep squashfs
+  register: squashfs_loaded_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - audit
+      - rule_1.1.1.6
+      - squashfs
+
+- name: "SCORED | 1.1.1.6 | PATCH | Ensure mounting of squashfs filesystems is disabled"
+  copy:
+      content: install squashfs /bin/true
+      dest: /etc/modprobe.d/disable-squashfs.conf
+      owner: root
+      group: root
+      mode: "0644"
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_1.1.1.6
+      - squashfs
+
+- name: "SCORED | 1.1.1.7 | AUDIT | Ensure mounting of udf filesystems is disabled"
+  shell: modprobe -n -v udf
+  register: udf_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - audit
+      - rule_1.1.1.7
+      - udf
+
+- name: "SCORED | 1.1.1.7 | AUDIT | Ensure mounting of udf filesystems is disabled"
+  shell: lsmod | grep udf
+  register: udf_loaded_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - audit
+      - rule_1.1.1.7
+      - udf
+
+- name: "SCORED | 1.1.1.7 | PATCH | Ensure mounting of udf filesystems is disabled"
+  copy:
+      content: install udf /bin/true
+      dest: /etc/modprobe.d/disable-udf.conf
+      owner: root
+      group: root
+      mode: "0644"
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_1.1.1.7
+      - udf
+
+- name: "SCORED | 1.1.1.8 | AUDIT | Ensure mounting of FAT filesystems is disabled"
+  shell: modprobe -n -v vfat
+  register: vfat_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - audit
+      - rule_1.1.1.8
+      - vfat
+
+- name: "SCORED | 1.1.1.8 | AUDIT | Ensure mounting of FAT filesystems is disabled"
+  shell: lsmod | grep vfat
+  register: vfat_loaded_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - audit
+      - rule_1.1.1.8
+      - vfat
+
+- name: "SCORED | 1.1.1.8 | PATCH | Ensure mounting of FAT filesystems is disabled"
+  copy:
+      content: install vfat /bin/true
+      dest: /etc/modprobe.d/disable-vfat.conf
+      owner: root
+      group: root
+      mode: "0644"
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_1.1.1.8
+      - vfat
+
+#- name: "SCORED | 1.1.1 | AUDIT | Create Separate Partition for /tmp"
+# See not_automated.yml
+
+- name: "SCORED | 1.1.3 | AUDIT | Ensure nodev option set on /tmp partition"
+  shell: mount | grep "on /tmp " | grep nodev
+  register: tmp_nodev_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - audit
+      - rule_1.1.3
+
+- name: "SCORED | 1.1.3 | PATCH | Ensure nodev option set on /tmp partition"
   command: /bin/true
   tags:
       - level1
-      - level2
+      - scored
       - patch
       - rule_1.1.3
 
-- name: "SCORED | 1.1.4 | AUDIT | Set noexec option for /tmp Partition"
+- name: "SCORED | 1.1.4 | AUDIT | Ensure nosuid option set on /tmp partition"
   command: /bin/true
   register: result
   always_run: yes
@@ -104,7 +353,7 @@
       - audit
       - rule_1.1.4
 
-- name: "SCORED | 1.1.4 | PATCH | Set noexec option for /tmp Partition"
+- name: "SCORED | 1.1.4 | PATCH | Ensure nosuid option set on /tmp partition"
   command: /bin/true
   tags:
       - level1
@@ -112,12 +361,9 @@
       - patch
       - rule_1.1.4
 
-#- name: "SCORED | 1.1.5 | PATCH | Create Separate Partition for /var"
-# Rule 1.1.5 see not_automated.yml
-
-- name: "SCORED | 1.1.6 | AUDIT | Bind Mount the /var/tmp directory to /tmp"
-  shell: mount | grep "/tmp " | grep /var/tmp
-  register: vartmp_bindmount_audit
+- name: "SCORED | 1.1.5 | AUDIT | Ensure noexec option set on /tmp partition"
+  command: /bin/true
+  register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -125,26 +371,63 @@
       - level1
       - level2
       - audit
-      - rule_1.1.6
+      - rule_1.1.5
 
-- name: "SCORED | 1.1.6 | PATCH | Bind Mount the /var/tmp directory to /tmp"
+- name: "SCORED | 1.1.5 | PATCH | Ensure noexec option set on /tmp partition"
   command: /bin/true
   tags:
       - level1
       - level2
       - patch
-      - rule_1.1.6
+      - rule_1.1.5
 
-#- name: "SCORED | 1.1.7 | PATCH | Create Separate Partition for /var/log"
-# Rule 1.1.7 see not_automated.yml
+#- name: "SCORED | 1.1.6 | AUDIT | Ensure separate partition exists for /var"
+# See not_automated.yml
 
-#- name: "SCORED | 1.1.8 | PATCH | Create Separate Partition for /var/log/audit"
-# Rule 1.1.8 see not_automated.yml
+#- name: "SCORED | 1.1.7 | AUDIT | Ensure separate partition exists for /var/tmp"
+# See not_automated.yml
 
-#- name: "SCORED | 1.1.9 | PATCH | Create Separate Partition for /home"
-# Rule 1.1.9 see not_automated.yml  command: /bin/true
+- name: "SCORED | 1.1.8 | AUDIT | Ensure nodev option set on /var/tmp partition"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_1.1.8
 
-- name: "SCORED | 1.1.10 | AUDIT | Add nodev Option to /home"
+- name: "SCORED | 1.1.8 | PATCH | Ensure nodev option set on /var/tmp partition"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_1.1.8
+
+- name: "SCORED | 1.1.9 | AUDIT | Ensure nosuid option set on /var/tmp partition"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_1.1.9
+
+- name: "SCORED | 1.1.9 | PATCH | Ensure nosuid option set on /var/tmp partition"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_1.1.9
+
+- name: "SCORED | 1.1.10 | AUDIT | Ensure noexec option set on /var/tmp partition"
   command: /bin/true
   register: result
   always_run: yes
@@ -156,7 +439,7 @@
       - audit
       - rule_1.1.10
 
-- name: "SCORED | 1.1.10 | PATCH | Add nodev Option to /home"
+- name: "SCORED | 1.1.10 | PATCH | Ensure noexec option set on /var/tmp partition"
   command: /bin/true
   tags:
       - level1
@@ -164,67 +447,16 @@
       - patch
       - rule_1.1.10
 
-- name: "NOTSCORED | 1.1.11 | AUDIT | Add nodev Option to Removable Media Partitions"
-  command: /bin/true
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - level2
-      - audit
-      - rule_1.1.11
+#- name: "SCORED | 1.1.11 | AUDIT | Ensure separate partition exists for /var/log"
+# See not_automated.yml
 
-- name: "NOTSCORED | 1.1.11 | PATCH | Add nodev Option to Removable Media Partitions"
-  command: /bin/true
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_1.1.11
+#- name: "SCORED | 1.1.12 | AUDIT | Ensure separate partition exists for /var/log/audit"
+# See not_automated.yml
 
-- name: "NOTSCORED | 1.1.12 | AUDIT | Add noexec Option to Removable Media Partitions"
-  command: /bin/true
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - level2
-      - audit
-      - rule_1.1.12
+#- name: "SCORED | 1.1.13 | AUDIT | Ensure separate partition exists for /home"
+# See not_automated.yml
 
-- name: "NOTSCORED | 1.1.12 | PATCH | Add noexec Option to Removable Media Partitions"
-  command: /bin/true
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_1.1.12
-
-- name: "NOTSCORED | 1.1.13 | AUDIT | Add nosuid Option to Removable Media Partitions"
-  command: /bin/true
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - level2
-      - audit
-      - rule_1.1.13
-
-- name: "NOTSCORED | 1.1.13 | PATCH | Add nosuid Option to Removable Media Partitions"
-  command: /bin/true
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_1.1.13
-
-- name: "SCORED | 1.1.14 | AUDIT | Add nodev Option to /dev/shm Partition"
+- name: "SCORED | 1.1.14 | AUDIT | Ensure nodev option set on /home partition"
   command: /bin/true
   register: result
   always_run: yes
@@ -236,7 +468,7 @@
       - audit
       - rule_1.1.14
 
-- name: "SCORED | 1.1.14 | PATCH | Add nodev Option to /dev/shm Partition"
+- name: "SCORED | 1.1.14 | PATCH | Ensure nodev option set on /home partition"
   command: /bin/true
   tags:
       - level1
@@ -244,7 +476,7 @@
       - patch
       - rule_1.1.14
 
-- name: "SCORED | 1.1.15 | AUDIT | Add nosuid Option to /dev/shm Partition"
+- name: "SCORED | 1.1.15 | AUDIT | Ensure nodev option set on /dev/shm partition"
   command: /bin/true
   register: result
   always_run: yes
@@ -256,7 +488,7 @@
       - audit
       - rule_1.1.15
 
-- name: "SCORED | 1.1.15 | PATCH | Add nosuid Option to /dev/shm Partition"
+- name: "SCORED | 1.1.15 | PATCH | Ensure nodev option set on /dev/shm partition"
   command: /bin/true
   tags:
       - level1
@@ -264,7 +496,7 @@
       - patch
       - rule_1.1.15
 
-- name: "SCORED | 1.1.16 | AUDIT | Add noexec Option to /dev/shm Partition"
+- name: "SCORED | 1.1.16 | AUDIT | Ensure nosuid option set on /dev/shm partition"
   command: /bin/true
   register: result
   always_run: yes
@@ -276,7 +508,7 @@
       - audit
       - rule_1.1.16
 
-- name: "SCORED | 1.1.16 | PATCH | Add noexec Option to /dev/shm Partition"
+- name: "SCORED | 1.1.16 | PATCH | Ensure nosuid option set on /dev/shm partition"
   command: /bin/true
   tags:
       - level1
@@ -284,164 +516,127 @@
       - patch
       - rule_1.1.16
 
-# - name: "SCORED | 1.1.17 | PATCH | Set Sticky Bit on All World-Writable Directories"
-# Rule 1.1.17 see not_automated.yml
-
-- name: "NOTSCORED | 1.1.18 | AUDIT | Disable Mounting of cramfs Filesystems"
-  shell: /sbin/lsmod | grep cramfs
+- name: "SCORED | 1.1.17 | AUDIT | Ensure noexec option set on /dev/shm partition"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
+      - level1
+      - level2
+      - audit
+      - rule_1.1.17
+
+- name: "SCORED | 1.1.17 | PATCH | Ensure noexec option set on /dev/shm partition"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_1.1.17
+
+- name: "NOTSCORED | 1.1.18 | AUDIT | Ensure nodev option set on removable media partitions"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
       - level2
       - audit
       - rule_1.1.18
 
-- name: "NOTSCORED | 1.1.18 | PATCH | Disable Mounting of cramfs Filesystems"
-  lineinfile:
-      dest=/etc/modprobe.d/CIS.conf
-      create=yes
-      regexp='^install cramfs'
-      line='install cramfs /bin/true'
+- name: "NOTSCORED | 1.1.18 | PATCH | Ensure nodev option set on removable media partitions"
+  command: /bin/true
   tags:
+      - level1
       - level2
       - patch
       - rule_1.1.18
 
-- name: "NOTSCORED | 1.1.19 | AUDIT | Disable Mounting of freevxfs Filesystems"
-  shell: /sbin/lsmod | grep freevxfs
+- name: "NOTSCORED | 1.1.19 | AUDIT | Ensure nosuid option set on removable media partitions"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
+      - level1
       - level2
       - audit
       - rule_1.1.19
 
-- name: "NOTSCORED | 1.1.19 | PATCH | Disable Mounting of freevxfs Filesystems"
-  lineinfile:
-      dest=/etc/modprobe.d/CIS.conf
-      create=yes
-      regexp='^install freevxfs'
-      line='install freevxfs /bin/true'
+- name: "NOTSCORED | 1.1.19 | PATCH | Ensure nosuid option set on removable media partitions"
+  command: /bin/true
   tags:
+      - level1
       - level2
       - patch
       - rule_1.1.19
 
-- name: "NOTSCORED | 1.1.20 | AUDIT | Disable Mounting of jffs2 Filesystems"
-  shell: /sbin/lsmod | grep jffs2
+- name: "NOTSCORED | 1.1.20 | AUDIT | Ensure noexec option set on removable media partitions"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
+      - level1
       - level2
       - audit
       - rule_1.1.20
 
-- name: "NOTSCORED | 1.1.20 | PATCH | Disable Mounting of jffs2 Filesystems"
-  lineinfile:
-      dest=/etc/modprobe.d/CIS.conf
-      create=yes
-      regexp='^install jffs2'
-      line='install jffs2 /bin/true'
+- name: "NOTSCORED | 1.1.20 | PATCH | Ensure noexec option set on removable media partitions"
+  command: /bin/true
   tags:
+      - level1
       - level2
       - patch
       - rule_1.1.20
 
-- name: "NOTSCORED | 1.1.21 | AUDIT | Disable Mounting of hfs Filesystems"
-  shell: /sbin/lsmod | grep hfs
+- name: "SCORED | 1.1.21 | AUDIT | Ensure sticky bit is set on all world-writable directories"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
+      - level1
       - level2
       - audit
       - rule_1.1.21
 
-- name: "NOTSCORED | 1.1.21 | PATCH | Disable Mounting of hfs Filesystems"
-  lineinfile:
-      dest=/etc/modprobe.d/CIS.conf
-      create=yes
-      regexp='^install hfs'
-      line='install hfs /bin/true'
+- name: "SCORED | 1.1.21 | PATCH | Ensure sticky bit is set on all world-writable directories"
+  command: /bin/true
   tags:
+      - level1
       - level2
       - patch
       - rule_1.1.21
 
-- name: "NOTSCORED | 1.1.22 | AUDIT | Disable Mounting of hfsplus Filesystems"
-  shell: /sbin/lsmod | grep hfsplus
+- name: "SCORED | 1.1.22 | AUDIT | Disable Automounting"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
+      - level1
       - level2
       - audit
       - rule_1.1.22
 
-- name: "NOTSCORED | 1.1.22 | PATCH | Disable Mounting of hfsplus Filesystems"
-  lineinfile:
-      dest=/etc/modprobe.d/CIS.conf
-      create=yes
-      regexp='^install hfsplus'
-      line='install hfsplus /bin/true'
+- name: "SCORED | 1.1.22 | PATCH | Disable Automounting"
+  command: /bin/true
   tags:
+      - level1
       - level2
       - patch
       - rule_1.1.22
 
-- name: "NOTSCORED | 1.1.23 | AUDIT | Disable Mounting of squashfs Filesystems"
-  shell: /sbin/lsmod | grep squashfs
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level2
-      - audit
-      - rule_1.1.23
-
-- name: "NOTSCORED | 1.1.23 | PATCH | Disable Mounting of squashfs Filesystems"
-  lineinfile:
-      dest=/etc/modprobe.d/CIS.conf
-      create=yes
-      regexp='^install squashfs'
-      line='install squashfs /bin/true'
-  tags:
-      - level2
-      - patch
-      - rule_1.1.23
-
-- name: "NOTSCORED | 1.1.24 | AUDIT | Disable Mounting of udf Filesystems"
-  shell: /sbin/lsmod | grep udf
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level2
-      - audit
-      - rule_1.1.24
-
-- name: "NOTSCORED | 1.1.24 | PATCH | Disable Mounting of udf Filesystems"
-  lineinfile:
-      dest=/etc/modprobe.d/CIS.conf
-      create=yes
-      regexp='^install udf'
-      line='install udf /bin/true'
-  tags:
-      - level2
-      - patch
-      - rule_1.1.24
-
-- name: "NOTSCORED | 1.2.1 | AUDIT | Configure Connection to the RHN RPM Repositories"
+- name: "NOTSCORED | 1.2.1 | AUDIT | Ensure package manager repositories are configured"
   command: /bin/true
   register: result
   always_run: yes
@@ -453,7 +648,7 @@
       - audit
       - rule_1.2.1
 
-- name: "NOTSCORED | 1.2.1 | PATCH | Configure Connection to the RHN RPM Repositories"
+- name: "NOTSCORED | 1.2.1 | PATCH | Ensure package manager repositories are configured"
   command: /bin/true
   tags:
       - level1
@@ -461,7 +656,7 @@
       - patch
       - rule_1.2.1
 
-- name: "SCORED | 1.2.2 | AUDIT | Verify Red Hat GPG Key is Installed"
+- name: "SCORED | 1.2.2 | AUDIT | Ensure gpgcheck is globally activated"
   command: /bin/true
   register: result
   always_run: yes
@@ -473,7 +668,7 @@
       - audit
       - rule_1.2.2
 
-- name: "SCORED | 1.2.2 | PATCH | Verify Red Hat GPG Key is Installed"
+- name: "SCORED | 1.2.2 | PATCH | Ensure gpgcheck is globally activated"
   command: /bin/true
   tags:
       - level1
@@ -481,7 +676,7 @@
       - patch
       - rule_1.2.2
 
-- name: "SCORED | 1.2.3 | AUDIT | Verify that gpgcheck is Globally Activated"
+- name: "NOTSCORED | 1.2.3 | AUDIT | Ensure GPG keys are configured"
   command: /bin/true
   register: result
   always_run: yes
@@ -493,7 +688,7 @@
       - audit
       - rule_1.2.3
 
-- name: "SCORED | 1.2.3 | PATCH | Verify that gpgcheck is Globally Activated"
+- name: "NOTSCORED | 1.2.3 | PATCH | Ensure GPG keys are configured"
   command: /bin/true
   tags:
       - level1
@@ -501,357 +696,244 @@
       - patch
       - rule_1.2.3
 
-- name: "NOTSCORED | 1.2.4 | AUDIT | Disable the rhnsd Daemon"
+- name: "NOTSCORED | 1.2.4 | AUDIT | Ensure Red Hat Network or Subscription Manager connection is configured"
   command: /bin/true
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
+      - level1
       - level2
       - audit
       - rule_1.2.4
 
-- name: "NOTSCORED | 1.2.4 | PATCH | Disable the rhnsd Daemon"
+- name: "NOTSCORED | 1.2.4 | PATCH | Ensure Red Hat Network or Subscription Manager connection is configured"
   command: /bin/true
   tags:
+      - level1
       - level2
       - patch
       - rule_1.2.4
 
-- name: "NOTSCORED | 1.2.5 | AUDIT | Obtain Software Package Updates with yum"
+- name: "NOTSCORED | 1.2.5 | AUDIT | Disable the rhnsd Daemon"
   command: /bin/true
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
-      - level1
       - level2
       - audit
       - rule_1.2.5
 
-- name: "NOTSCORED | 1.2.5 | PATCH | Obtain Software Package Updates with yum"
+- name: "NOTSCORED | 1.2.5 | PATCH | Disable the rhnsd Daemon"
   command: /bin/true
   tags:
-      - level1
       - level2
       - patch
       - rule_1.2.5
 
-- name: "NOTSCORED | 1.2.6 | AUDIT | Verify Package Integrity Using RPM"
-  command: /bin/true
-  register: result
+- name: "SCORED | 1.3.1 | AUDIT | Ensure AIDE is installed"
+  command: rpm -q aide
+  register: aide_installed_audit
   always_run: yes
   changed_when: no
+  failed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
-      - audit
-      - rule_1.2.6
-
-- name: "NOTSCORED | 1.2.6 | PATCH | Verify Package Integrity Using RPM"
-  command: /bin/true
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_1.2.6
-
-- name: "SCORED | 1.3.1 | AUDIT | Install AIDE"
-  shell: rpm -q aide
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level2
+      - scored
+      - aide
       - audit
       - rule_1.3.1
 
-- name: "SCORED | 1.3.1 | PATCH | Install AIDE"
+- name: "SCORED | 1.3.1 | AUDIT | Ensure AIDE is installed"
+  stat:
+      path: /var/lib/aide/aide.db.gz
+  register: aide_db
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - aide
+      - audit
+      - rule_1.3.1
+
+- name: "SCORED | 1.3.1 | PATCH | Ensure AIDE is installed"
   yum:
-      name=aide
-      state=installed
+      name: aide
+      state: present
   tags:
-      - level2
+      - level1
+      - scored
+      - aide
       - patch
       - rule_1.3.1
 
-- name: "SCORED | 1.3.2 | AUDIT | Implement Periodic Execution of File Integrity"
-  command: grep -r aide /etc/cron.* /etc/crontab
-  register: result
+- name: "SCORED | 1.3.1 | PATCH | Ensure AIDE is installed"
+  shell: /usr/sbin/aide --init && cp /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+  when: not aide_db.stat.exists
+  async: 45
+  poll: 0
+  tags:
+      - level1
+      - scored
+      - aide
+      - patch
+      - rule_1.3.1
+
+- name: "SCORED | 1.3.2 | AUDIT | Ensure filesystem integrity is regularly checked"
+  shell: grep aide {{ rhel7cis_aide_cron['cron_file'] }} /etc/cron.*/*
+  register: aide_cron_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
-      - level2
+      - level1
+      - scored
+      - aide
+      - file_integrity
       - audit
       - rule_1.3.2
 
-- name: "SCORED | 1.3.2 | PATCH | Implement Periodic Execution of File Integrity"
-  shell: aide --init && mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
-  args:
-      creates: /var/lib/aide/aide.db.gz
+- name: "SCORED | 1.3.2 | PATCH | Ensure filesystem integrity is regularly checked"
+  cron:
+      name: Run AIDE integrity check weekly
+      cron_file: "{{ rhel7cis_aide_cron['cron_file'] }}"
+      user: "{{ rhel7cis_aide_cron['cron_user'] }}"
+      minute: "{{ rhel7cis_aide_cron['aide_minute'] | default('0') }}"
+      hour: "{{ rhel7cis_aide_cron['aide_hour'] | default('5') }}"
+      day: "{{ rhel7cis_aide_cron['aide_day'] | default('*') }}"
+      month: "{{ rhel7cis_aide_cron['aide_month'] | default('*') }}"
+      weekday: "{{ rhel7cis_aide_cron['aide_weekday'] | default('*') }}"
+      job: "{{ rhel7cis_aide_cron['aide_job'] }}"
   tags:
-      - level2
+      - level1
+      - scored
+      - aide
+      - file_integrity
       - patch
       - rule_1.3.2
 
-- name: "SCORED | 1.3.2 | PATCH | Implement Periodic Execution of File Integrity"
-  cron: 
-      name="aide" weekday="*" minute=0 hour=5
-      user="root" job="/usr/sbin/aide --check"
-      cron_file=aide.cronjob
-  tags:
-      - level2
-      - patch
-      - rule_1.3.2
-
-- name: "SCORED | 1.4.1 | AUDIT | Ensure SELinux is not disabled in /boot/grub2/grub.cfg"
-  shell: grep "^\s*linux" /boot/grub2/grub.cfg|grep -E 'selinux|enforcing'=0
+- name: "SCORED | 1.4.1 | AUDIT | Ensure permissions on bootloader config are configured"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
-      - level2
+      - level1
+      - scored
       - audit
       - rule_1.4.1
 
-- name: "SCORED | 1.4.1 | PATCH | Ensure SELinux is not disabled in /boot/grub2/grub.cfg"
-  command: sed -i 's/selinux=0//;s/enforcing=0//' /boot/grub2/grub.cfg
+- name: "SCORED | 1.4.1 | PATCH | Ensure permissions on bootloader config are configured"
+  command: /bin/true
   tags:
-      - level2
+      - level1
+      - scored
       - patch
       - rule_1.4.1
 
-- name: "SCORED | 1.4.2 | AUDIT | Set the SELinux State"
-  shell: getenforce|grep Enforcing
+- name: "SCORED | 1.4.2 | AUDIT | Ensure bootloader password is set"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
-      - level2
+      - level1
+      - scored
       - audit
       - rule_1.4.2
 
-- name: "SCORED | 1.4.2 | PATCH | Set the SELinux State"
-  lineinfile:
-      state: present
-      dest: /etc/selinux/config
-      regexp: '^SELINUX='
-      line: 'SELINUX=enforcing'
+- name: "SCORED | 1.4.2 | PATCH | Ensure bootloader password is set"
+  command: /bin/true
   tags:
-      - level2
+      - level1
+      - scored
       - patch
       - rule_1.4.2
 
-- name: "SCORED | 1.4.3 | AUDIT | Set the SELinux Policy"
-  command: grep 'SELINUXTYPE=targeted' /etc/selinux/config
+- name: "NOTSCORED | 1.4.3 | AUDIT | Ensure authentication required for single user mode"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
+      - level1
       - level2
       - audit
       - rule_1.4.3
 
-- name: "SCORED | 1.4.3 | PATCH | Set the SELinux Policy"
-  lineinfile:
-      state: present
-      dest: /etc/selinux/config
-      regexp: '^SELINUXTYPE='
-      line: 'SELINUXTYPE=targeted'
+- name: "NOTSCORED | 1.4.3 | PATCH | Ensure authentication required for single user mode"
+  command: /bin/true
   tags:
+      - level1
       - level2
       - patch
       - rule_1.4.3
 
-- name: "SCORED | 1.4.4 | AUDIT | Remove SETroubleshoot"
-  command: rpm -q setroubleshoot
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level2
-      - audit
-      - rule_1.4.4
-
-- name: "SCORED | 1.4.4 | PATCH | Remove SETroubleshoot"
-  yum: 
-      name: setroubleshoot
-      state: absent
-  tags:
-      - level2
-      - patch
-      - rule_1.4.4
-
-- name: "SCORED | 1.4.5 | AUDIT | Remove MCS Translation Service (mcstrans)"
-  command: rpm -q mcstrans
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level2
-      - audit
-      - rule_1.4.5
-
-- name: "SCORED | 1.4.5 | PATCH | Remove MCS Translation Service (mcstrans)"
-  yum: 
-      name: mcstrans
-      state: absent
-  tags:
-      - level2
-      - patch
-      - rule_1.4.5
-
-- name: "SCORED | 1.4.6 | AUDIT | Check for Unconfined Daemons"
-  shell: ps -eZ | egrep "initrc" 
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level2
-      - audit
-      - rule_1.4.6
-
-- name: "SCORED | 1.4.6 | PATCH | Check for Unconfined Daemons"
-  command: /bin/true
-  tags:
-      - level2
-      - patch
-      - rule_1.4.6
-
-- name: "SCORED | 1.5.1 | AUDIT | Set User/Group Owner on /boot/grub2/grub.cfg"
-  command: /bin/true
-  register: result
+- name: "SCORED | 1.5.1 | AUDIT | Ensure core dumps are restricted"
+  shell: grep -E "^\*\s*hard\s*core\s*" /etc/security/limits.conf /etc/security/limits.d/* | awk '{print $4}'
+  register: coredump_limits_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
+      - scored
+      - limits
       - audit
       - rule_1.5.1
 
-- name: "SCORED | 1.5.1 | PATCH | Set User/Group Owner on /boot/grub2/grub.cfg"
-  command: /bin/true
+- name: "SCORED | 1.5.1 | AUDIT | Ensure core dumps are restricted"
+  shell: "sysctl fs.suid_dumpable | awk '{print $3}'"
+  register: coredump_sysctl_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
   tags:
       - level1
-      - level2
-      - patch
+      - scored
+      - sysctl
+      - audit
       - rule_1.5.1
 
-- name: "SCORED | 1.5.2 | AUDIT | Set Permissions on /boot/grub2/grub.cfg"
-  command: /bin/true
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - level2
-      - audit
-      - rule_1.5.2
-
-- name: "SCORED | 1.5.2 | PATCH | Set Permissions on /boot/grub2/grub.cfg"
-  command: /bin/true
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_1.5.2
-
-- name: "SCORED | 1.5.3 | AUDIT | Set Boot Loader Password"
-  command: /bin/true
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - level2
-      - audit
-      - rule_1.5.3
-
-- name: "SCORED | 1.5.3 | PATCH | Set Boot Loader Password"
-  command: /bin/true
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_1.5.3
-
-- name: "SCORED | 1.6.1 | AUDIT | Restrict Core Dumps"
-  shell: grep "hard core" /etc/security/limits.conf /etc/security/limits.d/*
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - level2
-      - audit
-      - rule_1.6.1
-
-- name: "SCORED | 1.6.1 | PATCH | Restrict Core Dumps"
+- name: "SCORED | 1.5.1 | PATCH | Ensure core dumps are restricted"
   lineinfile:
       state: present
       dest: /etc/security/limits.conf
-      regexp: 'hard core'
-      line: '* hard core 0'
+      regexp: '^#?\\*.*core'
+      line: '*                hard    core            0'
       insertbefore: '^# End of file'
   tags:
       - level1
-      - level2
+      - scored
+      - limits
       - patch
-      - rule_1.6.1
+      - rule_1.5.1
 
-- name: "SCORED | 1.6.1 | PATCH | Restrict Core Dumps"
+- name: "SCORED | 1.5.1 | PATCH | Ensure core dumps are restricted"
   sysctl:
       name: fs.suid_dumpable
       value: 0
       state: present
       reload: yes
+      sysctl_set: yes
       ignoreerrors: yes
   tags:
       - level1
-      - level2
+      - scored
+      - sysctl
       - patch
-      - rule_1.6.1
+      - rule_1.5.1
 
-- name: "SCORED | 1.6.2 | AUDIT | Enable Randomized Virtual Memory Region Placement"
-  shell: sysctl kernel.randomize_va_space | awk '{print $3}'
-  changed_when: no
-  always_run: yes
-  register: virt_addr_space_randomization_audit
-  tags:
-      - level1
-      - level2
-      - audit
-      - rule_1.6.2
-
-- name: "SCORED | 1.6.2 | PATCH | Enable Randomized Virtual Memory Region Placement"
-  sysctl:
-    name=kernel.randomize_va_space
-    state=present
-    value=1
-    reload=yes
-  when: virt_addr_space_randomization_audit != 2
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_1.6.2
-
-- name: "NOTSCORED | 1.7 | AUDIT | Use the Latest OS Release"
+- name: "NOTSCORED | 1.5.2 | AUDIT | Ensure XD/NX support is enabled"
   command: /bin/true
   register: result
   always_run: yes
@@ -861,13 +943,399 @@
       - level1
       - level2
       - audit
-      - rule_1.7
+      - rule_1.5.2
 
-- name: "NOTSCORED | 1.7 | PATCH | Use the Latest OS Release"
+- name: "NOTSCORED | 1.5.2 | PATCH | Ensure XD/NX support is enabled"
   command: /bin/true
   tags:
       - level1
       - level2
       - patch
-      - rule_1.7
+      - rule_1.5.2
+
+- name: "SCORED | 1.5.3 | AUDIT | Ensure address space layout randomization (ASLR) is enabled"
+  shell: "sysctl kernel.randomize_va_space | awk '{print $3}'"
+  register: aslr_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - aslr
+      - audit
+      - rule_1.5.3
+
+- name: "SCORED | 1.5.3 | PATCH | Ensure address space layout randomization (ASLR) is enabled"
+  sysctl:
+      name: kernel.randomize_va_space
+      value: 2
+      state: present
+      reload: yes
+      sysctl_set: yes
+      ignoreerrors: yes
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_1.5.3
+
+- name: "SCORED | 1.5.4 | AUDIT | Ensure prelink is disabled"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_1.5.4
+
+- name: "SCORED | 1.5.4 | PATCH | Ensure prelink is disabled"
+  command: /bin/true
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_1.5.4
+
+- name: "SCORED | 1.6.1.1 | AUDIT | Ensure SELinux is not disabled in bootloader configuration"
+  shell: grep -E "^\s*linux.*(selinux|enforcing)=0" /boot/grub2/grub.cfg
+  register: selinux_grub_audit
+  always_run: yes
+  changed_when: no
+  failed_when: selinux_grub_audit.rc == 0
+  ignore_errors: yes
+  tags:
+      - level2
+      - scored
+      - audit
+      - rule_1.6.1.1
+
+- name: "SCORED | 1.6.1.1 | PATCH | Ensure SELinux is not disabled in bootloader configuration"
+  replace:
+      dest: /etc/default/grub
+      regexp: '(selinux|enforcing)\s*=\s*0\s*'
+      follow: yes
+  register: selinux_grub_patch
+  tags:
+      - level2
+      - scored
+      - patch
+      - rule_1.6.1.1
+
+- name: "SCORED | 1.6.1.1 | PATCH | Ensure SELinux is not disabled in bootloader configuration"
+  shell: grub2-mkconfig > /boot/grub2/grub.cfg
+  when: selinux_grub_patch.changed
+  tags:
+      - level2
+      - scored
+      - patch
+      - rule_1.6.1.1
+
+- name: "SCORED | 1.6.1.2 | AUDIT | Ensure the SELinux state is enforcing"
+  shell: getenforce|grep Enforcing
+  register: selinux_state_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level2
+      - scored
+      - selinux
+      - audit
+      - rule_1.6.1.2
+
+# - name: "SCORED | 1.6.1.2 | AUDIT | Ensure the SELinux state is enforcing"
+#   shell: sestatus|grep "SELinux status\: enabled"
+#   register: selinux_running_state_audit
+#   always_run: yes
+#   changed_when: no
+#   ignore_errors: yes
+#   tags:
+#       - level2
+#       - scored
+#       - selinux
+#       - audit
+#       - rule_1.6.1.2
+
+- name: "SCORED | 1.6.1.2 | PATCH | Ensure the SELinux state is enforcing"
+  selinux:
+      conf: /etc/selinux/config
+      policy: "{{ rhel7cis_selinux_pol }}"
+      state: enforcing
+  tags:
+      - level2
+      - scored
+      - selinux
+      - patch
+      - rule_1.6.1.2
+
+- name: "SCORED | 1.6.1.3 | AUDIT | Ensure SELinux policy is configured"
+  shell: grep 'SELINUXTYPE=targeted' /etc/selinux/config
+  register: selinux_policy_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level2
+      - scored
+      - selinux
+      - audit
+      - rule_1.6.1.3
+
+- name: "SCORED | 1.6.1.3 | PATCH | Ensure SELinux policy is configured"
+  selinux:
+      conf: /etc/selinux/config
+      policy: "{{ rhel7cis_selinux_pol }}"
+      state: enforcing
+  tags:
+      - level2
+      - scored
+      - selinux
+      - patch
+      - rule_1.6.1.3
+
+- name: "SCORED | 1.6.1.4 | AUDIT | Ensure SETroubleshoot is not installed"
+  command: rpm -q setroubleshoot
+  register: setroubleshoot_removed_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level2
+      - scored
+      - selinux
+      - audit
+      - rule_1.6.1.4
+
+- name: "SCORED | 1.6.1.4 | PATCH | Ensure SETroubleshoot is not installed"
+  yum:
+      name: setroubleshoot
+      state: absent
+  tags:
+      - level2
+      - scored
+      - selinux
+      - patch
+      - rule_1.6.1.4
+
+- name: "SCORED | 1.6.1.5 | AUDIT | Ensure the MCS Translation Service (mcstrans) is not installed"
+  command: rpm -q mcstrans
+  register: mcstrans_removed_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level2
+      - scored
+      - audit
+      - rule_1.6.1.5
+
+- name: "SCORED | 1.6.1.5 | PATCH | Ensure the MCS Translation Service (mcstrans) is not installed"
+  yum:
+      name: mcstrans
+      state: absent
+  tags:
+      - level2
+      - scored
+      - patch
+      - rule_1.6.1.5
+
+- name: "SCORED | 1.6.1.6 | AUDIT | Ensure no unconfined daemons exist"
+  shell: "ps -eZ | egrep 'initrc' | egrep -vw 'tr|ps|egrep|bash|awk' | tr ':' ' ' | awk '{
+print $NF }'"
+  register: unconfined_daemon_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level2
+      - scored
+      - audit
+      - rule_1.6.1.6
+
+- name: "SCORED | 1.6.2 | AUDIT | Ensure SELinux is installed"
+  command: rpm -q libselinux
+  register: selinux_installed_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level2
+      - scored
+      - selinux
+      - audit
+      - rule_1.6.2
+
+- name: "SCORED | 1.6.2 | PATCH | Ensure SELinux is installed"
+  yum:
+      name: libselinux
+      state: present
+  tags:
+      - level2
+      - scored
+      - patch
+      - rule_1.6.2
+
+- name: "SCORED | 1.7.1.1 | AUDIT | Ensure message of the day is configured properly"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_1.7.1.1
+
+- name: "SCORED | 1.7.1.1 | PATCH | Ensure message of the day is configured properly"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_1.7.1.1
+
+- name: "NOTSCORED | 1.7.1.2 | AUDIT | Ensure local login warning banner is configured properly"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_1.7.1.2
+
+- name: "NOTSCORED | 1.7.1.2 | PATCH | Ensure local login warning banner is configured properly"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_1.7.1.2
+
+- name: "NOTSCORED | 1.7.1.3 | AUDIT | Ensure remote login warning banner is configured properly"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_1.7.1.3
+
+- name: "NOTSCORED | 1.7.1.3 | PATCH | Ensure remote login warning banner is configured properly"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_1.7.1.3
+
+- name: "NOTSCORED | 1.7.1.4 | AUDIT | Ensure permissions on /etc/motd are configured"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_1.7.1.4
+
+- name: "NOTSCORED | 1.7.1.4 | PATCH | Ensure permissions on /etc/motd are configured"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_1.7.1.4
+
+- name: "SCORED | 1.7.1.5 | AUDIT | Ensure permissions on /etc/issue are configured"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_1.7.1.5
+
+- name: "SCORED | 1.7.1.5 | PATCH | Ensure permissions on /etc/issue are configured"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_1.7.1.5
+
+- name: "NOTSCORED | 1.7.1.6 | AUDIT | Ensure permissions on /etc/issue.net are configured"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_1.7.1.6
+
+- name: "NOTSCORED | 1.7.1.6 | PATCH | Ensure permissions on /etc/issue.net are configured"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_1.7.1.6
+
+- name: "SCORED | 1.7.2 | AUDIT | Ensure GDM login banner is configured"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_1.7.2
+
+- name: "SCORED | 1.7.2 | PATCH | Ensure GDM login banner is configured"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_1.7.2
+
+- name: "NOTSCORED | 1.8 | AUDIT | Ensure updates, patches, and additional security software are installed"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_1.8
+
+- name: "NOTSCORED | 1.8 | PATCH | Ensure updates, patches, and additional security software are installed"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_1.8
 

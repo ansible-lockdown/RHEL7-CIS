@@ -1,0 +1,725 @@
+- name: "SCORED | 4.1.1 | AUDIT | Disable IP Forwarding"
+  shell: /sbin/sysctl net.ipv4.ip_forward|grep 0
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_4.1.1
+
+- name: "SCORED | 4.1.1 | PATCH | Disable IP Forwarding"
+  sysctl:
+      name: net.ipv4.ip_forward
+      value: 0
+      state: present
+      reload: yes
+      ignoreerrors: yes
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.1.1
+
+- name: "SCORED | 4.1.2 | AUDIT | Disable Send Packet Redirects"
+  shell: /sbin/sysctl net.ipv4.conf.all.send_redirects | grep 0
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_4.1.2
+
+- name: "SCORED | 4.1.2 | PATCH | Disable Send Packet Redirects"
+  sysctl:
+      name: net.ipv4.conf.all.send_redirects
+      value: 0
+      state: present
+      reload: yes
+      ignoreerrors: yes
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.1.2
+
+- name: "SCORED | 4.1.2 | AUDIT | Disable Send Packet Redirects"
+  shell: /sbin/sysctl net.ipv4.conf.default.send_redirects | grep 0
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_4.1.2
+
+- name: "SCORED | 4.1.2 | PATCH | Disable Send Packet Redirects"
+  sysctl:
+      name: net.ipv4.conf.default.send_redirects
+      value: 0
+      state: present
+      reload: yes
+      ignoreerrors: yes
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.1.2
+
+- name: "SCORED | 4.2.1 | AUDIT | Disable Source Routed Packet Acceptance"
+  shell: /sbin/sysctl net.ipv4.conf.all.accept_source_route | grep 0
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_4.2.1
+
+- name: "SCORED | 4.2.1 | PATCH | Disable Source Routed Packet Acceptance"
+  sysctl:
+      name: net.ipv4.conf.all.accept_source_route
+      value: 0
+      state: present
+      reload: yes
+      ignoreerrors: yes
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.1
+
+- name: "SCORED | 4.2.2 | AUDIT | Disable ICMP Redirect Acceptance"
+  shell: /sbin/sysctl net.ipv4.conf.all.accept_redirects | grep 0
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_4.2.2
+
+- name: "SCORED | 4.2.2 | PATCH | Disable ICMP Redirect Acceptance"
+  sysctl:
+      name: net.ipv4.conf.all.accept_redirects
+      value: 0
+      state: present
+      reload: yes
+      ignoreerrors: yes
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.2
+
+- name: "SCORED | 4.2.2 | AUDIT | Disable ICMP Redirect Acceptance"
+  shell: /sbin/sysctl net.ipv4.conf.default.accept_redirects | grep 0
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_4.2.2
+
+- name: "SCORED | 4.2.2 | PATCH | Disable ICMP Redirect Acceptance"
+  sysctl:
+      name: net.ipv4.conf.default.accept_redirects
+      value: 0
+      state: present
+      reload: yes
+      ignoreerrors: yes
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.2
+
+- name: "SCORED | 4.2.3 | AUDIT | Disable Secure ICMP Redirect Acceptance"
+  shell: /sbin/sysctl net.ipv4.conf.all.secure_redirects | grep 0
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level2
+      - audit
+      - rule_4.2.3
+
+- name: "SCORED | 4.2.3 | PATCH | Disable Secure ICMP Redirect Acceptance"
+  sysctl:
+      name: net.ipv4.conf.all.secure_redirects
+      value: 0
+      state: present
+      reload: yes
+      ignoreerrors: yes
+  tags:
+      - level2
+      - patch
+      - rule_4.2.3
+
+- name: "SCORED | 4.2.3 | AUDIT | Disable Secure ICMP Redirect Acceptance"
+  shell: /sbin/sysctl net.ipv4.conf.default.secure_redirects | grep 0
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level2
+      - audit
+      - rule_4.2.3
+
+- name: "SCORED | 4.2.3 | PATCH | Disable Secure ICMP Redirect Acceptance"
+  sysctl:
+      name: net.ipv4.conf.default.secure_redirects
+      value: 0
+      state: present
+      reload: yes
+      ignoreerrors: yes
+  tags:
+      - level2
+      - patch
+      - rule_4.2.3
+
+- name: "SCORED | 4.2.4 | AUDIT | Log Suspicious Packets"
+  shell: /sbin/sysctl net.ipv4.conf.all.log_martians | grep 1
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_4.2.4
+
+- name: "SCORED | 4.2.4 | PATCH | Log Suspicious Packets"
+  sysctl:
+      name: net.ipv4.conf.all.log_martians
+      value: 1
+      state: present
+      reload: yes
+      ignoreerrors: yes
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.4
+
+- name: "SCORED | 4.2.4 | AUDIT | Log Suspicious Packets"
+  shell: /sbin/sysctl net.ipv4.conf.default.log_martians | grep 1
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_4.2.4
+
+- name: "SCORED | 4.2.4 | PATCH | Log Suspicious Packets"
+  sysctl:
+      name: net.ipv4.conf.default.log_martians
+      value: 1
+      state: present
+      reload: yes
+      ignoreerrors: yes
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.4
+
+- name: "SCORED | 4.2.5 | AUDIT | Enable Ignore Broadcast Requests"
+  shell: /sbin/sysctl net.ipv4.icmp_echo_ignore_broadcasts | grep 1
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_4.2.5
+
+- name: "SCORED | 4.2.5 | PATCH | Enable Ignore Broadcast Requests"
+  sysctl:
+      name: net.ipv4.icmp_echo_ignore_broadcasts
+      value: 1
+      state: present
+      reload: yes
+      ignoreerrors: yes
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.5
+
+- name: "SCORED | 4.2.6 | AUDIT | Enable Bad Error Message Protection"
+  shell: /sbin/sysctl net.ipv4.icmp_ignore_bogus_error_responses | grep 1
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_4.2.6
+
+- name: "SCORED | 4.2.6 | PATCH | Enable Bad Error Message Protection"
+  sysctl:
+      name: net.ipv4.icmp_ignore_bogus_error_responses
+      value: 1
+      state: present
+      reload: yes
+      ignoreerrors: yes
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.6
+
+- name: "SCORED | 4.2.7 | AUDIT | Enable RFC-recommended Source Route Validation"
+  shell: /sbin/sysctl net.ipv4.conf.all.rp_filter | grep 1
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level2
+      - audit
+      - rule_4.2.7
+
+- name: "SCORED | 4.2.7 | PATCH | Enable RFC-recommended Source Route Validation"
+  sysctl:
+      name: net.ipv4.conf.all.rp_filter
+      value: 1
+      state: present
+      reload: yes
+      ignoreerrors: yes
+  tags:
+      - level2
+      - patch
+      - rule_4.2.7
+
+- name: "SCORED | 4.2.7 | AUDIT | Enable RFC-recommended Source Route Validation"
+  shell: /sbin/sysctl net.ipv4.conf.default.rp_filter | grep 1
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level2
+      - audit
+      - rule_4.2.7
+
+- name: "SCORED | 4.2.7 | PATCH | Enable RFC-recommended Source Route Validation"
+  sysctl:
+      name: net.ipv4.conf.default.rp_filter
+      value: 1
+      state: present
+      reload: yes
+      ignoreerrors: yes
+  tags:
+      - level2
+      - patch
+      - rule_4.2.7
+
+- name: "SCORED | 4.2.8 | AUDIT | Enable TCP SYN Cookies"
+  shell: /sbin/sysctl net.ipv4.tcp_syncookies | grep 1
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_4.2.8
+
+- name: "SCORED | 4.2.8 | PATCH | Enable TCP SYN Cookies"
+  sysctl:
+      name: net.ipv4.tcp_syncookies
+      value: 1
+      state: present
+      reload: yes
+      ignoreerrors: yes
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.8
+
+- name: "NOTSCORED | 4.3.1 | AUDIT | Deactivate Wireless Interfaces"
+  command: iwconfig
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_4.3.1
+
+- name: "NOTSCORED | 4.4.1.1 | AUDIT | Disable IPv6 Router Advertisements"
+  shell: /sbin/sysctl net.ipv6.conf.all.accept_ra | grep 0
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_4.4.1.1
+
+- name: "NOTSCORED | 4.4.1.1 | PATCH | Disable IPv6 Router Advertisements"
+  sysctl:
+      name: net.ipv6.conf.all.accept_ra
+      value: 0
+      state: present
+      reload: yes
+      ignoreerrors: yes
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.4.1.1
+
+- name: "NOTSCORED | 4.4.1.1 | AUDIT | Disable IPv6 Router Advertisements"
+  shell: /sbin/sysctl net.ipv6.conf.default.accept_ra | grep 0
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_4.4.1.1
+
+- name: "NOTSCORED | 4.4.1.1 | PATCH | Disable IPv6 Router Advertisements"
+  sysctl:
+      name: net.ipv6.conf.default.accept_ra
+      value: 0
+      state: present
+      reload: yes
+      ignoreerrors: yes
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.4.1.1
+
+- name: "NOTSCORED | 4.4.1.2 | AUDIT | Disable IPv6 Redirect Acceptance"
+  shell: /sbin/sysctl net.ipv6.conf.all.accept_redirect | grep 0
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_4.4.1.2
+
+- name: "NOTSCORED | 4.4.1.2 | PATCH | Disable IPv6 Redirect Acceptance"
+  sysctl:
+      name: net.ipv6.conf.all.accept_redirect
+      value: 0
+      state: present
+      reload: yes
+      ignoreerrors: yes
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.4.1.2
+
+- name: "NOTSCORED | 4.4.1.2 | AUDIT | Disable IPv6 Redirect Acceptance"
+  shell: /sbin/sysctl net.ipv6.conf.default.accept_redirect | grep 0
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_4.4.1.2
+
+- name: "NOTSCORED | 4.4.1.2 | PATCH | Disable IPv6 Redirect Acceptance"
+  sysctl:
+      name: net.ipv6.conf.default.accept_redirect
+      value: 0
+      state: present
+      reload: yes
+      ignoreerrors: yes
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.4.1.2
+
+- name: "NOTSCORED | 4.4.2 | AUDIT | Disable IPv6"
+  shell: /sbin/sysctl net.ipv6.conf.all.disable_ipv6 | grep 1
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_4.4.2
+
+- name: "NOTSCORED | 4.4.2 | PATCH | Disable IPv6"
+  sysctl:
+      name: net.ipv6.conf.all.disable_ipv6
+      value: 1
+      state: present
+      reload: yes
+      ignoreerrors: yes
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.4.2
+
+- name: "NOTSCORED | 4.5.1 | AUDIT | Install TCP Wrappers"
+  command: rpm -q tcp_wrappers
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_4.5.1
+
+- name: "NOTSCORED | 4.5.1 | PATCH | Install TCP Wrappers"
+  yum:
+      name=tcp_wrappers
+      state=installed
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.5.1
+
+- name: "NOTSCORED | 4.5.2 | AUDIT | Create /etc/hosts.allow"
+  command: grep -v '^#' /etc/hosts.allow
+  register: hosts_allow
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_4.5.2
+
+- name: "SCORED | 4.5.3 | AUDIT | Verify Permissions on /etc/hosts.allow"
+  shell: stat -L -c "%a %u %g" /etc/hosts.allow | egrep "644 0 0"
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_4.5.3
+
+- name: "SCORED | 4.5.3 | PATCH | Verify Permissions on /etc/hosts.allow"
+  file:
+      dest=/etc/hosts.allow
+      owner=root
+      group=root
+      mode=0644
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.5.3
+
+- name: "NOTSCORED | 4.5.4 | AUDIT | Create /etc/hosts.deny"
+  command: grep -v '^#' /etc/hosts.deny
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_4.5.4
+
+- name: "SCORED | 4.5.5 | AUDIT | Verify Permissions on /etc/hosts.deny"
+  shell: stat -L -c "%a %u %g" /etc/hosts.allow | egrep "644 0 0"
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_4.5.5
+
+- name: "SCORED | 4.5.5 | PATCH | Verify Permissions on /etc/hosts.deny"
+  file:
+      dest=/etc/hosts.deny
+      owner=root
+      group=root
+      mode=0644
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.5.5
+
+- name: "NOTSCORED | 4.6.1 | AUDIT | Disable DCCP"
+  command: grep -rs "^install\s*dccp\s*/bin/true$" /etc/modprobe.d
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_4.6.1
+
+- name: "NOTSCORED | 4.6.1 | PATCH | Disable DCCP"
+  lineinfile:
+      state: present
+      create: yes
+      line: install dccp /bin/true
+      dest: /etc/modprobe.d/disable-dccp.conf
+      owner: root
+      group: root
+      mode: "0644"
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.6.1
+
+- name: "NOTSCORED | 4.6.2 | AUDIT | Disable SCTP"
+  command: grep -rs "^install\s*sctp\s*/bin/true$" /etc/modprobe.d
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_4.6.2
+
+- name: "NOTSCORED | 4.6.2 | PATCH | Disable SCTP"
+  lineinfile:
+      state: present
+      create: yes
+      line: install sctp /bin/true
+      dest: /etc/modprobe.d/disable-sctp.conf
+      owner: root
+      group: root
+      mode: "0644"
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.6.2
+
+- name: "NOTSCORED | 4.6.3 | AUDIT | Disable RDS"
+  shell: find /etc/modprobe.* -type f -name '*.conf' -exec grep -ls '^install rds /bin/(true|false)' {} \;
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_4.6.3
+
+- name: "NOTSCORED | 4.6.3 | PATCH | Disable RDS"
+  copy:
+      backup: no
+      src: disable-rds.conf
+      dest: /etc/modprobe.d/disable-rds.conf
+      owner: root
+      group: root
+      mode: 0644
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.6.3
+
+- name: "NOTSCORED | 4.6.4 | AUDIT | Disable TIPC"
+  command: grep -rs "^install\s*tipc\s*/bin/true$" /etc/modprobe.d
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_4.6.4
+
+- name: "NOTSCORED | 4.6.4 | PATCH | Disable TIPC"
+  lineinfile:
+      state: present
+      create: yes
+      line: install tipc /bin/true
+      dest: /etc/modprobe.d/disable-tipc.conf
+      owner: root
+      group: root
+      mode: "0644"
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.6.4
+
+- name: "SCORED | 4.7 | AUDIT | Enable firewalld"
+  shell: systemctl is-enabled firewalld|grep enabled
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_4.7
+
+- name: "SCORED | 4.7 | PATCH | Enable firewalld"
+  command: systemctl enable firewalld
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.7
+

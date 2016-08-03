@@ -1,5 +1,5 @@
-- name: "SCORED | 5.1.1 | AUDIT | Install the rsyslog package"
-  command: rpm -q rsyslog
+- name: "SCORED | 5.1.1 | AUDIT | Ensure cron daemon is enabled"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -10,18 +10,16 @@
       - audit
       - rule_5.1.1
 
-- name: "SCORED | 5.1.1 | PATCH | Install the rsyslog package"
-  yum:
-      name: rsyslog
-      state: installed
+- name: "SCORED | 5.1.1 | PATCH | Ensure cron daemon is enabled"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_5.1.1
 
-- name: "SCORED | 5.1.2 | AUDIT | Activate the rsyslog Service"
-  command: systemctl is-enabled rsyslog
+- name: "SCORED | 5.1.2 | AUDIT | Ensure permissions on /etc/crontab are configured"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -32,16 +30,16 @@
       - audit
       - rule_5.1.2
 
-- name: "SCORED | 5.1.2 | PATCH | Activate the rsyslog Service"
-  command: systemctl enable rsyslog
+- name: "SCORED | 5.1.2 | PATCH | Ensure permissions on /etc/crontab are configured"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_5.1.2
 
-- name: "NOTSCORED | 5.1.3 | AUDIT | Configure /etc/rsyslog.conf"
-  shell: rpm -Vv rsyslog|grep /etc/rsyslog.conf| grep '^\.\.\.\.\.'
+- name: "SCORED | 5.1.3 | AUDIT | Ensure permissions on /etc/cron.hourly are configured"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -52,7 +50,7 @@
       - audit
       - rule_5.1.3
 
-- name: "NOTSCORED | 5.1.3 | PATCH | Configure /etc/rsyslog.conf"
+- name: "SCORED | 5.1.3 | PATCH | Ensure permissions on /etc/cron.hourly are configured"
   command: /bin/true
   tags:
       - level1
@@ -60,7 +58,7 @@
       - patch
       - rule_5.1.3
 
-- name: "SCORED | 5.1.4 | AUDIT | Create and Set Permissions on rsyslog Log Files"
+- name: "SCORED | 5.1.4 | AUDIT | Ensure permissions on /etc/cron.daily are configured"
   command: /bin/true
   register: result
   always_run: yes
@@ -72,20 +70,16 @@
       - audit
       - rule_5.1.4
 
-- name: "SCORED | 5.1.4 | PATCH | Create and Set Permissions on rsyslog Log Files"
-  file:
-      path: /etc/rsyslog.conf
-      mode: 0640
-      owner: root
-      group: root
+- name: "SCORED | 5.1.4 | PATCH | Ensure permissions on /etc/cron.daily are configured"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_5.1.4
 
-- name: "SCORED | 5.1.5 | AUDIT | Configure rsyslog to Send Logs to a Remote Log Host"
-  command: grep "^*.*[^I][^I]*@" /etc/rsyslog.conf
+- name: "SCORED | 5.1.5 | AUDIT | Ensure permissions on /etc/cron.weekly are configured"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -96,7 +90,7 @@
       - audit
       - rule_5.1.5
 
-- name: "SCORED | 5.1.5 | PATCH | Configure rsyslog to Send Logs to a Remote Log Host"
+- name: "SCORED | 5.1.5 | PATCH | Ensure permissions on /etc/cron.weekly are configured"
   command: /bin/true
   tags:
       - level1
@@ -104,31 +98,8 @@
       - patch
       - rule_5.1.5
 
-- name: "NOTSCORED | 5.1.6 | AUDIT | Accept Remote rsyslog Messages Only on Designated Log Hosts"
-  command: grep '^$ModLoad imtcp' /etc/rsyslog.conf
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - level2
-      - audit
-      - rule_5.1.6
-- name: "NOTSCORED | 5.1.6 | PATCH | Accept Remote rsyslog Messages Only on Designated Log Hosts"
-  lineinfile:
-      dest=/etc/rsyslog.conf
-      regexp='^$ModLoad imtcp'
-      line='# $ModLoad imtcp.so'
-      state=present
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_5.1.6
-
-- name: "NOTSCORED | 5.1.6 | AUDIT | Accept Remote rsyslog Messages Only on Designated Log Hosts"
-  command: grep '^$InputTCPServerRun' /etc/rsyslog.conf
+- name: "SCORED | 5.1.6 | AUDIT | Ensure permissions on /etc/cron.monthly are configured"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -139,379 +110,95 @@
       - audit
       - rule_5.1.6
 
-- name: "NOTSCORED | 5.1.6 | PATCH | Accept Remote rsyslog Messages Only on Designated Log Hosts"
-  lineinfile:
-      dest=/etc/rsyslog.conf
-      regexp='^$InputTCPServerRun'
-      line='# $InputTCPServerRun 514'
-      state=present
+- name: "SCORED | 5.1.6 | PATCH | Ensure permissions on /etc/cron.monthly are configured"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_5.1.6
 
-- name: "NOTSCORED | 5.2.1.1 | AUDIT | Configure Audit Log Storage Size"
+- name: "SCORED | 5.1.7 | AUDIT | Ensure permissions on /etc/cron.d are configured"
   command: /bin/true
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
+      - level1
       - level2
       - audit
-      - rule_5.2.1.1
+      - rule_5.1.7
 
-- name: "NOTSCORED | 5.2.1.1 | PATCH | Configure Audit Log Storage Size"
+- name: "SCORED | 5.1.7 | PATCH | Ensure permissions on /etc/cron.d are configured"
   command: /bin/true
   tags:
+      - level1
       - level2
       - patch
-      - rule_5.2.1.1
+      - rule_5.1.7
 
-- name: "NOTSCORED | 5.2.1.2 | AUDIT | Disable System on Audit Log Full"
+- name: "SCORED | 5.1.8 | AUDIT | Ensure at/cron is restricted to authorized users"
   command: /bin/true
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
+      - level1
       - level2
       - audit
-      - rule_5.2.1.2
+      - rule_5.1.8
 
-- name: "NOTSCORED | 5.2.1.2 | PATCH | Disable System on Audit Log Full"
+- name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
   command: /bin/true
   tags:
+      - level1
       - level2
       - patch
-      - rule_5.2.1.2
+      - rule_5.1.8
 
-- name: "SCORED | 5.2.1.3 | AUDIT | Keep All Auditing Information"
+- name: "SCORED | 5.2.1 | AUDIT | Ensure permissions on /etc/ssh/sshd_config are configured"
   command: /bin/true
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
+      - level1
       - level2
       - audit
-      - rule_5.2.1.3
+      - rule_5.2.1
 
-- name: "SCORED | 5.2.1.3 | PATCH | Keep All Auditing Information"
+- name: "SCORED | 5.2.1 | PATCH | Ensure permissions on /etc/ssh/sshd_config are configured"
   command: /bin/true
   tags:
+      - level1
       - level2
       - patch
-      - rule_5.2.1.3
+      - rule_5.2.1
 
-- name: "SCORED | 5.2.2 | AUDIT | Enable auditd Service"
+- name: "SCORED | 5.2.2 | AUDIT | Ensure SSH Protocol is set to 2"
   command: /bin/true
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
+      - level1
       - level2
       - audit
       - rule_5.2.2
 
-- name: "SCORED | 5.2.2 | PATCH | Enable auditd Service"
+- name: "SCORED | 5.2.2 | PATCH | Ensure SSH Protocol is set to 2"
   command: /bin/true
   tags:
+      - level1
       - level2
       - patch
       - rule_5.2.2
 
-- name: "SCORED | 5.2.3 | AUDIT | Enable Auditing for Processes That Start Prior to auditd"
-  command: /bin/true
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level2
-      - audit
-      - rule_5.2.3
-
-- name: "SCORED | 5.2.3 | PATCH | Enable Auditing for Processes That Start Prior to auditd"
-  command: /bin/true
-  tags:
-      - level2
-      - patch
-      - rule_5.2.3
-
-- name: "SCORED | 5.2.4 | AUDIT | Record Events That Modify Date and Time Information"
-  command: /bin/true
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level2
-      - audit
-      - rule_5.2.4
-
-- name: "SCORED | 5.2.4 | PATCH | Record Events That Modify Date and Time Information"
-  command: /bin/true
-  tags:
-      - level2
-      - patch
-      - rule_5.2.4
-
-- name: "SCORED | 5.2.5 | AUDIT | Record Events That Modify User/Group Information"
-  command: /bin/true
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level2
-      - audit
-      - rule_5.2.5
-
-- name: "SCORED | 5.2.5 | PATCH | Record Events That Modify User/Group Information"
-  command: /bin/true
-  tags:
-      - level2
-      - patch
-      - rule_5.2.5
-
-- name: "SCORED | 5.2.6 | AUDIT | Record Events That Modify the System's Network Environment"
-  command: /bin/true
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level2
-      - audit
-      - rule_5.2.6
-
-- name: "SCORED | 5.2.6 | PATCH | Record Events That Modify the System's Network Environment"
-  command: /bin/true
-  tags:
-      - level2
-      - patch
-      - rule_5.2.6
-
-- name: "SCORED | 5.2.7 | AUDIT | Record Events That Modify the System's Mandatory Access Controls"
-  command: /bin/true
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level2
-      - audit
-      - rule_5.2.7
-
-- name: "SCORED | 5.2.7 | PATCH | Record Events That Modify the System's Mandatory Access Controls"
-  command: /bin/true
-  tags:
-      - level2
-      - patch
-      - rule_5.2.7
-
-- name: "SCORED | 5.2.8 | AUDIT | Collect Login and Logout Events"
-  command: /bin/true
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level2
-      - audit
-      - rule_5.2.8
-
-- name: "SCORED | 5.2.8 | PATCH | Collect Login and Logout Events"
-  command: /bin/true
-  tags:
-      - level2
-      - patch
-      - rule_5.2.8
-
-- name: "SCORED | 5.2.9 | AUDIT | Collect Session Initiation Information"
-  command: /bin/true
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level2
-      - audit
-      - rule_5.2.9
-
-- name: "SCORED | 5.2.9 | PATCH | Collect Session Initiation Information"
-  command: /bin/true
-  tags:
-      - level2
-      - patch
-      - rule_5.2.9
-
-- name: "SCORED | 5.2.10 | AUDIT | Collect Discretionary Access Control Permission Modification Events"
-  command: /bin/true
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level2
-      - audit
-      - rule_5.2.10
-
-- name: "SCORED | 5.2.10 | PATCH | Collect Discretionary Access Control Permission Modification Events"
-  command: /bin/true
-  tags:
-      - level2
-      - patch
-      - rule_5.2.10
-
-- name: "SCORED | 5.2.11 | AUDIT | Collect Unsuccessful Unauthorized Access Attempts to Files"
-  command: /bin/true
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level2
-      - audit
-      - rule_5.2.11
-
-- name: "SCORED | 5.2.11 | PATCH | Collect Unsuccessful Unauthorized Access Attempts to Files"
-  command: /bin/true
-  tags:
-      - level2
-      - patch
-      - rule_5.2.11
-
-- name: "SCORED | 5.2.12 | AUDIT | Collect Use of Privileged Commands"
-  command: /bin/true
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level2
-      - audit
-      - rule_5.2.12
-
-- name: "SCORED | 5.2.12 | PATCH | Collect Use of Privileged Commands"
-  command: /bin/true
-  tags:
-      - level2
-      - patch
-      - rule_5.2.12
-
-- name: "SCORED | 5.2.13 | AUDIT | Collect Successful File System Mounts"
-  command: /bin/true
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level2
-      - audit
-      - rule_5.2.13
-
-- name: "SCORED | 5.2.13 | PATCH | Collect Successful File System Mounts"
-  command: /bin/true
-  tags:
-      - level2
-      - patch
-      - rule_5.2.13
-
-- name: "SCORED | 5.2.14 | AUDIT | Collect File Deletion Events by User"
-  command: /bin/true
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level2
-      - audit
-      - rule_5.2.14
-
-- name: "SCORED | 5.2.14 | PATCH | Collect File Deletion Events by User"
-  command: /bin/true
-  tags:
-      - level2
-      - patch
-      - rule_5.2.14
-
-- name: "SCORED | 5.2.15 | AUDIT | Collect Changes to System Administration Scope (sudoers)"
-  command: /bin/true
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level2
-      - audit
-      - rule_5.2.15
-
-- name: "SCORED | 5.2.15 | PATCH | Collect Changes to System Administration Scope (sudoers)"
-  command: /bin/true
-  tags:
-      - level2
-      - patch
-      - rule_5.2.15
-
-- name: "SCORED | 5.2.16 | AUDIT | Collect System Administrator Actions (sudolog)"
-  command: /bin/true
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level2
-      - audit
-      - rule_5.2.16
-
-- name: "SCORED | 5.2.16 | PATCH | Collect System Administrator Actions (sudolog)"
-  command: /bin/true
-  tags:
-      - level2
-      - patch
-      - rule_5.2.16
-
-- name: "SCORED | 5.2.17 | AUDIT | Collect Kernel Module Loading and Unloading"
-  command: /bin/true
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level2
-      - audit
-      - rule_5.2.17
-
-- name: "SCORED | 5.2.17 | PATCH | Collect Kernel Module Loading and Unloading"
-  command: /bin/true
-  tags:
-      - level2
-      - patch
-      - rule_5.2.17
-
-- name: "SCORED | 5.2.18 | AUDIT | Make the Audit Configuration Immutable"
-  command: /bin/true
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level2
-      - audit
-      - rule_5.2.18
-
-- name: "SCORED | 5.2.18 | PATCH | Make the Audit Configuration Immutable"
-  command: /bin/true
-  tags:
-      - level2
-      - patch
-      - rule_5.2.18
-
-- name: "NOTSCORED | 5.3 | AUDIT | Configure logrotate"
+- name: "SCORED | 5.2.3 | AUDIT | Ensure SSH LogLevel is set to INFO"
   command: /bin/true
   register: result
   always_run: yes
@@ -521,13 +208,533 @@
       - level1
       - level2
       - audit
-      - rule_5.3
+      - rule_5.2.3
 
-- name: "NOTSCORED | 5.3 | PATCH | Configure logrotate"
+- name: "SCORED | 5.2.3 | PATCH | Ensure SSH LogLevel is set to INFO"
   command: /bin/true
   tags:
       - level1
       - level2
       - patch
-      - rule_5.3
+      - rule_5.2.3
+
+- name: "SCORED | 5.2.4 | AUDIT | Ensure SSH X11 forwarding is disabled"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.2.4
+
+- name: "SCORED | 5.2.4 | PATCH | Ensure SSH X11 forwarding is disabled"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.4
+
+- name: "SCORED | 5.2.5 | AUDIT | Ensure SSH MaxAuthTries is set to 4 or less"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.2.5
+
+- name: "SCORED | 5.2.5 | PATCH | Ensure SSH MaxAuthTries is set to 4 or less"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.5
+
+- name: "SCORED | 5.2.6 | AUDIT | Ensure SSH IgnoreRhosts is enabled"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.2.6
+
+- name: "SCORED | 5.2.6 | PATCH | Ensure SSH IgnoreRhosts is enabled"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.6
+
+- name: "SCORED | 5.2.7 | AUDIT | Ensure SSH HostbasedAuthentication is disabled"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.2.7
+
+- name: "SCORED | 5.2.7 | PATCH | Ensure SSH HostbasedAuthentication is disabled"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.7
+
+- name: "SCORED | 5.2.8 | AUDIT | Ensure SSH root login is disabled"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.2.8
+
+- name: "SCORED | 5.2.8 | PATCH | Ensure SSH root login is disabled"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.8
+
+- name: "SCORED | 5.2.9 | AUDIT | Ensure SSH PermitEmptyPasswords is disabled"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.2.9
+
+- name: "SCORED | 5.2.9 | PATCH | Ensure SSH PermitEmptyPasswords is disabled"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.9
+
+- name: "SCORED | 5.2.10 | AUDIT | Ensure SSH PermitUserEnvironment is disabled"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.2.10
+
+- name: "SCORED | 5.2.10 | PATCH | Ensure SSH PermitUserEnvironment is disabled"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.10
+
+- name: "SCORED | 5.2.11 | AUDIT | Ensure only approved ciphers are used"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.2.11
+
+- name: "SCORED | 5.2.11 | PATCH | Ensure only approved ciphers are used"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.11
+
+- name: "SCORED | 5.2.12 | AUDIT | Ensure only approved MAC algorithms are used"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.2.12
+
+- name: "SCORED | 5.2.12 | PATCH | Ensure only approved MAC algorithms are used"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.12
+
+- name: "SCORED | 5.2.13 | AUDIT | Ensure SSH Idle Timeout Interval is configured"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.2.13
+
+- name: "SCORED | 5.2.13 | PATCH | Ensure SSH Idle Timeout Interval is configured"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.13
+
+- name: "SCORED | 5.2.14 | AUDIT | Ensure SSH LoginGraceTime is set to one minute or less"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.2.14
+
+- name: "SCORED | 5.2.14 | PATCH | Ensure SSH LoginGraceTime is set to one minute or less"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.14
+
+- name: "SCORED | 5.2.15 | AUDIT | Ensure SSH access is limited"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.2.15
+
+- name: "SCORED | 5.2.15 | PATCH | Ensure SSH access is limited"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.15
+
+- name: "SCORED | 5.2.16 | AUDIT | Ensure SSH warning banner is configured"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.2.16
+
+- name: "SCORED | 5.2.16 | PATCH | Ensure SSH warning banner is configured"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.16
+
+- name: "SCORED | 5.3.1 | AUDIT | Ensure password creation requirements are configured"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.3.1
+
+- name: "SCORED | 5.3.1 | PATCH | Ensure password creation requirements are configured"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.3.1
+
+- name: "SCORED | 5.3.2 | AUDIT | Ensure lockout for failed password attempts is configured"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.3.2
+
+- name: "SCORED | 5.3.2 | PATCH | Ensure lockout for failed password attempts is configured"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.3.2
+
+- name: "SCORED | 5.3.3 | AUDIT | Ensure password reuse is limited"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.3.3
+
+- name: "SCORED | 5.3.3 | PATCH | Ensure password reuse is limited"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.3.3
+
+- name: "SCORED | 5.3.4 | AUDIT | Ensure password hashing algorithm is SHA-512"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.3.4
+
+- name: "SCORED | 5.3.4 | PATCH | Ensure password hashing algorithm is SHA-512"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.3.4
+
+- name: "SCORED | 5.4.1.1 | AUDIT | Ensure password expiration is 90 days or less"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.4.1.1
+
+- name: "SCORED | 5.4.1.1 | PATCH | Ensure password expiration is 90 days or less"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.4.1.1
+
+- name: "SCORED | 5.4.1.2 | AUDIT | Ensure minimum days between password changes is 7 or more"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.4.1.2
+
+- name: "SCORED | 5.4.1.2 | PATCH | Ensure minimum days between password changes is 7 or more"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.4.1.2
+
+- name: "SCORED | 5.4.1.3 | AUDIT | Ensure password expiration warning days is 7 or more"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.4.1.3
+
+- name: "SCORED | 5.4.1.3 | PATCH | Ensure password expiration warning days is 7 or more"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.4.1.3
+
+- name: "SCORED | 5.4.1.4 | AUDIT | Ensure inactive password lock is 30 days or less"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.4.1.4
+
+- name: "SCORED | 5.4.1.4 | PATCH | Ensure inactive password lock is 30 days or less"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.4.1.4
+
+- name: "SCORED | 5.4.2 | AUDIT | Ensure system accounts are non-login"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.4.2
+
+- name: "SCORED | 5.4.2 | PATCH | Ensure system accounts are non-login"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.4.2
+
+- name: "SCORED | 5.4.3 | AUDIT | Ensure default group for the root account is GID 0"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.4.3
+
+- name: "SCORED | 5.4.3 | PATCH | Ensure default group for the root account is GID 0"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.4.3
+
+- name: "SCORED | 5.4.4 | AUDIT | Ensure default user umask is 027 or more restrictive"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.4.4
+
+- name: "SCORED | 5.4.4 | PATCH | Ensure default user umask is 027 or more restrictive"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.4.4
+
+- name: "NOTSCORED | 5.5 | AUDIT | Ensure root login is restricted to system console"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.5
+
+- name: "NOTSCORED | 5.5 | PATCH | Ensure root login is restricted to system console"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.5
+
+- name: "SCORED | 5.6 | AUDIT | Ensure access to the su command is restricted"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.6
+
+- name: "SCORED | 5.6 | PATCH | Ensure access to the su command is restricted"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.6
 

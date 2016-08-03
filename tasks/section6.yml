@@ -1,27 +1,23 @@
-- name: "SCORED | 6.1.1 | AUDIT | Enable anacron Daemon"
-  shell: rpm -q cronie-anacron
+- name: "NOTSCORED | 6.1.1 | AUDIT | Audit system file permissions"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
-      - level1
       - level2
       - audit
       - rule_6.1.1
 
-- name: "SCORED | 6.1.1 | PATCH | Enable anacron Daemon"
-  yum:
-      name=cronie-anacron
-      state=installed
+- name: "NOTSCORED | 6.1.1 | PATCH | Audit system file permissions"
+  command: /bin/true
   tags:
-      - level1
       - level2
       - patch
       - rule_6.1.1
 
-- name: "SCORED | 6.1.2 | AUDIT | Enable crond Daemon"
-  shell: systemctl is-enabled crond | grep enabled
+- name: "SCORED | 6.1.2 | AUDIT | Ensure permissions on /etc/passwd are configured"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -32,16 +28,16 @@
       - audit
       - rule_6.1.2
 
-- name: "SCORED | 6.1.2 | PATCH | Enable crond Daemon"
-  service: name=crond enabled=yes
+- name: "SCORED | 6.1.2 | PATCH | Ensure permissions on /etc/passwd are configured"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_6.1.2
 
-- name: "SCORED | 6.1.3 | AUDIT | Set User/Group Owner and Permission on /etc/anacrontab"
-  shell: stat -L -c "%a %u %g" /etc/anacrontab | egrep ".00 0 0"
+- name: "SCORED | 6.1.3 | AUDIT | Ensure permissions on /etc/shadow are configured"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -52,20 +48,16 @@
       - audit
       - rule_6.1.3
 
-- name: "SCORED | 6.1.3 | PATCH | Set User/Group Owner and Permission on /etc/anacrontab"
-  file:
-      dest=/etc/anacrontab
-      owner=root
-      group=root
-      mode=0600
+- name: "SCORED | 6.1.3 | PATCH | Ensure permissions on /etc/shadow are configured"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_6.1.3
 
-- name: "SCORED | 6.1.4 | AUDIT | Set User/Group Owner and Permission on /etc/crontab"
-  shell: stat -L -c "%a %u %g" /etc/crontab | egrep ".00 0 0"
+- name: "SCORED | 6.1.4 | AUDIT | Ensure permissions on /etc/group are configured"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -76,20 +68,16 @@
       - audit
       - rule_6.1.4
 
-- name: "SCORED | 6.1.4 | PATCH | Set User/Group Owner and Permission on /etc/crontab"
-  file:
-      dest=/etc/crontab
-      owner=root
-      group=root
-      mode=0600
+- name: "SCORED | 6.1.4 | PATCH | Ensure permissions on /etc/group are configured"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_6.1.4
 
-- name: "SCORED | 6.1.5 | AUDIT | Set User/Group Owner and Permission on /etc/cron.hourly"
-  shell: stat -L -c "%a %u %g" /etc/cron.hourly | egrep ".00 0 0"
+- name: "SCORED | 6.1.5 | AUDIT | Ensure permissions on /etc/gshadow are configured"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -100,20 +88,16 @@
       - audit
       - rule_6.1.5
 
-- name: "SCORED | 6.1.5 | PATCH | Set User/Group Owner and Permission on /etc/cron.hourly"
-  file:
-      dest=/etc/cron.hourly
-      owner=root
-      group=root
-      mode=0600
+- name: "SCORED | 6.1.5 | PATCH | Ensure permissions on /etc/gshadow are configured"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_6.1.5
 
-- name: "SCORED | 6.1.6 | AUDIT | Set User/Group Owner and Permission on /etc/cron.daily"
-  shell: stat -L -c "%a %u %g" /etc/cron.daily | egrep ".00 0 0"
+- name: "SCORED | 6.1.6 | AUDIT | Ensure permissions on /etc/passwd- are configured"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -124,20 +108,16 @@
       - audit
       - rule_6.1.6
 
-- name: "SCORED | 6.1.6 | PATCH | Set User/Group Owner and Permission on /etc/cron.daily"
-  file:
-      dest=/etc/cron.daily
-      owner=root
-      group=root
-      mode=0600
+- name: "SCORED | 6.1.6 | PATCH | Ensure permissions on /etc/passwd- are configured"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_6.1.6
 
-- name: "SCORED | 6.1.7 | AUDIT | Set User/Group Owner and Permission on /etc/cron.weekly"
-  shell: stat -L -c "%a %u %g" /etc/cron.weekly | egrep ".00 0 0"
+- name: "SCORED | 6.1.7 | AUDIT | Ensure permissions on /etc/shadow- are configured"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -148,20 +128,16 @@
       - audit
       - rule_6.1.7
 
-- name: "SCORED | 6.1.7 | PATCH | Set User/Group Owner and Permission on /etc/cron.weekly"
-  file:
-      dest=/etc/cron.weekly
-      owner=root
-      group=root
-      mode=0600
+- name: "SCORED | 6.1.7 | PATCH | Ensure permissions on /etc/shadow- are configured"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_6.1.7
 
-- name: "SCORED | 6.1.8 | AUDIT | Set User/Group Owner and Permission on /etc/cron.monthly"
-  shell: stat -L -c "%a %u %g" /etc/cron.monthly | egrep ".00 0 0"
+- name: "SCORED | 6.1.8 | AUDIT | Ensure permissions on /etc/group- are configured"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -172,20 +148,16 @@
       - audit
       - rule_6.1.8
 
-- name: "SCORED | 6.1.8 | PATCH | Set User/Group Owner and Permission on /etc/cron.monthly"
-  file:
-      dest=/etc/cron.monthly
-      owner=root
-      group=root
-      mode=0600
+- name: "SCORED | 6.1.8 | PATCH | Ensure permissions on /etc/group- are configured"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_6.1.8
 
-- name: "SCORED | 6.1.9 | AUDIT | Set User/Group Owner and Permission on /etc/cron.d"
-  shell: stat -L -c "%a %u %g" /etc/cron.d | egrep ".00 0 0"
+- name: "SCORED | 6.1.9 | AUDIT | Ensure permissions on /etc/gshadow- are configured"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -196,21 +168,16 @@
       - audit
       - rule_6.1.9
 
-- name: "SCORED | 6.1.9 | PATCH | Set User/Group Owner and Permission on /etc/cron.d"
-  file:
-      dest=/etc/cron.d
-      state=directory
-      owner=root
-      group=root
-      mode=0600
+- name: "SCORED | 6.1.9 | PATCH | Ensure permissions on /etc/gshadow- are configured"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_6.1.9
 
-- name: "SCORED | 6.1.10 | AUDIT | Restrict at Daemon"
-  shell: stat -L /etc/at.deny > /dev/null
+- name: "SCORED | 6.1.10 | AUDIT | Ensure no world writable files exist"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -221,43 +188,16 @@
       - audit
       - rule_6.1.10
 
-- name: "SCORED | 6.1.10 | AUDIT | Restrict at Daemon"
-  shell: stat -L -c "%a %u %g" /etc/at.allow | egrep ".00 0 0"
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - level2
-      - audit
-      - rule_6.1.10
-
-- name: "SCORED | 6.1.10 | PATCH | Restrict at Daemon"
-  file:
-      dest=/etc/at.deny
-      state=absent
+- name: "SCORED | 6.1.10 | PATCH | Ensure no world writable files exist"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_6.1.10
 
-- name: "SCORED | 6.1.10 | PATCH | Restrict at Daemon"
-  file:
-      dest=/etc/at.allow
-      state=touch
-      owner=root
-      group=root
-      mode=0600
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_6.1.10
-
-- name: "SCORED | 6.1.11 | AUDIT | Restrict at/cron to Authorized Users"
-  shell: ls -l /etc/cron.deny | grep '^$'
+- name: "SCORED | 6.1.11 | AUDIT | Ensure no unowned files or directories exist"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -268,8 +208,16 @@
       - audit
       - rule_6.1.11
 
-- name: "SCORED | 6.1.11 | AUDIT | Restrict at/cron to Authorized Users"
-  shell: ls -l /etc/at.deny | grep '^$'
+- name: "SCORED | 6.1.11 | PATCH | Ensure no unowned files or directories exist"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.11
+
+- name: "SCORED | 6.1.12 | AUDIT | Ensure no ungrouped files or directories exist"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -278,10 +226,18 @@
       - level1
       - level2
       - audit
-      - rule_6.1.11
+      - rule_6.1.12
 
-- name: "SCORED | 6.1.11 | AUDIT | Restrict at/cron to Authorized Users"
-  shell: ls -l /etc/cron.allow
+- name: "SCORED | 6.1.12 | PATCH | Ensure no ungrouped files or directories exist"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.12
+
+- name: "NOTSCORED | 6.1.13 | AUDIT | Audit SUID executables"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -290,10 +246,18 @@
       - level1
       - level2
       - audit
-      - rule_6.1.11
+      - rule_6.1.13
 
-- name: "SCORED | 6.1.11 | AUDIT | Restrict at/cron to Authorized Users"
-  shell: ls -l /etc/at.allow
+- name: "NOTSCORED | 6.1.13 | PATCH | Audit SUID executables"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.13
+
+- name: "NOTSCORED | 6.1.14 | AUDIT | Audit SGID executables"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -302,56 +266,18 @@
       - level1
       - level2
       - audit
-      - rule_6.1.11
+      - rule_6.1.14
 
-- name: "SCORED | 6.1.11 | PATCH | Restrict at/cron to Authorized Users"
-  file:
-      dest=/etc/cron.deny
-      state=absent
+- name: "NOTSCORED | 6.1.14 | PATCH | Audit SGID executables"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
-      - rule_6.1.11
+      - rule_6.1.14
 
-- name: "SCORED | 6.1.11 | PATCH | Restrict at/cron to Authorized Users"
-  file:
-      dest=/etc/at.deny
-      state=absent
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_6.1.11
-
-- name: "SCORED | 6.1.11 | PATCH | Restrict at/cron to Authorized Users"
-  file:
-      dest=/etc/cron.allow
-      state=touch
-      owner=root
-      group=root
-      mode=0600
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_6.1.11
-
-- name: "SCORED | 6.1.11 | PATCH | Restrict at/cron to Authorized Users"
-  file:
-      dest=/etc/at.allow
-      state=touch
-      owner=root
-      group=root
-      mode=0600
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_6.1.11
-
-- name: "SCORED | 6.2.1 | AUDIT | Set SSH Protocol to 2"
-  command: grep "^Protocol 2" /etc/ssh/sshd_config
+- name: "SCORED | 6.2.1 | AUDIT | Ensure password fields are not empty"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -362,20 +288,16 @@
       - audit
       - rule_6.2.1
 
-- name: "SCORED | 6.2.1 | PATCH | Set SSH Protocol to 2"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^(#)?Protocol \d'
-      line: 'Protocol 2'
+- name: "SCORED | 6.2.1 | PATCH | Ensure password fields are not empty"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_6.2.1
 
-- name: "SCORED | 6.2.2 | AUDIT | Set LogLevel to INFO"
-  command: grep "^LogLevel INFO" /etc/ssh/sshd_config
+- name: "SCORED | 6.2.2 | AUDIT | Ensure no legacy '+' entries exist in /etc/passwd"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -386,20 +308,16 @@
       - audit
       - rule_6.2.2
 
-- name: "SCORED | 6.2.2 | PATCH | Set LogLevel to INFO"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^(#)?LogLevel INFO\d'
-      line: 'LogLevel INFO'
+- name: "SCORED | 6.2.2 | PATCH | Ensure no legacy '+' entries exist in /etc/passwd"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_6.2.2
 
-- name: "SCORED | 6.2.3 | AUDIT | Set Permissions on /etc/ssh/sshd_config"
-  shell: stat -L -c "%a %u %g" /etc/ssh/sshd_config | egrep ".00 0 0"
+- name: "SCORED | 6.2.3 | AUDIT | Ensure no legacy '+' entries exist in /etc/shadow"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -410,21 +328,16 @@
       - audit
       - rule_6.2.3
 
-- name: "SCORED | 6.2.3 | PATCH | Set Permissions on /etc/ssh/sshd_config"
-  file:
-      dest=/etc/ssh/sshd_config
-      state=file
-      owner=root
-      group=root
-      mode=0600
+- name: "SCORED | 6.2.3 | PATCH | Ensure no legacy '+' entries exist in /etc/shadow"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_6.2.3
 
-- name: "SCORED | 6.2.4 | AUDIT | Disable SSH X11 Forwarding"
-  command: grep "^X11Forwarding no" /etc/ssh/sshd_config
+- name: "SCORED | 6.2.4 | AUDIT | Ensure no legacy '+' entries exist in /etc/group"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -435,20 +348,16 @@
       - audit
       - rule_6.2.4
 
-- name: "SCORED | 6.2.4 | PATCH | Disable SSH X11 Forwarding"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^(#)?X11Forwarding \d'
-      line: 'X11Forwarding no'
+- name: "SCORED | 6.2.4 | PATCH | Ensure no legacy '+' entries exist in /etc/group"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_6.2.4
 
-- name: "SCORED | 6.2.5 | AUDIT | Set SSH MaxAuthTries to 4 or Less"
-  shell: grep "^MaxAuthTries 4" /etc/ssh/sshd_config
+- name: "SCORED | 6.2.5 | AUDIT | Ensure root is the only UID 0 account"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -459,20 +368,16 @@
       - audit
       - rule_6.2.5
 
-- name: "SCORED | 6.2.5 | PATCH | Set SSH MaxAuthTries to 4 or Less"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^(#)?MaxAuthTries \d'
-      line: 'MaxAuthTries 4'
+- name: "SCORED | 6.2.5 | PATCH | Ensure root is the only UID 0 account"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_6.2.5
 
-- name: "SCORED | 6.2.6 | AUDIT | Set SSH IgnoreRhosts to Yes"
-  command: grep "^IgnoreRhosts yes" /etc/ssh/sshd_config
+- name: "SCORED | 6.2.6 | AUDIT | Ensure root PATH Integrity"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -483,20 +388,16 @@
       - audit
       - rule_6.2.6
 
-- name: "SCORED | 6.2.6 | PATCH | Set SSH IgnoreRhosts to Yes"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^IgnoreRhosts'
-      line: 'IgnoreRhosts yes'
+- name: "SCORED | 6.2.6 | PATCH | Ensure root PATH Integrity"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_6.2.6
 
-- name: "SCORED | 6.2.7 | AUDIT | Set SSH HostbasedAuthentication to No"
-  command: grep "^HostbasedAuthentication no" /etc/ssh/sshd_config
+- name: "SCORED | 6.2.7 | AUDIT | Ensure all users' home directories exist"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -507,20 +408,16 @@
       - audit
       - rule_6.2.7
 
-- name: "SCORED | 6.2.7 | PATCH | Set SSH HostbasedAuthentication to No"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^HostbasedAuthentication'
-      line: 'HostbasedAuthentication no'
+- name: "SCORED | 6.2.7 | PATCH | Ensure all users' home directories exist"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_6.2.7
 
-- name: "SCORED | 6.2.8 | AUDIT | Disable SSH Root Login"
-  command: grep "^PermitRootLogin no" /etc/ssh/sshd_config
+- name: "SCORED | 6.2.8 | AUDIT | Ensure users' home directories permissions are 750 or more restrictive"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -531,20 +428,16 @@
       - audit
       - rule_6.2.8
 
-- name: "SCORED | 6.2.8 | PATCH | Disable SSH Root Login"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^PermitRootLogin'
-      line: 'PermitRootLogin no'
+- name: "SCORED | 6.2.8 | PATCH | Ensure users' home directories permissions are 750 or more restrictive"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_6.2.8
 
-- name: "SCORED | 6.2.9 | AUDIT | Set SSH PermitEmptyPasswords to No"
-  command: grep "^PermitEmptyPasswords no" /etc/ssh/sshd_config
+- name: "SCORED | 6.2.9 | AUDIT | Ensure users own their home directories"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -555,20 +448,16 @@
       - audit
       - rule_6.2.9
 
-- name: "SCORED | 6.2.9 | PATCH | Set SSH PermitEmptyPasswords to No"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^PermitEmptyPasswords'
-      line: 'PermitEmptyPasswords no'
+- name: "SCORED | 6.2.9 | PATCH | Ensure users own their home directories"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_6.2.9
 
-- name: "SCORED | 6.2.10 | AUDIT | Do Not Allow Users to Set Environment Options"
-  command: grep "^PermitUserEnvironment no" /etc/ssh/sshd_config
+- name: "SCORED | 6.2.10 | AUDIT | Ensure users' dot files are not group or world writable"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -579,20 +468,16 @@
       - audit
       - rule_6.2.10
 
-- name: "SCORED | 6.2.10 | PATCH | Do Not Allow Users to Set Environment Options"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^PermitUserEnvironment'
-      line: 'PermitUserEnvironment no'
+- name: "SCORED | 6.2.10 | PATCH | Ensure users' dot files are not group or world writable"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_6.2.10
 
-- name: "SCORED | 6.2.11 | AUDIT | Use Only Approved Cipher in Counter Mode"
-  command: grep "Ciphers aes128-ctr,aes192-ctr,aes256-ctr" /etc/ssh/sshd_config
+- name: "SCORED | 6.2.11 | AUDIT | Ensure no users have .forward files"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -603,20 +488,16 @@
       - audit
       - rule_6.2.11
 
-- name: "SCORED | 6.2.11 | PATCH | Use Only Approved Cipher in Counter Mode"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^Ciphers'
-      line: 'Ciphers aes128-ctr,aes192-ctr,aes256-ctr'
+- name: "SCORED | 6.2.11 | PATCH | Ensure no users have .forward files"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_6.2.11
 
-- name: "SCORED | 6.2.12 | AUDIT | Set Idle Timeout Interval for User Login"
-  command: grep "^ClientAliveInterval" /etc/ssh/sshd_confige
+- name: "SCORED | 6.2.12 | AUDIT | Ensure no users have .netrc files"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -627,20 +508,16 @@
       - audit
       - rule_6.2.12
 
-- name: "SCORED | 6.2.12 | PATCH | Set Idle Timeout Interval for User Login"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^ClientAliveInterval'
-      line: 'ClientAliveInterval 300'
+- name: "SCORED | 6.2.12 | PATCH | Ensure no users have .netrc files"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_6.2.12
 
-- name: "SCORED | 6.2.13 | AUDIT | Limit Access via SSH"
-  command: grep "^AllowGroups" /etc/ssh/sshd_config
+- name: "SCORED | 6.2.13 | AUDIT | Ensure users' .netrc Files are not group or world accessible"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -651,7 +528,7 @@
       - audit
       - rule_6.2.13
 
-- name: "SCORED | 6.2.13 | PATCH | Limit Access via SSH"
+- name: "SCORED | 6.2.13 | PATCH | Ensure users' .netrc Files are not group or world accessible"
   command: /bin/true
   tags:
       - level1
@@ -659,8 +536,8 @@
       - patch
       - rule_6.2.13
 
-- name: "SCORED | 6.2.14 | AUDIT | Set SSH Banner"
-  command: grep "^Banner /etc/issue.net" /etc/ssh/sshd_config
+- name: "SCORED | 6.2.14 | AUDIT | Ensure no users have .rhosts files"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -671,39 +548,15 @@
       - audit
       - rule_6.2.14
 
-- name: "SCORED | 6.2.14 | PATCH | Set SSH Banner"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^Banner'
-      line: 'Banner /etc/issue.net'
+- name: "SCORED | 6.2.14 | PATCH | Ensure no users have .rhosts files"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_6.2.14
 
-- name: "SCORED | 6.3.1 | AUDIT | Upgrade Password Hashing Algorithm to SHA-512"
-  shell: authconfig --test | grep hashing | grep sha512
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - level2
-      - audit
-      - rule_6.3.1
-
-- name: "SCORED | 6.3.1 | PATCH | Upgrade Password Hashing Algorithm to SHA-512"
-  command: authconfig --passalgo=sha512 --update
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_6.3.1
-
-- name: "SCORED | 6.3.2 | AUDIT | Set Password Creation Requirement Parameters Using pam_pwquality"
+- name: "SCORED | 6.2.15 | AUDIT | Ensure all groups in /etc/passwd exist in /etc/group"
   command: /bin/true
   register: result
   always_run: yes
@@ -713,17 +566,17 @@
       - level1
       - level2
       - audit
-      - rule_6.3.2
+      - rule_6.2.15
 
-- name: "SCORED | 6.3.2 | PATCH | Set Password Creation Requirement Parameters Using pam_pwquality"
+- name: "SCORED | 6.2.15 | PATCH | Ensure all groups in /etc/passwd exist in /etc/group"
   command: /bin/true
   tags:
       - level1
       - level2
       - patch
-      - rule_6.3.2
+      - rule_6.2.15
 
-- name: "NOTSCORED | 6.3.3 | AUDIT | Set Lockout for Failed Password Attempts"
+- name: "SCORED | 6.2.16 | AUDIT | Ensure no duplicate UIDs exist"
   command: /bin/true
   register: result
   always_run: yes
@@ -733,17 +586,17 @@
       - level1
       - level2
       - audit
-      - rule_6.3.3
+      - rule_6.2.16
 
-- name: "NOTSCORED | 6.3.3 | PATCH | Set Lockout for Failed Password Attempts"
+- name: "SCORED | 6.2.16 | PATCH | Ensure no duplicate UIDs exist"
   command: /bin/true
   tags:
       - level1
       - level2
       - patch
-      - rule_6.3.3
+      - rule_6.2.16
 
-- name: "SCORED | 6.3.4 | AUDIT | Limit Password Reuse"
+- name: "SCORED | 6.2.17 | AUDIT | Ensure no duplicate GIDs exist"
   command: /bin/true
   register: result
   always_run: yes
@@ -753,17 +606,17 @@
       - level1
       - level2
       - audit
-      - rule_6.3.4
+      - rule_6.2.17
 
-- name: "SCORED | 6.3.4 | PATCH | Limit Password Reuse"
+- name: "SCORED | 6.2.17 | PATCH | Ensure no duplicate GIDs exist"
   command: /bin/true
   tags:
       - level1
       - level2
       - patch
-      - rule_6.3.4
+      - rule_6.2.17
 
-- name: "NOTSCORED | 6.4 | AUDIT | Restrict root Login to System Console"
+- name: "SCORED | 6.2.18 | AUDIT | Ensure no duplicate user names exist"
   command: /bin/true
   register: result
   always_run: yes
@@ -773,17 +626,17 @@
       - level1
       - level2
       - audit
-      - rule_6.4
+      - rule_6.2.18
 
-- name: "NOTSCORED | 6.4 | PATCH | Restrict root Login to System Console"
+- name: "SCORED | 6.2.18 | PATCH | Ensure no duplicate user names exist"
   command: /bin/true
   tags:
       - level1
       - level2
       - patch
-      - rule_6.4
+      - rule_6.2.18
 
-- name: "SCORED | 6.5 | AUDIT | Restrict Access to the su Command"
+- name: "SCORED | 6.2.19 | AUDIT | Ensure no duplicate group names exist"
   command: /bin/true
   register: result
   always_run: yes
@@ -793,13 +646,13 @@
       - level1
       - level2
       - audit
-      - rule_6.5
+      - rule_6.2.19
 
-- name: "SCORED | 6.5 | PATCH | Restrict Access to the su Command"
+- name: "SCORED | 6.2.19 | PATCH | Ensure no duplicate group names exist"
   command: /bin/true
   tags:
       - level1
       - level2
       - patch
-      - rule_6.5
+      - rule_6.2.19
 

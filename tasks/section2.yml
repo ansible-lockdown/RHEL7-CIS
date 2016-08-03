@@ -1,5 +1,5 @@
-- name: "SCORED | 2.1.1 | AUDIT | Remove telnet-server"
-  command: rpm -q telnet-server
+- name: "SCORED | 2.1.1 | AUDIT | Ensure chargen services are not enabled"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -10,18 +10,16 @@
       - audit
       - rule_2.1.1
 
-- name: "SCORED | 2.1.1 | PATCH | Remove telnet-server"
-  yum:
-    name: telnet-server
-    state: absent
+- name: "SCORED | 2.1.1 | PATCH | Ensure chargen services are not enabled"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_2.1.1
 
-- name: "SCORED | 2.1.2 | AUDIT | Remove telnet Clients"
-  command: rpm -q telnet
+- name: "SCORED | 2.1.2 | AUDIT | Ensure daytime services are not enabled"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -32,18 +30,16 @@
       - audit
       - rule_2.1.2
 
-- name: "SCORED | 2.1.2 | PATCH | Remove telnet Clients"
-  yum:
-    name: telnet
-    state: absent
+- name: "SCORED | 2.1.2 | PATCH | Ensure daytime services are not enabled"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_2.1.2
 
-- name: "SCORED | 2.1.3 | AUDIT | Remove rsh-server"
-  command: rpm -q rsh-server
+- name: "SCORED | 2.1.3 | AUDIT | Ensure discard services are not enabled"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -54,18 +50,16 @@
       - audit
       - rule_2.1.3
 
-- name: "SCORED | 2.1.3 | PATCH | Remove rsh-server"
-  yum:
-    name: rsh-server
-    state: absent
+- name: "SCORED | 2.1.3 | PATCH | Ensure discard services are not enabled"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_2.1.3
 
-- name: "SCORED | 2.1.4 | AUDIT | Remove rsh"
-  command: rpm -q rsh
+- name: "SCORED | 2.1.4 | AUDIT | Ensure echo services are not enabled"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -76,18 +70,16 @@
       - audit
       - rule_2.1.4
 
-- name: "SCORED | 2.1.4 | PATCH | Remove rsh"
-  yum:
-    name: rsh
-    state: absent
+- name: "SCORED | 2.1.4 | PATCH | Ensure echo services are not enabled"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_2.1.4
 
-- name: "SCORED | 2.1.5 | AUDIT | Remove NIS Client"
-  command: rpm -q yp-tools
+- name: "SCORED | 2.1.5 | AUDIT | Ensure time services are not enabled"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -98,18 +90,16 @@
       - audit
       - rule_2.1.5
 
-- name: "SCORED | 2.1.5 | PATCH | Remove NIS Client"
-  yum:
-    name: yp-tools
-    state: absent
+- name: "SCORED | 2.1.5 | PATCH | Ensure time services are not enabled"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_2.1.5
 
-- name: "SCORED | 2.1.6 | AUDIT | Remove NIS Server"
-  command: rpm -q ypserv
+- name: "SCORED | 2.1.6 | AUDIT | Ensure tftp server is not enabled"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -120,18 +110,16 @@
       - audit
       - rule_2.1.6
 
-- name: "SCORED | 2.1.6 | PATCH | Remove NIS Server"
-  yum:
-    name: ypserv
-    state: absent
+- name: "SCORED | 2.1.6 | PATCH | Ensure tftp server is not enabled"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_2.1.6
 
-- name: "SCORED | 2.1.7 | AUDIT | Remove tftp"
-  command: rpm -q tftp
+- name: "SCORED | 2.1.7 | AUDIT | Ensure xinetd is not enabled"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -142,18 +130,16 @@
       - audit
       - rule_2.1.7
 
-- name: "SCORED | 2.1.7 | PATCH | Remove tftp"
-  yum:
-      name: tftp
-      state: absent
+- name: "SCORED | 2.1.7 | PATCH | Ensure xinetd is not enabled"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
       - rule_2.1.7
 
-- name: "SCORED | 2.1.8 | AUDIT | Remove tftp-server"
-  command: rpm -q tftp-server
+- name: "NOTSCORED | 2.2.1.1 | AUDIT | Ensure time synchronization is in use"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -162,20 +148,229 @@
       - level1
       - level2
       - audit
-      - rule_2.1.8
+      - rule_2.2.1.1
 
-- name: "SCORED | 2.1.8 | PATCH | Remove tftp-server"
+- name: "NOTSCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_2.2.1.1
+
+- name: "SCORED | 2.2.1.2 | AUDIT | Ensure ntp is configured"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_2.2.1.2
+
+- name: "SCORED | 2.2.1.2 | PATCH | Ensure ntp is configured"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_2.2.1.2
+
+- name: "SCORED | 2.2.1.3 | AUDIT | Ensure chrony is configured"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_2.2.1.3
+
+- name: "SCORED | 2.2.1.3 | PATCH | Ensure chrony is configured"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_2.2.1.3
+
+- name: "SCORED | 2.2.2 | AUDIT | Ensure X Window System is not installed"
+  command: rpm -qi xorg-x11*
+  register: pkgs_xwindows_installed_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - xwindows
+      - audit
+      - rule_2.2.2
+
+- name: "SCORED | 2.2.2 | PATCH | Ensure X Window System is not installed"
   yum:
-      name: tftp-server
+      name: "{{item}}"
       state: absent
+  when: not rhel7cis_xwindows_required
+  with_items:
+      - "@X Window System"
+      - "xorg-x11*"
   tags:
       - level1
-      - level2
+      - scored
+      - xwindows
       - patch
-      - rule_2.1.8
+      - rule_2.2.2
 
-- name: "SCORED | 2.1.9 | AUDIT | Remove talk"
-  command: rpm -q talk
+- name: "SCORED | 2.2.3 | AUDIT | Ensure Avahi Server is not enabled"
+  command: systemctl is-enabled avahi-daemon
+  register: avahi_server_enabled_audit
+  failed_when: "'enabled' in avahi_server_enabled_audit.stdout"
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - avahi
+      - services
+      - audit
+      - rule_2.2.3
+
+- name: "SCORED | 2.2.3 | PATCH | Ensure Avahi Server is not enabled"
+  service:
+      name: avahi-daemon
+      state: stopped
+      enabled: no
+  when: avahi_server_enabled_audit.failed and rhel7cis_avahi_server == false
+  tags:
+      - level1
+      - scored
+      - avahi
+      - services
+      - patch
+      - rule_2.2.3
+
+- name: "SCORED | 2.2.4 | AUDIT | Ensure CUPS is not enabled"
+  command: systemctl is-enabled cups
+  register: cups_server_enabled_audit
+  failed_when: "'enabled' in cups_server_enabled_audit.stdout"
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - cups
+      - services
+      - audit
+      - rule_2.2.4
+
+- name: "SCORED | 2.2.4 | PATCH | Ensure CUPS is not enabled"
+  service:
+      name: cups
+      state: stopped
+      enabled: no
+  when: cups_server_enabled_audit.failed and rhel7cis_cups_server == false
+  tags:
+      - level1
+      - scored
+      - cups
+      - services
+      - patch
+      - rule_2.2.4
+
+- name: "SCORED | 2.2.5 | AUDIT | Ensure DHCP Server is not enabled"
+  command: systemctl is-enabled dhcpd
+  register: dhcpd_server_enabled_audit
+  failed_when: "'enabled' in dhcpd_server_enabled_audit.stdout"
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - dhcp
+      - services
+      - audit
+      - rule_2.2.5
+
+- name: "SCORED | 2.2.5 | PATCH | Ensure DHCP Server is not enabled"
+  service:
+      name: dhcpd
+      state: stopped
+      enabled: no
+  when: dhcpd_server_enabled_audit.failed and rhel7cis_dhcp_server == false
+  tags:
+      - level1
+      - scored
+      - dhcp
+      - services
+      - patch
+      - rule_2.2.5
+
+- name: "SCORED | 2.2.6 | AUDIT | Ensure LDAP server is not enabled"
+  command: systemctl is-enabled slapd
+  register: slapd_server_enabled_audit
+  failed_when: "'enabled' in slapd_server_enabled_audit.stdout"
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - ldap
+      - services
+      - audit
+      - rule_2.2.6
+
+- name: "SCORED | 2.2.6 | PATCH | Ensure LDAP server is not enabled"
+  service:
+      name: slapd
+      state: stopped
+      enabled: no
+  when: slapd_server_enabled_audit.failed and rhel7cis_ldap_server == false
+  tags:
+      - level1
+      - scored
+      - ldap
+      - services
+      - patch
+      - rule_2.2.6
+
+- name: "SCORED | 2.2.7 | AUDIT | Ensure NFS and RPC are not enabled"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - nfs
+      - rpc
+      - services
+      - audit
+      - rule_2.2.7
+
+- name: "SCORED | 2.2.7 | PATCH | Ensure NFS and RPC are not enabled"
+  command: /bin/true
+  tags:
+      - level1
+      - scored
+      - nfs
+      - rpc
+      - services
+      - patch
+      - rule_2.2.7
+
+- name: "SCORED | 2.2.8 | AUDIT | Ensure DNS Server is not enabled"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -184,20 +379,18 @@
       - level1
       - level2
       - audit
-      - rule_2.1.9
+      - rule_2.2.8
 
-- name: "SCORED | 2.1.9 | PATCH | Remove talk"
-  yum:
-    name: talk
-    state: absent
+- name: "SCORED | 2.2.8 | PATCH | Ensure DNS Server is not enabled"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
-      - rule_2.1.9
+      - rule_2.2.8
 
-- name: "SCORED | 2.1.10 | AUDIT | Remove talk-server"
-  command: rpm -q talk-server
+- name: "SCORED | 2.2.9 | AUDIT | Ensure FTP Server is not enabled"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -206,40 +399,18 @@
       - level1
       - level2
       - audit
-      - rule_2.1.10
+      - rule_2.2.9
 
-- name: "SCORED | 2.1.10 | PATCH | Remove talk-server"
-  yum:
-    name: talk-server
-    state: absent
+- name: "SCORED | 2.2.9 | PATCH | Ensure FTP Server is not enabled"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
-      - rule_2.1.10
+      - rule_2.2.9
 
-- name: "SCORED | 2.1.11 | AUDIT | Remove xinetd"
-  command: rpm -q xinetd
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level2
-      - audit
-      - rule_2.1.11
-
-- name: "SCORED | 2.1.11 | PATCH | Remove xinetd"
-  yum:
-    name: xinetd
-    state: absent
-  tags:
-      - level2
-      - patch
-      - rule_2.1.11
-
-- name: "SCORED | 2.1.12 | AUDIT | Disable chargen-dgram"
-  shell: chkconfig --list chargen-dgram | grep 'off'
+- name: "SCORED | 2.2.10 | AUDIT | Ensure HTTP server is not enabled"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -248,20 +419,18 @@
       - level1
       - level2
       - audit
-      - rule_2.1.12
+      - rule_2.2.10
 
-- name: "SCORED | 2.1.12 | PATCH | Disable chargen-dgram"
-  yum:
-    name: xinetd
-    state: absent
+- name: "SCORED | 2.2.10 | PATCH | Ensure HTTP server is not enabled"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
-      - rule_2.1.12
+      - rule_2.2.10
 
-- name: "SCORED | 2.1.13 | AUDIT | Disable chargen-stream"
-  shell: chkconfig --list chargen-stream | grep 'off'
+- name: "SCORED | 2.2.11 | AUDIT | Ensure IMAP and POP3 server is not enabled"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -270,20 +439,18 @@
       - level1
       - level2
       - audit
-      - rule_2.1.13
+      - rule_2.2.11
 
-- name: "SCORED | 2.1.13 | PATCH | Disable chargen-stream"
-  yum:
-    name: xinetd
-    state: absent
+- name: "SCORED | 2.2.11 | PATCH | Ensure IMAP and POP3 server is not enabled"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
-      - rule_2.1.13
+      - rule_2.2.11
 
-- name: "SCORED | 2.1.14 | AUDIT | Disable daytime-dgram"
-  shell: chkconfig --list daytime-dgram | grep 'off'
+- name: "SCORED | 2.2.12 | AUDIT | Ensure Samba is not enabled"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -292,20 +459,18 @@
       - level1
       - level2
       - audit
-      - rule_2.1.14
+      - rule_2.2.12
 
-- name: "SCORED | 2.1.14 | PATCH | Disable daytime-dgram"
-  yum:
-    name: xinetd
-    state: absent
+- name: "SCORED | 2.2.12 | PATCH | Ensure Samba is not enabled"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
-      - rule_2.1.14
+      - rule_2.2.12
 
-- name: "SCORED | 2.1.15 | AUDIT | Disable daytime-stream"
-  shell: chkconfig --list daytime-stream | grep 'off'
+- name: "SCORED | 2.2.13 | AUDIT | Ensure HTTP Proxy Server is not enabled"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -314,20 +479,18 @@
       - level1
       - level2
       - audit
-      - rule_2.1.15
+      - rule_2.2.13
 
-- name: "SCORED | 2.1.15 | PATCH | Disable daytime-stream"
-  yum:
-    name: xinetd
-    state: absent
+- name: "SCORED | 2.2.13 | PATCH | Ensure HTTP Proxy Server is not enabled"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
-      - rule_2.1.15
+      - rule_2.2.13
 
-- name: "SCORED | 2.1.16 | AUDIT | Disable echo-dgram"
-  shell: chkconfig --list echo-dgram | grep 'off'
+- name: "SCORED | 2.2.14 | AUDIT | Ensure SNMP Server is not enabled"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -336,20 +499,18 @@
       - level1
       - level2
       - audit
-      - rule_2.1.16
+      - rule_2.2.14
 
-- name: "SCORED | 2.1.16 | PATCH | Disable echo-dgram"
-  yum:
-    name: xinetd
-    state: absent
+- name: "SCORED | 2.2.14 | PATCH | Ensure SNMP Server is not enabled"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
-      - rule_2.1.16
+      - rule_2.2.14
 
-- name: "SCORED | 2.1.17 | AUDIT | Disable echo-stream"
-  shell: chkconfig --list echo-stream | grep 'off'
+- name: "SCORED | 2.2.15 | AUDIT | Ensure mail transfer agent is configured for local-only mode"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -358,20 +519,18 @@
       - level1
       - level2
       - audit
-      - rule_2.1.17
+      - rule_2.2.15
 
-- name: "SCORED | 2.1.17 | PATCH | Disable echo-stream"
-  yum:
-    name: xinetd
-    state: absent
+- name: "SCORED | 2.2.15 | PATCH | Ensure mail transfer agent is configured for local-only mode"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
-      - rule_2.1.17
+      - rule_2.2.15
 
-- name: "SCORED | 2.1.18 | AUDIT | Disable tcpmux-server"
-  shell: chkconfig --list tcpmux-server | grep 'off'
+- name: "SCORED | 2.2.16 | AUDIT | Ensure NIS Server is not enabled"
+  command: /bin/true
   register: result
   always_run: yes
   changed_when: no
@@ -380,15 +539,222 @@
       - level1
       - level2
       - audit
-      - rule_2.1.18
+      - rule_2.2.16
 
-- name: "SCORED | 2.1.18 | PATCH | Disable tcpmux-server"
-  yum:
-    name: xinetd
-    state: absent
+- name: "SCORED | 2.2.16 | PATCH | Ensure NIS Server is not enabled"
+  command: /bin/true
   tags:
       - level1
       - level2
       - patch
-      - rule_2.1.18
+      - rule_2.2.16
+
+- name: "SCORED | 2.2.17 | AUDIT | Ensure rsh server is not enabled"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_2.2.17
+
+- name: "SCORED | 2.2.17 | PATCH | Ensure rsh server is not enabled"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_2.2.17
+
+- name: "SCORED | 2.2.18 | AUDIT | Ensure talk server is not enabled"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_2.2.18
+
+- name: "SCORED | 2.2.18 | PATCH | Ensure talk server is not enabled"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_2.2.18
+
+- name: "SCORED | 2.2.19 | AUDIT | Ensure telnet server is not enabled"
+  command: systemctl is-enabled telnet.socket
+  register: telnet_server_enabled_audit
+  failed_when: "'enabled' in telnet_server_enabled_audit.stdout"
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - insecure_services
+      - telnet
+      - audit
+      - rule_2.2.19
+
+- name: "SCORED | 2.2.19 | PATCH | Ensure telnet server is not enabled"
+  service:
+      name: telnet
+      state: stopped
+      enabled: no
+  when: telnet_server_enabled_audit.failed and rhel7cis_telnet_server == false
+  tags:
+      - level1
+      - scored
+      - insecure_services
+      - telnet
+      - patch
+      - rule_2.2.19
+
+- name: "SCORED | 2.2.20 | AUDIT | Ensure tftp server is not enabled"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_2.2.20
+
+- name: "SCORED | 2.2.20 | PATCH | Ensure tftp server is not enabled"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_2.2.20
+
+- name: "SCORED | 2.2.21 | AUDIT | Ensure rsync service is not enabled"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_2.2.21
+
+- name: "SCORED | 2.2.21 | PATCH | Ensure rsync service is not enabled"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_2.2.21
+
+- name: "SCORED | 2.3.1 | AUDIT | Ensure NIS Client is not installed"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_2.3.1
+
+- name: "SCORED | 2.3.1 | PATCH | Ensure NIS Client is not installed"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_2.3.1
+
+- name: "SCORED | 2.3.2 | AUDIT | Ensure rsh client is not installed"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_2.3.2
+
+- name: "SCORED | 2.3.2 | PATCH | Ensure rsh client is not installed"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_2.3.2
+
+- name: "SCORED | 2.3.3 | AUDIT | Ensure talk client is not installed"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_2.3.3
+
+- name: "SCORED | 2.3.3 | PATCH | Ensure talk client is not installed"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_2.3.3
+
+- name: "SCORED | 2.3.4 | AUDIT | Ensure telnet client is not installed"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_2.3.4
+
+- name: "SCORED | 2.3.4 | PATCH | Ensure telnet client is not installed"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_2.3.4
+
+- name: "SCORED | 2.3.5 | AUDIT | Ensure LDAP client is not installed"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_2.3.5
+
+- name: "SCORED | 2.3.5 | PATCH | Ensure LDAP client is not installed"
+  command: /bin/true
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_2.3.5
 

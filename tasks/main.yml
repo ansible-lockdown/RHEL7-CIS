@@ -47,3 +47,4 @@
 - include: post.yml
   tags:
       - post_tasks
+      - always
