@@ -5,55 +5,67 @@
   changed_when: no
   ignore_errors: yes
   tags:
-      - level1
       - level2
+      - scored
       - audit
       - rule_1.1.1
 
-- name: "SCORED | 1.1.5 | AUDIT | Create Separate Partition for /var"
+- name: "SCORED | 1.1.6 | AUDIT | Ensure separate partition exists for /var"
   shell: mount | grep "on /var "
   register: var_mounted_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
-      - level1
       - level2
+      - scored
       - audit
-      - rule_1.1.5
+      - rule_1.1.6
 
-- name: "SCORED | 1.1.7 | AUDIT | Create Separate Partition for /var/log"
+- name: "SCORED | 1.1.7 | AUDIT | Ensure separate partition exists for /var/tmp"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level2
+      - scored
+      - audit
+      - rule_1.1.7
+
+- name: "SCORED | 1.1.11 | AUDIT | Ensure separate partition exists for /var/log"
   shell: mount | grep "on /var/log "
   register: varlog_mounted_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
-      - level1
       - level2
+      - scored
       - audit
-      - rule_1.1.7
+      - rule_1.1.11
 
-- name: "SCORED | 1.1.8 | AUDIT | Create Separate Partition for /var/log/audit"
+- name: "SCORED | 1.1.12 | AUDIT | Ensure separate partition exists for /var/log/audit"
   shell: mount | grep "on /var/log/audit "
   register: varlogaudit_mounted_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
-      - level1
       - level2
+      - scored
       - audit
-      - rule_1.1.8
+      - rule_1.1.12
 
-- name: "SCORED | 1.1.9 | AUDIT | Create Separate Partition for /home"
+- name: "SCORED | 1.1.13 | AUDIT | Ensure separate partition exists for /home"
   shell: mount | grep "on /home "
   register: home_mounted_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
-      - level1
       - level2
+      - scored
       - audit
-      - rule_1.1.9
+      - rule_1.1.13

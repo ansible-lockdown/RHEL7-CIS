@@ -1,7 +1,25 @@
 ---
 # tasks file for RHEL7-CIS
-- include: not_automated.yml
-  when: rhel7cis_notauto
+- name: Check OS version and family
+  fail:
+      msg: "This role can only be run agaist RHEL 7. {{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported."
+  when:
+      - ansible_os_family == 'RedHat'
+      - ansible_distribution_major_version | version_compare('7', '!=')
+  tags:
+      - always
+
+- name: Check ansible version
+  fail:
+      msg: You must use ansible 2.1 or greater
+  when: not ansible_version.full | version_compare('2.1', '>=')
+  tags:
+      - always
+
+- include: prelim.yml
+  tags:
+      - prelim_tasks
+      - always
 
 - include: section1.yml
   when: rhel7cis_section1
@@ -21,11 +39,11 @@
 - include: section6.yml
   when: rhel7cis_section6
 
-- include: section7.yml
-  when: rhel7cis_section7
+- include: not_automated.yml
+  when: rhel7cis_notauto
+  tags:
+      - not_auto_fixed
 
-- include: section8.yml
-  when: rhel7cis_section8
-
-- include: section9.yml
-  when: rhel7cis_section9
+- include: post.yml
+  tags:
+      - post_tasks
