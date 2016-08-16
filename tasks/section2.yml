@@ -580,22 +580,26 @@
       - rule_2.2.7
 
 - name: "SCORED | 2.2.8 | AUDIT | Ensure DNS Server is not enabled"
-  command: /bin/true
-  register: result
+  command: systemctl is-enabled named
+  register: named_server_enabled_audit
+  failed_when: "'enabled' in named_server_enabled_audit.stdout"
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_2.2.8
 
 - name: "SCORED | 2.2.8 | PATCH | Ensure DNS Server is not enabled"
-  command: /bin/true
+  service:
+      name: "{{ item }}"
+      state: stopped
+      enabled: no
+  with_items: named
+  when: named_server_enabled_audit.failed and not rhel7cis_named_server
   tags:
       - level1
-      - level2
       - patch
       - rule_2.2.8
 

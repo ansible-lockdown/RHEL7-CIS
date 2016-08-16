@@ -30,6 +30,7 @@ rhel7cis_smb_server: false
 rhel7cis_dovecot_server: false
 rhel7cis_httpd_server: false
 rhel7cis_vsftpd_server: false
+named_server_enabled_audit: false
 rhel7cis_bind: false
 rhel7cis_vsftpd: false
 rhel7cis_httpd: false
