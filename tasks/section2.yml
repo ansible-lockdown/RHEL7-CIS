@@ -668,7 +668,6 @@
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_2.2.12
 
@@ -681,7 +680,6 @@
   when: smb_server_enabled_audit.failed and not rhel7cis_smb_server
   tags:
       - level1
-      - level2
       - patch
       - rule_2.2.12
 
