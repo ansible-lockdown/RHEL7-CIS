@@ -1,7 +1,7 @@
 - name: "SCORED | 2.1.1 | AUDIT | Ensure chargen services are not enabled | chargen-dgram"
-  shell: "if chkconfig --list | grep chargen-dgram |grep -q on; then echo true ; fi 2>&1"
+  shell: "chkconfig --list | grep chargen-dgram |grep -q on"
   register: chargen1_server_enabled_audit
-  failed_when: "'true' in chargen1_server_enabled_audit.stdout"
+  failed_when: chargen1_server_enabled_audit.rc == 0
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -11,9 +11,9 @@
       - rule_2.1.1
 
 - name: "SCORED | 2.1.1 | AUDIT | Ensure chargen services are not enabled | chargen-stream"
-  shell: "if chkconfig --list | grep chargen-stream |grep -q on; then echo true ; fi 2>&1"
+  shell: "chkconfig --list | grep chargen-stream |grep -q on"
   register: chargen2_server_enabled_audit
-  failed_when: "'true' in chargen2_server_enabled_audit.stdout"
+  failed_when: chargen2_server_enabled_audit.rc == 0
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -47,9 +47,9 @@
       - rule_2.1.1
 
 - name: "SCORED | 2.1.2 | AUDIT | Ensure daytime services are not enabled | daytime-dgram"
-  shell: "if chkconfig --list | grep daytime-dgram |grep -q on; then echo true ; fi 2>&1"
+  shell: "chkconfig --list | grep daytime-dgram |grep -q on"
   register: daytime1_server_enabled_audit
-  failed_when: "'true' in daytime1_server_enabled_audit.stdout"
+  failed_when: daytime1_server_enabled_audit.rc == 0
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -59,9 +59,9 @@
       - rule_2.1.2
 
 - name: "SCORED | 2.1.2 | AUDIT | Ensure daytime services are not enabled | daytime-stream"
-  shell: "if chkconfig --list | grep daytime-stream |grep -q on; then echo true ; fi 2>&1"
+  shell: "chkconfig --list | grep daytime-stream |grep -q on"
   register: daytime2_server_enabled_audit
-  failed_when: "'true' in daytime2_server_enabled_audit.stdout"
+  failed_when: daytime2_server_enabled_audit.rc == 0
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -91,9 +91,9 @@
       - rule_2.1.2
 
 - name: "SCORED | 2.1.3 | AUDIT | Ensure discard services are not enabled | discard-dgram"
-  shell: "if chkconfig --list | grep discard-dgram |grep -q on; then echo true ; fi 2>&1"
+  shell: "chkconfig --list | grep discard-dgram |grep -q on"
   register: discard1_server_enabled_audit
-  failed_when: "'true' in discard1_server_enabled_audit.stdout"
+  failed_when: discard1_server_enabled_audit.rc == 0
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -103,9 +103,9 @@
       - rule_2.1.3
 
 - name: "SCORED | 2.1.3 | AUDIT | Ensure discard services are not enabled | discard-stream"
-  shell: "if chkconfig --list | grep discard-stream |grep -q on; then echo true ; fi 2>&1"
+  shell: "chkconfig --list | grep discard-stream |grep -q on"
   register: discard2_server_enabled_audit
-  failed_when: "'true' in discard2_server_enabled_audit.stdout"
+  failed_when: discard2_server_enabled_audit.rc == 0
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -135,9 +135,9 @@
       - rule_2.1.3
 
 - name: "SCORED | 2.1.4 | AUDIT | Ensure echo services are not enabled | echo-dgram"
-  shell: "if chkconfig --list | grep echo-dgram |grep -q on; then echo true ; fi 2>&1"
+  shell: "chkconfig --list | grep echo-dgram |grep -q on"
   register: echo1_server_enabled_audit
-  failed_when: "'true' in echo1_server_enabled_audit.stdout"
+  failed_when: echo1_server_enabled_audit.rc == 0
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -147,9 +147,9 @@
       - rule_2.1.4
 
 - name: "SCORED | 2.1.4 | AUDIT | Ensure echo services are not enabled | echo-stream"
-  shell: "if chkconfig --list | grep echo-stream |grep -q on; then echo true ; fi 2>&1"
+  shell: "chkconfig --list | grep echo-stream |grep -q on"
   register: echo2_server_enabled_audit
-  failed_when: "'true' in echo2_server_enabled_audit.stdout"
+  failed_when: echo2_server_enabled_audit.rc == 0
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -179,9 +179,9 @@
       - rule_2.1.4
 
 - name: "SCORED | 2.1.5 | AUDIT | Ensure time services are not enabled | time-dgram"
-  shell: "if chkconfig --list | grep time-dgram |grep -q on; then echo true ; fi 2>&1"
+  shell: "chkconfig --list | grep time-dgram |grep -q on"
   register: time1_server_enabled_audit
-  failed_when: "'true' in time1_server_enabled_audit.stdout"
+  failed_when: time1_server_enabled_audit.rc == 0
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -191,9 +191,9 @@
       - rule_2.1.5
 
 - name: "SCORED | 2.1.5 | AUDIT | Ensure time services are not enabled | time-stream"
-  shell: "if chkconfig --list | grep time-stream |grep -q on; then echo true ; fi 2>&1"
+  shell: "chkconfig --list | grep time-stream |grep -q on"
   register: time2_server_enabled_audit
-  failed_when: "'true' in time2_server_enabled_audit.stdout"
+  failed_when: time2_server_enabled_audit.rc == 0
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -223,9 +223,9 @@
       - rule_2.1.5
 
 - name: "SCORED | 2.1.6 | AUDIT | Ensure tftp server is not enabled"
-  shell: "if chkconfig --list | grep tftp |grep -q on; then echo true ; fi 2>&1"
+  shell: "chkconfig --list | grep tftp |grep -q on"
   register: tftp_server_enabled_audit
-  failed_when: "'true' in tftp_server_enabled_audit.stdout"
+  failed_when: tftp_server_enabled_audit.rc == 0
   always_run: yes
   changed_when: no
   ignore_errors: yes
