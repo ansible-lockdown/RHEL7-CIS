@@ -759,23 +759,54 @@
       - patch
       - rule_2.2.16
 
-- name: "SCORED | 2.2.17 | AUDIT | Ensure rsh server is not enabled"
-  command: /bin/true
-  register: result
+- name: "SCORED | 2.2.17 | AUDIT | Ensure rsh server is not enabled | rsh.socket"
+  command: systemctl is-enabled rsh.socket
+  register: rsh_server_enabled_audit
+  failed_when: "'enabled' in rsh_server_enabled_audit.stdout"
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
+      - audit
+      - rule_2.2.17
+
+- name: "SCORED | 2.2.17 | AUDIT | Ensure rsh server is not enabled | rlogin.socket"
+  command: systemctl is-enabled rlogin.socket
+  register: rlogin_server_enabled_audit
+  failed_when: "'enabled' in rlogin_server_enabled_audit.stdout"
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - audit
+      - rule_2.2.17
+
+- name: "SCORED | 2.2.17 | AUDIT | Ensure rsh server is not enabled | rexec.socket"
+  command: systemctl is-enabled rexec.socket
+  register: rexec_server_enabled_audit
+  failed_when: "'enabled' in rexec_server_enabled_audit.stdout"
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
       - audit
       - rule_2.2.17
 
 - name: "SCORED | 2.2.17 | PATCH | Ensure rsh server is not enabled"
-  command: /bin/true
+  service:
+      name: "{{ item }}"
+      state: stopped
+      enabled: no
+  with_items:
+  - rsh.socket
+  - rlogin.socket
+  - rexec.socket
+  when: rsh_server_enabled_audit.failed and not rhel7cis_rsh_server
   tags:
       - level1
-      - level2
       - patch
       - rule_2.2.17
 
@@ -788,11 +819,10 @@
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_2.2.18
 
-- name: "SCORED | 2.2.18 | PATCH | Ensure telnet server is not enabled
+- name: "SCORED | 2.2.18 | PATCH | Ensure telnet server is not enabled"
   service:
       name: telnet
       state: stopped
@@ -800,12 +830,11 @@
   when: telnet_server_enabled_audit.failed and not rhel7cis_telnet_server
   tags:
       - level1
-      - level2
       - patch
       - rule_2.2.18
 
 - name: "SCORED | 2.2.19 | AUDIT | Ensure tftp server is not enabled"
-  command: systemctl is-enabled telnet.socket
+  command: "systemctl is-enabled telnet.socket"
   register: tftp_server_enabled_audit
   failed_when: "'enabled' in tftp_server_enabled_audit.stdout"
   always_run: yes
@@ -833,7 +862,7 @@
       - patch
       - rule_2.2.19
 
-- name: "SCORED | 2.2.20 | AUDIT | Ensure tftp server is not enabled"
+- name: "SCORED | 2.2.20 | AUDIT | Ensure rsync service is not enabled "
   shell: "systemctl is-enabled rsyncd"
   register: rsyncd_server_enabled_audit
   failed_when: "'enabled' in rsyncd_server_enabled_audit.stdout"
@@ -846,7 +875,7 @@
       - audit
       - rule_2.2.20
 
-- name: "SCORED | 2.2.20 | PATCH | Ensure tftp server is not enabled"
+- name: "SCORED | 2.2.20 | PATCH | Ensure rsync service is not enabled "
   service:
       name: "{{ item }}"
       state: stopped
@@ -859,7 +888,7 @@
       - patch
       - rule_2.2.20
 
-- name: "SCORED | 2.2.21 | AUDIT | Ensure rsync service is not enabled"
+- name: "SCORED | 2.2.21 | AUDIT | Ensure talk server is not enabled"
   shell: "systemctl is-enabled ntalk"
   register: ntalk_server_enabled_audit
   failed_when: "'enabled' in ntalk_server_enabled_audit.stdout"
@@ -871,7 +900,7 @@
       - audit
       - rule_2.2.21
 
-- name: "SCORED | 2.2.21 | PATCH | Ensure rsync service is not enabled"
+- name: "SCORED | 2.2.21 | PATCH | Ensure talk server is not enabled"
   service:
       name: "{{ item }}"
       state: stopped
