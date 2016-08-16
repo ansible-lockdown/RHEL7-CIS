@@ -600,22 +600,26 @@
       - rule_2.2.8
 
 - name: "SCORED | 2.2.9 | AUDIT | Ensure FTP Server is not enabled"
-  command: /bin/true
-  register: result
+  command: systemctl is-enabled vsftpd
+  register: vsftpd_server_enabled_audit
+  failed_when: "'enabled' in vsftpd_server_enabled_audit.stdout"
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_2.2.9
 
 - name: "SCORED | 2.2.9 | PATCH | Ensure FTP Server is not enabled"
-  command: /bin/true
+  service:
+      name: "{{ item }}"
+      state: stopped
+      enabled: no
+  with_items: vsftpd
+  when: vsftpd_server_enabled_audit.failed and not rhel7cis_vsftpd_server
   tags:
       - level1
-      - level2
       - patch
       - rule_2.2.9
 
