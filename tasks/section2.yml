@@ -949,21 +949,25 @@
       - rule_2.3.4
 
 - name: "SCORED | 2.3.5 | AUDIT | Ensure LDAP client is not installed"
-  command: /bin/true
-  register: result
+  shell: "if rpm -aq | grep -q openldap-clients ; then echo true ; fi 2>&1"
+  register: pkgs_openldap_clients_installed_audit
+  failed_when: "'true' in pkgs_openldap_clients_installed_audit.stdout"
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
-      - audit
+      - audit1
       - rule_2.3.5
 
 - name: "SCORED | 2.3.5 | PATCH | Ensure LDAP client is not installed"
-  command: /bin/true
+  yum:
+      name: "{{item}}"
+      state: absent
+  when: not rhel7cis_openldap_clients_required
+  with_items:
+      - "openldap-clients"
   tags:
       - level1
-      - level2
       - patch
       - rule_2.3.5

@@ -44,6 +44,8 @@ rhel7cis_selinux_pol: targeted
 # Set to 'true' if X Windows is needed in your environment
 rhel7cis_xwindows_required: no
 
+rhel7cis_openldap_clients_required: false
+
 # Time Synchronization
 rhel7cis_time_Synchronization: chrony
 #rhel7cis_time_Synchronization: ntp
