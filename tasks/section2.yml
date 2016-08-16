@@ -829,8 +829,9 @@
       - rule_2.2.19
 
 - name: "SCORED | 2.2.20 | AUDIT | Ensure tftp server is not enabled"
-  command: /bin/true
-  register: result
+  shell: "systemctl is-enabled rsyncd"
+  register: rsyncd_server_enabled_audit
+  failed_when: "'enabled' in rsyncd_server_enabled_audit.stdout"
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -841,7 +842,12 @@
       - rule_2.2.20
 
 - name: "SCORED | 2.2.20 | PATCH | Ensure tftp server is not enabled"
-  command: /bin/true
+  service:
+      name: "{{ item }}"
+      state: stopped
+      enabled: no
+  with_items: rsyncd
+  when: rsyncd_server_enabled_audit.failed and not rhel7cis_rsyncd_server
   tags:
       - level1
       - level2

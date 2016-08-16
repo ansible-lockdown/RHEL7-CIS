@@ -20,6 +20,7 @@ rhel7cis_telnet_server: false
 rhel7cis_nfs_server: false
 rhel7cis_rpc_server: false
 rhel7cis_ntalk_server: false
+rhel7cis_rsyncd_server: false
 rhel7cis_bind: false
 rhel7cis_vsftpd: false
 rhel7cis_httpd: false
