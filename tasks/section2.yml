@@ -640,22 +640,26 @@
       - rule_2.2.10
 
 - name: "SCORED | 2.2.11 | AUDIT | Ensure IMAP and POP3 server is not enabled"
-  command: /bin/true
-  register: result
+  command: systemctl is-enabled dovecot
+  register: dovecot_server_enabled_audit
+  failed_when: "'enabled' in dovecot_server_enabled_audit.stdout"
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_2.2.11
 
 - name: "SCORED | 2.2.11 | PATCH | Ensure IMAP and POP3 server is not enabled"
-  command: /bin/true
+  service:
+      name: "{{ item }}"
+      state: stopped
+      enabled: no
+  with_items: dovecot
+  when: dovecot_server_enabled_audit.failed and not rhel7cis_dovecot_server
   tags:
       - level1
-      - level2
       - patch
       - rule_2.2.11
 
