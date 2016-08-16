@@ -889,22 +889,26 @@
       - rule_2.3.1
 
 - name: "SCORED | 2.3.2 | AUDIT | Ensure rsh client is not installed"
-  command: /bin/true
-  register: result
+  shell: "if rpm -aq | grep -q rsh ; then echo true ; fi 2>&1"
+  register: pkgs_rsh_installed_audit
+  failed_when: "'true' in pkgs_rsh_installed_audit.stdout"
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_2.3.2
 
 - name: "SCORED | 2.3.2 | PATCH | Ensure rsh client is not installed"
-  command: /bin/true
+  yum:
+      name: "{{item}}"
+      state: absent
+  when: not rhel7cis_rsh_required
+  with_items:
+      - "rsh"
   tags:
       - level1
-      - level2
       - patch
       - rule_2.3.2
 
