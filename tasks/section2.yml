@@ -554,8 +554,9 @@
       - rule_2.2.6
 
 - name: "SCORED | 2.2.7 | AUDIT | Ensure NFS and RPC are not enabled"
-  command: /bin/true
-  register: result
+  command: systemctl is-enabled nfs rpcbind |grep -q enabled
+  register: pkgs_nfs_rpcbind_installed_audit
+  failed_when: pkgs_nfs_rpcbind_installed_audit.rc == 0
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -569,7 +570,14 @@
       - rule_2.2.7
 
 - name: "SCORED | 2.2.7 | PATCH | Ensure NFS and RPC are not enabled"
-  command: /bin/true
+  service:
+      name: "{{ item }}"
+      state: stopped
+      enabled: no
+  with_items:
+  - nfs
+  - rpcbind
+  when: pkgs_nfs_rpcbind_installed_audit.failed and not rhel7cis_nfs_rfc_server
   tags:
       - level1
       - scored
