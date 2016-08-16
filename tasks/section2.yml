@@ -909,22 +909,26 @@
       - rule_2.3.2
 
 - name: "SCORED | 2.3.3 | AUDIT | Ensure talk client is not installed"
-  command: /bin/true
-  register: result
+  shell: "if rpm -aq | grep -q talk ; then echo true ; fi 2>&1"
+  register: pkgs_talk_installed_audit
+  failed_when: "'true' in pkgs_talk_installed_audit.stdout"
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_2.3.3
 
 - name: "SCORED | 2.3.3 | PATCH | Ensure talk client is not installed"
-  command: /bin/true
+  yum:
+      name: "{{item}}"
+      state: absent
+  when: not rhel7cis_talk_required
+  with_items:
+      - "talk"
   tags:
       - level1
-      - level2
       - patch
       - rule_2.3.3
 
