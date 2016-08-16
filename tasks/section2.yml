@@ -976,9 +976,9 @@
       - rule_2.3.2
 
 - name: "SCORED | 2.3.3 | AUDIT | Ensure talk client is not installed"
-  shell: "if rpm -aq | grep -q talk ; then echo true ; fi 2>&1"
+  shell: "rpm -aq | grep -q talk"
   register: pkgs_talk_installed_audit
-  failed_when: "'true' in pkgs_talk_installed_audit.stdout"
+  failed_when: pkgs_talk_installed_audit.rc == 0
   always_run: yes
   changed_when: no
   ignore_errors: yes
