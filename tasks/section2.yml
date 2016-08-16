@@ -849,22 +849,26 @@
       - rule_2.2.20
 
 - name: "SCORED | 2.2.21 | AUDIT | Ensure rsync service is not enabled"
-  command: /bin/true
-  register: result
+  shell: "systemctl is-enabled ntalk"
+  register: ntalk_server_enabled_audit
+  failed_when: "'enabled' in ntalk_server_enabled_audit.stdout"
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_2.2.21
 
 - name: "SCORED | 2.2.21 | PATCH | Ensure rsync service is not enabled"
-  command: /bin/true
+  service:
+      name: "{{ item }}"
+      state: stopped
+      enabled: no
+  with_items: ntalk
+  when: ntalk_server_enabled_audit.failed and not rhel7cis_ntalk_server
   tags:
       - level1
-      - level2
       - patch
       - rule_2.2.21
 
