@@ -26,6 +26,7 @@ rhel7cis_rsh_server: false
 rhel7cis_nis_server: false
 rhel7cis_snmp_server: false
 rhel7cis_squid_server: false
+rhel7cis_smb_server: false
 rhel7cis_bind: false
 rhel7cis_vsftpd: false
 rhel7cis_httpd: false
