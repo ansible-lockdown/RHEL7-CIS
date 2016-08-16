@@ -720,8 +720,9 @@
       - rule_2.2.14
 
 - name: "SCORED | 2.2.15 | AUDIT | Ensure mail transfer agent is configured for local-only mode"
-  command: /bin/true
-  register: result
+  shell: netstat -an | grep LIST | grep ":25[[:space:]]" |egrep -q '127.0.0.1:25|::1:25'
+  register: check_mail_agent_audit
+  failed_when: check_mail_agent_audit.rc == 1
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -732,7 +733,17 @@
       - rule_2.2.15
 
 - name: "SCORED | 2.2.15 | PATCH | Ensure mail transfer agent is configured for local-only mode"
-  command: /bin/true
+  lineinfile:
+      dest: /etc/postfix/main.cf
+      regexp: "^(#)?inet_interfaces"
+      line: "inet_interfaces = localhost"
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_2.2.15
+
+- debug: msg="{{ check_mail_agent_audit.rc }}"
   tags:
       - level1
       - level2
@@ -740,22 +751,26 @@
       - rule_2.2.15
 
 - name: "SCORED | 2.2.16 | AUDIT | Ensure NIS Server is not enabled"
-  command: /bin/true
-  register: result
+  command: systemctl is-enabled ypserv
+  register: nis_server_enabled_audit
+  failed_when: "'enabled' in nis_server_enabled_audit.stdout"
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_2.2.16
 
 - name: "SCORED | 2.2.16 | PATCH | Ensure NIS Server is not enabled"
-  command: /bin/true
+  service:
+      name: "{{ item }}"
+      state: stopped
+      enabled: no
+  with_items: ypserv
+  when: nis_server_enabled_audit.failed and not rhel7cis_nis_server
   tags:
       - level1
-      - level2
       - patch
       - rule_2.2.16
 
@@ -913,9 +928,9 @@
       - rule_2.2.21
 
 - name: "SCORED | 2.3.1 | AUDIT | Ensure NIS Client is not installed"
-  shell: "if rpm -aq | grep -q ypbind ; then echo true ; fi 2>&1"
+  shell: "rpm -aq | grep -q ypbind"
   register: pkgs_ypbind_installed_audit
-  failed_when: "'true' in pkgs_ypbind_installed_audit.stdout"
+  failed_when: pkgs_ypbind_installed_audit.rc == 0
   always_run: yes
   changed_when: no
   ignore_errors: yes
