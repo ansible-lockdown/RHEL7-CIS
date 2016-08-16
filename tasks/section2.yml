@@ -1,146 +1,278 @@
-- name: "SCORED | 2.1.1 | AUDIT | Ensure chargen services are not enabled"
-  command: /bin/true
-  register: result
+- name: "SCORED | 2.1.1 | AUDIT | Ensure chargen services are not enabled | chargen-dgram"
+  shell: "if chkconfig --list | grep chargen-dgram |grep -q on; then echo true ; fi 2>&1"
+  register: chargen1_server_enabled_audit
+  failed_when: "'true' in chargen1_server_enabled_audit.stdout"
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_2.1.1
 
-- name: "SCORED | 2.1.1 | PATCH | Ensure chargen services are not enabled"
-  command: /bin/true
+- name: "SCORED | 2.1.1 | AUDIT | Ensure chargen services are not enabled | chargen-stream"
+  shell: "if chkconfig --list | grep chargen-stream |grep -q on; then echo true ; fi 2>&1"
+  register: chargen2_server_enabled_audit
+  failed_when: "'true' in chargen2_server_enabled_audit.stdout"
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
   tags:
       - level1
-      - level2
+      - audit
+      - rule_2.1.1
+
+- name: "SCORED | 2.1.1 | PATCH | Ensure chargen services are not enabled | chargen-dgram"
+  command: "chkconfig chargen-dgram off"
+  when: chargen1_server_enabled_audit.failed
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - ldap
+      - services
       - patch
       - rule_2.1.1
 
-- name: "SCORED | 2.1.2 | AUDIT | Ensure daytime services are not enabled"
-  command: /bin/true
-  register: result
+- name: "SCORED | 2.1.1 | PATCH | Ensure chargen services are not enabled | chargen-stream"
+  command: "chkconfig chargen-dgram off"
+  when: chargen2_server_enabled_audit.failed
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - ldap
+      - services
+      - patch
+      - rule_2.1.1
+
+- name: "SCORED | 2.1.2 | AUDIT | Ensure daytime services are not enabled | daytime-dgram"
+  shell: "if chkconfig --list | grep daytime-dgram |grep -q on; then echo true ; fi 2>&1"
+  register: daytime1_server_enabled_audit
+  failed_when: "'true' in daytime1_server_enabled_audit.stdout"
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_2.1.2
 
-- name: "SCORED | 2.1.2 | PATCH | Ensure daytime services are not enabled"
-  command: /bin/true
+- name: "SCORED | 2.1.2 | AUDIT | Ensure daytime services are not enabled | daytime-stream"
+  shell: "if chkconfig --list | grep daytime-stream |grep -q on; then echo true ; fi 2>&1"
+  register: daytime2_server_enabled_audit
+  failed_when: "'true' in daytime2_server_enabled_audit.stdout"
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
   tags:
       - level1
-      - level2
+      - audit
+      - rule_2.1.2
+
+- name: "SCORED | 2.1.2 | PATCH | Ensure daytime services are not enabled | daytime-dgram"
+  command: "chkconfig daytime-dgram off"
+  when: daytime1_server_enabled_audit.failed
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
       - patch
       - rule_2.1.2
 
-- name: "SCORED | 2.1.3 | AUDIT | Ensure discard services are not enabled"
-  command: /bin/true
-  register: result
+- name: "SCORED | 2.1.2 | PATCH | Ensure daytime services are not enabled | daytime-stream"
+  command: "chkconfig daytime-stream off"
+  when: daytime2_server_enabled_audit.failed
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_2.1.2
+
+- name: "SCORED | 2.1.3 | AUDIT | Ensure discard services are not enabled | discard-dgram"
+  shell: "if chkconfig --list | grep discard-dgram |grep -q on; then echo true ; fi 2>&1"
+  register: discard1_server_enabled_audit
+  failed_when: "'true' in discard1_server_enabled_audit.stdout"
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_2.1.3
 
-- name: "SCORED | 2.1.3 | PATCH | Ensure discard services are not enabled"
-  command: /bin/true
+- name: "SCORED | 2.1.3 | AUDIT | Ensure discard services are not enabled | discard-stream"
+  shell: "if chkconfig --list | grep discard-stream |grep -q on; then echo true ; fi 2>&1"
+  register: discard2_server_enabled_audit
+  failed_when: "'true' in discard2_server_enabled_audit.stdout"
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
   tags:
       - level1
-      - level2
+      - audit
+      - rule_2.1.3
+
+- name: "SCORED | 2.1.3 | PATCH | Ensure discard services are not enabled | discard-dgram"
+  command: "chkconfig discard-dgram off"
+  when: discard1_server_enabled_audit.failed
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
       - patch
       - rule_2.1.3
 
-- name: "SCORED | 2.1.4 | AUDIT | Ensure echo services are not enabled"
-  command: /bin/true
-  register: result
+- name: "SCORED | 2.1.3 | PATCH | Ensure discard services are not enabled | discard-stream"
+  command: "chkconfig discard-stream off"
+  when: discard2_server_enabled_audit.failed
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_2.1.3
+
+- name: "SCORED | 2.1.4 | AUDIT | Ensure echo services are not enabled | echo-dgram"
+  shell: "if chkconfig --list | grep echo-dgram |grep -q on; then echo true ; fi 2>&1"
+  register: echo1_server_enabled_audit
+  failed_when: "'true' in echo1_server_enabled_audit.stdout"
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_2.1.4
 
-- name: "SCORED | 2.1.4 | PATCH | Ensure echo services are not enabled"
-  command: /bin/true
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_2.1.4
-
-- name: "SCORED | 2.1.5 | AUDIT | Ensure time services are not enabled"
-  command: /bin/true
-  register: result
+- name: "SCORED | 2.1.4 | AUDIT | Ensure echo services are not enabled | echo-stream"
+  shell: "if chkconfig --list | grep echo-stream |grep -q on; then echo true ; fi 2>&1"
+  register: echo2_server_enabled_audit
+  failed_when: "'true' in echo2_server_enabled_audit.stdout"
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
+      - audit
+      - rule_2.1.4
+
+- name: "SCORED | 2.1.4 | PATCH | Ensure echo services are not enabled | echo-dgram"
+  command: "chkconfig echo-dgram off"
+  when: echo1_server_enabled_audit.failed
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_2.1.4
+
+- name: "SCORED | 2.1.4 | PATCH | Ensure echo services are not enabled | echo-stream"
+  command: "chkconfig echo-stream off"
+  when: echo2_server_enabled_audit.failed
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_2.1.4
+
+- name: "SCORED | 2.1.5 | AUDIT | Ensure time services are not enabled | time-dgram"
+  shell: "if chkconfig --list | grep time-dgram |grep -q on; then echo true ; fi 2>&1"
+  register: time1_server_enabled_audit
+  failed_when: "'true' in time1_server_enabled_audit.stdout"
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
       - audit
       - rule_2.1.5
 
-- name: "SCORED | 2.1.5 | PATCH | Ensure time services are not enabled"
-  command: /bin/true
+- name: "SCORED | 2.1.5 | AUDIT | Ensure time services are not enabled | time-stream"
+  shell: "if chkconfig --list | grep time-stream |grep -q on; then echo true ; fi 2>&1"
+  register: time2_server_enabled_audit
+  failed_when: "'true' in time2_server_enabled_audit.stdout"
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
   tags:
       - level1
-      - level2
+      - audit
+      - rule_2.1.5
+
+- name: "SCORED | 2.1.5 | PATCH | Ensure time services are not enabled | time-dgram"
+  command: "chkconfig time-dgram off"
+  when: time1_server_enabled_audit.failed
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_2.1.5
+
+- name: "SCORED | 2.1.5 | PATCH | Ensure time services are not enabled | time-stream"
+  command: "chkconfig time-stream off"
+  when: time2_server_enabled_audit.failed
+  ignore_errors: yes
+  tags:
+      - level1
+      - scored
       - patch
       - rule_2.1.5
 
 - name: "SCORED | 2.1.6 | AUDIT | Ensure tftp server is not enabled"
-  command: /bin/true
-  register: result
+  shell: "if chkconfig --list | grep tftp |grep -q on; then echo true ; fi 2>&1"
+  register: tftp_server_enabled_audit
+  failed_when: "'true' in tftp_server_enabled_audit.stdout"
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_2.1.6
 
 - name: "SCORED | 2.1.6 | PATCH | Ensure tftp server is not enabled"
-  command: /bin/true
+  command: "chkconfig tftp off"
+  when: tftp_server_enabled_audit.failed
+  ignore_errors: yes
   tags:
       - level1
-      - level2
+      - scored
       - patch
       - rule_2.1.6
 
 - name: "SCORED | 2.1.7 | AUDIT | Ensure xinetd is not enabled"
-  command: /bin/true
-  register: result
+  shell: "systemctl is-enabled xinetd"
+  register: xinetd_server_enabled_audit
+  failed_when: "'enabled' in xinetd_server_enabled_audit.stdout"
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_2.1.7
 
 - name: "SCORED | 2.1.7 | PATCH | Ensure xinetd is not enabled"
-  command: /bin/true
+  service:
+      name: "{{ item }}"
+      state: stopped
+      enabled: no
+  with_items: xinetd
+  when: xinetd_server_enabled_audit.failed
   tags:
       - level1
-      - level2
       - patch
+      - scored
       - rule_2.1.7
 
 - name: "NOTSCORED | 2.2.1.1 | AUDIT | Ensure time synchronization is in use"
-  command: /bin/true
-  register: result
+  shell: "systemctl is-enabled {{ rhel7cis_time_Synchronization }}"
+  register: timesync_server_enabled_audit
+  failed_when: "'enabled' in timesync_server_enabled_audit.stdout"
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -150,11 +282,44 @@
       - audit
       - rule_2.2.1.1
 
-- name: "NOTSCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use"
-  command: /bin/true
+- name: "NOTSCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use - service install"
+  yum:
+      name: "{{ rhel7cis_time_Synchronization }}"
+      state: present
   tags:
       - level1
-      - level2
+      - patch
+      - rule_2.2.1.1
+
+- name: "NOTSCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use - service start"
+  service:
+      name: "{{ rhel7cis_time_Synchronization }}d"
+      state: started
+      enabled: yes
+  tags:
+      - level1
+      - patch
+      - rule_2.2.1.1
+
+- name: "NOTSCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use - service stop ntp"
+  service:
+      name: "ntpd"
+      state: stopped
+      enabled: no
+  when: rhel7cis_time_Synchronization == "chrony"
+  tags:
+      - level1
+      - patch
+      - rule_2.2.1.1
+
+- name: "NOTSCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use - service stop chrony"
+  service:
+      name: "chronyd"
+      state: stopped
+      enabled: no
+  when: rhel7cis_time_Synchronization == "ntp"
+  tags:
+      - level1
       - patch
       - rule_2.2.1.1
 
@@ -170,11 +335,38 @@
       - audit
       - rule_2.2.1.2
 
-- name: "SCORED | 2.2.1.2 | PATCH | Ensure ntp is configured"
-  command: /bin/true
+- name: "SCORED | 2.2.1.2 | PATCH | Ensure ntp is configured | modify /etc/ntp.conf"
+  template:
+      src: ntp.conf.j2
+      dest: /etc/ntp.conf
+      owner: root
+      group: root
+      mode: 0644
+  when: rhel7cis_time_Synchronization == "ntp"
   tags:
       - level1
-      - level2
+      - patch
+      - rule_2.2.1.2
+
+- name: "SCORED | 2.2.1.2 | PATCH | Ensure ntp is configured | modify /etc/sysconfig/ntpd"
+  lineinfile:
+      dest: /etc/sysconfig/ntpd
+      regexp: "^(#)?OPTIONS"
+      line: "OPTIONS=\"-u ntp:ntp\""
+  when: rhel7cis_time_Synchronization == "ntp"
+  tags:
+      - level1
+      - patch
+      - rule_2.2.1.2
+
+- name: "SCORED | 2.2.1.2 | PATCH | Ensure ntp is configured | modify /usr/lib/systemd/system/ntpd.service"
+  lineinfile:
+      dest: /usr/lib/systemd/system/ntpd.service
+      regexp: "^(#)?ExecStart"
+      line: "ExecStart=/usr/sbin/ntpd -u ntp:ntp $OPTIONS"
+  when: rhel7cis_time_Synchronization == "ntp"
+  tags:
+      - level1
       - patch
       - rule_2.2.1.2
 
@@ -186,12 +378,31 @@
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_2.2.1.3
 
 - name: "SCORED | 2.2.1.3 | PATCH | Ensure chrony is configured"
-  command: /bin/true
+  template:
+      src: chrony.conf.j2
+      dest: /etc/chrony.conf
+      owner: root
+      group: root
+      mode: 0644
+  when: rhel7cis_time_Synchronization == "chrony"
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_2.2.1.3
+
+- name: "SCORED | 2.2.1.3 | PATCH | Ensure chrony is configured | modify /etc/sysconfig/chronyd | 1"
+  lineinfile:
+      dest: /etc/sysconfig/chronyd
+      regexp: "^(#)?OPTIONS"
+      line: "OPTIONS=\"-u chrony\""
+      state: present
+      create: yes
+  when: rhel7cis_time_Synchronization == "chrony"
   tags:
       - level1
       - level2
@@ -317,7 +528,6 @@
   command: systemctl is-enabled slapd
   register: slapd_server_enabled_audit
   failed_when: "'enabled' in slapd_server_enabled_audit.stdout"
-  register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -757,4 +967,3 @@
       - level2
       - patch
       - rule_2.3.5
-
