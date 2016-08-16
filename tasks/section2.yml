@@ -779,27 +779,7 @@
       - patch
       - rule_2.2.17
 
-- name: "SCORED | 2.2.18 | AUDIT | Ensure talk server is not enabled"
-  command: /bin/true
-  register: result
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - level2
-      - audit
-      - rule_2.2.18
-
-- name: "SCORED | 2.2.18 | PATCH | Ensure talk server is not enabled"
-  command: /bin/true
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_2.2.18
-
-- name: "SCORED | 2.2.19 | AUDIT | Ensure telnet server is not enabled"
+- name: "SCORED | 2.2.18 | AUDIT | Ensure telnet server is not enabled"
   command: systemctl is-enabled telnet.socket
   register: telnet_server_enabled_audit
   failed_when: "'enabled' in telnet_server_enabled_audit.stdout"
@@ -808,23 +788,48 @@
   ignore_errors: yes
   tags:
       - level1
-      - scored
-      - insecure_services
-      - telnet
+      - level2
       - audit
-      - rule_2.2.19
+      - rule_2.2.18
 
-- name: "SCORED | 2.2.19 | PATCH | Ensure telnet server is not enabled"
+- name: "SCORED | 2.2.18 | PATCH | Ensure telnet server is not enabled
   service:
       name: telnet
       state: stopped
       enabled: no
-  when: telnet_server_enabled_audit.failed and rhel7cis_telnet_server == false
+  when: telnet_server_enabled_audit.failed and not rhel7cis_telnet_server
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_2.2.18
+
+- name: "SCORED | 2.2.19 | AUDIT | Ensure tftp server is not enabled"
+  command: systemctl is-enabled telnet.socket
+  register: tftp_server_enabled_audit
+  failed_when: "'enabled' in tftp_server_enabled_audit.stdout"
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
   tags:
       - level1
       - scored
       - insecure_services
-      - telnet
+      - tftp
+      - audit
+      - rule_2.2.19
+
+- name: "SCORED | 2.2.19 | PATCH | Ensure tftp server is not enabled"
+  service:
+      name: tftp
+      state: stopped
+      enabled: no
+  when: tftp_server_enabled_audit.failed and not rhel7cis_tftp_server
+  tags:
+      - level1
+      - scored
+      - insecure_services
+      - tftp
       - patch
       - rule_2.2.19
 
