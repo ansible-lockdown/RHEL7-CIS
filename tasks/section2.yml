@@ -680,42 +680,50 @@
       - rule_2.2.12
 
 - name: "SCORED | 2.2.13 | AUDIT | Ensure HTTP Proxy Server is not enabled"
-  command: /bin/true
-  register: result
+  command: systemctl is-enabled squid
+  register: squid_server_enabled_audit
+  failed_when: "'enabled' in squid_server_enabled_audit.stdout"
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_2.2.13
 
 - name: "SCORED | 2.2.13 | PATCH | Ensure HTTP Proxy Server is not enabled"
-  command: /bin/true
+  service:
+      name: "{{ item }}"
+      state: stopped
+      enabled: no
+  with_items: squid
+  when: squid_server_enabled_audit.failed and not rhel7cis_squid_server
   tags:
       - level1
-      - level2
       - patch
       - rule_2.2.13
 
 - name: "SCORED | 2.2.14 | AUDIT | Ensure SNMP Server is not enabled"
-  command: /bin/true
-  register: result
+  command: systemctl is-enabled snmpd
+  register: snmp_server_enabled_audit
+  failed_when: "'enabled' in snmp_server_enabled_audit.stdout"
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_2.2.14
 
 - name: "SCORED | 2.2.14 | PATCH | Ensure SNMP Server is not enabled"
-  command: /bin/true
+  service:
+      name: "{{ item }}"
+      state: stopped
+      enabled: no
+  with_items: snmpd
+  when: snmp_server_enabled_audit.failed and not rhel7cis_snmp_server
   tags:
       - level1
-      - level2
       - patch
       - rule_2.2.14
 

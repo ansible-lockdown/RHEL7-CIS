@@ -24,6 +24,8 @@ rhel7cis_rsyncd_server: false
 rhel7cis_tftp_server: false
 rhel7cis_rsh_server: false
 rhel7cis_nis_server: false
+rhel7cis_snmp_server: false
+rhel7cis_squid_server: false
 rhel7cis_bind: false
 rhel7cis_vsftpd: false
 rhel7cis_httpd: false
