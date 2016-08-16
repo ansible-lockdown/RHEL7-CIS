@@ -324,14 +324,15 @@
       - rule_2.2.1.1
 
 - name: "SCORED | 2.2.1.2 | AUDIT | Ensure ntp is configured"
-  command: /bin/true
-  register: result
+  command: egrep -q "^restrict \-[46] default kod nomodify notrap nopeer noquery" /etc/ntp.conf && grep -q "^server" /etc/ntp.conf && grep -q "^OPTIONS=\"-u ntp:ntp\"" /etc/sysconfig/ntpd
+  register: check_ntp_restrict_audit
+  failed_when: check_ntp_restrict_audit.rc == 1
   always_run: yes
   changed_when: no
   ignore_errors: yes
+  when: rhel7cis_time_Synchronization == "ntp"
   tags:
       - level1
-      - level2
       - audit
       - rule_2.2.1.2
 
@@ -371,11 +372,13 @@
       - rule_2.2.1.2
 
 - name: "SCORED | 2.2.1.3 | AUDIT | Ensure chrony is configured"
-  command: /bin/true
-  register: result
+  command: grep -q "^server" /etc/chrony.conf && egrep -q "OPTIONS=\"\-u chrony\"" /etc/sysconfig/chronyd
+  register: check_chrony_server_audit
+  failed_when: check_chrony_server_audit.rc == 1
   always_run: yes
   changed_when: no
   ignore_errors: yes
+  when: rhel7cis_time_Synchronization == "chrony"
   tags:
       - level1
       - audit
