@@ -45,6 +45,7 @@ rhel7cis_selinux_pol: targeted
 rhel7cis_xwindows_required: no
 
 rhel7cis_openldap_clients_required: false
+rhel7cis_telnet_required: false
 
 # Time Synchronization
 rhel7cis_time_Synchronization: chrony
