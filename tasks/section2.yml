@@ -620,22 +620,26 @@
       - rule_2.2.9
 
 - name: "SCORED | 2.2.10 | AUDIT | Ensure HTTP server is not enabled"
-  command: /bin/true
-  register: result
+  command: systemctl is-enabled httpd
+  register: httpd_server_enabled_audit
+  failed_when: "'enabled' in httpd_server_enabled_audit.stdout"
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_2.2.10
 
 - name: "SCORED | 2.2.10 | PATCH | Ensure HTTP server is not enabled"
-  command: /bin/true
+  service:
+      name: "{{ item }}"
+      state: stopped
+      enabled: no
+  with_items: httpd
+  when: httpd_server_enabled_audit.failed and not rhel7cis_httpd_server
   tags:
       - level1
-      - level2
       - patch
       - rule_2.2.10
 
