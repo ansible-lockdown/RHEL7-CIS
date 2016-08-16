@@ -1026,9 +1026,9 @@
       - rule_2.3.4
 
 - name: "SCORED | 2.3.5 | AUDIT | Ensure LDAP client is not installed"
-  shell: "if rpm -aq | grep -q openldap-clients ; then echo true ; fi 2>&1"
+  shell: "rpm -aq | grep -q openldap-clients"
   register: pkgs_openldap_clients_installed_audit
-  failed_when: "'true' in pkgs_openldap_clients_installed_audit.stdout"
+  failed_when: pkgs_openldap_clients_installed_audit.rc == 0
   always_run: yes
   changed_when: no
   ignore_errors: yes
