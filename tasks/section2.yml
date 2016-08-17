@@ -278,7 +278,6 @@
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_2.2.1.1
 
@@ -394,7 +393,6 @@
   when: rhel7cis_time_Synchronization == "chrony"
   tags:
       - level1
-      - level2
       - patch
       - rule_2.2.1.3
 
@@ -408,7 +406,6 @@
   when: rhel7cis_time_Synchronization == "chrony"
   tags:
       - level1
-      - level2
       - patch
       - rule_2.2.1.3
 
@@ -767,7 +764,6 @@
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_2.2.15
 
@@ -778,16 +774,9 @@
       line: "inet_interfaces = localhost"
   tags:
       - level1
-      - level2
       - patch
       - rule_2.2.15
 
-- debug: msg="{{ check_mail_agent_audit.rc }}"
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_2.2.15
 
 - name: "SCORED | 2.2.16 | AUDIT | Ensure NIS Server is not enabled"
   command: systemctl is-enabled ypserv
@@ -925,7 +914,6 @@
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_2.2.20
 
@@ -938,7 +926,6 @@
   when: rsyncd_server_enabled_audit.failed and not rhel7cis_rsyncd_server
   tags:
       - level1
-      - level2
       - patch
       - rule_2.2.20
 
@@ -1047,7 +1034,6 @@
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_2.3.4
 
@@ -1060,7 +1046,6 @@
       - "telnet"
   tags:
       - level1
-      - level2
       - patch
       - rule_2.3.4
 
@@ -1073,7 +1058,7 @@
   ignore_errors: yes
   tags:
       - level1
-      - audit1
+      - audit
       - rule_2.3.5
 
 - name: "SCORED | 2.3.5 | PATCH | Ensure LDAP client is not installed"
