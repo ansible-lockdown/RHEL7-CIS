@@ -49,17 +49,17 @@ Service variables: These control whether a server should or should not be allowe
 False (Default) = Disallow service (it will be removed upon playbook run)
 True = Allow service (service will not be removed)
 
-      **rhel7cis_dhcp**: Allow dhcp (Default: false)
-      **rhel7cis_ldap**: Allow ldap (Default: false)
-      **rhel7cis_nfs**: Allow nfs (Default: false)
-      **rhel7cis_rpc**: Allow rpc (Default: false)
-      **rhel7cis_bind**: Allow bind (Default: false)
-      **rhel7cis_vsftpd**: Allow vsftpd (Default: false)
-      **rhel7cis_httpd**: Allow httpd (Apache) (Default: false)
-      **rhel7cis_dovecot**: Allow dovecot (Default: false)
-      **rhel7cis_samba**: Allow samba (Default: false)
-      **rhel7cis_squid**: Allow squid (Default: false)
-      **rhel7cis_net_snmp**: Allow SNMP (Default: false)
+    **rhel7cis_dhcp**: Allow dhcp (Default: false)
+    **rhel7cis_ldap**: Allow ldap (Default: false)
+    **rhel7cis_nfs**: Allow nfs (Default: false)
+    **rhel7cis_rpc**: Allow rpc (Default: false)
+    **rhel7cis_bind**: Allow bind (Default: false)
+    **rhel7cis_vsftpd**: Allow vsftpd (Default: false)
+    **rhel7cis_httpd**: Allow httpd (Apache) (Default: false)
+    **rhel7cis_dovecot**: Allow dovecot (Default: false)
+    **rhel7cis_samba**: Allow samba (Default: false)
+    **rhel7cis_squid**: Allow squid (Default: false)
+    **rhel7cis_net_snmp**: Allow SNMP (Default: false)
 
 
 Dependencies
