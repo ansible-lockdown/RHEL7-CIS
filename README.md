@@ -70,12 +70,12 @@ Ansible > 1.9
 Example Playbook
 -------------------------
 
-- name: Harden Server
-  hosts: servers
-  become: yes
+  - name: Harden Server
+    hosts: servers
+    become: yes
 
-  roles:
-    - RHEL7-CIS
+    roles:
+      - RHEL7-CIS
 
 
 Tags
