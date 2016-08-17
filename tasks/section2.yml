@@ -316,8 +316,6 @@
 - name: "SCORED | 2.2.6 | AUDIT | Ensure LDAP server is not enabled"
   command: systemctl is-enabled slapd
   register: slapd_server_enabled_audit
-  failed_when: "'enabled' in slapd_server_enabled_audit.stdout"
-  register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -330,10 +328,9 @@
       - rule_2.2.6
 
 - name: "SCORED | 2.2.6 | PATCH | Ensure LDAP server is not enabled"
-  service:
-      name: slapd
-      state: stopped
-      enabled: no
+  yum:
+      name=openldap-servers
+      state=absent
   when: slapd_server_enabled_audit.failed and rhel7cis_ldap_server == false
   tags:
       - level1
