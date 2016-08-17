@@ -378,7 +378,7 @@
       - rule_3.4.3
 
 - name: "SCORED | 3.4.3 | PATCH | Ensure /etc/hosts.deny is configured"
-  command: grep -v '^#' /etc/hosts.deny
+  command: /bin/true
   tags:
       - level1
       - level2
