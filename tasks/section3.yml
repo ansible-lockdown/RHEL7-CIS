@@ -549,12 +549,49 @@
       - patch
       - rule_3.5.4
 
+- name: "SCORED | 3.6 | AUDIT | Ensure firewalld is installed and started | CUSTOM"
+  shell: "systemctl is-enabled firewalld|grep disabled"
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  when: rhel7cis_firewall == "firewalld"
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_3.6
+
+- name: "SCORED | 3.6 | PATCH | Ensure firewalld is installed and started | CUSTOM"
+  yum:
+      name: firewalld
+      state: present
+  when: rhel7cis_firewall == "firewalld"
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_3.6
+
+- name: "SCORED | 3.6 | PATCH | Ensure firewalld is installed and started | CUSTOM"
+  service:
+      name: firewalld
+      state: stopped
+      enabled: no
+  when: rhel7cis_firewall == "firewalld"
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_3.6
+
 - name: "SCORED | 3.6.1 | AUDIT | Ensure iptables is installed"
   command: /bin/true
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
+  when: rhel7cis_firewall == "iptables"
   tags:
       - level1
       - level2
@@ -563,6 +600,7 @@
 
 - name: "SCORED | 3.6.1 | PATCH | Ensure iptables is installed"
   command: /bin/true
+  when: rhel7cis_firewall == "iptables"
   tags:
       - level1
       - level2
@@ -575,6 +613,7 @@
   always_run: yes
   changed_when: no
   ignore_errors: yes
+  when: rhel7cis_firewall == "iptables"
   tags:
       - level1
       - level2
@@ -583,6 +622,7 @@
 
 - name: "SCORED | 3.6.2 | PATCH | Ensure default deny firewall policy"
   command: /bin/true
+  when: rhel7cis_firewall == "iptables"
   tags:
       - level1
       - level2
@@ -595,6 +635,7 @@
   always_run: yes
   changed_when: no
   ignore_errors: yes
+  when: rhel7cis_firewall == "iptables"
   tags:
       - level1
       - level2
@@ -603,6 +644,7 @@
 
 - name: "SCORED | 3.6.3 | PATCH | Ensure loopback traffic is configured"
   command: /bin/true
+  when: rhel7cis_firewall == "iptables"
   tags:
       - level1
       - level2
@@ -615,6 +657,7 @@
   always_run: yes
   changed_when: no
   ignore_errors: yes
+  when: rhel7cis_firewall == "iptables"
   tags:
       - level1
       - level2
@@ -623,6 +666,7 @@
 
 - name: "NOTSCORED | 3.6.4 | PATCH | Ensure outbound and established connections are configured"
   command: /bin/true
+  when: rhel7cis_firewall == "iptables"
   tags:
       - level1
       - level2
@@ -635,6 +679,7 @@
   always_run: yes
   changed_when: no
   ignore_errors: yes
+  when: rhel7cis_firewall == "iptables"
   tags:
       - level1
       - level2
@@ -643,6 +688,7 @@
 
 - name: "SCORED | 3.6.5 | PATCH | Ensure firewall rules exist for all open ports"
   command: /bin/true
+  when: rhel7cis_firewall == "iptables"
   tags:
       - level1
       - level2
