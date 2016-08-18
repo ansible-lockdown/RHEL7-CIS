@@ -1,0 +1,23 @@
+sudo: required
+
+language: bash
+
+services:
+    - docker
+
+before_install:
+    - docker info
+    - docker version
+
+install:
+    - docker build -t centos7-systemd tests/centos/7/
+
+script:
+    - docker run --detach --privileged --name RHEL7-CIS -v $(pwd):/ansible -v /sys/fs/cgroup:/sys/fs/cgroup centos7-systemd
+    - bash ./tests/centos_7.sh
+
+after_script:
+    - docker ps -a
+    - docker logs centos7-systemd
+
+    - docker exec -i -t RHEL7-CIS ansible-playbook -i "localhost," -c local /ansible/tests/test.yml
