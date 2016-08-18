@@ -305,6 +305,7 @@
       name: "ntpd"
       state: stopped
       enabled: no
+  ignore_errors: yes
   when: rhel7cis_time_Synchronization == "chrony"
   tags:
       - level1
@@ -316,6 +317,7 @@
       name: "chronyd"
       state: stopped
       enabled: no
+  ignore_errors: yes
   when: rhel7cis_time_Synchronization == "ntp"
   tags:
       - level1
