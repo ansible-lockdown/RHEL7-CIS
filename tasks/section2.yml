@@ -774,6 +774,7 @@
       dest: /etc/postfix/main.cf
       regexp: "^(#)?inet_interfaces"
       line: "inet_interfaces = localhost"
+  ignore_errors: yes
   tags:
       - level1
       - patch
