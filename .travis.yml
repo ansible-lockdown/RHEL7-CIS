@@ -20,4 +20,4 @@ after_script:
     - docker ps -a
     - docker logs centos7-systemd
 
-    - docker exec -i -t RHEL7-CIS ansible-playbook -i "localhost," -c local /ansible/tests/test.yml
+    - docker exec -i -t RHEL7-CIS ansible-playbook -i "localhost," -c local /ansible/tests/test.yml --skip-tags 'rule_1.6.1.1'
