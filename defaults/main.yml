@@ -72,3 +72,9 @@ rhel7cis_time_Synchronization_servers:
     - 1.pool.ntp.org
     - 2.pool.ntp.org
     - 3.pool.ntp.org
+
+# 3.4.2 | PATCH | Ensure /etc/hosts.allow is configured
+rhel7cis_host_allow:
+    - "10.0.0.0/255.0.0.0"
+    - "172.16.0.0/255.240.0.0"
+    - "192.168.0.0/255.255.0.0"
