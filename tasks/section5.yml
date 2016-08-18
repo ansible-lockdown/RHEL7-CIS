@@ -607,7 +607,7 @@
       - rule_5.2.15
 
 - name: "SCORED | 5.2.16 | AUDIT | Ensure SSH warning banner is configured"
-  command: grep "^Banner /etc/issue.net" /etc/ssh/sshd_config
+  command: grep "^Banner /etc/issue" /etc/ssh/sshd_config
   register: result
   always_run: yes
   changed_when: no
@@ -623,7 +623,7 @@
       state: present
       dest: /etc/ssh/sshd_config
       regexp: '^Banner'
-      line: 'Banner /etc/issue.net'
+      line: 'Banner /etc/issue'
   tags:
       - level1
       - level2
