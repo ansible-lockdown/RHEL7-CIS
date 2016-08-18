@@ -1,33 +1,40 @@
+---
 sudo: required
 
-language: bash
+env:
+  - distribution: centos
+    version: 7
+    init: /usr/lib/systemd/systemd
+    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
 
 services:
-    - docker
+  - docker
 
 before_install:
-    - docker info
-    - docker version
-
-install:
-    - docker build -t centos7-systemd tests/centos/7/
+  # Pull container
+  - 'sudo docker pull ${distribution}:${version}'
+  # Customize container
+  - 'sudo docker build --rm=true --file=tests/Dockerfile.${distribution}-${version} --tag=${distribution}-${version}:ansible tests'
 
 script:
-    - container_id=$(mktemp)
-    - docker run --detach --privileged --name RHEL7-CIS -v $(pwd):/ansible -v /sys/fs/cgroup:/sys/fs/cgroup centos7-systemd
-    - bash ./tests/centos_7.sh
+  - container_id=$(mktemp)
+  # Run container in detached state
+  - 'sudo docker run --detach -p 8025:8025 --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} ${distribution}-${version}:ansible "${init}" > "${container_id}"'
 
-after_script:
-    - docker ps -a
-    - docker logs centos7-systemd
+  # Ansible syntax check.
+  - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/test.yml --syntax-check'
 
-    - docker exec -i -t RHEL7-CIS ansible-playbook -i "localhost," -c local /ansible/tests/test.yml --syntax-check
+  # Test role.
+  - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/test.yml'
 
   # Test role idempotence.
-    - idempotence=$(mktemp)
-    - docker exec -i -t RHEL7-CIS ansible-playbook -i "localhost," -c local /ansible/tests/test.yml  | tee -a ${idempotence}
-    - >
-      tail ${idempotence}
-      | grep -q 'changed=0.*failed=0'
-      && (echo 'Idempotence test: pass' && exit 0)
-      || (echo 'Idempotence test: fail' && exit 1)
+  - idempotence=$(mktemp)
+  - sudo docker exec "$(cat ${container_id})" ansible-playbook /etc/ansible/roles/role_under_test/tests/test.yml | tee -a ${idempotence}
+  - >
+    tail ${idempotence}
+    | grep -q 'changed=0.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)
+
+  # Clean up
+  - 'sudo docker stop "$(cat ${container_id})"'
