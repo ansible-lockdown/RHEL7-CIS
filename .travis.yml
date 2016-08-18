@@ -21,5 +21,6 @@ after_script:
     - docker logs centos7-systemd
 
     - docker exec -i -t RHEL7-CIS ansible-playbook -i "localhost," -c local /ansible/tests/test.yml --syntax-check
-    - docker exec -i -t RHEL7-CIS ansible-playbook -i "localhost," -c local /ansible/tests/test.yml |tee /tmp/ansible.log
-    - grep -q 'changed=0.*failed=0' && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)
+    - docker exec -i -t RHEL7-CIS ansible-playbook -i "localhost," -c local /ansible/tests/test.yml | grep -q 'changed=0.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)
