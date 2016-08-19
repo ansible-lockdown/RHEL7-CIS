@@ -6,7 +6,6 @@
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_3.1.1
 
@@ -19,144 +18,176 @@
       ignoreerrors: yes
   tags:
       - level1
-      - level2
       - patch
       - rule_3.1.1
 
 - name: "SCORED | 3.1.2 | AUDIT | Ensure packet redirect sending is disabled"
-  shell: /sbin/sysctl net.ipv4.conf.all.send_redirects | grep 0
+  shell: /sbin/sysctl net.ipv4.conf.all.send_redirects|grep 0 && /sbin/sysctl net.ipv4.conf.default.send_redirects|grep 0
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_3.1.2
 
 - name: "SCORED | 3.1.2 | PATCH | Ensure packet redirect sending is disabled"
   sysctl:
-      name: net.ipv4.conf.all.send_redirects
-      value: 0
+      name: '{{ item.name }}'
+      value: '{{ item.value }}'
+      sysctl_set: yes
       state: present
       reload: yes
       ignoreerrors: yes
+  with_items:
+      - { name: net.ipv4.conf.all.send_redirects, value: 0 }
+      - { name: net.ipv4.conf.default.send_redirects, value: 0 }
   tags:
       - level1
-      - level2
       - patch
       - rule_3.1.2
 
+# - name: "SCORED | 3.1.2 | PATCH | Ensure packet redirect sending is disabled"
+#   sysctl:
+#       name: net.ipv4.conf.all.send_redirects
+#       value: 0
+#       state: present
+#       reload: yes
+#       ignoreerrors: yes
+#   tags:
+#       - level1
+#       - patch
+#       - rule_3.1.2
+#
+# - name: "SCORED | 3.1.2 | PATCH | Ensure packet redirect sending is disabled"
+#   sysctl:
+#       name: net.ipv4.conf.default.send_redirects
+#       value: 0
+#       state: present
+#       reload: yes
+#       ignoreerrors: yes
+#   tags:
+#       - level1
+#       - patch
+#       - rule_3.1.2
+
 - name: "SCORED | 3.2.1 | AUDIT | Ensure source routed packets are not accepted"
-  shell: /sbin/sysctl net.ipv4.conf.all.accept_source_route | grep 0
+  shell: /sbin/sysctl net.ipv4.conf.all.accept_source_route|grep 0 && /sbin/sysctl net.ipv4.conf.default.accept_source_route|grep 0
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_3.2.1
 
 - name: "SCORED | 3.2.1 | PATCH | Ensure source routed packets are not accepted"
   sysctl:
-      name: net.ipv4.conf.all.accept_source_route
-      value: 0
+      name: '{{ item.name }}'
+      value: '{{ item.value }}'
+      sysctl_set: yes
       state: present
       reload: yes
       ignoreerrors: yes
+  with_items:
+      - { name: net.ipv4.conf.all.accept_source_route, value: 0 }
+      - { name: net.ipv4.conf.default.accept_source_route, value: 0 }
   tags:
       - level1
-      - level2
       - patch
       - rule_3.2.1
 
 - name: "SCORED | 3.2.2 | AUDIT | Ensure ICMP redirects are not accepted"
-  shell: /sbin/sysctl net.ipv4.conf.all.accept_redirects | grep 0
+  shell: /sbin/sysctl net.ipv4.conf.all.accept_redirects|grep 0 && /sbin/sysctl net.ipv4.conf.default.accept_redirects|grep 0
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_3.2.2
 
 - name: "SCORED | 3.2.2 | PATCH | Ensure ICMP redirects are not accepted"
   sysctl:
-      name: net.ipv4.conf.all.accept_redirects
-      value: 0
+      name: '{{ item.name }}'
+      value: '{{ item.value }}'
+      sysctl_set: yes
       state: present
       reload: yes
       ignoreerrors: yes
+  with_items:
+      - { name: net.ipv4.conf.all.accept_redirects, value: 0 }
+      - { name: net.ipv4.conf.default.accept_redirects, value: 0 }
   tags:
       - level1
-      - level2
       - patch
       - rule_3.2.2
 
 - name: "SCORED | 3.2.3 | AUDIT | Ensure secure ICMP redirects are not accepted"
-  shell: /sbin/sysctl net.ipv4.conf.default.accept_redirects | grep 0
+  shell: /sbin/sysctl net.ipv4.conf.all.secure_redirects|grep 0 && /sbin/sysctl net.ipv4.conf.default.secure_redirects|grep 0
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_3.2.3
 
 - name: "SCORED | 3.2.3 | PATCH | Ensure secure ICMP redirects are not accepted"
   sysctl:
-      name: net.ipv4.conf.default.accept_redirects
-      value: 0
+      name: '{{ item.name }}'
+      value: '{{ item.value }}'
+      sysctl_set: yes
       state: present
       reload: yes
       ignoreerrors: yes
+  with_items:
+      - { name: net.ipv4.conf.all.secure_redirects, value: 0 }
+      - { name: net.ipv4.conf.default.secure_redirects, value: 0 }
   tags:
       - level1
-      - level2
       - patch
       - rule_3.2.3
 
 - name: "SCORED | 3.2.4 | AUDIT | Ensure suspicious packets are logged"
-  shell: /sbin/sysctl net.ipv4.conf.all.log_martians | grep 1
+  shell: /sbin/sysctl net.ipv4.conf.all.log_martians|grep 1 && /sbin/sysctl net.ipv4.conf.default.log_martians|grep 1
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_3.2.4
 
 - name: "SCORED | 3.2.4 | PATCH | Ensure suspicious packets are logged"
   sysctl:
-      name: net.ipv4.conf.all.log_martians
-      value: 1
+      name: '{{ item.name }}'
+      value: '{{ item.value }}'
+      sysctl_set: yes
       state: present
       reload: yes
       ignoreerrors: yes
+  with_items:
+      - { name: net.ipv4.conf.all.log_martians, value: 1 }
+      - { name: net.ipv4.conf.default.log_martians, value: 1 }
   tags:
       - level1
-      - level2
       - patch
       - rule_3.2.4
 
 - name: "SCORED | 3.2.5 | AUDIT | Ensure broadcast ICMP requests are ignored"
-  shell: /sbin/sysctl net.ipv4.icmp_echo_ignore_broadcasts | grep 1
+  shell: /sbin/sysctl net.ipv4.icmp_echo_ignore_broadcasts|grep 1
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_3.2.5
 
@@ -169,19 +200,17 @@
       ignoreerrors: yes
   tags:
       - level1
-      - level2
       - patch
       - rule_3.2.5
 
 - name: "SCORED | 3.2.6 | AUDIT | Ensure bogus ICMP responses are ignored"
-  shell: /sbin/sysctl net.ipv4.icmp_ignore_bogus_error_responses | grep 1
+  shell: /sbin/sysctl net.ipv4.icmp_ignore_bogus_error_responses|grep 1
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_3.2.6
 
@@ -194,44 +223,44 @@
       ignoreerrors: yes
   tags:
       - level1
-      - level2
       - patch
       - rule_3.2.6
 
 - name: "SCORED | 3.2.7 | AUDIT | Ensure Reverse Path Filtering is enabled"
-  shell: /sbin/sysctl net.ipv4.conf.all.rp_filter | grep 1
+  shell: /sbin/sysctl net.ipv4.conf.all.rp_filter|grep 1 && /sbin/sysctl net.ipv4.conf.default.rp_filter|grep 1
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_3.2.7
 
 - name: "SCORED | 3.2.7 | PATCH | Ensure Reverse Path Filtering is enabled"
   sysctl:
-      name: net.ipv4.conf.all.rp_filter
-      value: 1
+      name: '{{ item.name }}'
+      value: '{{ item.value }}'
+      sysctl_set: yes
       state: present
       reload: yes
       ignoreerrors: yes
+  with_items:
+      - { name: net.ipv4.conf.all.rp_filter, value: 1 }
+      - { name: net.ipv4.conf.default.rp_filter, value: 1 }
   tags:
       - level1
-      - level2
       - patch
       - rule_3.2.7
 
 - name: "SCORED | 3.2.8 | AUDIT | Ensure TCP SYN Cookies is enabled"
-  shell: /sbin/sysctl net.ipv4.tcp_syncookies | grep 1
+  shell: /sbin/sysctl net.ipv4.tcp_syncookies|grep 1
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_3.2.8
 
@@ -244,37 +273,38 @@
       ignoreerrors: yes
   tags:
       - level1
-      - level2
       - patch
       - rule_3.2.8
 
 - name: "SCORED | 3.3.1 | AUDIT | Ensure IPv6 router advertisements are not accepted"
-  shell: /sbin/sysctl net.ipv6.conf.all.accept_ra | grep 0
+  shell: /sbin/sysctl net.ipv6.conf.all.accept_ra|grep 0 && /sbin/sysctl net.ipv6.conf.default.accept_ra|grep 0
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_3.3.1
 
 - name: "SCORED | 3.3.1 | PATCH | Ensure IPv6 router advertisements are not accepted"
   sysctl:
-      name: net.ipv6.conf.all.accept_ra
-      value: 0
+      name: '{{ item.name }}'
+      value: '{{ item.value }}'
+      sysctl_set: yes
       state: present
       reload: yes
       ignoreerrors: yes
+  with_items:
+      - { name: net.ipv6.conf.all.accept_ra, value: 0 }
+      - { name: net.ipv6.conf.default.accept_ra, value: 0 }
   tags:
       - level1
-      - level2
       - patch
       - rule_3.3.1
 
 - name: "SCORED | 3.3.2 | AUDIT | Ensure IPv6 redirects are not accepted"
-  shell: /sbin/sysctl net.ipv6.conf.all.accept_redirect | grep 0
+  shell: /sbin/sysctl net.ipv6.conf.all.accept_redirects|grep 0 && /sbin/sysctl net.ipv6.conf.default.accept_redirects|grep 0
   register: result
   always_run: yes
   changed_when: no
@@ -287,39 +317,39 @@
 
 - name: "SCORED | 3.3.2 | PATCH | Ensure IPv6 redirects are not accepted"
   sysctl:
-      name: net.ipv6.conf.all.accept_redirect
-      value: 0
+      name: '{{ item.name }}'
+      value: '{{ item.value }}'
+      sysctl_set: yes
       state: present
       reload: yes
       ignoreerrors: yes
+  with_items:
+      - { name: net.ipv6.conf.all.accept_redirects, value: 0 }
+      - { name: net.ipv6.conf.default.accept_redirects, value: 0 }
   tags:
       - level1
-      - level2
       - patch
       - rule_3.3.2
 
 - name: "NOTSCORED | 3.3.3 | AUDIT | Ensure IPv6 is disabled"
-  shell: /sbin/sysctl net.ipv6.conf.all.disable_ipv6 | grep 1
+  shell: modprobe -c | grep 'options ipv6 disable=1'
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_3.3.3
 
 - name: "NOTSCORED | 3.3.3 | PATCH | Ensure IPv6 is disabled"
-  sysctl:
-      name: net.ipv6.conf.all.disable_ipv6
-      value: 1
-      state: present
-      reload: yes
-      ignoreerrors: yes
+  lineinfile:
+      dest: /etc/modprobe.d/CIS.conf
+      regexp: "^(#)?options ipv6 disable="
+      line: "options ipv6 disable=1"
+      create: yes
   tags:
       - level1
-      - level2
       - patch
       - rule_3.3.3
 
@@ -331,57 +361,59 @@
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_3.4.1
 
 - name: "SCORED | 3.4.1 | PATCH | Ensure TCP Wrappers is installed"
   yum:
-      name: tcp_wrappers
-      state: installed
+    name: tcp_wrappers
+    state: present
   tags:
       - level1
-      - level2
       - patch
       - rule_3.4.1
 
 - name: "SCORED | 3.4.2 | AUDIT | Ensure /etc/hosts.allow is configured"
-  command: grep -v '^#' /etc/hosts.allow
+  shell: "/usr/bin/egrep '^ALL' /etc/hosts.allow"
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_3.4.2
 
 - name: "SCORED | 3.4.2 | PATCH | Ensure /etc/hosts.allow is configured"
-  command: /bin/true
+  template:
+      src: hosts.allow.j2
+      dest: /etc/hosts.allow
+      owner: root
+      group: root
+      mode: 0644
   tags:
       - level1
-      - level2
       - patch
       - rule_3.4.2
 
 - name: "SCORED | 3.4.3 | AUDIT | Ensure /etc/hosts.deny is configured"
-  command: grep '^ALL: ALL' /etc/hosts.deny
+  shell: "/usr/bin/egrep '^ALL: ALL' /etc/hosts.deny"
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_3.4.3
 
 - name: "SCORED | 3.4.3 | PATCH | Ensure /etc/hosts.deny is configured"
-  command: /bin/true
+  lineinfile:
+      dest: /etc/hosts.deny
+      regexp: "^(#)?ALL"
+      line: "ALL: ALL"
   tags:
       - level1
-      - level2
       - patch
       - rule_3.4.3
 
@@ -393,7 +425,6 @@
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_3.4.4
 
@@ -405,19 +436,17 @@
       mode: 0644
   tags:
       - level1
-      - level2
       - patch
       - rule_3.4.4
 
 - name: "SCORED | 3.4.5 | AUDIT | Ensure permissions on /etc/hosts.deny are 644"
-  shell: stat -L -c "%a %u %g" /etc/hosts.allow | egrep "644 0 0"
+  shell: stat -L -c "%a %u %g" /etc/hosts.deny | egrep "644 0 0"
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_3.4.5
 
@@ -429,116 +458,132 @@
       mode: 0644
   tags:
       - level1
-      - level2
       - patch
       - rule_3.4.5
 
 - name: "NOTSCORED | 3.5.1 | AUDIT | Ensure DCCP is disabled"
-  command: grep -rs "^install\s*dccp\s*/bin/true$" /etc/modprobe.d
+  shell: modprobe -n -v dccp | grep 'install /bin/true'
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_3.5.1
 
 - name: "NOTSCORED | 3.5.1 | PATCH | Ensure DCCP is disabled"
   lineinfile:
-      state: present
+      dest: /etc/modprobe.d/CIS.conf
+      regexp: "^(#)?install dccp"
+      line: "install dccp /bin/true"
       create: yes
-      line: install dccp /bin/true
-      dest: /etc/modprobe.d/disable-dccp.conf
-      owner: root
-      group: root
-      mode: "0644"
   tags:
       - level1
-      - level2
       - patch
       - rule_3.5.1
 
 - name: "NOTSCORED | 3.5.2 | AUDIT | Ensure SCTP is disabled"
-  command: grep -rs "^install\s*sctp\s*/bin/true$" /etc/modprobe.d
+  shell: modprobe -n -v sctp | grep 'install /bin/true'
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_3.5.2
 
 - name: "NOTSCORED | 3.5.2 | PATCH | Ensure SCTP is disabled"
   lineinfile:
-      state: present
+      dest: /etc/modprobe.d/CIS.conf
+      regexp: "^(#)?install sctp"
+      line: "install sctp /bin/true"
       create: yes
-      line: install sctp /bin/true
-      dest: /etc/modprobe.d/disable-sctp.conf
-      owner: root
-      group: root
-      mode: "0644"
   tags:
       - level1
-      - level2
       - patch
       - rule_3.5.2
 
 - name: "NOTSCORED | 3.5.3 | AUDIT | Ensure RDS is disabled"
-  shell: find /etc/modprobe.* -type f -name '*.conf' -exec grep -ls '^install rds /bin/(true|false)' {} \;
+  shell: modprobe -n -v rds | grep 'install /bin/true'
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_3.5.3
 
 - name: "NOTSCORED | 3.5.3 | PATCH | Ensure RDS is disabled"
-  copy:
-      backup: no
-      src: disable-rds.conf
-      dest: /etc/modprobe.d/disable-rds.conf
-      owner: root
-      group: root
-      mode: 0644
+  lineinfile:
+      dest: /etc/modprobe.d/CIS.conf
+      regexp: "^(#)?install rds"
+      line: "install rds /bin/true"
+      create: yes
   tags:
       - level1
-      - level2
       - patch
       - rule_3.5.3
 
 - name: "NOTSCORED | 3.5.4 | AUDIT | Ensure TIPC is disabled"
-  command: grep -rs "^install\s*tipc\s*/bin/true$" /etc/modprobe.d
+  shell: modprobe -n -v tipc | grep 'install /bin/true'
   register: result
   always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
       - level1
-      - level2
       - audit
       - rule_3.5.4
 
 - name: "NOTSCORED | 3.5.4 | PATCH | Ensure TIPC is disabled"
   lineinfile:
-      state: present
+      dest: /etc/modprobe.d/CIS.conf
+      regexp: "^(#)?install tipc"
+      line: "install tipc /bin/true"
       create: yes
-      line: install tipc /bin/true
-      dest: /etc/modprobe.d/disable-tipc.conf
-      owner: root
-      group: root
-      mode: "0644"
+  tags:
+      - level1
+      - patch
+      - rule_3.5.4
+
+- name: "SCORED | 3.6 | AUDIT | Ensure firewalld is installed and started | CUSTOM"
+  shell: "systemctl is-enabled firewalld|grep disabled"
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  when: rhel7cis_firewall == "firewalld"
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_3.6
+
+- name: "SCORED | 3.6 | PATCH | Ensure firewalld is installed and started | CUSTOM"
+  yum:
+      name: firewalld
+      state: present
+  when: rhel7cis_firewall == "firewalld"
   tags:
       - level1
       - level2
       - patch
-      - rule_3.5.4
+      - rule_3.6
+
+- name: "SCORED | 3.6 | PATCH | Ensure firewalld is installed and started | CUSTOM"
+  service:
+      name: firewalld
+      state: stopped
+      enabled: no
+  when: rhel7cis_firewall == "firewalld"
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_3.6
 
 - name: "SCORED | 3.6.1 | AUDIT | Ensure iptables is installed"
   command: rpm -q iptables
@@ -546,6 +591,7 @@
   always_run: yes
   changed_when: no
   ignore_errors: yes
+  when: rhel7cis_firewall == "iptables"
   tags:
       - level1
       - level2
@@ -556,6 +602,7 @@
   yum:
       name: iptables
       state: installed
+  when: rhel7cis_firewall == "iptables"
   tags:
       - level1
       - level2
@@ -568,6 +615,7 @@
   always_run: yes
   changed_when: no
   ignore_errors: yes
+  when: rhel7cis_firewall == "iptables"
   tags:
       - level1
       - level2
@@ -576,6 +624,7 @@
 
 - name: "SCORED | 3.6.2 | PATCH | Ensure default deny firewall policy"
   command: /bin/true
+  when: rhel7cis_firewall == "iptables"
   tags:
       - level1
       - level2
@@ -588,6 +637,7 @@
   always_run: yes
   changed_when: no
   ignore_errors: yes
+  when: rhel7cis_firewall == "iptables"
   tags:
       - level1
       - level2
@@ -596,6 +646,7 @@
 
 - name: "SCORED | 3.6.3 | PATCH | Ensure loopback traffic is configured"
   command: /bin/true
+  when: rhel7cis_firewall == "iptables"
   tags:
       - level1
       - level2
@@ -608,6 +659,7 @@
   always_run: yes
   changed_when: no
   ignore_errors: yes
+  when: rhel7cis_firewall == "iptables"
   tags:
       - level1
       - level2
@@ -616,6 +668,7 @@
 
 - name: "NOTSCORED | 3.6.4 | PATCH | Ensure outbound and established connections are configured"
   command: /bin/true
+  when: rhel7cis_firewall == "iptables"
   tags:
       - level1
       - level2
@@ -628,6 +681,7 @@
   always_run: yes
   changed_when: no
   ignore_errors: yes
+  when: rhel7cis_firewall == "iptables"
   tags:
       - level1
       - level2
@@ -636,6 +690,7 @@
 
 - name: "SCORED | 3.6.5 | PATCH | Ensure firewall rules exist for all open ports"
   command: /bin/true
+  when: rhel7cis_firewall == "iptables"
   tags:
       - level1
       - level2
@@ -661,4 +716,3 @@
       - level2
       - patch
       - rule_3.7
-
