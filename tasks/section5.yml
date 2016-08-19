@@ -655,7 +655,7 @@
       state: present
       dest: /etc/security/pwquality.conf
       regexp: '^{{ item.key }}'
-      line: '{{ item.key }}={{ item.value }}'
+      line: '{{ item.key }} = {{ item.value }}'
   with_items:
       - { key: 'minlen',  value: '14' }
       - { key: 'dcredit', value: '-1' }
