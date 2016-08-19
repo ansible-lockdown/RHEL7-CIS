@@ -342,7 +342,7 @@
       - rule_1.1.3
 
 - name: "SCORED | 1.1.4 | AUDIT | Ensure nosuid option set on /tmp partition"
-  command: /bin/true
+  shell: mount | grep /tmp | grep nosuid
   register: result
   always_run: yes
   changed_when: no
@@ -362,7 +362,7 @@
       - rule_1.1.4
 
 - name: "SCORED | 1.1.5 | AUDIT | Ensure noexec option set on /tmp partition"
-  command: /bin/true
+  shell: mount | grep /tmp | grep noexec
   register: result
   always_run: yes
   changed_when: no
@@ -388,7 +388,7 @@
 # See not_automated.yml
 
 - name: "SCORED | 1.1.8 | AUDIT | Ensure nodev option set on /var/tmp partition"
-  command: /bin/true
+  shell: mount | grep /var/tmp | grep nodev
   register: result
   always_run: yes
   changed_when: no
@@ -408,7 +408,7 @@
       - rule_1.1.8
 
 - name: "SCORED | 1.1.9 | AUDIT | Ensure nosuid option set on /var/tmp partition"
-  command: /bin/true
+  shell: mount | grep /var/tmp | grep nosuid
   register: result
   always_run: yes
   changed_when: no
@@ -428,7 +428,7 @@
       - rule_1.1.9
 
 - name: "SCORED | 1.1.10 | AUDIT | Ensure noexec option set on /var/tmp partition"
-  command: /bin/true
+  shell: mount | grep /var/tmp | grep noexec
   register: result
   always_run: yes
   changed_when: no
@@ -457,7 +457,7 @@
 # See not_automated.yml
 
 - name: "SCORED | 1.1.14 | AUDIT | Ensure nodev option set on /home partition"
-  command: /bin/true
+  shell: mount | grep /home | grep nodev
   register: result
   always_run: yes
   changed_when: no
@@ -477,7 +477,7 @@
       - rule_1.1.14
 
 - name: "SCORED | 1.1.15 | AUDIT | Ensure nodev option set on /dev/shm partition"
-  command: /bin/true
+  shell: mount | grep /dev/shm | grep nodev
   register: result
   always_run: yes
   changed_when: no
@@ -497,7 +497,7 @@
       - rule_1.1.15
 
 - name: "SCORED | 1.1.16 | AUDIT | Ensure nosuid option set on /dev/shm partition"
-  command: /bin/true
+  shell: mount | grep /dev/shm | grep nosuid
   register: result
   always_run: yes
   changed_when: no
@@ -517,7 +517,7 @@
       - rule_1.1.16
 
 - name: "SCORED | 1.1.17 | AUDIT | Ensure noexec option set on /dev/shm partition"
-  command: /bin/true
+  shell: mount | grep /dev/shm | grep noexec
   register: result
   always_run: yes
   changed_when: no
@@ -1180,7 +1180,7 @@ print $NF }'"
       - rule_1.6.2
 
 - name: "SCORED | 1.7.1.1 | AUDIT | Ensure message of the day is configured properly"
-  command: /bin/true
+  command: egrep '(\\v|\\r|\\m|\\s)' /etc/motd
   register: result
   always_run: yes
   changed_when: no
@@ -1200,7 +1200,7 @@ print $NF }'"
       - rule_1.7.1.1
 
 - name: "NOTSCORED | 1.7.1.2 | AUDIT | Ensure local login warning banner is configured properly"
-  command: /bin/true
+  command: egrep '(\\v|\\r|\\m|\\s)' /etc/issue
   register: result
   always_run: yes
   changed_when: no
@@ -1220,7 +1220,7 @@ print $NF }'"
       - rule_1.7.1.2
 
 - name: "NOTSCORED | 1.7.1.3 | AUDIT | Ensure remote login warning banner is configured properly"
-  command: /bin/true
+  command: egrep '(\\v|\\r|\\m|\\s)' /etc/issue.net
   register: result
   always_run: yes
   changed_when: no
@@ -1240,7 +1240,7 @@ print $NF }'"
       - rule_1.7.1.3
 
 - name: "NOTSCORED | 1.7.1.4 | AUDIT | Ensure permissions on /etc/motd are configured"
-  command: /bin/true
+  shell: stat -L -c "%a %u %g" /etc/motd  | egrep "644 0 0"
   register: result
   always_run: yes
   changed_when: no
@@ -1252,7 +1252,12 @@ print $NF }'"
       - rule_1.7.1.4
 
 - name: "NOTSCORED | 1.7.1.4 | PATCH | Ensure permissions on /etc/motd are configured"
-  command: /bin/true
+  file:
+      dest=/etc/motd
+      state=file
+      owner=root
+      group=root
+      mode=0644
   tags:
       - level1
       - level2
@@ -1260,7 +1265,7 @@ print $NF }'"
       - rule_1.7.1.4
 
 - name: "SCORED | 1.7.1.5 | AUDIT | Ensure permissions on /etc/issue are configured"
-  command: /bin/true
+  shell: stat -L -c "%a %u %g" /etc/issue  | egrep "644 0 0"
   register: result
   always_run: yes
   changed_when: no
@@ -1272,7 +1277,12 @@ print $NF }'"
       - rule_1.7.1.5
 
 - name: "SCORED | 1.7.1.5 | PATCH | Ensure permissions on /etc/issue are configured"
-  command: /bin/true
+  file:
+      dest=/etc/issue
+      state=file
+      owner=root
+      group=root
+      mode=0644
   tags:
       - level1
       - level2
@@ -1280,7 +1290,7 @@ print $NF }'"
       - rule_1.7.1.5
 
 - name: "NOTSCORED | 1.7.1.6 | AUDIT | Ensure permissions on /etc/issue.net are configured"
-  command: /bin/true
+  shell: stat -L -c "%a %u %g" /etc/issue.net  | egrep "644 0 0"
   register: result
   always_run: yes
   changed_when: no
@@ -1292,7 +1302,12 @@ print $NF }'"
       - rule_1.7.1.6
 
 - name: "NOTSCORED | 1.7.1.6 | PATCH | Ensure permissions on /etc/issue.net are configured"
-  command: /bin/true
+  file:
+      dest=/etc/issue.net
+      state=file
+      owner=root
+      group=root
+      mode=0644
   tags:
       - level1
       - level2
@@ -1320,7 +1335,7 @@ print $NF }'"
       - rule_1.7.2
 
 - name: "NOTSCORED | 1.8 | AUDIT | Ensure updates, patches, and additional security software are installed"
-  command: /bin/true
+  command: yum check-update
   register: result
   always_run: yes
   changed_when: no
