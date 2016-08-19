@@ -1,4 +1,3 @@
 *.swp
 .DS_Store
-*test*
 main.yml

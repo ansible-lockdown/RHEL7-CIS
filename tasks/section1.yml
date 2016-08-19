@@ -1019,6 +1019,7 @@
       regexp: '(selinux|enforcing)\s*=\s*0\s*'
       follow: yes
   register: selinux_grub_patch
+  ignore_errors: yes
   tags:
       - level2
       - scored
@@ -1039,7 +1040,7 @@
   register: selinux_state_audit
   always_run: yes
   changed_when: no
-  ignore_errors: yes
+  when: not rhel7cis_selinux_disable
   tags:
       - level2
       - scored
@@ -1065,6 +1066,7 @@
       conf: /etc/selinux/config
       policy: "{{ rhel7cis_selinux_pol }}"
       state: enforcing
+  when: not rhel7cis_selinux_disable
   tags:
       - level2
       - scored
@@ -1090,6 +1092,7 @@
       conf: /etc/selinux/config
       policy: "{{ rhel7cis_selinux_pol }}"
       state: enforcing
+  when: not rhel7cis_selinux_disable
   tags:
       - level2
       - scored
@@ -1338,4 +1341,3 @@ print $NF }'"
       - level2
       - patch
       - rule_1.8
-

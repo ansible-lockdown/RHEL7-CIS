@@ -1,6 +1,9 @@
 RHEL 7 CIS STIG
 ================
 
+[![Build Status](https://travis-ci.org/daswars/RHEL7-CIS.svg?branch=devel)](https://travis-ci.org/daswars/RHEL7-CIS)
+
+
 Configure RHEL/Centos 7 machine to be CIS compliant. Level 1 and 2 findings will be corrected by default.
 
 This role **will make changes to the system** that could break things. This is not an auditing tool but rather a remediation tool to be used after an audit has been conducted.
@@ -49,17 +52,17 @@ Service variables: These control whether a server should or should not be allowe
 False (Default) = Disallow service (it will be removed upon playbook run)
 True = Allow service (service will not be removed)
 
-**rhel7cis_dhcp**: Allow dhcp (Default: false)
-**rhel7cis_ldap**: Allow ldap (Default: false)
-**rhel7cis_nfs**: Allow nfs (Default: false)
-**rhel7cis_rpc**: Allow rpc (Default: false)
-**rhel7cis_bind**: Allow bind (Default: false)
-**rhel7cis_vsftpd**: Allow vsftpd (Default: false)
-**rhel7cis_httpd**: Allow httpd (Apache) (Default: false)
-**rhel7cis_dovecot**: Allow dovecot (Default: false)
-**rhel7cis_samba**: Allow samba (Default: false)
-**rhel7cis_squid**: Allow squid (Default: false)
-**rhel7cis_net_snmp**: Allow SNMP (Default: false)
+    **rhel7cis_dhcp**: Allow dhcp (Default: false)
+    **rhel7cis_ldap**: Allow ldap (Default: false)
+    **rhel7cis_nfs**: Allow nfs (Default: false)
+    **rhel7cis_rpc**: Allow rpc (Default: false)
+    **rhel7cis_bind**: Allow bind (Default: false)
+    **rhel7cis_vsftpd**: Allow vsftpd (Default: false)
+    **rhel7cis_httpd**: Allow httpd (Apache) (Default: false)
+    **rhel7cis_dovecot**: Allow dovecot (Default: false)
+    **rhel7cis_samba**: Allow samba (Default: false)
+    **rhel7cis_squid**: Allow squid (Default: false)
+    **rhel7cis_net_snmp**: Allow SNMP (Default: false)
 
 
 Dependencies
@@ -95,4 +98,3 @@ License
 -------
 
 MIT
-
