@@ -337,8 +337,8 @@
 
 - name: "SCORED | 3.4.1 | PATCH | Ensure TCP Wrappers is installed"
   yum:
-      name=tcp_wrappers
-      state=installed
+      name: tcp_wrappers
+      state: installed
   tags:
       - level1
       - level2
@@ -399,10 +399,10 @@
 
 - name: "SCORED | 3.4.4 | PATCH | Ensure permissions on /etc/hosts.allow are configured"
   file:
-      dest=/etc/hosts.allow
-      owner=root
-      group=root
-      mode=0644
+      dest: /etc/hosts.allow
+      owner: root
+      group: root
+      mode: 0644
   tags:
       - level1
       - level2
@@ -423,10 +423,10 @@
 
 - name: "SCORED | 3.4.5 | PATCH | Ensure permissions on /etc/hosts.deny are 644"
   file:
-      dest=/etc/hosts.deny
-      owner=root
-      group=root
-      mode=0644
+      dest: /etc/hosts.deny
+      owner: root
+      group: root
+      mode: 0644
   tags:
       - level1
       - level2
@@ -554,8 +554,8 @@
 
 - name: "SCORED | 3.6.1 | PATCH | Ensure iptables is installed"
   yum:
-      name=iptables
-      state=installed
+      name: iptables
+      state: installed
   tags:
       - level1
       - level2

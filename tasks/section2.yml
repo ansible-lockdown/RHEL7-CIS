@@ -329,9 +329,9 @@
 
 - name: "SCORED | 2.2.6 | PATCH | Ensure LDAP server is not enabled"
   service:
--      name: slapd
--      state: stopped
--      enabled: no
+      name: slapd
+      state: stopped
+      enabled: no
   when: slapd_server_enabled_audit.failed and rhel7cis_ldap_server == false
   tags:
       - level1
