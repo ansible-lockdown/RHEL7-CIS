@@ -366,7 +366,7 @@
       - rule_3.4.2
 
 - name: "SCORED | 3.4.3 | AUDIT | Ensure /etc/hosts.deny is configured"
-  command: /bin/true
+  command: grep '^ALL: ALL' /etc/hosts.deny
   register: result
   always_run: yes
   changed_when: no
@@ -541,7 +541,7 @@
       - rule_3.5.4
 
 - name: "SCORED | 3.6.1 | AUDIT | Ensure iptables is installed"
-  command: /bin/true
+  command: rpm -q iptables
   register: result
   always_run: yes
   changed_when: no
@@ -553,7 +553,9 @@
       - rule_3.6.1
 
 - name: "SCORED | 3.6.1 | PATCH | Ensure iptables is installed"
-  command: /bin/true
+  yum:
+      name=iptables
+      state=installed
   tags:
       - level1
       - level2
