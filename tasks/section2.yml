@@ -577,8 +577,8 @@
       state: stopped
       enabled: no
   with_items:
-  - nfs
-  - rpcbind
+      - nfs
+      - rpcbind
   when: pkgs_nfs_rpcbind_installed_audit.failed and not rhel7cis_nfs_rfc_server
   tags:
       - level1
@@ -847,9 +847,9 @@
       state: stopped
       enabled: no
   with_items:
-  - rsh.socket
-  - rlogin.socket
-  - rexec.socket
+      - rsh.socket
+      - rlogin.socket
+      - rexec.socket
   when: rsh_server_enabled_audit.failed and not rhel7cis_rsh_server
   tags:
       - level1
