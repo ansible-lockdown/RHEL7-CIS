@@ -32,10 +32,10 @@
 
 - name: "SCORED | 5.1.2 | PATCH | Ensure permissions on /etc/crontab are configured"
   file:
-      dest=/etc/crontab
-      owner=root
-      group=root
-      mode=0600
+      dest: /etc/crontab
+      owner: root
+      group: root
+      mode: 0600
   tags:
       - level1
       - level2
@@ -56,10 +56,10 @@
 
 - name: "SCORED | 5.1.3 | PATCH | Ensure permissions on /etc/cron.hourly are configured"
   file:
-      dest=/etc/cron.hourly
-      owner=root
-      group=root
-      mode=0600
+      dest: /etc/cron.hourly
+      owner: root
+      group: root
+      mode: 0600
   tags:
       - level1
       - level2
@@ -80,10 +80,10 @@
 
 - name: "SCORED | 5.1.4 | PATCH | Ensure permissions on /etc/cron.daily are configured"
   file:
-      dest=/etc/cron.daily
-      owner=root
-      group=root
-      mode=0600
+      dest: /etc/cron.daily
+      owner: root
+      group: root
+      mode: 0600
   tags:
       - level1
       - level2
@@ -104,10 +104,10 @@
 
 - name: "SCORED | 5.1.5 | PATCH | Ensure permissions on /etc/cron.weekly are configured"
   file:
-      dest=/etc/cron.weekly
-      owner=root
-      group=root
-      mode=0600
+      dest: /etc/cron.weekly
+      owner: root
+      group: root
+      mode: 0600
   tags:
       - level1
       - level2
@@ -128,10 +128,10 @@
 
 - name: "SCORED | 5.1.6 | PATCH | Ensure permissions on /etc/cron.monthly are configured"
   file:
-      dest=/etc/cron.monthly
-      owner=root
-      group=root
-      mode=0600
+      dest: /etc/cron.monthly
+      owner: root
+      group: root
+      mode: 0600
   tags:
       - level1
       - level2
@@ -152,11 +152,11 @@
 
 - name: "SCORED | 5.1.7 | PATCH | Ensure permissions on /etc/cron.d are configured"
   file:
-      dest=/etc/cron.d
-      state=directory
-      owner=root
-      group=root
-      mode=0600
+      dest: /etc/cron.d
+      state: directory
+      owner: root
+      group: root
+      mode: 0600
   tags:
       - level1
       - level2
@@ -189,8 +189,8 @@
 
 - name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
   file:
-      dest=/etc/at.deny
-      state=absent
+      dest: /etc/at.deny
+      state: absent
   tags:
       - level1
       - level2
@@ -199,11 +199,11 @@
 
 - name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
   file:
-      dest=/etc/at.allow
-      state=touch
-      owner=root
-      group=root
-      mode=0600
+      dest: /etc/at.allow
+      state: touch
+      owner: root
+      group: root
+      mode: 0600
   tags:
       - level1
       - level2
@@ -236,8 +236,8 @@
 
 - name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
   file:
-      dest=/etc/cron.deny
-      state=absent
+      dest: /etc/cron.deny
+      state: absent
   tags:
       - level1
       - level2
@@ -246,11 +246,11 @@
 
 - name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
   file:
-      dest=/etc/cron.allow
-      state=touch
-      owner=root
-      group=root
-      mode=0600
+      dest: /etc/cron.allow
+      state: touch
+      owner: root
+      group: root
+      mode: 0600
   tags:
       - level1
       - level2
@@ -271,11 +271,11 @@
 
 - name: "SCORED | 5.2.1 | PATCH | Ensure permissions on /etc/ssh/sshd_config are configured"
   file:
-      dest=/etc/ssh/sshd_config
-      state=file
-      owner=root
-      group=root
-      mode=0600
+      dest: /etc/ssh/sshd_config
+      state: file
+      owner: root
+      group: root
+      mode: 0600
   tags:
       - level1
       - level2
