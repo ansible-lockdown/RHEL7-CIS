@@ -11,7 +11,9 @@
       - rule_5.1.1
 
 - name: "SCORED | 5.1.1 | PATCH | Ensure cron daemon is enabled"
-  service: name=crond enabled=yes
+  service:
+      name: crond
+      enabled: yes
   tags:
       - level1
       - level2
