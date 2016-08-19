@@ -1040,7 +1040,7 @@
   register: selinux_state_audit
   always_run: yes
   changed_when: no
-  ignore_errors: yes
+  when: not rhel7cis_selinux_disable
   tags:
       - level2
       - scored
@@ -1066,7 +1066,7 @@
       conf: /etc/selinux/config
       policy: "{{ rhel7cis_selinux_pol }}"
       state: enforcing
-  ignore_errors: yes
+  when: not rhel7cis_selinux_disable
   tags:
       - level2
       - scored
@@ -1092,7 +1092,7 @@
       conf: /etc/selinux/config
       policy: "{{ rhel7cis_selinux_pol }}"
       state: enforcing
-  ignore_errors: yes
+  when: not rhel7cis_selinux_disable
   tags:
       - level2
       - scored
@@ -1140,7 +1140,6 @@
   yum:
       name: mcstrans
       state: absent
-  ignore_errors: yes
   tags:
       - level2
       - scored

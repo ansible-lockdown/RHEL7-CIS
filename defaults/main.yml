@@ -11,6 +11,8 @@ rhel7cis_section7: true
 rhel7cis_section8: true
 rhel7cis_section9: true
 
+rhel7cis_selinux_disable: false
+
 #3 Service configuration booleans set true to keep service
 rhel7cis_avahi_server: false
 rhel7cis_cups_server: false
