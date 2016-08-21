@@ -1060,6 +1060,7 @@
   register: selinux_state_audit
   always_run: yes
   changed_when: no
+  ignore_errors: yes
   when: not rhel7cis_selinux_disable
   tags:
       - level2
