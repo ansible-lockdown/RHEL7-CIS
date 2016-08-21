@@ -587,7 +587,7 @@
 
 - name: "SCORED | 3.6.1 | AUDIT | Ensure iptables is installed"
   command: rpm -q iptables
-  register: result
+  register: iptables_installed_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
