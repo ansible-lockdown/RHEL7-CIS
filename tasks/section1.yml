@@ -597,8 +597,8 @@
       - rule_1.1.20
 
 - name: "SCORED | 1.1.21 | AUDIT | Ensure sticky bit is set on all world-writable directories"
-  command: /bin/true
-  register: result
+  shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d \( -perm -0002 -a ! -perm -1000 \) 2>/dev/null
+  register: sticky_bit_on_worldwritable_dirs_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -609,7 +609,8 @@
       - rule_1.1.21
 
 - name: "SCORED | 1.1.21 | PATCH | Ensure sticky bit is set on all world-writable directories"
-  command: /bin/true
+  shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d -perm -0002 2>/dev/null | xargs chmod a+t
+  when: sticky_bit_on_worldwritable_dirs_audit.rc
   tags:
       - level1
       - level2
@@ -637,8 +638,8 @@
       - rule_1.1.22
 
 - name: "NOTSCORED | 1.2.1 | AUDIT | Ensure package manager repositories are configured"
-  command: /bin/true
-  register: result
+  command: yum repolist
+  register: yum_repositories_configured_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -650,6 +651,7 @@
 
 - name: "NOTSCORED | 1.2.1 | PATCH | Ensure package manager repositories are configured"
   command: /bin/true
+  when: yum_repositories_configured_audit.rc
   tags:
       - level1
       - level2
@@ -657,8 +659,8 @@
       - rule_1.2.1
 
 - name: "SCORED | 1.2.2 | AUDIT | Ensure gpgcheck is globally activated"
-  command: /bin/true
-  register: result
+  shell: grep ^gpgcheck /etc/yum.repos.d/*|grep -v '0$'
+  register: yum_gpgcheck_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -670,6 +672,7 @@
 
 - name: "SCORED | 1.2.2 | PATCH | Ensure gpgcheck is globally activated"
   command: /bin/true
+  when: yum_gpgcheck_audit.rc
   tags:
       - level1
       - level2
@@ -677,8 +680,8 @@
       - rule_1.2.2
 
 - name: "NOTSCORED | 1.2.3 | AUDIT | Ensure GPG keys are configured"
-  command: /bin/true
-  register: result
+  command: rpm -q gpg-pubkey --qf '%{name}-%{version}-%{release} --> %{summary}\n'
+  register: yum_gpg_keys_configured_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -690,6 +693,7 @@
 
 - name: "NOTSCORED | 1.2.3 | PATCH | Ensure GPG keys are configured"
   command: /bin/true
+  when: yum_gpg_keys_configured_audit.rc
   tags:
       - level1
       - level2
@@ -892,7 +896,7 @@
       - rule_1.5.1
 
 - name: "SCORED | 1.5.1 | AUDIT | Ensure core dumps are restricted"
-  shell: "sysctl fs.suid_dumpable | awk '{print $3}'"
+  shell: "sysctl fs.suid_dumpable | awk '{print $3}' | grep 0"
   register: coredump_sysctl_audit
   always_run: yes
   changed_when: no
@@ -911,6 +915,7 @@
       regexp: '^#?\\*.*core'
       line: '*                hard    core            0'
       insertbefore: '^# End of file'
+  when: coredump_limits_audit.rc
   tags:
       - level1
       - scored
@@ -926,6 +931,7 @@
       reload: yes
       sysctl_set: yes
       ignoreerrors: yes
+  when: coredump_sysctl_audit.rc
   tags:
       - level1
       - scored
@@ -934,8 +940,8 @@
       - rule_1.5.1
 
 - name: "NOTSCORED | 1.5.2 | AUDIT | Ensure XD/NX support is enabled"
-  command: /bin/true
-  register: result
+  shell: dmesg | grep NX| grep Execute
+  register: xdnx_support_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -947,6 +953,7 @@
 
 - name: "NOTSCORED | 1.5.2 | PATCH | Ensure XD/NX support is enabled"
   command: /bin/true
+  when: xdnx_support_audit.rc
   tags:
       - level1
       - level2
@@ -954,7 +961,7 @@
       - rule_1.5.2
 
 - name: "SCORED | 1.5.3 | AUDIT | Ensure address space layout randomization (ASLR) is enabled"
-  shell: "sysctl kernel.randomize_va_space | awk '{print $3}'"
+  shell: "sysctl kernel.randomize_va_space | awk '{print $3}' | grep 2"
   register: aslr_audit
   always_run: yes
   changed_when: no
@@ -974,6 +981,7 @@
       reload: yes
       sysctl_set: yes
       ignoreerrors: yes
+  when: aslr_audit.rc
   tags:
       - level1
       - scored
@@ -981,8 +989,8 @@
       - rule_1.5.3
 
 - name: "SCORED | 1.5.4 | AUDIT | Ensure prelink is disabled"
-  command: /bin/true
-  register: result
+  command: rpm -q prelink
+  register: prelink_disabled_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -993,7 +1001,19 @@
       - rule_1.5.4
 
 - name: "SCORED | 1.5.4 | PATCH | Ensure prelink is disabled"
-  command: /bin/true
+  command: prelink -ua
+  when: prelink_disabled_audit.rc == 0
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_1.5.4
+
+- name: "SCORED | 1.5.4 | PATCH | Ensure prelink is disabled"
+  yum:
+    name: prelink
+    state: absent
+  when: prelink_disabled_audit.rc == 0
   tags:
       - level1
       - scored
