@@ -586,8 +586,8 @@
       - rule_3.6
 
 - name: "SCORED | 3.6.1 | AUDIT | Ensure iptables is installed"
-  command: /bin/true
-  register: result
+  command: rpm -q iptables
+  register: iptables_installed_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -599,7 +599,9 @@
       - rule_3.6.1
 
 - name: "SCORED | 3.6.1 | PATCH | Ensure iptables is installed"
-  command: /bin/true
+  yum:
+      name: iptables
+      state: installed
   when: rhel7cis_firewall == "iptables"
   tags:
       - level1
@@ -696,7 +698,7 @@
       - rule_3.6.5
 
 - name: "NOTSCORED | 3.7 | AUDIT | Ensure wireless interfaces are disabled"
-  command: /bin/true
+  command: iwconfig
   register: result
   always_run: yes
   changed_when: no
