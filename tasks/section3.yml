@@ -1,6 +1,6 @@
 - name: "SCORED | 3.1.1 | AUDIT | Ensure IP forwarding is disabled"
   shell: /sbin/sysctl net.ipv4.ip_forward|grep 0
-  register: result
+  register: check_ipv4_forward_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -23,7 +23,7 @@
 
 - name: "SCORED | 3.1.2 | AUDIT | Ensure packet redirect sending is disabled"
   shell: /sbin/sysctl net.ipv4.conf.all.send_redirects|grep 0 && /sbin/sysctl net.ipv4.conf.default.send_redirects|grep 0
-  register: result
+  register: check_ipv4_redirects_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -74,7 +74,7 @@
 
 - name: "SCORED | 3.2.1 | AUDIT | Ensure source routed packets are not accepted"
   shell: /sbin/sysctl net.ipv4.conf.all.accept_source_route|grep 0 && /sbin/sysctl net.ipv4.conf.default.accept_source_route|grep 0
-  register: result
+  register: check_ipv4_route_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -101,7 +101,7 @@
 
 - name: "SCORED | 3.2.2 | AUDIT | Ensure ICMP redirects are not accepted"
   shell: /sbin/sysctl net.ipv4.conf.all.accept_redirects|grep 0 && /sbin/sysctl net.ipv4.conf.default.accept_redirects|grep 0
-  register: result
+  register: check_ipv4_redirects_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -128,7 +128,7 @@
 
 - name: "SCORED | 3.2.3 | AUDIT | Ensure secure ICMP redirects are not accepted"
   shell: /sbin/sysctl net.ipv4.conf.all.secure_redirects|grep 0 && /sbin/sysctl net.ipv4.conf.default.secure_redirects|grep 0
-  register: result
+  register: check_ipv4_redirects_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -155,7 +155,7 @@
 
 - name: "SCORED | 3.2.4 | AUDIT | Ensure suspicious packets are logged"
   shell: /sbin/sysctl net.ipv4.conf.all.log_martians|grep 1 && /sbin/sysctl net.ipv4.conf.default.log_martians|grep 1
-  register: result
+  register: check_ipv4_suspicious_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -182,7 +182,7 @@
 
 - name: "SCORED | 3.2.5 | AUDIT | Ensure broadcast ICMP requests are ignored"
   shell: /sbin/sysctl net.ipv4.icmp_echo_ignore_broadcasts|grep 1
-  register: result
+  register: check_ipv4_broadcasts_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -205,7 +205,7 @@
 
 - name: "SCORED | 3.2.6 | AUDIT | Ensure bogus ICMP responses are ignored"
   shell: /sbin/sysctl net.ipv4.icmp_ignore_bogus_error_responses|grep 1
-  register: result
+  register: check_ipv4_bogos_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -228,7 +228,7 @@
 
 - name: "SCORED | 3.2.7 | AUDIT | Ensure Reverse Path Filtering is enabled"
   shell: /sbin/sysctl net.ipv4.conf.all.rp_filter|grep 1 && /sbin/sysctl net.ipv4.conf.default.rp_filter|grep 1
-  register: result
+  register: check_ipv4_pathfilter_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -255,7 +255,7 @@
 
 - name: "SCORED | 3.2.8 | AUDIT | Ensure TCP SYN Cookies is enabled"
   shell: /sbin/sysctl net.ipv4.tcp_syncookies|grep 1
-  register: result
+  register: check_ipv4_tcpsyn_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -278,7 +278,7 @@
 
 - name: "SCORED | 3.3.1 | AUDIT | Ensure IPv6 router advertisements are not accepted"
   shell: /sbin/sysctl net.ipv6.conf.all.accept_ra|grep 0 && /sbin/sysctl net.ipv6.conf.default.accept_ra|grep 0
-  register: result
+  register: check_ipv6_route_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -305,7 +305,7 @@
 
 - name: "SCORED | 3.3.2 | AUDIT | Ensure IPv6 redirects are not accepted"
   shell: /sbin/sysctl net.ipv6.conf.all.accept_redirects|grep 0 && /sbin/sysctl net.ipv6.conf.default.accept_redirects|grep 0
-  register: result
+  register: check_ipv6_redirects_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -333,7 +333,7 @@
 
 - name: "NOTSCORED | 3.3.3 | AUDIT | Ensure IPv6 is disabled"
   shell: modprobe -c | grep 'options ipv6 disable=1'
-  register: result
+  register: check_ipv6_disable_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -355,7 +355,7 @@
 
 - name: "SCORED | 3.4.1 | AUDIT | Ensure TCP Wrappers is installed"
   command: rpm -q tcp_wrappers
-  register: result
+  register: check_tcp_wrapper_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -375,7 +375,7 @@
 
 - name: "SCORED | 3.4.2 | AUDIT | Ensure /etc/hosts.allow is configured"
   shell: "/usr/bin/egrep '^ALL' /etc/hosts.allow"
-  register: result
+  register: check_host_allow_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -398,7 +398,7 @@
 
 - name: "SCORED | 3.4.3 | AUDIT | Ensure /etc/hosts.deny is configured"
   shell: "/usr/bin/egrep '^ALL: ALL' /etc/hosts.deny"
-  register: result
+  register: check_host_deny_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -419,7 +419,7 @@
 
 - name: "SCORED | 3.4.4 | AUDIT | Ensure permissions on /etc/hosts.allow are configured"
   shell: stat -L -c "%a %u %g" /etc/hosts.allow | egrep "644 0 0"
-  register: result
+  register: fileperm_host_allow_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -441,7 +441,7 @@
 
 - name: "SCORED | 3.4.5 | AUDIT | Ensure permissions on /etc/hosts.deny are 644"
   shell: stat -L -c "%a %u %g" /etc/hosts.deny | egrep "644 0 0"
-  register: result
+  register: fileperm_host_deny_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -463,7 +463,7 @@
 
 - name: "NOTSCORED | 3.5.1 | AUDIT | Ensure DCCP is disabled"
   shell: modprobe -n -v dccp | grep 'install /bin/true'
-  register: result
+  register: check_dccp_disable_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -485,7 +485,7 @@
 
 - name: "NOTSCORED | 3.5.2 | AUDIT | Ensure SCTP is disabled"
   shell: modprobe -n -v sctp | grep 'install /bin/true'
-  register: result
+  register: check_sctp_disable_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -507,7 +507,7 @@
 
 - name: "NOTSCORED | 3.5.3 | AUDIT | Ensure RDS is disabled"
   shell: modprobe -n -v rds | grep 'install /bin/true'
-  register: result
+  register: check_rds_disable_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -529,7 +529,7 @@
 
 - name: "NOTSCORED | 3.5.4 | AUDIT | Ensure TIPC is disabled"
   shell: modprobe -n -v tipc | grep 'install /bin/true'
-  register: result
+  register: check_tipc_disable_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -551,7 +551,7 @@
 
 - name: "SCORED | 3.6 | AUDIT | Ensure firewalld is installed and started | CUSTOM"
   shell: "systemctl is-enabled firewalld|grep disabled"
-  register: result
+  register: check_firewalld_enable_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes

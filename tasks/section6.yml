@@ -18,7 +18,7 @@
 
 - name: "SCORED | 6.1.2 | AUDIT | Ensure permissions on /etc/passwd are configured"
   shell: stat -L -c "%a %u %g" /etc/passwd | egrep "644 0 0"
-  register: result
+  register: check_perm_passwd_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -42,7 +42,7 @@
 
 - name: "SCORED | 6.1.3 | AUDIT | Ensure permissions on /etc/shadow are configured"
   shell: stat -L -c "%a %u %g" /etc/shadow | egrep "0 0 0"
-  register: result
+  register: check_perm_shadow_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -66,7 +66,7 @@
 
 - name: "SCORED | 6.1.4 | AUDIT | Ensure permissions on /etc/group are configured"
   shell: stat -L -c "%a %u %g" /etc/group | egrep "644 0 0"
-  register: result
+  register: check_perm_group_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -90,7 +90,7 @@
 
 - name: "SCORED | 6.1.5 | AUDIT | Ensure permissions on /etc/gshadow are configured"
   shell: stat -L -c "%a %u %g" /etc/gshadow | egrep "0 0 0"
-  register: result
+  register: check_perm_gshadow_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -114,7 +114,7 @@
 
 - name: "SCORED | 6.1.6 | AUDIT | Ensure permissions on /etc/passwd- are configured"
   shell: stat -L -c "%a %u %g" /etc/passwd- | egrep "600 0 0"
-  register: result
+  register: check_perm_passwd2_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -138,7 +138,7 @@
 
 - name: "SCORED | 6.1.7 | AUDIT | Ensure permissions on /etc/shadow- are configured"
   shell: stat -L -c "%a %u %g" /etc/shadow- | egrep "600 0 0"
-  register: result
+  register: check_perm_shadow2_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -162,7 +162,7 @@
 
 - name: "SCORED | 6.1.8 | AUDIT | Ensure permissions on /etc/group- are configured"
   shell: stat -L -c "%a %u %g" /etc/group- | egrep "600 0 0"
-  register: result
+  register: check_perm_group2_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -186,7 +186,7 @@
 
 - name: "SCORED | 6.1.9 | AUDIT | Ensure permissions on /etc/gshadow- are configured"
   shell: stat -L -c "%a %u %g" /etc/gshadow- | egrep "600 0 0"
-  register: result
+  register: check_perm_gshadow2_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -210,7 +210,7 @@
 
 - name: "SCORED | 6.1.10 | AUDIT | Ensure no world writable files exist"
   shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -0002
-  register: result
+  register: check_world_writable_audit
   always_run: yes
   changed_when: no
   failed_when: result.stdout != ""
@@ -231,7 +231,7 @@
 
 - name: "SCORED | 6.1.11 | AUDIT | Ensure no unowned files or directories exist"
   shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nouser
-  register: result
+  register: check_unowned_files_audit
   always_run: yes
   changed_when: no
   failed_when: result.stdout != ""
@@ -252,7 +252,7 @@
 
 - name: "SCORED | 6.1.12 | AUDIT | Ensure no ungrouped files or directories exist"
   shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nogroup
-  register: result
+  register: check_ungrouped_files_audit
   always_run: yes
   changed_when: no
   failed_when: result.stdout != ""
@@ -273,7 +273,7 @@
 
 - name: "NOTSCORED | 6.1.13 | AUDIT | Audit SUID executables"
   shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -4000
-  register: result
+  register: check_suid_executables_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -294,7 +294,7 @@
 
 - name: "NOTSCORED | 6.1.14 | AUDIT | Audit SGID executables"
   shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -4000
-  register: result
+  register: check_SGID_executables_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
