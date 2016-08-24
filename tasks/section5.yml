@@ -300,8 +300,9 @@
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
-      regexp: '^(#)?Protocol \d'
+      regexp: '^Protocol'
       line: 'Protocol 2'
+  when: ssh_protocol2_audit.rc
   tags:
       - level1
       - level2
@@ -324,8 +325,9 @@
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
-      regexp: '^(#)?LogLevel INFO\d'
+      regexp: '^LogLevel'
       line: 'LogLevel INFO'
+  when: ssh_loglevel_audit.rc
   tags:
       - level1
       - level2
@@ -348,8 +350,9 @@
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
-      regexp: '^(#)?X11Forwarding \d'
+      regexp: '^X11Forwarding'
       line: 'X11Forwarding no'
+  when: ssh_x11_forwarding_audit.rc
   tags:
       - level1
       - level2
@@ -374,6 +377,7 @@
       dest: /etc/ssh/sshd_config
       regexp: '^(#)?MaxAuthTries \d'
       line: 'MaxAuthTries 4'
+  when: ssh_max_auth_tries_audit.rc
   tags:
       - level1
       - level2
@@ -398,6 +402,7 @@
       dest: /etc/ssh/sshd_config
       regexp: '^IgnoreRhosts'
       line: 'IgnoreRhosts yes'
+  when: ssh_ignore_rhosts_audit.rc
   tags:
       - level1
       - level2
@@ -422,6 +427,7 @@
       dest: /etc/ssh/sshd_config
       regexp: '^HostbasedAuthentication'
       line: 'HostbasedAuthentication no'
+  when: ssh_hostbased_authentication_audit.rc
   tags:
       - level1
       - level2
@@ -446,6 +452,7 @@
       dest: /etc/ssh/sshd_config
       regexp: '^PermitRootLogin'
       line: 'PermitRootLogin no'
+  when: ssh_permit_root_login_audit.rc
   tags:
       - level1
       - level2
@@ -470,6 +477,7 @@
       dest: /etc/ssh/sshd_config
       regexp: '^PermitEmptyPasswords'
       line: 'PermitEmptyPasswords no'
+  when: ssh_permit_empty_passwords_audit.rc
   tags:
       - level1
       - level2
@@ -494,6 +502,7 @@
       dest: /etc/ssh/sshd_config
       regexp: '^PermitUserEnvironment'
       line: 'PermitUserEnvironment no'
+  when: ssh_permit_userenvironment_audit.rc
   tags:
       - level1
       - level2
@@ -518,6 +527,7 @@
       dest: /etc/ssh/sshd_config
       regexp: '^Ciphers'
       line: 'Ciphers aes128-ctr,aes192-ctr,aes256-ctr'
+  when: ssh_approved_cyphers_audit.rc
   tags:
       - level1
       - level2
@@ -525,8 +535,8 @@
       - rule_5.2.11
 
 - name: "SCORED | 5.2.12 | AUDIT | Ensure only approved MAC algorithms are used"
-  command: /bin/true
-  register: result
+  command: grep "MACs" /etc/ssh/sshd_config
+  register: ssh_only_approved_macs_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -537,7 +547,12 @@
       - rule_5.2.12
 
 - name: "SCORED | 5.2.12 | PATCH | Ensure only approved MAC algorithms are used"
-  command: /bin/true
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^MACs'
+      line: 'MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com'
+  when: ssh_only_approved_macs_audit.rc
   tags:
       - level1
       - level2
@@ -545,7 +560,7 @@
       - rule_5.2.12
 
 - name: "SCORED | 5.2.13 | AUDIT | Ensure SSH Idle Timeout Interval is configured"
-  command: grep "^ClientAliveInterval" /etc/ssh/sshd_confige
+  command: grep "^ClientAliveInterval" /etc/ssh/sshd_config
   register: ssh_idle_timeout_audit
   always_run: yes
   changed_when: no
@@ -562,6 +577,7 @@
       dest: /etc/ssh/sshd_config
       regexp: '^ClientAliveInterval'
       line: 'ClientAliveInterval 300'
+  when: ssh_idle_timeout_audit.rc
   tags:
       - level1
       - level2
@@ -569,8 +585,8 @@
       - rule_5.2.13
 
 - name: "SCORED | 5.2.14 | AUDIT | Ensure SSH LoginGraceTime is set to one minute or less"
-  command: /bin/true
-  register: result
+  command: grep "^LoginGraceTime" /etc/ssh/sshd_config
+  register: ssh_logingracetime_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -581,7 +597,12 @@
       - rule_5.2.14
 
 - name: "SCORED | 5.2.14 | PATCH | Ensure SSH LoginGraceTime is set to one minute or less"
-  command: /bin/true
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^LoginGraceTime'
+      line: 'LoginGraceTime 60'
+  when: ssh_logingracetime_audit.rc
   tags:
       - level1
       - level2
@@ -691,8 +712,8 @@
       - rule_5.3.2
 
 - name: "SCORED | 5.3.3 | AUDIT | Ensure password reuse is limited"
-  command: /bin/true
-  register: result
+  shell: egrep '^password\s+sufficient\s+pam_unix.so' /etc/pam.d/password-auth|grep remember
+  register: pam_password_reuse_is_limited
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -704,6 +725,7 @@
 
 - name: "SCORED | 5.3.3 | PATCH | Ensure password reuse is limited"
   command: /bin/true
+  when: pam_password_reuse_is_limited.rc
   tags:
       - level1
       - level2
@@ -724,6 +746,7 @@
 
 - name: "SCORED | 5.3.4 | PATCH | Ensure password hashing algorithm is SHA-512"
   command: authconfig --passalgo=sha512 --update
+  when: pass_sha512_hashing_audit.rc
   tags:
       - level1
       - level2
@@ -843,8 +866,8 @@
       - rule_5.4.2
 
 - name: "SCORED | 5.4.3 | AUDIT | Ensure default group for the root account is GID 0"
-  command: /bin/true
-  register: result
+  shell: 'grep "^root:" /etc/passwd | cut -f4 -d: | grep 0'
+  register: default_group_for_root_is_gid_0_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -855,7 +878,8 @@
       - rule_5.4.3
 
 - name: "SCORED | 5.4.3 | PATCH | Ensure default group for the root account is GID 0"
-  command: /bin/true
+  command: usermod -g 0 root
+  when: default_group_for_root_is_gid_0_audit.rc
   tags:
       - level1
       - level2
