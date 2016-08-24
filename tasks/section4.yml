@@ -10,6 +10,16 @@
       - rule_4.1.1.1
 
 - name: "NOTSCORED | 4.1.1.1 | PATCH | Ensure audit log storage size is configured"
+  yum:
+      name: audit
+      state: present
+  when: audit_log_storage_size_audit.rc
+  tags:
+      - level2
+      - patch
+      - rule_4.1.1.1
+
+- name: "NOTSCORED | 4.1.1.1 | PATCH | Ensure audit log storage size is configured"
   lineinfile:
       dest: /etc/audit/auditd.conf
       regexp: "^max_log_file"
@@ -291,7 +301,17 @@
 - name: "SCORED | 4.1.13 | PATCH | Ensure successful file system mounts are collected"
   lineinfile:
       dest: /etc/audit/rules.d/audit.rules
+      line: "-a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=4294967295 -k mounts"
       state: present
+  when: successful_file_system_mounts_collected_audit.rc
+  tags:
+      - level2
+      - patch
+      - rule_4.1.13
+
+- name: "SCORED | 4.1.13 | PATCH | Ensure successful file system mounts are collected"
+  lineinfile:
+      dest: /etc/audit/audit.rules
       line: "-a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=4294967295 -k mounts"
       state: present
   when: successful_file_system_mounts_collected_audit.rc
@@ -303,7 +323,6 @@
 - name: "SCORED | 4.1.13 | PATCH | Ensure successful file system mounts are collected"
   lineinfile:
       dest: /etc/audit/rules.d/audit.rules
-      state: present
       line: "-a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=4294967295 -k mounts"
       state: present
   when: successful_file_system_mounts_collected_audit.rc
@@ -345,7 +364,17 @@
 - name: "SCORED | 4.1.15 | PATCH | Ensure changes to system administration scope (sudoers) is collected"
   lineinfile:
       dest: /etc/audit/rules.d/audit.rules
+      line: "-w /etc/sudoers -p wa -k scope"
       state: present
+  when: change_to_system_administration_scope_collected_audit.rc
+  tags:
+      - level2
+      - patch
+      - rule_4.1.15
+
+- name: "SCORED | 4.1.15 | PATCH | Ensure changes to system administration scope (sudoers) is collected"
+  lineinfile:
+      dest: /etc/audit/audit.rules
       line: "-w /etc/sudoers -p wa -k scope"
       state: present
   when: change_to_system_administration_scope_collected_audit.rc
@@ -357,7 +386,6 @@
 - name: "SCORED | 4.1.15 | PATCH | Ensure changes to system administration scope (sudoers) is collected"
   lineinfile:
       dest: /etc/audit/rules.d/audit.rules
-      state: present
       line: "-w /etc/sudoers.d -p wa -k scope"
       state: present
   when: change_to_system_administration_scope_collected_audit.rc
