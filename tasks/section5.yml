@@ -11,9 +11,21 @@
       - rule_5.1.1
 
 - name: "SCORED | 5.1.1 | PATCH | Ensure cron daemon is enabled"
+  yum:
+      name: cronie
+      state: present
+  when: cron_daemon_enabled_audit.rc
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.1.1
+
+- name: "SCORED | 5.1.1 | PATCH | Ensure cron daemon is enabled"
   service:
       name: crond
       enabled: yes
+  when: cron_daemon_enabled_audit.rc
   tags:
       - level1
       - level2
