@@ -120,6 +120,18 @@
       - rule_4.1.3
 
 - name: "SCORED | 4.1.3 | PATCH | Ensure auditing for processes that start prior to auditd is enabled"
+  copy:
+    src: grub
+    dest: /etc/default/grub
+    owner: root
+    group: root
+  when: audit_for_processes_prior_to_auditd_audit.rc
+  tags:
+      - level2
+      - patch
+      - rule_4.1.3
+
+- name: "SCORED | 4.1.3 | PATCH | Ensure auditing for processes that start prior to auditd is enabled"
   shell: sed -i 's/\(GRUB_CMDLINE_LINUX=.*\)\"$/\1 audit=1"/' /etc/default/grub && grub2-mkconfig > /boot/grub2/grub.cfg
   when: audit_for_processes_prior_to_auditd_audit.rc
   tags:
