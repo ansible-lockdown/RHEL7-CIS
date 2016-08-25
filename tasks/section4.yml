@@ -459,7 +459,7 @@
       - patch
       - rule_4.1.18
 
-- name: "SCORED | 4.2.1.1 | AUDIT | command: /bin/true"
+- name: "SCORED | 4.2.1.1 | AUDIT | Ensure rsyslog Service is enabled"
   command: systemctl is-enabled rsyslog
   register: rsyslog_service_enabled_audit
   always_run: yes
