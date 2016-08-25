@@ -610,8 +610,34 @@
       - rule_3.6.1
 
 - name: "SCORED | 3.6.2 | AUDIT | Ensure default deny firewall policy"
-  command: /bin/true
-  register: result
+  shell: iptables -L | grep 'Chain INPUT' | grep DROP
+  register: default_deny_input_policy_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  when: rhel7cis_firewall == "iptables"
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_3.6.2
+
+- name: "SCORED | 3.6.2 | AUDIT | Ensure default deny firewall policy"
+  shell: iptables -L | grep 'Chain FORWARD' | grep DROP
+  register: default_deny_forward_policy_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  when: rhel7cis_firewall == "iptables"
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_3.6.2
+
+- name: "SCORED | 3.6.2 | AUDIT | Ensure default deny firewall policy"
+  shell: iptables -L | grep 'Chain OUTPUT' | grep DROP
+  register: default_deny_output_policy_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -632,8 +658,21 @@
       - rule_3.6.2
 
 - name: "SCORED | 3.6.3 | AUDIT | Ensure loopback traffic is configured"
-  command: /bin/true
-  register: result
+  shell: iptables -L INPUT -v -n| grep lo | grep ACCEPT
+  register: ensure_loopback_interface_accepts_traffic_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  when: rhel7cis_firewall == "iptables"
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_3.6.3
+
+- name: "SCORED | 3.6.3 | AUDIT | Ensure loopback traffic is configured"
+  shell: iptables -L INPUT -v -n | grep 127.0.0.0/8|grep DROP
+  register: ensure_other_interfaces_drop_loopback_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -646,7 +685,7 @@
 
 - name: "SCORED | 3.6.3 | PATCH | Ensure loopback traffic is configured"
   command: /bin/true
-  when: rhel7cis_firewall == "iptables"
+  when: rhel7cis_firewall == "iptables" and ( ensure_loopback_interface_accepts_traffic_audit.rc or ensure_other_interfaces_drop_loopback_audit.rc )
   tags:
       - level1
       - level2
