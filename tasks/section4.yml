@@ -413,14 +413,6 @@
       - patch
       - rule_4.1.16
 
-- name: "SCORED | 4.1.16 | PATCH | Ensure system administrator actions (sudolog) are collected"
-  command: /bin/true
-  when: system_administrator_actions_audit.rc
-  tags:
-      - level2
-      - patch
-      - rule_4.1.16
-
 - name: "SCORED | 4.1.17 | AUDIT | Ensure kernel module loading and unloading is collected"
   command: grep modules /etc/audit/audit.rules
   register: kernel_module_loading_unloading_collected_audit
