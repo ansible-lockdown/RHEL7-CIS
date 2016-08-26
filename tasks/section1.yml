@@ -12,7 +12,7 @@
       - cramfs
 
 - name: "SCORED | 1.1.1.1 | AUDIT | Ensure mounting of cramfs filesystems is disabled"
-  shell: lsmod | grep cramfs
+  shell: lsmod | grep -vq cramfs
   register: cramfs_loaded_audit
   always_run: yes
   changed_when: no
@@ -52,7 +52,7 @@
       - freevxfs
 
 - name: "SCORED | 1.1.1.2 | AUDIT | Ensure mounting of freevxfs filesystems is disabled"
-  shell: lsmod | grep freevxfs
+  shell: lsmod | grep -vq freevxfs
   register: freevxfs_loaded_audit
   always_run: yes
   changed_when: no
@@ -92,7 +92,7 @@
       - jffs2
 
 - name: "SCORED | 1.1.1.3 | AUDIT | Ensure mounting of jffs2 filesystems is disabled"
-  shell: lsmod | grep jffs2
+  shell: lsmod | grep -vq jffs2
   register: jffs2_loaded_audit
   always_run: yes
   changed_when: no
@@ -132,7 +132,7 @@
       - hfs
 
 - name: "SCORED | 1.1.1.4 | AUDIT | Ensure mounting of hfs filesystems is disabled"
-  shell: lsmod | grep hfs
+  shell: lsmod | grep -vq hfs
   register: hfs_loaded_audit
   always_run: yes
   changed_when: no
@@ -172,7 +172,7 @@
       - hfsplus
 
 - name: "SCORED | 1.1.1.5 | AUDIT | Ensure mounting of hfsplus filesystems is disabled"
-  shell: lsmod | grep hfsplus
+  shell: lsmod | grep -vq hfsplus
   register: hfsplus_loaded_audit
   always_run: yes
   changed_when: no
@@ -212,7 +212,7 @@
       - squashfs
 
 - name: "SCORED | 1.1.1.6 | AUDIT | Ensure mounting of squashfs filesystems is disabled"
-  shell: lsmod | grep squashfs
+  shell: lsmod | grep -vq squashfs
   register: squashfs_loaded_audit
   always_run: yes
   changed_when: no
@@ -252,7 +252,7 @@
       - udf
 
 - name: "SCORED | 1.1.1.7 | AUDIT | Ensure mounting of udf filesystems is disabled"
-  shell: lsmod | grep udf
+  shell: lsmod | grep -vq udf
   register: udf_loaded_audit
   always_run: yes
   changed_when: no
@@ -292,7 +292,7 @@
       - vfat
 
 - name: "SCORED | 1.1.1.8 | AUDIT | Ensure mounting of FAT filesystems is disabled"
-  shell: lsmod | grep vfat
+  shell: lsmod | grep -vq vfat
   register: vfat_loaded_audit
   always_run: yes
   changed_when: no
