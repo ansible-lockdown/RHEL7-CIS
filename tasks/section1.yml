@@ -858,12 +858,7 @@
       - rule_1.4.1
 
 - name: "SCORED | 1.4.1 | PATCH | Ensure permissions on bootloader config are configured"
-  file:
-    path: /boot/grub2/grub.cfg
-    state: file
-    owner: root
-    group: root
-    mode:  0600
+  command: /bin/true
   tags:
       - level1
       - scored
