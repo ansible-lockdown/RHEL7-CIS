@@ -90,8 +90,8 @@
 
 - name: "SCORED | 4.1.2 | PATCH | Ensure auditd service is enabled"
   service:
-    name: auditd
-    enabled: yes
+      name: auditd
+      enabled: yes
   when: auditd_service_enabled_audit.rc
   tags:
       - level2

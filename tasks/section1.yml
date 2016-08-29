@@ -1437,8 +1437,8 @@ print $NF }'"
 
 - name: "NOTSCORED | 1.8 | PATCH | Ensure updates, patches, and additional security software are installed"
   yum:
-    name: "*"
-    state: latest
+      name: "*"
+     state: latest
   tags:
       - level1
       - level2
