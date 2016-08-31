@@ -80,7 +80,6 @@ Example Playbook
   roles:
     - RHEL7-CIS
 
-
 Tags
 ----
 Many tags are available for precise control of what is and is not changed.
