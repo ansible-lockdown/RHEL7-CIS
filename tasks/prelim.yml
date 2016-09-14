@@ -1,2 +1,8 @@
 ---
 # Preliminary tasks that should always be run
+# List users in order to look files inside each home directory
+- name: "PRELIM | List users accounts"
+  command: "awk -F: '{print $1}' /etc/passwd"
+  register: users
+  changed_when: false
+  always_run: yes
