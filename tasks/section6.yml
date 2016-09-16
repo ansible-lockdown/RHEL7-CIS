@@ -34,6 +34,7 @@
       owner: root
       group: root
       mode: 0644
+  when: check_perm_passwd_audit.rc
   tags:
       - level1
       - level2
@@ -58,6 +59,7 @@
       owner: root
       group: root
       mode: 0000
+  when: check_perm_shadow_audit.rc
   tags:
       - level1
       - level2
@@ -82,6 +84,7 @@
       owner: root
       group: root
       mode: 0644
+  when: check_perm_group_audit.rc
   tags:
       - level1
       - level2
@@ -106,6 +109,7 @@
       owner: root
       group: root
       mode: 0000
+  when: check_perm_gshadow_audit.rc
   tags:
       - level1
       - level2
@@ -113,7 +117,7 @@
       - rule_6.1.5
 
 - name: "SCORED | 6.1.6 | AUDIT | Ensure permissions on /etc/passwd- are configured"
-  shell: stat -L -c "%a %u %g" /etc/passwd- | egrep "600 0 0"
+  shell: stat -L -c "%a %u %g" /etc/passwd- | egrep "644 0 0"
   register: check_perm_passwd2_audit
   always_run: yes
   changed_when: no
@@ -129,7 +133,8 @@
       dest: /etc/passwd-
       owner: root
       group: root
-      mode: 0600
+      mode: 0644
+  when: check_perm_passwd2_audit.rc
   tags:
       - level1
       - level2
@@ -137,7 +142,7 @@
       - rule_6.1.6
 
 - name: "SCORED | 6.1.7 | AUDIT | Ensure permissions on /etc/shadow- are configured"
-  shell: stat -L -c "%a %u %g" /etc/shadow- | egrep "600 0 0"
+  shell: stat -L -c "%a %u %g" /etc/shadow- | egrep "000 0 0"
   register: check_perm_shadow2_audit
   always_run: yes
   changed_when: no
@@ -153,7 +158,8 @@
       dest: /etc/shadow-
       owner: root
       group: root
-      mode: 0600
+      mode: 0000
+  when: check_perm_shadow2_audit.rc
   tags:
       - level1
       - level2
@@ -178,6 +184,7 @@
       owner: root
       group: root
       mode: 0600
+  when: check_perm_group2_audit.rc
   tags:
       - level1
       - level2
@@ -202,6 +209,7 @@
       owner: root
       group: root
       mode: 0600
+  when: check_perm_gshadow2_audit.rc
   tags:
       - level1
       - level2
@@ -209,7 +217,7 @@
       - rule_6.1.9
 
 - name: "SCORED | 6.1.10 | AUDIT | Ensure no world writable files exist"
-  shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -0002
+  shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -0777 | wc -l |grep 0
   register: check_world_writable_audit
   always_run: yes
   changed_when: no
@@ -223,6 +231,7 @@
 
 - name: "SCORED | 6.1.10 | PATCH | Ensure no world writable files exist"
   command: /bin/true
+  when: check_world_writable_audit.rc
   tags:
       - level1
       - level2
@@ -230,7 +239,7 @@
       - rule_6.1.10
 
 - name: "SCORED | 6.1.11 | AUDIT | Ensure no unowned files or directories exist"
-  shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nouser
+  shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nouser | wc -l |grep 0
   register: check_unowned_files_audit
   always_run: yes
   changed_when: no
@@ -244,6 +253,7 @@
 
 - name: "SCORED | 6.1.11 | PATCH | Ensure no unowned files or directories exist"
   command: /bin/true
+  when: check_unowned_files_audit.rc
   tags:
       - level1
       - level2
@@ -251,7 +261,7 @@
       - rule_6.1.11
 
 - name: "SCORED | 6.1.12 | AUDIT | Ensure no ungrouped files or directories exist"
-  shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nogroup
+  shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nogroup | wc -l |grep 0
   register: check_ungrouped_files_audit
   always_run: yes
   changed_when: no
@@ -265,6 +275,7 @@
 
 - name: "SCORED | 6.1.12 | PATCH | Ensure no ungrouped files or directories exist"
   command: /bin/true
+  when: check_ungrouped_files_audit.rc
   tags:
       - level1
       - level2
@@ -314,8 +325,8 @@
       - rule_6.1.14
 
 - name: "SCORED | 6.2.1 | AUDIT | Ensure password fields are not empty"
-  command: /bin/true
-  register: result
+  shell: "cat /etc/shadow | awk -F: '($2 == \"\" ) {j++;print $1; } END {exit j}'"
+  register: empty_password_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -326,7 +337,9 @@
       - rule_6.2.1
 
 - name: "SCORED | 6.2.1 | PATCH | Ensure password fields are not empty"
-  command: /bin/true
+  command: passwd -l {{ item }}
+  with_items: "{{ empty_password_audit.stdout_lines }}"
+  when: empty_password_audit.rc
   tags:
       - level1
       - level2
@@ -334,8 +347,8 @@
       - rule_6.2.1
 
 - name: "SCORED | 6.2.2 | AUDIT | Ensure no legacy '+' entries exist in /etc/passwd"
-  command: /bin/true
-  register: result
+  shell: grep -c '^+' /etc/passwd | grep 0
+  register: nismap_legacy_passwd_entries_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -346,7 +359,8 @@
       - rule_6.2.2
 
 - name: "SCORED | 6.2.2 | PATCH | Ensure no legacy '+' entries exist in /etc/passwd"
-  command: /bin/true
+  command: sed -i '/^+/ d' /etc/passwd
+  when: nismap_legacy_passwd_entries_audit.rc
   tags:
       - level1
       - level2
@@ -354,8 +368,8 @@
       - rule_6.2.2
 
 - name: "SCORED | 6.2.3 | AUDIT | Ensure no legacy '+' entries exist in /etc/shadow"
-  command: /bin/true
-  register: result
+  shell: grep -c '^+' /etc/shadow | grep 0
+  register: nismap_legacy_shadow_entries_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -366,7 +380,8 @@
       - rule_6.2.3
 
 - name: "SCORED | 6.2.3 | PATCH | Ensure no legacy '+' entries exist in /etc/shadow"
-  command: /bin/true
+  command: sed -i '/^+/ d' /etc/shadow
+  when: nismap_legacy_shadow_entries_audit.rc
   tags:
       - level1
       - level2
@@ -374,8 +389,8 @@
       - rule_6.2.3
 
 - name: "SCORED | 6.2.4 | AUDIT | Ensure no legacy '+' entries exist in /etc/group"
-  command: /bin/true
-  register: result
+  shell: grep -c '^+' /etc/group | grep 0
+  register: nismap_legacy_group_entries_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -386,7 +401,8 @@
       - rule_6.2.4
 
 - name: "SCORED | 6.2.4 | PATCH | Ensure no legacy '+' entries exist in /etc/group"
-  command: /bin/true
+  command: sed -i '/^+/ d' /etc/group
+  when: nismap_legacy_group_entries_audit.rc
   tags:
       - level1
       - level2
@@ -394,8 +410,8 @@
       - rule_6.2.4
 
 - name: "SCORED | 6.2.5 | AUDIT | Ensure root is the only UID 0 account"
-  command: /bin/true
-  register: result
+  shell: "cat /etc/passwd | awk -F: '($3 == 0 && $1 != \"root\") {i++;print $1 } END {exit i}'"
+  register: uid_zero_accounts_except_root_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -406,7 +422,9 @@
       - rule_6.2.5
 
 - name: "SCORED | 6.2.5 | PATCH | Ensure root is the only UID 0 account"
-  command: /bin/true
+  command: passwd -l {{ item }}
+  with_items: "{{ uid_zero_accounts_except_root_audit.stdout_lines }}"
+  when: uid_zero_accounts_except_root_audit.rc
   tags:
       - level1
       - level2
@@ -514,8 +532,8 @@
       - rule_6.2.10
 
 - name: "SCORED | 6.2.11 | AUDIT | Ensure no users have .forward files"
-  command: /bin/true
-  register: result
+  shell: find /root /home -xdev -name .forward|wc -l |grep 0
+  register: forward_files_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -526,7 +544,11 @@
       - rule_6.2.11
 
 - name: "SCORED | 6.2.11 | PATCH | Ensure no users have .forward files"
-  command: /bin/true
+  file:
+      state: absent
+      dest: "~{{ item }}/.forward"
+  with_items: "{{ users.stdout_lines }}"
+  when: forward_files_audit.rc
   tags:
       - level1
       - level2
@@ -534,8 +556,8 @@
       - rule_6.2.11
 
 - name: "SCORED | 6.2.12 | AUDIT | Ensure no users have .netrc files"
-  command: /bin/true
-  register: result
+  shell: find /root /home -xdev -name .netrc|wc -l |grep 0
+  register: netrc_files_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -546,7 +568,8 @@
       - rule_6.2.12
 
 - name: "SCORED | 6.2.12 | PATCH | Ensure no users have .netrc files"
-  command: /bin/true
+  shell: find /root /home -xdev -name .netrc
+  when: netrc_files_audit.rc
   tags:
       - level1
       - level2
@@ -554,8 +577,8 @@
       - rule_6.2.12
 
 - name: "SCORED | 6.2.13 | AUDIT | Ensure users' .netrc Files are not group or world accessible"
-  command: /bin/true
-  register: result
+  shell: find /root /home -xdev -name .netrc|wc -l |grep 0
+  register: netrc_permissions_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -566,7 +589,11 @@
       - rule_6.2.13
 
 - name: "SCORED | 6.2.13 | PATCH | Ensure users' .netrc Files are not group or world accessible"
-  command: /bin/true
+  file:
+      mode: 0600
+      dest: "~{{ item }}/.netrc"
+  with_items: "{{ users.stdout_lines }}"
+  when: netrc_permissions_audit.rc
   tags:
       - level1
       - level2
@@ -574,8 +601,8 @@
       - rule_6.2.13
 
 - name: "SCORED | 6.2.14 | AUDIT | Ensure no users have .rhosts files"
-  command: /bin/true
-  register: result
+  shell: find /root /home -xdev -name .rhosts|wc -l |grep 0
+  register: rhosts_files_audit
   always_run: yes
   changed_when: no
   ignore_errors: yes
@@ -586,7 +613,11 @@
       - rule_6.2.14
 
 - name: "SCORED | 6.2.14 | PATCH | Ensure no users have .rhosts files"
-  command: /bin/true
+  file:
+      state: absent
+      dest: "~{{ item }}/.forward"
+  with_items: "{{ users.stdout_lines }}"
+  when: rhosts_files_audit.rc
   tags:
       - level1
       - level2
