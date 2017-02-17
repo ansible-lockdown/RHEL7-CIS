@@ -17,6 +17,9 @@ RUN yum -y install epel-release openssh-server audit authconfig
 RUN yum -y install git ansible sudo
 RUN yum clean all
 
+# Install basic packages that should be there
+RUN yum -y install audit; systemctl enable auditd; systemctl start auditd
+
 # Disable requiretty
 RUN sed -i -e 's/^\(Defaults\s*requiretty\)/#--- \1/'  /etc/sudoers
 
