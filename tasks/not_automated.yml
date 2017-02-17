@@ -1,7 +1,6 @@
 - name: "SCORED | 1.1.1 | AUDIT | Create Separate Partition for /tmp"
   shell: mount | grep "on /tmp "
   register: tmp_mounted_audit
-  always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
@@ -13,7 +12,6 @@
 - name: "SCORED | 1.1.6 | AUDIT | Ensure separate partition exists for /var"
   shell: mount | grep "on /var "
   register: var_mounted_audit
-  always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
@@ -25,7 +23,6 @@
 - name: "SCORED | 1.1.7 | AUDIT | Ensure separate partition exists for /var/tmp"
   command: /bin/true
   register: result
-  always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
@@ -37,7 +34,6 @@
 - name: "SCORED | 1.1.11 | AUDIT | Ensure separate partition exists for /var/log"
   shell: mount | grep "on /var/log "
   register: varlog_mounted_audit
-  always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
@@ -49,7 +45,6 @@
 - name: "SCORED | 1.1.12 | AUDIT | Ensure separate partition exists for /var/log/audit"
   shell: mount | grep "on /var/log/audit "
   register: varlogaudit_mounted_audit
-  always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
@@ -61,7 +56,6 @@
 - name: "SCORED | 1.1.13 | AUDIT | Ensure separate partition exists for /home"
   shell: mount | grep "on /home "
   register: home_mounted_audit
-  always_run: yes
   changed_when: no
   ignore_errors: yes
   tags:
