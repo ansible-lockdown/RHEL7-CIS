@@ -1,0 +1,529 @@
+- name: "SCORED | 5.1.1 | AUDIT | Ensure cron daemon is enabled"
+  shell: systemctl is-enabled crond | grep enabled
+  register: cron_daemon_enabled_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.1.1
+
+
+
+- name: "SCORED | 5.1.2 | AUDIT | Ensure permissions on /etc/crontab are configured"
+  shell: stat -L -c "%a %u %g" /etc/crontab | egrep ".00 0 0"
+  register: cron_etc_crontab_permissions_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.1.2
+
+
+- name: "SCORED | 5.1.3 | AUDIT | Ensure permissions on /etc/cron.hourly are configured"
+  shell: stat -L -c "%a %u %g" /etc/cron.hourly | egrep ".00 0 0"
+  register: cron_hourly_permissions_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.1.3
+
+
+- name: "SCORED | 5.1.4 | AUDIT | Ensure permissions on /etc/cron.daily are configured"
+  shell: stat -L -c "%a %u %g" /etc/cron.daily | egrep ".00 0 0"
+  register: cron_daily_permissions_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.1.4
+
+
+- name: "SCORED | 5.1.5 | AUDIT | Ensure permissions on /etc/cron.weekly are configured"
+  shell: stat -L -c "%a %u %g" /etc/cron.weekly | egrep ".00 0 0"
+  register: cron_weekly_permissions_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.1.5
+
+
+- name: "SCORED | 5.1.6 | AUDIT | Ensure permissions on /etc/cron.monthly are configured"
+  shell: stat -L -c "%a %u %g" /etc/cron.monthly | egrep ".00 0 0"
+  register: cron_monthly_permissions_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.1.6
+
+
+- name: "SCORED | 5.1.7 | AUDIT | Ensure permissions on /etc/cron.d are configured"
+  shell: stat -L -c "%a %u %g" /etc/cron.d | egrep ".00 0 0"
+  register: cdron_d_permissions_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.1.7
+
+
+- name: "SCORED | 5.1.8 | AUDIT | Ensure at/cron is restricted to authorized users"
+  shell: stat -L /etc/at.deny > /dev/null
+  register: at_deny_restricted_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.1.8
+
+- name: "SCORED | 5.1.8 | AUDIT | Ensure at/cron is restricted to authorized users"
+  shell: stat -L -c "%a %u %g" /etc/at.allow | egrep ".00 0 0"
+  register: at_allow_restricted_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.1.8
+
+
+
+- name: "SCORED | 5.1.8 | AUDIT | Ensure at/cron is restricted to authorized users"
+  shell: stat -L /etc/cron.deny > /dev/null
+  register: cron_deny_restricted_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.1.8
+
+- name: "SCORED | 5.1.8 | AUDIT | Ensure at/cron is restricted to authorized users"
+  shell: stat -L -c "%a %u %g" /etc/cron.allow | egrep ".00 0 0"
+  register: cron_allow_restricted_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.1.8
+
+
+
+- name: "SCORED | 5.2.1 | AUDIT | Ensure permissions on /etc/ssh/sshd_config are configured"
+  shell: stat -L -c "%a %u %g" /etc/ssh/sshd_config | egrep ".00 0 0"
+  register: sshd_config_permissions_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.2.1
+
+
+- name: "SCORED | 5.2.2 | AUDIT | Ensure SSH Protocol is set to 2"
+  command: grep "^Protocol 2" /etc/ssh/sshd_config
+  register: ssh_protocol2_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.2.2
+
+
+- name: "SCORED | 5.2.3 | AUDIT | Ensure SSH LogLevel is set to INFO"
+  command: grep "^LogLevel INFO" /etc/ssh/sshd_config
+  register: ssh_loglevel_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.2.3
+
+
+- name: "SCORED | 5.2.4 | AUDIT | Ensure SSH X11 forwarding is disabled"
+  command: grep "^X11Forwarding no" /etc/ssh/sshd_config
+  register: ssh_x11_forwarding_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.2.4
+
+
+- name: "SCORED | 5.2.5 | AUDIT | Ensure SSH MaxAuthTries is set to 4 or less"
+  shell: grep "^MaxAuthTries 4" /etc/ssh/sshd_config
+  register: ssh_max_auth_tries_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.2.5
+
+
+- name: "SCORED | 5.2.6 | AUDIT | Ensure SSH IgnoreRhosts is enabled"
+  command: grep "^IgnoreRhosts yes" /etc/ssh/sshd_config
+  register: ssh_ignore_rhosts_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.2.6
+
+
+- name: "SCORED | 5.2.7 | AUDIT | Ensure SSH HostbasedAuthentication is disabled"
+  command: grep "^HostbasedAuthentication no" /etc/ssh/sshd_config
+  register: ssh_hostbased_authentication_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.2.7
+
+
+- name: "SCORED | 5.2.8 | AUDIT | Ensure SSH root login is disabled"
+  command: grep "^PermitRootLogin no" /etc/ssh/sshd_config
+  register: ssh_permit_root_login_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.2.8
+
+
+- name: "SCORED | 5.2.9 | AUDIT | Ensure SSH PermitEmptyPasswords is disabled"
+  command: grep "^PermitEmptyPasswords no" /etc/ssh/sshd_config
+  register: ssh_permit_empty_passwords_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.2.9
+
+
+- name: "SCORED | 5.2.10 | AUDIT | Ensure SSH PermitUserEnvironment is disabled"
+  command: grep "^PermitUserEnvironment no" /etc/ssh/sshd_config
+  register: ssh_permit_userenvironment_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.2.10
+
+
+- name: "SCORED | 5.2.11 | AUDIT | Ensure only approved ciphers are used"
+  command: grep "Ciphers aes128-ctr,aes192-ctr,aes256-ctr" /etc/ssh/sshd_config
+  register: ssh_approved_cyphers_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.2.11
+
+
+- name: "SCORED | 5.2.12 | AUDIT | Ensure only approved MAC algorithms are used"
+  command: grep "MACs" /etc/ssh/sshd_config
+  register: ssh_only_approved_macs_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.2.12
+
+
+- name: "SCORED | 5.2.13 | AUDIT | Ensure SSH Idle Timeout Interval is configured"
+  command: grep "^ClientAliveInterval" /etc/ssh/sshd_config
+  register: ssh_idle_timeout_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.2.13
+
+
+- name: "SCORED | 5.2.14 | AUDIT | Ensure SSH LoginGraceTime is set to one minute or less"
+  command: grep "^LoginGraceTime" /etc/ssh/sshd_config
+  register: ssh_logingracetime_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.2.14
+
+
+- name: "SCORED | 5.2.15 | AUDIT | Ensure SSH access is limited"
+  command: grep "^AllowGroups" /etc/ssh/sshd_config
+  register: ssh_limited_access_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.2.15
+
+
+- name: "SCORED | 5.2.16 | AUDIT | Ensure SSH warning banner is configured"
+  command: grep "^Banner /etc/issue" /etc/ssh/sshd_config
+  register: ssh_banner_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.2.16
+
+
+- name: "SCORED | 5.3.1 | AUDIT | Ensure password creation requirements are configured"
+  shell: '{{ item }}'
+  with_items:
+    - grep pam_pwquality.so /etc/pam.d/password-auth
+    - grep pam_pwquality.so /etc/pam.d/system-auth
+    - grep ^minlen /etc/security/pwquality.conf
+    - grep ^dcredit /etc/security/pwquality.conf
+    - grep ^lcredit /etc/security/pwquality.conf
+    - grep ^ocredit /etc/security/pwquality.conf
+    - grep ^ucredit /etc/security/pwquality.conf
+  register: pass_quality_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.3.1
+
+
+- name: "SCORED | 5.3.2 | AUDIT | Ensure lockout for failed password attempts is configured"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.3.2
+
+
+- name: "SCORED | 5.3.3 | AUDIT | Ensure password reuse is limited"
+  shell: egrep '^password\s+sufficient\s+pam_unix.so' /etc/pam.d/password-auth|grep remember
+  register: pam_password_reuse_is_limited
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.3.3
+
+
+- name: "SCORED | 5.3.4 | AUDIT | Ensure password hashing algorithm is SHA-512"
+  shell: authconfig --test | grep hashing | grep sha512
+  register: pass_sha512_hashing_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.3.4
+
+
+- name: "SCORED | 5.4.1.1 | AUDIT | Ensure password expiration is 90 days or less"
+  command: grep PASS_MAX_DAYS /etc/login.defs
+  register: pass_max_days_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.4.1.1
+
+
+- name: "SCORED | 5.4.1.2 | AUDIT | Ensure minimum days between password changes is 7 or more"
+  command: grep PASS_MIN_DAYS /etc/login.defs
+  register: pass_min_days_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.4.1.2
+
+
+- name: "SCORED | 5.4.1.3 | AUDIT | Ensure password expiration warning days is 7 or more"
+  command: grep PASS_WARN_AGE /etc/login.defs
+  register: pass_warn_age_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.4.1.3
+
+
+- name: "SCORED | 5.4.1.4 | AUDIT | Ensure inactive password lock is 30 days or less"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.4.1.4
+
+
+- name: "SCORED | 5.4.2 | AUDIT | Ensure system accounts are non-login"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.4.2
+
+
+- name: "SCORED | 5.4.3 | AUDIT | Ensure default group for the root account is GID 0"
+  shell: 'grep "^root:" /etc/passwd | cut -f4 -d: | grep 0'
+  register: default_group_for_root_is_gid_0_audit
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.4.3
+
+
+- name: "SCORED | 5.4.4 | AUDIT | Ensure default user umask is 027 or more restrictive"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.4.4
+
+
+- name: "NOTSCORED | 5.5 | AUDIT | Ensure root login is restricted to system console"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.5
+
+
+- name: "SCORED | 5.6 | AUDIT | Ensure access to the su command is restricted"
+  command: /bin/true
+  register: result
+  always_run: yes
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - level1
+      - level2
+      - audit
+      - rule_5.6
+
+
