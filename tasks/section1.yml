@@ -576,8 +576,10 @@
       - rule_1.7.1.6
 
 - name: "SCORED | 1.7.2 | PATCH | Ensure GDM login banner is configured"
-  command: /bin/true
+  debug:
+      msg: "Not currently implemented"
   #when: gdm_installed_audit.rc == '0' and gdm_login_banner_configured_audit
+  changed_when: no
   tags:
       - level1
       - level2
