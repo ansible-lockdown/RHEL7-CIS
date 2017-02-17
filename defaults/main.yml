@@ -1,5 +1,7 @@
 ---
 # defaults file for RHEL7-CIS
+rhel7cis_skip_for_travis: false
+
 rhel7cis_notauto: false
 rhel7cis_section1: true
 rhel7cis_section2: true
