@@ -1,10 +1,9 @@
 - name: "SCORED | 1.1.1.1 | PATCH | Ensure mounting of cramfs filesystems is disabled"
-  copy:
-      content: install cramfs /bin/true
-      dest: /etc/modprobe.d/disable-cramfs.conf
-      owner: root
-      group: root
-      mode: "0644"
+  lineinfile:
+      dest: /etc/modprobe.d/CIS.conf
+      regexp: "^(#)?install cramfs(\\s|$)"
+      line: "install cramfs /bin/true"
+      create: yes
   tags:
       - level1
       - scored
@@ -13,12 +12,11 @@
       - cramfs
 
 - name: "SCORED | 1.1.1.2 | PATCH | Ensure mounting of freevxfs filesystems is disabled"
-  copy:
-      content: install freevxfs /bin/true
-      dest: /etc/modprobe.d/disable-freevxfs.conf
-      owner: root
-      group: root
-      mode: "0644"
+  lineinfile:
+      dest: /etc/modprobe.d/CIS.conf
+      regexp: "^(#)?install freevxfs(\\s|$)"
+      line: "install freevxfs /bin/true"
+      create: yes
   tags:
       - level1
       - scored
@@ -27,12 +25,11 @@
       - freevxfs
 
 - name: "SCORED | 1.1.1.3 | PATCH | Ensure mounting of jffs2 filesystems is disabled"
-  copy:
-      content: install jffs2 /bin/true
-      dest: /etc/modprobe.d/disable-jffs2.conf
-      owner: root
-      group: root
-      mode: "0644"
+  lineinfile:
+      dest: /etc/modprobe.d/CIS.conf
+      regexp: "^(#)?install jffs2(\\s|$)"
+      line: "install jffs2 /bin/true"
+      create: yes
   tags:
       - level1
       - scored
@@ -41,12 +38,11 @@
       - jffs2
 
 - name: "SCORED | 1.1.1.4 | PATCH | Ensure mounting of hfs filesystems is disabled"
-  copy:
-      content: install hfs /bin/true
-      dest: /etc/modprobe.d/disable-hfs.conf
-      owner: root
-      group: root
-      mode: "0644"
+  lineinfile:
+      dest: /etc/modprobe.d/CIS.conf
+      regexp: "^(#)?install hfs(\\s|$)"
+      line: "install hfs /bin/true"
+      create: yes
   tags:
       - level1
       - scored
@@ -55,12 +51,11 @@
       - hfs
 
 - name: "SCORED | 1.1.1.5 | PATCH | Ensure mounting of hfsplus filesystems is disabled"
-  copy:
-      content: install hfsplus /bin/true
-      dest: /etc/modprobe.d/disable-hfsplus.conf
-      owner: root
-      group: root
-      mode: "0644"
+  lineinfile:
+      dest: /etc/modprobe.d/CIS.conf
+      regexp: "^(#)?install hfsplus(\\s|$)"
+      line: "install hfsplus /bin/true"
+      create: yes
   tags:
       - level1
       - scored
@@ -69,12 +64,11 @@
       - hfsplus
 
 - name: "SCORED | 1.1.1.6 | PATCH | Ensure mounting of squashfs filesystems is disabled"
-  copy:
-      content: install squashfs /bin/true
-      dest: /etc/modprobe.d/disable-squashfs.conf
-      owner: root
-      group: root
-      mode: "0644"
+  lineinfile:
+      dest: /etc/modprobe.d/CIS.conf
+      regexp: "^(#)?install squashfs(\\s|$)"
+      line: "install squashfs /bin/true"
+      create: yes
   tags:
       - level1
       - scored
@@ -83,12 +77,11 @@
       - squashfs
 
 - name: "SCORED | 1.1.1.7 | PATCH | Ensure mounting of udf filesystems is disabled"
-  copy:
-      content: install udf /bin/true
-      dest: /etc/modprobe.d/disable-udf.conf
-      owner: root
-      group: root
-      mode: "0644"
+  lineinfile:
+      dest: /etc/modprobe.d/CIS.conf
+      regexp: "^(#)?install udf(\\s|$)"
+      line: "install udf /bin/true"
+      create: yes
   tags:
       - level1
       - scored
@@ -97,12 +90,11 @@
       - udf
 
 - name: "SCORED | 1.1.1.8 | PATCH | Ensure mounting of FAT filesystems is disabled"
-  copy:
-      content: install vfat /bin/true
-      dest: /etc/modprobe.d/disable-vfat.conf
-      owner: root
-      group: root
-      mode: "0644"
+  lineinfile:
+      dest: /etc/modprobe.d/CIS.conf
+      regexp: "^(#)?install vfat(\\s|$)"
+      line: "install vfat /bin/true"
+      create: yes
   tags:
       - level1
       - scored
@@ -242,10 +234,12 @@
       - rule_1.1.21
 
 - name: "SCORED | 1.1.22 | PATCH | Disable Automounting"
-  command: /bin/true
+  service:
+      name: autofs
+      enabled: no
+  when: rhel7cis_allow_autofs == false and autofs_service_status.stdout == "loaded"
   tags:
       - level1
-      - level2
       - patch
       - rule_1.1.22
 
