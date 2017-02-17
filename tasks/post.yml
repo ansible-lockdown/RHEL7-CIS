@@ -3,6 +3,5 @@
 
 - name: Perform YUM package cleanup
   command: yum -y autoremove
-  always_run: yes
   changed_when: no
   ignore_errors: yes

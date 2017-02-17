@@ -1,79 +1,67 @@
-- name: "SCORED | 2.1.1 | AUDIT | Ensure chargen services are not enabled | chargen-dgram"
-  shell: "chkconfig --list | grep chargen-dgram |grep -q on"
-  register: chargen1_server_enabled_audit
-  failed_when: chargen1_server_enabled_audit.rc == 0
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - audit
-      - rule_2.1.1
-
-- name: "SCORED | 2.1.1 | AUDIT | Ensure chargen services are not enabled | chargen-stream"
-  shell: "chkconfig --list | grep chargen-stream |grep -q on"
-  register: chargen2_server_enabled_audit
-  failed_when: chargen2_server_enabled_audit.rc == 0
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - audit
-      - rule_2.1.1
-
 - name: "SCORED | 2.1.1 | PATCH | Ensure chargen services are not enabled | chargen-dgram"
-  command: "chkconfig chargen-dgram off"
-  when: chargen1_server_enabled_audit.failed
-  ignore_errors: yes
+  stat:
+      path: /etc/xinetd.d/chargen-dgram
+  register: chargen_dgram_service
   tags:
       - level1
       - scored
-      - ldap
+      - services
+      - patch
+      - rule_2.1.1
+
+- name: "SCORED | 2.1.1 | PATCH | Ensure chargen services are not enabled | chargen-dgram"
+  service:
+      name: chargen-dgram
+      state: stopped
+      enabled: no
+  when: chargen_dgram_service.stat.exists
+  tags:
+      - level1
+      - scored
       - services
       - patch
       - rule_2.1.1
 
 - name: "SCORED | 2.1.1 | PATCH | Ensure chargen services are not enabled | chargen-stream"
-  command: "chkconfig chargen-dgram off"
-  when: chargen2_server_enabled_audit.failed
-  ignore_errors: yes
+  stat:
+      path: /etc/xinetd.d/chargen-stream
+  register: chargen_stream_service
   tags:
       - level1
       - scored
-      - ldap
       - services
       - patch
       - rule_2.1.1
 
-- name: "SCORED | 2.1.2 | AUDIT | Ensure daytime services are not enabled | daytime-dgram"
-  shell: "chkconfig --list | grep daytime-dgram |grep -q on"
-  register: daytime1_server_enabled_audit
-  failed_when: daytime1_server_enabled_audit.rc == 0
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
+- name: "SCORED | 2.1.1 | PATCH | Ensure chargen services are not enabled | chargen-stream"
+  service:
+      name: chargen-stream
+      state: stopped
+      enabled: no
+  when: chargen_stream_service.stat.exists
   tags:
       - level1
-      - audit
-      - rule_2.1.2
+      - scored
+      - services
+      - patch
+      - rule_2.1.1
 
-- name: "SCORED | 2.1.2 | AUDIT | Ensure daytime services are not enabled | daytime-stream"
-  shell: "chkconfig --list | grep daytime-stream |grep -q on"
-  register: daytime2_server_enabled_audit
-  failed_when: daytime2_server_enabled_audit.rc == 0
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
+- name: "SCORED | 2.1.2 | PATCH | Ensure daytime services are not enabled | daytime-dgram"
+  stat:
+      path: /etc/xinetd.d/daytime-dgram
+  register: daytime_dgram_service
   tags:
       - level1
-      - audit
+      - scored
+      - patch
       - rule_2.1.2
 
 - name: "SCORED | 2.1.2 | PATCH | Ensure daytime services are not enabled | daytime-dgram"
-  command: "chkconfig daytime-dgram off"
-  when: daytime1_server_enabled_audit.failed
-  ignore_errors: yes
+  service:
+      name: daytime-dgram
+      state: stopped
+      enabled: no
+  when: daytime_dgram_service.stat.exists
   tags:
       - level1
       - scored
@@ -81,43 +69,43 @@
       - rule_2.1.2
 
 - name: "SCORED | 2.1.2 | PATCH | Ensure daytime services are not enabled | daytime-stream"
-  command: "chkconfig daytime-stream off"
-  when: daytime2_server_enabled_audit.failed
-  ignore_errors: yes
+  stat:
+      path: /etc/xinetd.d/daytime-stream
+  register: daytime_stream_service
   tags:
       - level1
       - scored
       - patch
       - rule_2.1.2
 
-- name: "SCORED | 2.1.3 | AUDIT | Ensure discard services are not enabled | discard-dgram"
-  shell: "chkconfig --list | grep discard-dgram |grep -q on"
-  register: discard1_server_enabled_audit
-  failed_when: discard1_server_enabled_audit.rc == 0
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
+- name: "SCORED | 2.1.2 | PATCH | Ensure daytime services are not enabled | daytime-stream"
+  service:
+      name: daytime-stream
+      state: stopped
+      enabled: no
+  when: daytime_stream_service.stat.exists
   tags:
       - level1
-      - audit
-      - rule_2.1.3
+      - scored
+      - patch
+      - rule_2.1.2
 
-- name: "SCORED | 2.1.3 | AUDIT | Ensure discard services are not enabled | discard-stream"
-  shell: "chkconfig --list | grep discard-stream |grep -q on"
-  register: discard2_server_enabled_audit
-  failed_when: discard2_server_enabled_audit.rc == 0
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
+- name: "SCORED | 2.1.3 | PATCH | Ensure discard services are not enabled | discard-dgram"
+  stat:
+      path: /etc/xinetd.d/discard-dgram
+  register: discard_dgram_service
   tags:
       - level1
-      - audit
+      - scored
+      - patch
       - rule_2.1.3
 
 - name: "SCORED | 2.1.3 | PATCH | Ensure discard services are not enabled | discard-dgram"
-  command: "chkconfig discard-dgram off"
-  when: discard1_server_enabled_audit.failed
-  ignore_errors: yes
+  service:
+      name: discard-dgram
+      state: stopped
+      enabled: no
+  when: discard_dgram_service.stat.exists
   tags:
       - level1
       - scored
@@ -125,43 +113,43 @@
       - rule_2.1.3
 
 - name: "SCORED | 2.1.3 | PATCH | Ensure discard services are not enabled | discard-stream"
-  command: "chkconfig discard-stream off"
-  when: discard2_server_enabled_audit.failed
-  ignore_errors: yes
+  stat:
+      path: /etc/xinetd.d/discard-stream
+  register: discard_stream_service
   tags:
       - level1
       - scored
       - patch
       - rule_2.1.3
 
-- name: "SCORED | 2.1.4 | AUDIT | Ensure echo services are not enabled | echo-dgram"
-  shell: "chkconfig --list | grep echo-dgram |grep -q on"
-  register: echo1_server_enabled_audit
-  failed_when: echo1_server_enabled_audit.rc == 0
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
+- name: "SCORED | 2.1.3 | PATCH | Ensure discard services are not enabled | discard-stream"
+  service:
+      name: discard-stream
+      state: stopped
+      enabled: no
+  when: discard_stream_service.stat.exists
   tags:
       - level1
-      - audit
-      - rule_2.1.4
+      - scored
+      - patch
+      - rule_2.1.3
 
-- name: "SCORED | 2.1.4 | AUDIT | Ensure echo services are not enabled | echo-stream"
-  shell: "chkconfig --list | grep echo-stream |grep -q on"
-  register: echo2_server_enabled_audit
-  failed_when: echo2_server_enabled_audit.rc == 0
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
+- name: "SCORED | 2.1.4 | PATCH | Ensure echo services are not enabled | echo-dgram"
+  stat:
+      path: /etc/xinetd.d/echo-dgram
+  register: echo_dgram_service
   tags:
       - level1
-      - audit
+      - scored
+      - patch
       - rule_2.1.4
 
 - name: "SCORED | 2.1.4 | PATCH | Ensure echo services are not enabled | echo-dgram"
-  command: "chkconfig echo-dgram off"
-  when: echo1_server_enabled_audit.failed
-  ignore_errors: yes
+  service:
+      name: echo-dgram
+      state: stopped
+      enabled: no
+  when: echo_dgram_service.stat.exists
   tags:
       - level1
       - scored
@@ -169,43 +157,43 @@
       - rule_2.1.4
 
 - name: "SCORED | 2.1.4 | PATCH | Ensure echo services are not enabled | echo-stream"
-  command: "chkconfig echo-stream off"
-  when: echo2_server_enabled_audit.failed
-  ignore_errors: yes
+  stat:
+      path: /etc/xinetd.d/echo-stream
+  register: echo_stream_service
   tags:
       - level1
       - scored
       - patch
       - rule_2.1.4
 
-- name: "SCORED | 2.1.5 | AUDIT | Ensure time services are not enabled | time-dgram"
-  shell: "chkconfig --list | grep time-dgram |grep -q on"
-  register: time1_server_enabled_audit
-  failed_when: time1_server_enabled_audit.rc == 0
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
+- name: "SCORED | 2.1.4 | PATCH | Ensure echo services are not enabled | echo-stream"
+  service:
+      name: echo-stream
+      state: stopped
+      enabled: no
+  when: echo_stream_service.stat.exists
   tags:
       - level1
-      - audit
-      - rule_2.1.5
+      - scored
+      - patch
+      - rule_2.1.4
 
-- name: "SCORED | 2.1.5 | AUDIT | Ensure time services are not enabled | time-stream"
-  shell: "chkconfig --list | grep time-stream |grep -q on"
-  register: time2_server_enabled_audit
-  failed_when: time2_server_enabled_audit.rc == 0
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
+- name: "SCORED | 2.1.5 | PATCH | Ensure time services are not enabled | time-dgram"
+  stat:
+      path: /etc/xinetd.d/time-dgram
+  register: time_dgram_service
   tags:
       - level1
-      - audit
+      - scored
+      - patch
       - rule_2.1.5
 
 - name: "SCORED | 2.1.5 | PATCH | Ensure time services are not enabled | time-dgram"
-  command: "chkconfig time-dgram off"
-  when: time1_server_enabled_audit.failed
-  ignore_errors: yes
+  service:
+      name: time-dgram
+      state: stopped
+      enabled: no
+  when: time_dgram_service.stat.exists
   tags:
       - level1
       - scored
@@ -213,77 +201,64 @@
       - rule_2.1.5
 
 - name: "SCORED | 2.1.5 | PATCH | Ensure time services are not enabled | time-stream"
-  command: "chkconfig time-stream off"
-  when: time2_server_enabled_audit.failed
-  ignore_errors: yes
+  stat:
+      path: /etc/xinetd.d/time-stream
+  register: time_stream_service
   tags:
       - level1
       - scored
       - patch
       - rule_2.1.5
 
-- name: "SCORED | 2.1.6 | AUDIT | Ensure tftp server is not enabled"
-  shell: "chkconfig --list | grep tftp |grep -q on"
-  register: tftp_server_enabled_audit
-  failed_when: tftp_server_enabled_audit.rc == 0
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
+- name: "SCORED | 2.1.5 | PATCH | Ensure time services are not enabled | time-stream"
+  service:
+      name: time-stream
+      state: stopped
+      enabled: no
+  when: time_stream_service.stat.exists
   tags:
       - level1
-      - audit
+      - scored
+      - patch
+      - rule_2.1.5
+
+- name: "SCORED | 2.1.6 | PATCH | Ensure tftp server is not enabled"
+  stat:
+      path: /etc/xinetd.d/tftp
+  register: tftp_service
+  tags:
+      - level1
+      - scored
+      - patch
       - rule_2.1.6
 
 - name: "SCORED | 2.1.6 | PATCH | Ensure tftp server is not enabled"
-  command: "chkconfig tftp off"
-  when: tftp_server_enabled_audit.failed
-  ignore_errors: yes
+  service:
+      name: tftp
+      state: stopped
+      enabled: no
+  when: tftp_service.stat.exists and rhel7cis_tftp_server == false
   tags:
       - level1
       - scored
       - patch
       - rule_2.1.6
 
-- name: "SCORED | 2.1.7 | AUDIT | Ensure xinetd is not enabled"
-  shell: "systemctl is-enabled xinetd"
-  register: xinetd_server_enabled_audit
-  failed_when: "'enabled' in xinetd_server_enabled_audit.stdout"
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - audit
-      - rule_2.1.7
-
 - name: "SCORED | 2.1.7 | PATCH | Ensure xinetd is not enabled"
   service:
-      name: "{{ item }}"
+      name: xinetd
       state: stopped
       enabled: no
-  with_items: xinetd
-  when: xinetd_server_enabled_audit.failed
+  when: xinetd_service_status.stdout == "loaded"
   tags:
       - level1
       - patch
       - scored
       - rule_2.1.7
 
-- name: "NOTSCORED | 2.2.1.1 | AUDIT | Ensure time synchronization is in use"
-  shell: "systemctl is-enabled {{ rhel7cis_time_Synchronization }}"
-  register: timesync_server_enabled_audit
-  failed_when: "'enabled' in timesync_server_enabled_audit.stdout"
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - audit
-      - rule_2.2.1.1
-
 - name: "NOTSCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use - service install"
   yum:
-      name: "{{ rhel7cis_time_Synchronization }}"
+      name: "{{ rhel7cis_time_synchronization }}"
       state: present
   tags:
       - level1
@@ -292,7 +267,7 @@
 
 - name: "NOTSCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use - service start"
   service:
-      name: "{{ rhel7cis_time_Synchronization }}d"
+      name: "{{ rhel7cis_time_synchronization }}d"
       state: started
       enabled: yes
   tags:
@@ -302,11 +277,10 @@
 
 - name: "NOTSCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use - service stop ntp"
   service:
-      name: "ntpd"
+      name: ntpd
       state: stopped
       enabled: no
-  ignore_errors: yes
-  when: rhel7cis_time_Synchronization == "chrony"
+  when: rhel7cis_time_synchronization == "chrony" and ntpd_service_status.stdout == "loaded"
   tags:
       - level1
       - patch
@@ -314,28 +288,15 @@
 
 - name: "NOTSCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use - service stop chrony"
   service:
-      name: "chronyd"
+      name: chronyd
       state: stopped
       enabled: no
   ignore_errors: yes
-  when: rhel7cis_time_Synchronization == "ntp"
+  when: rhel7cis_time_synchronization == "ntp" and chronyd_service_status.stdout == "loaded"
   tags:
       - level1
       - patch
       - rule_2.2.1.1
-
-- name: "SCORED | 2.2.1.2 | AUDIT | Ensure ntp is configured"
-  command: egrep -q "^restrict \-[46] default kod nomodify notrap nopeer noquery" /etc/ntp.conf && grep -q "^server" /etc/ntp.conf && grep -q "^OPTIONS=\"-u ntp:ntp\"" /etc/sysconfig/ntpd
-  register: check_ntp_restrict_audit
-  failed_when: check_ntp_restrict_audit.rc == 1
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  when: rhel7cis_time_Synchronization == "ntp"
-  tags:
-      - level1
-      - audit
-      - rule_2.2.1.2
 
 - name: "SCORED | 2.2.1.2 | PATCH | Ensure ntp is configured | modify /etc/ntp.conf"
   template:
@@ -344,7 +305,7 @@
       owner: root
       group: root
       mode: 0644
-  when: rhel7cis_time_Synchronization == "ntp"
+  when: rhel7cis_time_synchronization == "ntp"
   tags:
       - level1
       - patch
@@ -355,7 +316,7 @@
       dest: /etc/sysconfig/ntpd
       regexp: "^(#)?OPTIONS"
       line: "OPTIONS=\"-u ntp:ntp\""
-  when: rhel7cis_time_Synchronization == "ntp"
+  when: rhel7cis_time_synchronization == "ntp"
   tags:
       - level1
       - patch
@@ -366,24 +327,11 @@
       dest: /usr/lib/systemd/system/ntpd.service
       regexp: "^(#)?ExecStart"
       line: "ExecStart=/usr/sbin/ntpd -u ntp:ntp $OPTIONS"
-  when: rhel7cis_time_Synchronization == "ntp"
+  when: rhel7cis_time_synchronization == "ntp"
   tags:
       - level1
       - patch
       - rule_2.2.1.2
-
-- name: "SCORED | 2.2.1.3 | AUDIT | Ensure chrony is configured"
-  command: grep -q "^server" /etc/chrony.conf && egrep -q "OPTIONS=\"\-u chrony\"" /etc/sysconfig/chronyd
-  register: check_chrony_server_audit
-  failed_when: check_chrony_server_audit.rc == 1
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  when: rhel7cis_time_Synchronization == "chrony"
-  tags:
-      - level1
-      - audit
-      - rule_2.2.1.3
 
 - name: "SCORED | 2.2.1.3 | PATCH | Ensure chrony is configured"
   template:
@@ -392,7 +340,7 @@
       owner: root
       group: root
       mode: 0644
-  when: rhel7cis_time_Synchronization == "chrony"
+  when: rhel7cis_time_synchronization == "chrony"
   tags:
       - level1
       - patch
@@ -405,24 +353,11 @@
       line: "OPTIONS=\"-u chrony\""
       state: present
       create: yes
-  when: rhel7cis_time_Synchronization == "chrony"
+  when: rhel7cis_time_synchronization == "chrony"
   tags:
       - level1
       - patch
       - rule_2.2.1.3
-
-- name: "SCORED | 2.2.2 | AUDIT | Ensure X Window System is not installed"
-  command: rpm -qi xorg-x11*
-  register: pkgs_xwindows_installed_audit
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - scored
-      - xwindows
-      - audit
-      - rule_2.2.2
 
 - name: "SCORED | 2.2.2 | PATCH | Ensure X Window System is not installed"
   yum:
@@ -439,27 +374,12 @@
       - patch
       - rule_2.2.2
 
-- name: "SCORED | 2.2.3 | AUDIT | Ensure Avahi Server is not enabled"
-  command: systemctl is-enabled avahi-daemon
-  register: avahi_server_enabled_audit
-  failed_when: "'enabled' in avahi_server_enabled_audit.stdout"
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - scored
-      - avahi
-      - services
-      - audit
-      - rule_2.2.3
-
 - name: "SCORED | 2.2.3 | PATCH | Ensure Avahi Server is not enabled"
   service:
       name: avahi-daemon
       state: stopped
       enabled: no
-  when: avahi_server_enabled_audit.failed and rhel7cis_avahi_server == false
+  when: rhel7cis_avahi_server == false and avahi_service_status.stdout == "loaded"
   tags:
       - level1
       - scored
@@ -467,28 +387,13 @@
       - services
       - patch
       - rule_2.2.3
-
-- name: "SCORED | 2.2.4 | AUDIT | Ensure CUPS is not enabled"
-  command: systemctl is-enabled cups
-  register: cups_server_enabled_audit
-  failed_when: "'enabled' in cups_server_enabled_audit.stdout"
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - scored
-      - cups
-      - services
-      - audit
-      - rule_2.2.4
 
 - name: "SCORED | 2.2.4 | PATCH | Ensure CUPS is not enabled"
   service:
       name: cups
       state: stopped
       enabled: no
-  when: cups_server_enabled_audit.failed and rhel7cis_cups_server == false
+  when: rhel7cis_cups_server == false and cups_service_status.stdout == "loaded"
   tags:
       - level1
       - scored
@@ -497,27 +402,12 @@
       - patch
       - rule_2.2.4
 
-- name: "SCORED | 2.2.5 | AUDIT | Ensure DHCP Server is not enabled"
-  command: systemctl is-enabled dhcpd
-  register: dhcpd_server_enabled_audit
-  failed_when: "'enabled' in dhcpd_server_enabled_audit.stdout"
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - scored
-      - dhcp
-      - services
-      - audit
-      - rule_2.2.5
-
 - name: "SCORED | 2.2.5 | PATCH | Ensure DHCP Server is not enabled"
   service:
       name: dhcpd
       state: stopped
       enabled: no
-  when: dhcpd_server_enabled_audit.failed and rhel7cis_dhcp_server == false
+  when: rhel7cis_dhcp_server == false and dhcpd_service_status.stdout == "loaded"
   tags:
       - level1
       - scored
@@ -525,28 +415,13 @@
       - services
       - patch
       - rule_2.2.5
-
-- name: "SCORED | 2.2.6 | AUDIT | Ensure LDAP server is not enabled"
-  command: systemctl is-enabled slapd
-  register: slapd_server_enabled_audit
-  failed_when: "'enabled' in slapd_server_enabled_audit.stdout"
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - scored
-      - ldap
-      - services
-      - audit
-      - rule_2.2.6
 
 - name: "SCORED | 2.2.6 | PATCH | Ensure LDAP server is not enabled"
   service:
       name: slapd
       state: stopped
       enabled: no
-  when: slapd_server_enabled_audit.failed and rhel7cis_ldap_server == false
+  when: rhel7cis_ldap_server == false and slapd_service_status.stdout == "loaded"
   tags:
       - level1
       - scored
@@ -555,31 +430,27 @@
       - patch
       - rule_2.2.6
 
-- name: "SCORED | 2.2.7 | AUDIT | Ensure NFS and RPC are not enabled"
-  command: systemctl is-enabled nfs rpcbind |grep -q enabled
-  register: pkgs_nfs_rpcbind_installed_audit
-  failed_when: pkgs_nfs_rpcbind_installed_audit.rc == 0
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
+- name: "SCORED | 2.2.7 | PATCH | Ensure NFS and RPC are not enabled"
+  service:
+      name: nfs
+      state: stopped
+      enabled: no
+  when: rhel7cis_nfs_rpc_server == false and nfs_service_status.stdout == "loaded"
   tags:
       - level1
       - scored
       - nfs
       - rpc
       - services
-      - audit
+      - patch
       - rule_2.2.7
 
 - name: "SCORED | 2.2.7 | PATCH | Ensure NFS and RPC are not enabled"
   service:
-      name: "{{ item }}"
+      name: rpcbind
       state: stopped
       enabled: no
-  with_items:
-      - nfs
-      - rpcbind
-  when: pkgs_nfs_rpcbind_installed_audit.failed and not rhel7cis_nfs_rfc_server
+  when: rhel7cis_nfs_rpc_server == false and rpcbind_service_status.stdout == "loaded"
   tags:
       - level1
       - scored
@@ -589,317 +460,159 @@
       - patch
       - rule_2.2.7
 
-- name: "SCORED | 2.2.8 | AUDIT | Ensure DNS Server is not enabled"
-  command: systemctl is-enabled named
-  register: named_server_enabled_audit
-  failed_when: "'enabled' in named_server_enabled_audit.stdout"
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - audit
-      - rule_2.2.8
-
 - name: "SCORED | 2.2.8 | PATCH | Ensure DNS Server is not enabled"
   service:
-      name: "{{ item }}"
+      name: named
       state: stopped
       enabled: no
-  with_items: named
-  when: named_server_enabled_audit.failed and not rhel7cis_named_server
+  when: rhel7cis_named_server == false and named_service_status.stdout == "loaded"
   tags:
       - level1
       - patch
       - rule_2.2.8
-
-- name: "SCORED | 2.2.9 | AUDIT | Ensure FTP Server is not enabled"
-  command: systemctl is-enabled vsftpd
-  register: vsftpd_server_enabled_audit
-  failed_when: "'enabled' in vsftpd_server_enabled_audit.stdout"
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - audit
-      - rule_2.2.9
 
 - name: "SCORED | 2.2.9 | PATCH | Ensure FTP Server is not enabled"
   service:
-      name: "{{ item }}"
+      name: vsftpd
       state: stopped
       enabled: no
-  with_items: vsftpd
-  when: vsftpd_server_enabled_audit.failed and not rhel7cis_vsftpd_server
+  when: rhel7cis_vsftpd_server == false and vsftpd_service_status.stdout == "loaded"
   tags:
       - level1
       - patch
       - rule_2.2.9
 
-- name: "SCORED | 2.2.10 | AUDIT | Ensure HTTP server is not enabled"
-  command: systemctl is-enabled httpd
-  register: httpd_server_enabled_audit
-  failed_when: "'enabled' in httpd_server_enabled_audit.stdout"
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - audit
-      - rule_2.2.10
-
 - name: "SCORED | 2.2.10 | PATCH | Ensure HTTP server is not enabled"
   service:
-      name: "{{ item }}"
+      name: httpd
       state: stopped
       enabled: no
-  with_items: httpd
-  when: httpd_server_enabled_audit.failed and not rhel7cis_httpd_server
+  when: rhel7cis_httpd_server == false and httpd_service_status.stdout == "loaded"
   tags:
       - level1
       - patch
       - rule_2.2.10
-
-- name: "SCORED | 2.2.11 | AUDIT | Ensure IMAP and POP3 server is not enabled"
-  command: systemctl is-enabled dovecot
-  register: dovecot_server_enabled_audit
-  failed_when: "'enabled' in dovecot_server_enabled_audit.stdout"
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - audit
-      - rule_2.2.11
 
 - name: "SCORED | 2.2.11 | PATCH | Ensure IMAP and POP3 server is not enabled"
   service:
-      name: "{{ item }}"
+      name: dovecot
       state: stopped
       enabled: no
-  with_items: dovecot
-  when: dovecot_server_enabled_audit.failed and not rhel7cis_dovecot_server
+  when: rhel7cis_dovecot_server == false and dovecot_service_status.stdout == "loaded"
   tags:
       - level1
       - patch
       - rule_2.2.11
 
-- name: "SCORED | 2.2.12 | AUDIT | Ensure Samba is not enabled"
-  command: systemctl is-enabled smb
-  register: smb_server_enabled_audit
-  failed_when: "'enabled' in smb_server_enabled_audit.stdout"
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - audit
-      - rule_2.2.12
-
 - name: "SCORED | 2.2.12 | PATCH | Ensure Samba is not enabled"
   service:
-      name: "{{ item }}"
+      name: smb
       state: stopped
       enabled: no
-  with_items: smb
-  when: smb_server_enabled_audit.failed and not rhel7cis_smb_server
+  when: rhel7cis_smb_server == false and smb_service_status.stdout == "loaded"
   tags:
       - level1
       - patch
       - rule_2.2.12
-
-- name: "SCORED | 2.2.13 | AUDIT | Ensure HTTP Proxy Server is not enabled"
-  command: systemctl is-enabled squid
-  register: squid_server_enabled_audit
-  failed_when: "'enabled' in squid_server_enabled_audit.stdout"
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - audit
-      - rule_2.2.13
 
 - name: "SCORED | 2.2.13 | PATCH | Ensure HTTP Proxy Server is not enabled"
   service:
-      name: "{{ item }}"
+      name: squid
       state: stopped
       enabled: no
-  with_items: squid
-  when: squid_server_enabled_audit.failed and not rhel7cis_squid_server
+  when: rhel7cis_squid_server == false and squid_service_status.stdout == "loaded"
   tags:
       - level1
       - patch
       - rule_2.2.13
 
-- name: "SCORED | 2.2.14 | AUDIT | Ensure SNMP Server is not enabled"
-  command: systemctl is-enabled snmpd
-  register: snmp_server_enabled_audit
-  failed_when: "'enabled' in snmp_server_enabled_audit.stdout"
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - audit
-      - rule_2.2.14
-
 - name: "SCORED | 2.2.14 | PATCH | Ensure SNMP Server is not enabled"
   service:
-      name: "{{ item }}"
+      name: snmpd
       state: stopped
       enabled: no
-  with_items: snmpd
-  when: snmp_server_enabled_audit.failed and not rhel7cis_snmp_server
+  when: rhel7cis_snmp_server == false and snmpd_service_status.stdout == "loaded"
   tags:
       - level1
       - patch
       - rule_2.2.14
-
-- name: "SCORED | 2.2.15 | AUDIT | Ensure mail transfer agent is configured for local-only mode"
-  shell: netstat -an | grep LIST | grep ":25[[:space:]]" |egrep -q '127.0.0.1:25|::1:25'
-  register: check_mail_agent_audit
-  failed_when: check_mail_agent_audit.rc == 1
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - audit
-      - rule_2.2.15
 
 - name: "SCORED | 2.2.15 | PATCH | Ensure mail transfer agent is configured for local-only mode"
   lineinfile:
       dest: /etc/postfix/main.cf
       regexp: "^(#)?inet_interfaces"
       line: "inet_interfaces = localhost"
-  ignore_errors: yes
+  when: rhel7cis_is_mail_server == false and postfix_installed.rc == 0
   tags:
       - level1
       - patch
       - rule_2.2.15
 
-
-- name: "SCORED | 2.2.16 | AUDIT | Ensure NIS Server is not enabled"
-  command: systemctl is-enabled ypserv
-  register: nis_server_enabled_audit
-  failed_when: "'enabled' in nis_server_enabled_audit.stdout"
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - audit
-      - rule_2.2.16
-
 - name: "SCORED | 2.2.16 | PATCH | Ensure NIS Server is not enabled"
   service:
-      name: "{{ item }}"
+      name: ypserv
       state: stopped
       enabled: no
-  with_items: ypserv
-  when: nis_server_enabled_audit.failed and not rhel7cis_nis_server
+  when: rhel7cis_nis_server == false and ypserv_service_status.stdout == "loaded"
   tags:
       - level1
       - patch
       - rule_2.2.16
 
-- name: "SCORED | 2.2.17 | AUDIT | Ensure rsh server is not enabled | rsh.socket"
-  command: systemctl is-enabled rsh.socket
-  register: rsh_server_enabled_audit
-  failed_when: "'enabled' in rsh_server_enabled_audit.stdout"
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - audit
-      - rule_2.2.17
-
-- name: "SCORED | 2.2.17 | AUDIT | Ensure rsh server is not enabled | rlogin.socket"
-  command: systemctl is-enabled rlogin.socket
-  register: rlogin_server_enabled_audit
-  failed_when: "'enabled' in rlogin_server_enabled_audit.stdout"
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - audit
-      - rule_2.2.17
-
-- name: "SCORED | 2.2.17 | AUDIT | Ensure rsh server is not enabled | rexec.socket"
-  command: systemctl is-enabled rexec.socket
-  register: rexec_server_enabled_audit
-  failed_when: "'enabled' in rexec_server_enabled_audit.stdout"
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - audit
-      - rule_2.2.17
-
-- name: "SCORED | 2.2.17 | PATCH | Ensure rsh server is not enabled"
+- name: "SCORED | 2.2.17 | PATCH | Ensure rsh server is not enabled | rsh"
   service:
-      name: "{{ item }}"
+      name: rsh.socket
+      state: stopped
+      enabled: no
+  when: rhel7cis_rsh_server == false and rsh_service_status.stdout == "loaded"
+  tags:
+      - level1
+      - patch
+      - rule_2.2.17
+
+- name: "SCORED | 2.2.17 | PATCH | Ensure rsh server is not enabled | rlogin"
+  service:
+      name: rlogin.socket
+      state: stopped
+      enabled: no
+  when: rhel7cis_rsh_server == false and rlogin_service_status.stdout == "loaded"
+  tags:
+      - level1
+      - patch
+      - rule_2.2.17
+
+- name: "SCORED | 2.2.17 | PATCH | Ensure rsh server is not enabled | rexec"
+  service:
+      name: rexec.socket
       state: stopped
       enabled: no
   with_items:
       - rsh.socket
       - rlogin.socket
       - rexec.socket
-  when: rsh_server_enabled_audit.failed and not rhel7cis_rsh_server
+  when: rhel7cis_rsh_server == false and rexec_service_status.stdout == "loaded"
   tags:
       - level1
       - patch
       - rule_2.2.17
-
-- name: "SCORED | 2.2.18 | AUDIT | Ensure telnet server is not enabled"
-  command: systemctl is-enabled telnet.socket
-  register: telnet_server_enabled_audit
-  failed_when: "'enabled' in telnet_server_enabled_audit.stdout"
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - audit
-      - rule_2.2.18
 
 - name: "SCORED | 2.2.18 | PATCH | Ensure telnet server is not enabled"
   service:
       name: telnet
       state: stopped
       enabled: no
-  when: telnet_server_enabled_audit.failed and not rhel7cis_telnet_server
+  when: rhel7cis_telnet_server == false and telnet_service_status.stdout == "loaded"
   tags:
       - level1
       - patch
       - rule_2.2.18
-
-- name: "SCORED | 2.2.19 | AUDIT | Ensure tftp server is not enabled"
-  command: "systemctl is-enabled telnet.socket"
-  register: tftp_server_enabled_audit
-  failed_when: "'enabled' in tftp_server_enabled_audit.stdout"
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - scored
-      - insecure_services
-      - tftp
-      - audit
-      - rule_2.2.19
 
 - name: "SCORED | 2.2.19 | PATCH | Ensure tftp server is not enabled"
   service:
       name: tftp
       state: stopped
       enabled: no
-  when: tftp_server_enabled_audit.failed and not rhel7cis_tftp_server
+  when: rhel7cis_tftp_server == false and tftp_service_status.stdout == "loaded"
   tags:
       - level1
       - scored
@@ -908,169 +621,74 @@
       - patch
       - rule_2.2.19
 
-- name: "SCORED | 2.2.20 | AUDIT | Ensure rsync service is not enabled "
-  shell: "systemctl is-enabled rsyncd"
-  register: rsyncd_server_enabled_audit
-  failed_when: "'enabled' in rsyncd_server_enabled_audit.stdout"
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - audit
-      - rule_2.2.20
-
 - name: "SCORED | 2.2.20 | PATCH | Ensure rsync service is not enabled "
   service:
-      name: "{{ item }}"
+      name: rsyncd
       state: stopped
       enabled: no
   with_items: rsyncd
-  when: rsyncd_server_enabled_audit.failed and not rhel7cis_rsyncd_server
+  when: rhel7cis_rsyncd_server == false and rsyncd_service_status.stdout == "loaded"
   tags:
       - level1
       - patch
       - rule_2.2.20
 
-- name: "SCORED | 2.2.21 | AUDIT | Ensure talk server is not enabled"
-  shell: "systemctl is-enabled ntalk"
-  register: ntalk_server_enabled_audit
-  failed_when: "'enabled' in ntalk_server_enabled_audit.stdout"
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - audit
-      - rule_2.2.21
-
 - name: "SCORED | 2.2.21 | PATCH | Ensure talk server is not enabled"
   service:
-      name: "{{ item }}"
+      name: ntalk
       state: stopped
       enabled: no
-  with_items: ntalk
-  when: ntalk_server_enabled_audit.failed and not rhel7cis_ntalk_server
+  when: rhel7cis_ntalk_server == false and ntalk_service_status.stdout == "loaded"
   tags:
       - level1
       - patch
       - rule_2.2.21
-
-- name: "SCORED | 2.3.1 | AUDIT | Ensure NIS Client is not installed"
-  shell: "rpm -aq | grep -q ypbind"
-  register: pkgs_ypbind_installed_audit
-  failed_when: pkgs_ypbind_installed_audit.rc == 0
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - audit
-      - rule_2.3.1
 
 - name: "SCORED | 2.3.1 | PATCH | Ensure NIS Client is not installed"
   yum:
-      name: "{{item}}"
+      name: ypbind
       state: absent
-  when: not rhel7cis_ypbind_required
-  with_items:
-      - "ypbind"
+  when: rhel7cis_ypbind_required == false
   tags:
       - level1
       - patch
       - rule_2.3.1
 
-- name: "SCORED | 2.3.2 | AUDIT | Ensure rsh client is not installed"
-  shell: "rpm -aq | grep -q rsh"
-  register: pkgs_rsh_installed_audit
-  failed_when: pkgs_rsh_installed_audit.rc == 0
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - audit
-      - rule_2.3.2
-
 - name: "SCORED | 2.3.2 | PATCH | Ensure rsh client is not installed"
   yum:
-      name: "{{item}}"
+      name: rsh
       state: absent
-  when: not rhel7cis_rsh_required
-  with_items:
-      - "rsh"
+  when: rhel7cis_rsh_required == false
   tags:
       - level1
       - patch
       - rule_2.3.2
-
-- name: "SCORED | 2.3.3 | AUDIT | Ensure talk client is not installed"
-  shell: "rpm -aq | grep -q talk"
-  register: pkgs_talk_installed_audit
-  failed_when: pkgs_talk_installed_audit.rc == 0
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - audit
-      - rule_2.3.3
 
 - name: "SCORED | 2.3.3 | PATCH | Ensure talk client is not installed"
   yum:
-      name: "{{item}}"
+      name: talk
       state: absent
-  when: not rhel7cis_talk_required
-  with_items:
-      - "talk"
+  when: rhel7cis_talk_required == false
   tags:
       - level1
       - patch
       - rule_2.3.3
 
-- name: "SCORED | 2.3.4 | AUDIT | Ensure telnet client is not installed"
-  shell: "rpm -aq | grep -q telnet"
-  register: pkgs_telnet_installed_audit
-  failed_when: pkgs_telnet_installed_audit.rc == 0
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - audit
-      - rule_2.3.4
-
 - name: "SCORED | 2.3.4 | PATCH | Ensure telnet client is not installed"
   yum:
-      name: "{{item}}"
+      name: telnet
       state: absent
-  when: not rhel7cis_telnet_required
-  with_items:
-      - "telnet"
+  when: rhel7cis_telnet_required == false
   tags:
       - level1
       - patch
       - rule_2.3.4
 
-- name: "SCORED | 2.3.5 | AUDIT | Ensure LDAP client is not installed"
-  shell: "rpm -aq | grep -q openldap-clients"
-  register: pkgs_openldap_clients_installed_audit
-  failed_when: pkgs_openldap_clients_installed_audit.rc == 0
-  always_run: yes
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - level1
-      - audit
-      - rule_2.3.5
-
 - name: "SCORED | 2.3.5 | PATCH | Ensure LDAP client is not installed"
   yum:
-      name: "{{item}}"
+      name: openldap-clients
       state: absent
-  when: not rhel7cis_openldap_clients_required
-  with_items:
-      - "openldap-clients"
+  when: rhel7cis_openldap_clients_required == false
   tags:
       - level1
       - patch
