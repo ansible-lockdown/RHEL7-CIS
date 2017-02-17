@@ -18,7 +18,9 @@ RUN yum -y install git ansible sudo
 RUN yum clean all
 
 # Install basic packages that should be there
-RUN yum -y install audit; systemctl enable auditd; systemctl start auditd
+RUN yum -y install audit
+RUN systemctl enable auditd
+RUN systemctl start auditd
 
 # Disable requiretty
 RUN sed -i -e 's/^\(Defaults\s*requiretty\)/#--- \1/'  /etc/sudoers
