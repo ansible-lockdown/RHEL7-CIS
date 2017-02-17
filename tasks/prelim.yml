@@ -36,6 +36,13 @@
   failed_when: no
   check_mode: no
 
+- name: "PRELIM | Check if postfix package is installed"
+  command: rpm -q postfix
+  register: postfix_installed
+  changed_when: no
+  failed_when: no
+  check_mode: no
+
 # Individual service checks
 - name: "PRELIM | Check for xinetd service"
   shell: "systemctl show xinetd | grep LoadState | cut -d = -f 2"

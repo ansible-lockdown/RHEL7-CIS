@@ -111,20 +111,21 @@ rhel7cis_aide_cron:
 ```
 
 ##### SELinux policy
-rhel7cis_selinux_pol: targeted  
+`rhel7cis_selinux_pol: targeted` 
 
 
 ##### Set to 'true' if X Windows is needed in your environment
-rhel7cis_xwindows_required: no  
+`rhel7cis_xwindows_required: no` 
 
 
 ##### Client application requirements
-rhel7cis_openldap_clients_required: false
-rhel7cis_telnet_required: false
-rhel7cis_talk_required: false
-rhel7cis_rsh_required: false
-rhel7cis_ypbind_required: false  
-
+```
+rhel7cis_openldap_clients_required: false 
+rhel7cis_telnet_required: false 
+rhel7cis_talk_required: false  
+rhel7cis_rsh_required: false 
+rhel7cis_ypbind_required: false 
+```
 
 ##### Time Synchronization
 ```

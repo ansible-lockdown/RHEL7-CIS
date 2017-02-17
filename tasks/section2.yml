@@ -542,7 +542,7 @@
       dest: /etc/postfix/main.cf
       regexp: "^(#)?inet_interfaces"
       line: "inet_interfaces = localhost"
-  when: rhel7cis_is_mail_server == false
+  when: rhel7cis_is_mail_server == false and postfix_installed.rc == 0
   tags:
       - level1
       - patch
