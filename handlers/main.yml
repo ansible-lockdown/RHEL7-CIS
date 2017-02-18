@@ -24,7 +24,7 @@
       daemon_reload: yes
       enabled: yes
       masked: no
-      state: reloaded
+      state: restarted
 
 - name: generate new grub config
   become: yes
