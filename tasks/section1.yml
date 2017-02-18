@@ -102,8 +102,17 @@
       - rule_1.1.1.8
       - vfat
 
-#- name: "SCORED | 1.1.2 | PATCH | Ensure separate partition exists for /tmp"
-# See not_automated.yml
+- name: "SCORED | 1.1.2 | PATCH | Ensure separate partition exists for /tmp | enable and start/restart tmp.mount"
+  systemd:
+      name: tmp.mount
+      enabled: yes
+      masked: no
+      state: started
+  tags:
+      - level2
+      - scored
+      - patch
+      - rule_1.1.2
 
 - name: "SCORED | 1.1.3 | PATCH | Ensure nodev option set on /tmp partition\n
          SCORED | 1.1.4 | PATCH | Ensure nosuid option set on /tmp partition\n
@@ -115,124 +124,149 @@
       owner: root
       group: root
       mode: 0644
+  notify: systemd restart tmp.mount
   tags:
       - level1
       - scored
-      - audit
+      - patch
       - rule_1.1.3
       - rule_1.1.4
       - rule_1.1.5
 
-- name: "SCORED | 1.1.3 | PATCH | Ensure nodev option set on /tmp partition\n
-         SCORED | 1.1.4 | PATCH | Ensure nosuid option set on /tmp partition\n
-         SCORED | 1.1.5 | PATCH | Ensure noexec option set on /tmp partition\n
-         | enable and start/restart tmp.mount"
-  systemd:
-      name: tmp.mount
-      daemon_reload: yes
-      enabled: yes
-      masked: no
-      state: restarted
+- meta: flush_handlers
+
+- name: "SCORED | 1.1.6 | PATCH | Ensure separate partition exists for /var"
+  shell: mount | grep "on /var "
+  register: var_mounted
+  changed_when: no
+  failed_when: no
   tags:
       - level2
       - scored
-      - audit
-      - rule_1.1.3
-      - rule_1.1.4
-      - rule_1.1.5
+      - patch
+      - rule_1.1.6
 
-#- name: "SCORED | 1.1.6 | AUDIT | Ensure separate partition exists for /var"
-# See not_automated.yml
-
-#- name: "SCORED | 1.1.7 | AUDIT | Ensure separate partition exists for /var/tmp"
-# See not_automated.yml
+- name: "SCORED | 1.1.7 | PATCH | Ensure separate partition exists for /var/tmp"
+  shell: mount | grep "on /var/tmp "
+  register: var_tmp_mounted
+  changed_when: no
+  failed_when: no
+  tags:
+      - level2
+      - scored
+      - patch
+      - rule_1.1.7
 
 - name: "SCORED | 1.1.8 | PATCH | Ensure nodev option set on /var/tmp partition"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
-      - level2
+      - scored
       - patch
       - rule_1.1.8
 
 - name: "SCORED | 1.1.9 | PATCH | Ensure nosuid option set on /var/tmp partition"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
-      - level2
+      - scored
       - patch
       - rule_1.1.9
 
 - name: "SCORED | 1.1.10 | PATCH | Ensure noexec option set on /var/tmp partition"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
-      - level2
+      - scored
       - patch
       - rule_1.1.10
 
-#- name: "SCORED | 1.1.11 | AUDIT | Ensure separate partition exists for /var/log"
-# See not_automated.yml
+- name: "SCORED | 1.1.11 | PATCH | Ensure separate partition exists for /var/log"
+  shell: mount | grep "on /var/log "
+  register: var_log_mounted
+  changed_when: no
+  failed_when: no
+  tags:
+      - level2
+      - scored
+      - patch
+      - rule_1.1.11
 
-#- name: "SCORED | 1.1.12 | AUDIT | Ensure separate partition exists for /var/log/audit"
-# See not_automated.yml
+- name: "SCORED | 1.1.12 | PATCH | Ensure separate partition exists for /var/log/audit"
+  shell: mount | grep "on /var/log/audit "
+  register: var_log_audit_mounted
+  changed_when: no
+  failed_when: no
+  tags:
+      - level2
+      - scored
+      - patch
+      - rule_1.1.12
 
-#- name: "SCORED | 1.1.13 | AUDIT | Ensure separate partition exists for /home"
-# See not_automated.yml
+- name: "SCORED | 1.1.13 | PATCH | Ensure separate partition exists for /home"
+  shell: mount | grep "on /home "
+  register: home_mounted
+  changed_when: no
+  failed_when: no
+  tags:
+      - level2
+      - scored
+      - patch
+      - rule_1.1.13
 
 - name: "SCORED | 1.1.14 | PATCH | Ensure nodev option set on /home partition"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
       - level2
       - patch
       - rule_1.1.14
 
-- name: "SCORED | 1.1.15 | PATCH | Ensure nodev option set on /dev/shm partition"
-  command: /bin/true
+- name: "SCORED | 1.1.15 | PATCH | Ensure nodev option set on /dev/shm partition\n
+         SCORED | 1.1.16 | PATCH | Ensure nosuid option set on /dev/shm partition\n
+         SCORED | 1.1.17 | PATCH | Ensure noexec option set on /dev/shm partition"
+  mount:
+      name: /dev/shm
+      src: tmpfs
+      state: mounted
+      fstype: tmpfs
+      opts: "defaults,nodev,nosuid,noexec"
   tags:
       - level1
-      - level2
+      - scored
       - patch
       - rule_1.1.15
-
-- name: "SCORED | 1.1.16 | PATCH | Ensure nosuid option set on /dev/shm partition"
-  command: /bin/true
-  tags:
-      - level1
-      - level2
-      - patch
       - rule_1.1.16
-
-- name: "SCORED | 1.1.17 | PATCH | Ensure noexec option set on /dev/shm partition"
-  command: /bin/true
-  tags:
-      - level1
-      - level2
-      - patch
       - rule_1.1.17
 
 - name: "NOTSCORED | 1.1.18 | PATCH | Ensure nodev option set on removable media partitions"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
-      - level2
+      - notscored
       - patch
       - rule_1.1.18
 
 - name: "NOTSCORED | 1.1.19 | PATCH | Ensure nosuid option set on removable media partitions"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
-      - level2
+      - notscored
       - patch
       - rule_1.1.19
 
 - name: "NOTSCORED | 1.1.20 | PATCH | Ensure noexec option set on removable media partitions"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
-      - level2
+      - notscored
       - patch
       - rule_1.1.20
 
@@ -401,6 +435,7 @@
 
 - name: "NOTSCORED | 1.5.2 | PATCH | Ensure XD/NX support is enabled"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
       - level2
