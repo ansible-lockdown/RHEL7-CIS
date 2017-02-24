@@ -134,8 +134,6 @@
       - rule_1.1.4
       - rule_1.1.5
 
-- meta: flush_handlers
-
 - name: "SCORED | 1.1.6 | PATCH | Ensure separate partition exists for /var"
   shell: mount | grep "on /var "
   register: var_mounted
