@@ -28,7 +28,7 @@
 
 - name: generate new grub config
   become: yes
-  shell: grub2-mkconfig -o /boot/grub2/grub.cfg
+  shell: grub2-mkconfig -o "{{ grub_cfg.stat.lnk_source }}"
 
 - name: restart firewalld
   become: yes

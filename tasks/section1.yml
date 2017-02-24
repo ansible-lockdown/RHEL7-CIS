@@ -409,11 +409,9 @@
       - rule_1.3.2
 
 - name: "SCORED | 1.4.1 | PATCH | Ensure permissions on bootloader config are configured"
-  file:
-      path: /boot/grub2/grub.cfg
-      owner: root
-      group: root
-      mode: 0600
+  stat:
+      path: /etc/grub2.cfg
+  register: grub_cfg
   tags:
       - level1
       - scored
@@ -440,18 +438,6 @@
       password: "{{ rhel7cis_bootloader_password }}"
   register: grub_pass
   when: rhel7cis_set_boot_pass
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_1.4.2
-
-- name: "SCORED | 1.4.2 | PATCH | Ensure bootloader password is set"
-  copy:
-      dest: /boot/grub2/user.cfg
-      content: "GRUB2_PASSWORD={{ grub_pass.passhash }}"
-  when: rhel7cis_set_boot_pass and grub_pass is defined and grub_pass.passhash is defined and grub_pass.passhash != ''
-  notify: generate new grub config
   tags:
       - level1
       - scored
