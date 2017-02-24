@@ -23,3 +23,7 @@
       enabled: yes
       masked: no
       state: restarted
+
+- name: generate new grub config
+  become: yes
+  shell: grub2-mkconfig -o /boot/grub2/grub.cfg

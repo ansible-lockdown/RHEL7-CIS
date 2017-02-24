@@ -43,6 +43,14 @@ rhel7cis_squid: false
 rhel7cis_net_snmp: false
 rhel7cis_allow_autofs: false
 
+# RedHat Satellite Subscription items
+rhel7cis_rhnsd_required: false
+
+# 1.4.2 Bootloader password
+
+rhel7cis_bootloader_password: random
+rhel7cis_set_boot_pass: false
+
 # System network parameters (host only OR host and router)
 rhel7cis_is_router: false
 

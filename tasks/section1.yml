@@ -291,40 +291,77 @@
 
 - name: "NOTSCORED | 1.2.1 | PATCH | Ensure package manager repositories are configured"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
-      - level2
+      - notscored
       - patch
       - rule_1.2.1
 
 - name: "SCORED | 1.2.2 | PATCH | Ensure gpgcheck is globally activated"
-  command: /bin/true
+  replace:
+      name: /etc/yum.conf
+      regexp: "^gpgcheck=0"
+      replace: "gpgcheck=1"
   tags:
       - level1
-      - level2
+      - scored
+      - patch
+      - rule_1.2.2
+
+- name: "SCORED | 1.2.2 | PATCH | Ensure gpgcheck is globally activated"
+  find:
+      paths: /etc/yum.repos.d
+      patterns: "*.repo"
+  register: yum_repos
+  changed_when: no
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_1.2.2
+
+- name: "SCORED | 1.2.2 | PATCH | Ensure gpgcheck is globally activated"
+  replace:
+      name: "{{ item.path }}"
+      regexp: "^gpgcheck=0"
+      replace: "gpgcheck=1"
+  with_items:
+      - "{{ yum_repos.files }}"
+  tags:
+      - level1
+      - scored
       - patch
       - rule_1.2.2
 
 - name: "NOTSCORED | 1.2.3 | PATCH | Ensure GPG keys are configured"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
-      - level2
+      - notscored
       - patch
       - rule_1.2.3
 
 - name: "NOTSCORED | 1.2.4 | PATCH | Ensure Red Hat Network or Subscription Manager connection is configured"
   command: /bin/true
+  changed_when: no
+  when: ansible_distribution == "RedHat"
   tags:
       - level1
-      - level2
+      - notscored
       - patch
       - rule_1.2.4
 
 - name: "NOTSCORED | 1.2.5 | PATCH | Disable the rhnsd Daemon"
-  command: /bin/true
+  service:
+      name: rhnsd
+      state: stopped
+      enabled: no
+  when: ansible_distribution == "RedHat" and rhnsd_service_status and rhel7cis_rhnsd_required
   tags:
       - level2
+      - notscored
       - patch
       - rule_1.2.5
 
@@ -373,7 +410,11 @@
       - rule_1.3.2
 
 - name: "SCORED | 1.4.1 | PATCH | Ensure permissions on bootloader config are configured"
-  command: /bin/true
+  file:
+      path: /boot/grub2/grub.cfg
+      owner: root
+      group: root
+      mode: 0600
   tags:
       - level1
       - scored
@@ -381,7 +422,22 @@
       - rule_1.4.1
 
 - name: "SCORED | 1.4.2 | PATCH | Ensure bootloader password is set"
-  command: /bin/true
+  grub_crypt:
+      password: "{{ rhel7cis_bootloader_password }}"
+  register: grub_pass
+  when: rhel7cis_set_boot_pass
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_1.4.2
+
+- name: "SCORED | 1.4.2 | PATCH | Ensure bootloader password is set"
+  copy:
+      dest: /boot/grub2/user.cfg
+      content: "GRUB2_PASSWORD={{ grub_pass.passhash }}"
+  when: rhel7cis_set_boot_pass and grub_pass is defined and grub_pass.passhash is defined and grub_pass.passhash != ''
+  notify: generate new grub config
   tags:
       - level1
       - scored
@@ -482,15 +538,7 @@
       follow: yes
   register: selinux_grub_patch
   ignore_errors: yes
-  tags:
-      - level2
-      - scored
-      - patch
-      - rule_1.6.1.1
-
-- name: "SCORED | 1.6.1.1 | PATCH | Ensure SELinux is not disabled in bootloader configuration"
-  shell: grub2-mkconfig > /boot/grub2/grub.cfg
-  when: selinux_grub_patch.changed
+  notify: generate new grub config
   tags:
       - level2
       - scored
