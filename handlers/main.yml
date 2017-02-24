@@ -7,6 +7,7 @@
       name: net.ipv4.route.flush
       value: 1
       sysctl_set: yes
+  when: ansible_virtualization_type != "docker"
 
 - name: sysctl flush ipv6 route table
   become: yes
@@ -14,6 +15,7 @@
       name: net.ipv6.route.flush
       value: 1
       sysctl_set: yes
+  when: ansible_virtualization_type != "docker"
 
 - name: systemd restart tmp.mount
   become: yes
@@ -22,8 +24,8 @@
       daemon_reload: yes
       enabled: yes
       masked: no
-      state: restarted
+      state: reloaded
 
 - name: generate new grub config
   become: yes
-  shell: grub2-mkconfig -o /boot/grub2/grub.cfg
+  shell: grub2-mkconfig -o {{ grub_cfg.stat.lnk_source }}
