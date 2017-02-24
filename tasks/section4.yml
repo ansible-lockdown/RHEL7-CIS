@@ -39,6 +39,7 @@
       name: auditd
       state: started
       enabled: yes
+  when: rhel7cis_skip_for_travis == false
   tags:
       - level2
       - auditd
