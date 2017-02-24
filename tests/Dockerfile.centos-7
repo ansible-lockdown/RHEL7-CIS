@@ -17,11 +17,14 @@ RUN yum -y install epel-release openssh-server audit authconfig
 RUN yum -y install git ansible sudo
 RUN yum clean all
 
+# Fix for Travis docker containers
+RUN mkdir /var/log/audit; chmod 700 /var/log/audit;
+
 # Disable requiretty
 RUN sed -i -e 's/^\(Defaults\s*requiretty\)/#--- \1/'  /etc/sudoers
 
 # Install Ansible inventory file
 RUN echo -e '[local]\nlocalhost ansible_connection=local' > /etc/ansible/hosts
 
-VOLUME ["/sys/fs/cgroup", "/run", "/tmp"]
+VOLUME ["/sys/fs/cgroup", "/var/log/audit"]
 CMD ["/usr/sbin/init"]

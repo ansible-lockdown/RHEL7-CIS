@@ -586,10 +586,6 @@
       name: rexec.socket
       state: stopped
       enabled: no
-  with_items:
-      - rsh.socket
-      - rlogin.socket
-      - rexec.socket
   when: rhel7cis_rsh_server == false and rexec_service_status.stdout == "loaded"
   tags:
       - level1
@@ -626,7 +622,6 @@
       name: rsyncd
       state: stopped
       enabled: no
-  with_items: rsyncd
   when: rhel7cis_rsyncd_server == false and rsyncd_service_status.stdout == "loaded"
   tags:
       - level1
