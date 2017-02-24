@@ -409,14 +409,27 @@
       - rule_1.3.2
 
 - name: "SCORED | 1.4.1 | PATCH | Ensure permissions on bootloader config are configured"
-  file:
-      path: /boot/grub2/grub.cfg
-      owner: root
-      group: root
-      mode: 0600
+  stat:
+      path: /etc/grub2.cfg
+  register: grub_cfg
   tags:
       - level1
       - scored
+      - grub
+      - patch
+      - rule_1.4.1
+
+- name: "SCORED | 1.4.1 | PATCH | Ensure permissions on bootloader config are configured"
+  file:
+      path: "{{ grub_cfg.stat.lnk_source }}"
+      owner: root
+      group: root
+      mode: 0600
+  when: grub_cfg.stat.exists and grub_cfg.stat.islnk
+  tags:
+      - level1
+      - scored
+      - grub
       - patch
       - rule_1.4.1
 
@@ -428,6 +441,7 @@
   tags:
       - level1
       - scored
+      - grub
       - patch
       - rule_1.4.2
 
@@ -440,6 +454,7 @@
   tags:
       - level1
       - scored
+      - grub
       - patch
       - rule_1.4.2
 
