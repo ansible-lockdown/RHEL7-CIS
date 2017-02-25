@@ -101,6 +101,9 @@ rhel7cis_host_allow:
 rhel7cis_firewall: firewalld
 #rhel7cis_firewall: iptables
 
+rhel7cis_firewall_services:
+    - ssh
+
 # Warning Banner Content (issue, issue.net, motd)
 rhel7cis_warning_banner: |
     Authorized uses only. All activity may be monitored and reported.
