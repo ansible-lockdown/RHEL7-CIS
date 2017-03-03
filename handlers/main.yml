@@ -32,4 +32,6 @@
 
 - name: restart xinetd
   become: yes
-  shell: kill -USR2 `pidof xinetd`
+  service:
+        name: xinetd
+        state: restarted
