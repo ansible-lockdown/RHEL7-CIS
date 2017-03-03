@@ -29,3 +29,7 @@
 - name: generate new grub config
   become: yes
   shell: grub2-mkconfig -o {{ grub_cfg.stat.lnk_source }}
+
+- name: restart xinetd
+  become: yes
+  command: "kill -USR2 `pidof xinetd`"
