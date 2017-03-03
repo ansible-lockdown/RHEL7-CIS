@@ -102,7 +102,7 @@
       - patch
       - rule_2.1.3
 
-- name: "SCORED | 2.1.3 | PATCH | Ensure discard services are not enabled | discard-stream"
+- name: "SCORED | 2.1.3 | PATCH | Ensure discard services are not enabled | discard-stream"
   stat:
       path: /etc/xinetd.d/discard-stream
   register: discard_stream_service
@@ -112,7 +112,7 @@
       - patch
       - rule_2.1.3
 
-- name: "SCORED | 2.1.3 | PATCH | Ensure discard services are not enabled | discard-stream"
+- name: "SCORED | 2.1.3 | PATCH | Ensure discard services are not enabled | discard-stream"
   command: chkconfig discard-stream off
   notify: restart xinetd
   when: discard_stream_service.stat.exists
@@ -142,7 +142,7 @@
       - patch
       - rule_2.1.4
 
-- name: "SCORED | 2.1.4 | PATCH | Ensure echo services are not enabled | echo-stream"
+- name: "SCORED | 2.1.4 | PATCH | Ensure echo services are not enabled | echo-stream"
   stat:
       path: /etc/xinetd.d/echo-stream
   register: echo_stream_service
@@ -152,7 +152,7 @@
       - patch
       - rule_2.1.4
 
-- name: "SCORED | 2.1.4 | PATCH | Ensure echo services are not enabled | echo-stream"
+- name: "SCORED | 2.1.4 | PATCH | Ensure echo services are not enabled | echo-stream"
   command: chkconfig echo-stream off
   notify: restart xinetd
   when: echo_stream_service.stat.exists
@@ -162,7 +162,7 @@
       - patch
       - rule_2.1.4
 
-- name: "SCORED | 2.1.5 | PATCH | Ensure time services are not enabled | time-dgram"
+- name: "SCORED | 2.1.5 | PATCH | Ensure time services are not enabled | time-dgram"
   stat:
       path: /etc/xinetd.d/time-dgram
   register: time_dgram_service
@@ -172,7 +172,7 @@
       - patch
       - rule_2.1.5
 
-- name: "SCORED | 2.1.5 | PATCH | Ensure time services are not enabled | time-dgram"
+- name: "SCORED | 2.1.5 | PATCH | Ensure time services are not enabled | time-dgram"
   command: chkconfig time-dgram off
   notify: restart xinetd
   when: time_dgram_service.stat.exists
@@ -182,7 +182,7 @@
       - patch
       - rule_2.1.5
 
-- name: "SCORED | 2.1.5 | PATCH | Ensure time services are not enabled | time-stream"
+- name: "SCORED | 2.1.5 | PATCH | Ensure time services are not enabled | time-stream"
   stat:
       path: /etc/xinetd.d/time-stream
   register: time_stream_service
@@ -192,7 +192,7 @@
       - patch
       - rule_2.1.5
 
-- name: "SCORED | 2.1.5 | PATCH | Ensure time services are not enabled | time-stream"
+- name: "SCORED | 2.1.5 | PATCH | Ensure time services are not enabled | time-stream"
   command: chkconfig time-stream off
   notify: restart xinetd
   when: time_stream_service.stat.exists
@@ -307,7 +307,7 @@
       - patch
       - rule_2.2.1.2
 
-- name: "SCORED | 2.2.1.2 | PATCH | Ensure ntp is configuredÂ |Â modify /usr/lib/systemd/system/ntpd.service"
+- name: "SCORED | 2.2.1.2 | PATCH | Ensure ntp is configured | modify /usr/lib/systemd/system/ntpd.service"
   lineinfile:
       dest: /usr/lib/systemd/system/ntpd.service
       regexp: "^(#)?ExecStart"
@@ -331,7 +331,7 @@
       - patch
       - rule_2.2.1.3
 
-- name: "SCORED | 2.2.1.3 | PATCH | Ensure chrony is configured | modify /etc/sysconfig/chronyd |Â 1"
+- name: "SCORED | 2.2.1.3 | PATCH | Ensure chrony is configured | modify /etc/sysconfig/chronyd | 1"
   lineinfile:
       dest: /etc/sysconfig/chronyd
       regexp: "^(#)?OPTIONS"
