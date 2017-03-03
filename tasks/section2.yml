@@ -228,13 +228,7 @@
       state: stopped
       enabled: no
   when: 
-      - xinetd_service_status.stdout == "loaded" 
-      - not rhel7cis_telnet_server
-      - not rhel7cis_vsftpd_server
-      - not rhel7cis_named_server
-      - not rhel7cis_tftp_server
-      - not rhel7cis_cups_server
-      - not rhel7cis_rsyncd_server
+      - xinetd_service_status.stdout == "loaded" and not rhel7cis_xinetd_required
   tags:
       - level1
       - patch

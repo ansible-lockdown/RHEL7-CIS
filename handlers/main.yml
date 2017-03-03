@@ -32,4 +32,4 @@
 
 - name: restart xinetd
   become: yes
-  command: "kill -USR2 `pidof xinetd`"
+  shell: kill -USR2 `pidof xinetd`
