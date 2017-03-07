@@ -1,23 +1,19 @@
 galaxy_info:
-  author: your name
+  author: "Daniel Shepherd, Matt Shepherd, Bas Meijeri, amunter, daswars"
   description: "Ansible role to apply RHEL 7 CIS Baseline"
   company:
   license: MIT
-  min_ansible_version: 2.1
-  version: 0.1
+  min_ansible_version: 2.2
 
   platforms:
   - name: EL
-    versions:
-      - 7
-  - name: CentOS
     versions:
       - 7
 
   galaxy_tags:
     - system
     - security
-    - stig
+    - cis
     - hardening
 
 dependencies: []
