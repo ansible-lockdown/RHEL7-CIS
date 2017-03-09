@@ -357,7 +357,7 @@
       name: rhnsd
       state: stopped
       enabled: no
-  when: ansible_distribution == "RedHat" and rhnsd_service_status and rhel7cis_rhnsd_required
+  when: ansible_distribution == "RedHat" and rhnsd_service_status and not rhel7cis_rhnsd_required
   tags:
       - level2
       - notscored

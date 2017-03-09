@@ -43,6 +43,9 @@ rhel7cis_squid: false
 rhel7cis_net_snmp: false
 rhel7cis_allow_autofs: false
 
+# xinetd required
+rhel7cis_xinetd_required: false
+
 # RedHat Satellite Subscription items
 rhel7cis_rhnsd_required: false
 
