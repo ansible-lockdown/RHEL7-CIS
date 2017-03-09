@@ -35,3 +35,9 @@
   service:
       name: firewalld
       state: restarted
+
+- name: restart xinetd
+  become: yes
+  service:
+      name: xinetd
+      state: restarted
