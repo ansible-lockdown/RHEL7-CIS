@@ -336,8 +336,8 @@
 - name: "SCORED | 3.6 | PATCH | Ensure firewalld is installed and started | CUSTOM"
   service:
       name: firewalld
-      state: stopped
-      enabled: no
+      state: started
+      enabled: yes
   when: rhel7cis_firewall == "firewalld"
   tags:
       - level1
@@ -353,6 +353,39 @@
       - level1
       - patch
       - rule_3.6.1
+
+- name: "SCORED | 3.6.1 | PATCH | Ensure iptables is installed and started"
+  service:
+      name: iptables
+      state: started
+      enabled: yes
+  when: rhel7cis_firewall == "iptables"
+  tags:
+      - level1
+      - patch
+      - rule_3.6.1
+
+- name: "SCORED | 3.6.2 | PATCH | Ensure default deny firewall policy"
+  lineinfile:
+      dest: /etc/firewalld/firewalld.conf
+      regexp: "^DefaultZone"
+      line: "DefaultZone=drop"
+  when: rhel7cis_firewall == "firewalld"
+  tags:
+      - level1
+      - patch
+      - rule_3.6.2
+
+- name: "SCORED | 3.6.2 | PATCH | Ensure default deny firewall policy"
+  firewalld:
+      state: enabled
+      zone: drop
+      permanent: true
+  when: rhel7cis_firewall == "firewalld"
+  tags:
+      - level1
+      - patch
+      - rule_3.6.2
 
 - name: "SCORED | 3.6.2 | PATCH | Ensure default deny firewall policy"
   command: /bin/true
@@ -377,6 +410,21 @@
       - level1
       - patch
       - rule_3.6.4
+
+- name: "SCORED | 3.6.5 | PATCH | Ensure firewall rules exist for all open ports"
+  firewalld:
+      service: "{{ item }}"
+      state: enabled
+      zone: drop
+      permanent: true
+      immediate: true
+  when: rhel7cis_firewall == "firewalld"
+  notify: restart firewalld
+  with_items: "{{ rhel7cis_firewall_services }}"
+  tags:
+      - level1
+      - patch
+      - rule_3.6.5
 
 - name: "SCORED | 3.6.5 | PATCH | Ensure firewall rules exist for all open ports"
   command: /bin/true
