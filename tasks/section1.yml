@@ -685,10 +685,22 @@
       - rule_1.7.1.6
 
 - name: "SCORED | 1.7.2 | PATCH | Ensure GDM login banner is configured"
-  debug:
-      msg: "Not currently implemented"
-  #when: gdm_installed_audit.rc == '0' and gdm_login_banner_configured_audit
-  changed_when: no
+  lineinfile:
+      dest: "{{ item.file }}"
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+      state: present
+      create: yes
+      owner: root
+      group: root
+      mode: 0644
+  with_items:
+      - { file: '/etc/dconf/profile/gdm', regexp:  'user-db', line: 'user-db:user' }
+      - { file: '/etc/dconf/profile/gdm', regexp:  'system-db', line: 'system-db:gdm' }
+      - { file: '/etc/dconf/profile/gdm', regexp:  'file-db', line: 'file-db:/usr/share/gdm/greeter-dconf-defaults' }
+      - { file: '/etc/dconf/db/gdm.d/01-banner-message', regexp:  '\[org\/gnome\/login-screen\]', line: '[org/gnome/login-screen]' }
+      - { file: '/etc/dconf/db/gdm.d/01-banner-message', regexp:  'banner-message-enable', line: 'banner-message-enable=true' }
+      - { file: '/etc/dconf/db/gdm.d/01-banner-message', regexp:  'banner-message-text', line: "banner-message-text='{{ rhel7cis_warning_banner }}' " }
   tags:
       - level1
       - level2
