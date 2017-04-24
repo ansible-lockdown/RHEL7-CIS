@@ -23,9 +23,10 @@
 - name: "SCORED | 5.1.3 | PATCH | Ensure permissions on /etc/cron.hourly are configured"
   file:
       dest: /etc/cron.hourly
+      state: directory
       owner: root
       group: root
-      mode: 0600
+      mode: 0700
   tags:
       - level1
       - level2
@@ -35,9 +36,10 @@
 - name: "SCORED | 5.1.4 | PATCH | Ensure permissions on /etc/cron.daily are configured"
   file:
       dest: /etc/cron.daily
+      state: directory
       owner: root
       group: root
-      mode: 0600
+      mode: 0700
   tags:
       - level1
       - level2
@@ -47,9 +49,10 @@
 - name: "SCORED | 5.1.5 | PATCH | Ensure permissions on /etc/cron.weekly are configured"
   file:
       dest: /etc/cron.weekly
+      state: directory
       owner: root
       group: root
-      mode: 0600
+      mode: 0700
   tags:
       - level1
       - level2
@@ -59,9 +62,10 @@
 - name: "SCORED | 5.1.6 | PATCH | Ensure permissions on /etc/cron.monthly are configured"
   file:
       dest: /etc/cron.monthly
+      state: directory
       owner: root
       group: root
-      mode: 0600
+      mode: 0700
   tags:
       - level1
       - level2
@@ -74,7 +78,7 @@
       state: directory
       owner: root
       group: root
-      mode: 0600
+      mode: 0700
   tags:
       - level1
       - level2
