@@ -230,6 +230,16 @@
       - patch
       - rule_4.1.18
 
+- name: "SCORED | 4.2.3 | PATCH | Ensure rsyslog or syslog-ng is installed"
+  yum:
+      name: "{{ rhel7cis_syslog }}"
+      state: present
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.3
+
 - name: "SCORED | 4.2.1.1 | PATCH | Ensure rsyslog Service is enabled"
   command: /bin/true
   tags:
@@ -288,16 +298,6 @@
       - level2
       - patch
       - rule_4.2.2.1
-
-- name: "SCORED | 4.2.3 | PATCH | Ensure rsyslog or syslog-ng is installed"
-  yum:
-      name: "{{ rhel7cis_syslog }}"
-      state: present
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_4.2.3
 
 - name: "NOTSCORED | 4.2.2.2 | PATCH | Ensure logging is configured"
   command: /bin/true
