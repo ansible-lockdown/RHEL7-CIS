@@ -486,8 +486,22 @@
       - patch
       - rule_5.4.3
 
-- name: "SCORED | 5.4.4 | PATCH | Ensure default user umask is 027 or more restrictive"
-  command: /bin/true
+- name: "SCORED | 5.4.4 | PATCH | Ensure default user umask is 027 or more restrictive - /etc/bashrc"
+  replace:
+      path: /etc/bashrc
+      regexp: '(^\s+umask) 002'
+      replace: '\1 027'
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.4.4
+
+- name: "SCORED | 5.4.4 | PATCH | Ensure default user umask is 027 or more restrictive - /etc/profile"
+  replace:
+      path: /etc/profile
+      regexp: '(^\s+umask) 002'
+      replace: '\1 027'
   tags:
       - level1
       - level2
