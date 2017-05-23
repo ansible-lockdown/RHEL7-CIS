@@ -288,6 +288,18 @@
       - patch
       - rule_5.2.13
 
+- name: "SCORED | 5.2.13 | PATCH | Ensure SSH ClientAliveCountMax set to <= 3"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^ClientAliveCountMax'
+      line: "ClientAliveCountMax {{ rhel7cis_sshd['clientalivecountmax'] }}"
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.13
+
 - name: "SCORED | 5.2.14 | PATCH | Ensure SSH LoginGraceTime is set to one minute or less"
   lineinfile:
       state: present
