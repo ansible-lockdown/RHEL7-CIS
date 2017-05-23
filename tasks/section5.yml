@@ -335,7 +335,7 @@
       line: AllowGroups {{ rhel7cis_sshd['allowgroups'] }}
   notify:
       - restart sshd
-  when: when: "rhel7cis_sshd['allowgroups']|default('') != ''"
+  when: "rhel7cis_sshd['allowgroups']|default('') != ''"
   tags:
       - level1
       - level2
