@@ -320,7 +320,7 @@
       line: AllowUsers {{ rhel7cis_sshd['allowusers'] }}
   notify:
       - restart sshd
-  when: rhel7cis_sshd['allowusers'] is defined
+  when: "rhel7cis_sshd['allowusers']|default('') != ''"
   tags:
       - level1
       - level2
@@ -335,7 +335,7 @@
       line: AllowGroups {{ rhel7cis_sshd['allowgroups'] }}
   notify:
       - restart sshd
-  when: rhel7cis_sshd['allowgroups'] is defined
+  when: when: "rhel7cis_sshd['allowgroups']|default('') != ''"
   tags:
       - level1
       - level2
@@ -350,7 +350,7 @@
       line: DenyUsers {{ rhel7cis_sshd['denyusers'] }}
   notify:
       - restart sshd
-  when: rhel7cis_sshd['denyusers'] is defined
+  when: "rhel7cis_sshd['denyusers']|default('') != ''"
   tags:
       - level1
       - level2
@@ -365,7 +365,7 @@
       line: DenyGroups {{ rhel7cis_sshd['denygroups'] }}
   notify:
       - restart sshd
-  when: rhel7cis_sshd['denygroups'] is defined
+  when: "rhel7cis_sshd['denygroups']|default('') != ''"
   tags:
       - level1
       - level2
