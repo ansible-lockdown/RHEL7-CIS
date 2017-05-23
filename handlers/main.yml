@@ -42,6 +42,12 @@
       name: xinetd
       state: restarted
 
+- name: restart sshd
+  become: yes
+  service:
+      name: sshd
+      state: restarted
+
 - name: reload dconf
   become: yes
   command: dconf update

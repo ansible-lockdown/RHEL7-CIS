@@ -257,7 +257,7 @@
       state: present
       dest: /etc/ssh/sshd_config
       regexp: '^Ciphers'
-      line: 'Ciphers aes128-ctr,aes192-ctr,aes256-ctr'
+      line: 'Ciphers aes256-ctr,aes192-ctr,aes128-ctr'
   tags:
       - level1
       - level2
@@ -288,6 +288,18 @@
       - patch
       - rule_5.2.13
 
+- name: "SCORED | 5.2.13 | PATCH | Ensure SSH ClientAliveCountMax set to <= 3"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^ClientAliveCountMax'
+      line: "ClientAliveCountMax {{ rhel7cis_sshd['clientalivecountmax'] }}"
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.13
+
 - name: "SCORED | 5.2.14 | PATCH | Ensure SSH LoginGraceTime is set to one minute or less"
   lineinfile:
       state: present
@@ -300,8 +312,60 @@
       - patch
       - rule_5.2.14
 
-- name: "SCORED | 5.2.15 | PATCH | Ensure SSH access is limited"
-  command: /bin/true
+- name: "SCORED | 5.2.15 | PATCH | Ensure SSH access is limited - allowusers"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: "^AllowUsers"
+      line: AllowUsers {{ rhel7cis_sshd['allowusers'] }}
+  notify:
+      - restart sshd
+  when: "rhel7cis_sshd['allowusers']|default('') != ''"
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.15
+
+- name: "SCORED | 5.2.15 | PATCH | Ensure SSH access is limited - allowgroups"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: "^AllowGroups"
+      line: AllowGroups {{ rhel7cis_sshd['allowgroups'] }}
+  notify:
+      - restart sshd
+  when: "rhel7cis_sshd['allowgroups']|default('') != ''"
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.15
+
+- name: "SCORED | 5.2.15 | PATCH | Ensure SSH access is limited - denyusers"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: "^DenyUsers"
+      line: DenyUsers {{ rhel7cis_sshd['denyusers'] }}
+  notify:
+      - restart sshd
+  when: "rhel7cis_sshd['denyusers']|default('') != ''"
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.15
+
+- name: "SCORED | 5.2.15 | PATCH | Ensure SSH access is limited - denygroups"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: "^DenyGroups"
+      line: DenyGroups {{ rhel7cis_sshd['denygroups'] }}
+  notify:
+      - restart sshd
+  when: "rhel7cis_sshd['denygroups']|default('') != ''"
   tags:
       - level1
       - level2
@@ -313,7 +377,7 @@
       state: present
       dest: /etc/ssh/sshd_config
       regexp: '^Banner'
-      line: 'Banner /etc/issue'
+      line: 'Banner /etc/issue.net'
   tags:
       - level1
       - level2
@@ -422,8 +486,22 @@
       - patch
       - rule_5.4.3
 
-- name: "SCORED | 5.4.4 | PATCH | Ensure default user umask is 027 or more restrictive"
-  command: /bin/true
+- name: "SCORED | 5.4.4 | PATCH | Ensure default user umask is 027 or more restrictive - /etc/bashrc"
+  replace:
+      path: /etc/bashrc
+      regexp: '(^\s+umask) 002'
+      replace: '\1 027'
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.4.4
+
+- name: "SCORED | 5.4.4 | PATCH | Ensure default user umask is 027 or more restrictive - /etc/profile"
+  replace:
+      path: /etc/profile
+      regexp: '(^\s+umask) 002'
+      replace: '\1 027'
   tags:
       - level1
       - level2
@@ -444,6 +522,16 @@
       dest: /etc/pam.d/su
       regexp: '^#auth\s+required\s+pam_wheel\.so'
       line: 'auth           required        pam_wheel.so use_uid'
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.6
+
+- name: "SCORED | 5.6 | PATCH | Ensure access to the su command is restricted - wheel group contains root"
+  user:
+      name: root
+      groups: wheel
   tags:
       - level1
       - level2

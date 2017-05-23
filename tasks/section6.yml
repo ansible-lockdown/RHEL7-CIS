@@ -58,7 +58,7 @@
       dest: /etc/passwd-
       owner: root
       group: root
-      mode: 0644
+      mode: 0600
   tags:
       - level1
       - level2
