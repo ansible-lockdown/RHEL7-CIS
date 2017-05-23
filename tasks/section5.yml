@@ -312,8 +312,60 @@
       - patch
       - rule_5.2.14
 
-- name: "SCORED | 5.2.15 | PATCH | Ensure SSH access is limited"
-  command: /bin/true
+- name: "SCORED | 5.2.15 | PATCH | Ensure SSH access is limited - allowusers"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: "^AllowUsers"
+      line: AllowUsers {{ rhel7cis_sshd['allowusers'] }}
+  notify:
+      - restart sshd
+  when: rhel7cis_sshd['allowusers'] is defined
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.15
+
+- name: "SCORED | 5.2.15 | PATCH | Ensure SSH access is limited - allowgroups"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: "^AllowGroups"
+      line: AllowGroups {{ rhel7cis_sshd['allowgroups'] }}
+  notify:
+      - restart sshd
+  when: rhel7cis_sshd['allowgroups'] is defined
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.15
+
+- name: "SCORED | 5.2.15 | PATCH | Ensure SSH access is limited - denyusers"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: "^DenyUsers"
+      line: DenyUsers {{ rhel7cis_sshd['denyusers'] }}
+  notify:
+      - restart sshd
+  when: rhel7cis_sshd['denyusers'] is defined
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.15
+
+- name: "SCORED | 5.2.15 | PATCH | Ensure SSH access is limited - denygroups"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: "^DenyGroups"
+      line: DenyGroups {{ rhel7cis_sshd['denygroups'] }}
+  notify:
+      - restart sshd
+  when: rhel7cis_sshd['denygroups'] is defined
   tags:
       - level1
       - level2
