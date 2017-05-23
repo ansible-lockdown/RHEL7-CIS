@@ -119,3 +119,7 @@ rhel7cis_sshd:
     #allowgroups: systems dba
     #denyusers:
     #denygroups:
+
+# Syslog system
+rhel7cis_syslog: rsyslog
+#rhel7cis_syslog: syslog-ng
