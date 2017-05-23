@@ -8,4 +8,4 @@
 #		for information on rule syntax.
 #		See 'man tcpd' for information on tcp_wrappers
 #
-ALL: {% for iprange in rhel7cis_host_allow -%}{{ iprange }}, {% endfor %}
+ALL: {% for iprange in rhel7cis_host_allow -%}{{ iprange }}{% if not loop.last %}, {% endif %}{% endfor %}
