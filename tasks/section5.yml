@@ -257,7 +257,7 @@
       state: present
       dest: /etc/ssh/sshd_config
       regexp: '^Ciphers'
-      line: 'Ciphers aes128-ctr,aes192-ctr,aes256-ctr'
+      line: 'Ciphers aes256-ctr,aes192-ctr,aes128-ctr'
   tags:
       - level1
       - level2
