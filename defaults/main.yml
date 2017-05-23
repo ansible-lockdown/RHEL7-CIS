@@ -50,7 +50,6 @@ rhel7cis_xinetd_required: false
 rhel7cis_rhnsd_required: false
 
 # 1.4.2 Bootloader password
-
 rhel7cis_bootloader_password: random
 rhel7cis_set_boot_pass: false
 
