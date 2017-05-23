@@ -377,7 +377,7 @@
       state: present
       dest: /etc/ssh/sshd_config
       regexp: '^Banner'
-      line: 'Banner /etc/issue'
+      line: 'Banner /etc/issue.net'
   tags:
       - level1
       - level2
