@@ -513,3 +513,13 @@
       - level2
       - patch
       - rule_5.6
+
+- name: "SCORED | 5.6 | PATCH | Ensure access to the su command is restricted - wheel group contains root"
+  user:
+      name: root
+      groups: wheel
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.6
