@@ -1,5 +1,6 @@
 - name: "NOTSCORED | 6.1.1 | PATCH | Audit system file permissions"
   command: /bin/true
+  changed_when: no
   tags:
       - level2
       - patch
@@ -103,6 +104,7 @@
 
 - name: "SCORED | 6.1.10 | PATCH | Ensure no world writable files exist"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
       - level2
@@ -111,6 +113,7 @@
 
 - name: "SCORED | 6.1.11 | PATCH | Ensure no unowned files or directories exist"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
       - level2
@@ -119,6 +122,7 @@
 
 - name: "SCORED | 6.1.12 | PATCH | Ensure no ungrouped files or directories exist"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
       - level2
@@ -127,6 +131,7 @@
 
 - name: "NOTSCORED | 6.1.13 | PATCH | Audit SUID executables"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
       - level2
@@ -135,6 +140,7 @@
 
 - name: "NOTSCORED | 6.1.14 | PATCH | Audit SGID executables"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
       - level2
@@ -187,6 +193,7 @@
 
 - name: "SCORED | 6.2.6 | PATCH | Ensure root PATH Integrity"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
       - level2
@@ -195,6 +202,7 @@
 
 - name: "SCORED | 6.2.7 | PATCH | Ensure all users' home directories exist"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
       - level2
@@ -203,6 +211,7 @@
 
 - name: "SCORED | 6.2.8 | PATCH | Ensure users' home directories permissions are 750 or more restrictive"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
       - level2
@@ -211,6 +220,7 @@
 
 - name: "SCORED | 6.2.9 | PATCH | Ensure users own their home directories"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
       - level2
@@ -219,6 +229,7 @@
 
 - name: "SCORED | 6.2.10 | PATCH | Ensure users' dot files are not group or world writable"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
       - level2
@@ -271,6 +282,7 @@
 
 - name: "SCORED | 6.2.15 | PATCH | Ensure all groups in /etc/passwd exist in /etc/group"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
       - level2
@@ -279,6 +291,7 @@
 
 - name: "SCORED | 6.2.16 | PATCH | Ensure no duplicate UIDs exist"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
       - level2
@@ -287,6 +300,7 @@
 
 - name: "SCORED | 6.2.17 | PATCH | Ensure no duplicate GIDs exist"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
       - level2
@@ -295,6 +309,7 @@
 
 - name: "SCORED | 6.2.18 | PATCH | Ensure no duplicate user names exist"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
       - level2
@@ -303,6 +318,7 @@
 
 - name: "SCORED | 6.2.19 | PATCH | Ensure no duplicate group names exist"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
       - level2

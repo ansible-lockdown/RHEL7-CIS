@@ -389,6 +389,7 @@
 
 - name: "SCORED | 3.6.2 | PATCH | Ensure default deny firewall policy"
   command: /bin/true
+  changed_when: no
   when: rhel7cis_firewall == "iptables"
   tags:
       - level1
@@ -397,6 +398,7 @@
 
 - name: "SCORED | 3.6.3 | PATCH | Ensure loopback traffic is configured"
   command: /bin/true
+  changed_when: no
   when: rhel7cis_firewall == "iptables"
   tags:
       - level1
@@ -405,6 +407,7 @@
 
 - name: "NOTSCORED | 3.6.4 | PATCH | Ensure outbound and established connections are configured"
   command: /bin/true
+  changed_when: no
   when: rhel7cis_firewall == "iptables"
   tags:
       - level1
@@ -428,6 +431,7 @@
 
 - name: "SCORED | 3.6.5 | PATCH | Ensure firewall rules exist for all open ports"
   command: /bin/true
+  changed_when: no
   when: rhel7cis_firewall == "iptables"
   tags:
       - level1
@@ -436,6 +440,7 @@
 
 - name: "NOTSCORED | 3.7 | PATCH | Ensure wireless interfaces are disabled"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
       - level2

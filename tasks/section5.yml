@@ -404,6 +404,7 @@
 
 - name: "SCORED | 5.3.2 | PATCH | Ensure lockout for failed password attempts is configured"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
       - level2
@@ -412,6 +413,7 @@
 
 - name: "SCORED | 5.3.3 | PATCH | Ensure password reuse is limited"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
       - level2
@@ -464,6 +466,7 @@
 
 - name: "SCORED | 5.4.1.4 | PATCH | Ensure inactive password lock is 30 days or less"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
       - level2
@@ -472,6 +475,7 @@
 
 - name: "SCORED | 5.4.2 | PATCH | Ensure system accounts are non-login"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
       - level2
@@ -510,6 +514,7 @@
 
 - name: "NOTSCORED | 5.5 | PATCH | Ensure root login is restricted to system console"
   command: /bin/true
+  changed_when: no
   tags:
       - level1
       - level2
