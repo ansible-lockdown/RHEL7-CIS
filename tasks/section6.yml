@@ -165,6 +165,8 @@
 
 - name: "SCORED | 6.2.2 | PATCH | Ensure no legacy '+' entries exist in /etc/passwd"
   command: sed -i '/^+/ d' /etc/passwd
+  changed_when: no
+  failed_when: no
   tags:
       - level1
       - level2
@@ -173,6 +175,8 @@
 
 - name: "SCORED | 6.2.3 | PATCH | Ensure no legacy '+' entries exist in /etc/shadow"
   command: sed -i '/^+/ d' /etc/shadow
+  changed_when: no
+  failed_when: no
   tags:
       - level1
       - level2
@@ -181,6 +185,8 @@
 
 - name: "SCORED | 6.2.4 | PATCH | Ensure no legacy '+' entries exist in /etc/group"
   command: sed -i '/^+/ d' /etc/group
+  changed_when: no
+  failed_when: no
   tags:
       - level1
       - level2
@@ -189,6 +195,8 @@
 
 - name: "SCORED | 6.2.5 | PATCH | Ensure root is the only UID 0 account"
   command: passwd -l {{ item }}
+  changed_when: no
+  failed_when: no
   with_items: "{{ uid_zero_accounts_except_root.stdout_lines }}"
   when: uid_zero_accounts_except_root.rc
   tags:

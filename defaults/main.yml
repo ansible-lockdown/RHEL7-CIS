@@ -98,6 +98,9 @@ rhel7cis_aide_cron:
 # SELinux policy
 rhel7cis_selinux_pol: targeted
 
+# Whether or not to run tasks related to auditing/patching the desktop environment
+rhel7cis_gui: no
+
 # Set to 'true' if X Windows is needed in your environment
 rhel7cis_xwindows_required: no
 

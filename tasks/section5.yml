@@ -424,6 +424,8 @@
 
 - name: "SCORED | 5.3.4 | PATCH | Ensure password hashing algorithm is SHA-512"
   command: authconfig --passalgo=sha512 --update
+  changed_when: no
+  failed_when: no
   tags:
       - level1
       - level2
@@ -488,6 +490,8 @@
 
 - name: "SCORED | 5.4.3 | PATCH | Ensure default group for the root account is GID 0"
   command: usermod -g 0 root
+  changed_when: no
+  failed_when: no
   tags:
       - level1
       - level2
