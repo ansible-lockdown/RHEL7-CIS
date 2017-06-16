@@ -410,6 +410,7 @@
       - level2
       - patch
       - rule_5.3.2
+      - notimplemented
 
 - name: "SCORED | 5.3.3 | PATCH | Ensure password reuse is limited"
   command: /bin/true
@@ -419,6 +420,7 @@
       - level2
       - patch
       - rule_5.3.3
+      - notimplemented
 
 - name: "SCORED | 5.3.4 | PATCH | Ensure password hashing algorithm is SHA-512"
   command: authconfig --passalgo=sha512 --update
@@ -472,6 +474,7 @@
       - level2
       - patch
       - rule_5.4.1.4
+      - notimplemented
 
 - name: "SCORED | 5.4.2 | PATCH | Ensure system accounts are non-login"
   command: /bin/true
@@ -481,6 +484,7 @@
       - level2
       - patch
       - rule_5.4.2
+      - notimplemented
 
 - name: "SCORED | 5.4.3 | PATCH | Ensure default group for the root account is GID 0"
   command: usermod -g 0 root
@@ -520,6 +524,7 @@
       - level2
       - patch
       - rule_5.5
+      - notimplemented
 
 - name: "SCORED | 5.6 | PATCH | Ensure access to the su command is restricted"
   lineinfile:

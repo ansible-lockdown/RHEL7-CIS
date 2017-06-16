@@ -395,6 +395,7 @@
       - level1
       - patch
       - rule_3.6.2
+      - notimplemented
 
 - name: "SCORED | 3.6.3 | PATCH | Ensure loopback traffic is configured"
   command: /bin/true
@@ -404,6 +405,7 @@
       - level1
       - patch
       - rule_3.6.3
+      - notimplemented
 
 - name: "NOTSCORED | 3.6.4 | PATCH | Ensure outbound and established connections are configured"
   command: /bin/true
@@ -413,6 +415,7 @@
       - level1
       - patch
       - rule_3.6.4
+      - notimplemented
 
 - name: "SCORED | 3.6.5 | PATCH | Ensure firewall rules exist for all open ports"
   firewalld:
@@ -437,6 +440,7 @@
       - level1
       - patch
       - rule_3.6.5
+      - notimplemented
 
 - name: "NOTSCORED | 3.7 | PATCH | Ensure wireless interfaces are disabled"
   command: /bin/true

@@ -164,6 +164,7 @@
       - scored
       - patch
       - rule_1.1.8
+      - notimplemented
 
 - name: "SCORED | 1.1.9 | PATCH | Ensure nosuid option set on /var/tmp partition"
   command: /bin/true
@@ -173,6 +174,7 @@
       - scored
       - patch
       - rule_1.1.9
+      - notimplemented
 
 - name: "SCORED | 1.1.10 | PATCH | Ensure noexec option set on /var/tmp partition"
   command: /bin/true
@@ -182,6 +184,7 @@
       - scored
       - patch
       - rule_1.1.10
+      - notimplemented
 
 - name: "SCORED | 1.1.11 | PATCH | Ensure separate partition exists for /var/log"
   shell: mount | grep "on /var/log "
@@ -224,6 +227,7 @@
       - level2
       - patch
       - rule_1.1.14
+      - notimplemented
 
 - name: "SCORED | 1.1.15 | PATCH | Ensure nodev option set on /dev/shm partition\n
          SCORED | 1.1.16 | PATCH | Ensure nosuid option set on /dev/shm partition\n
@@ -250,6 +254,7 @@
       - notscored
       - patch
       - rule_1.1.18
+      - notimplemented
 
 - name: "NOTSCORED | 1.1.19 | PATCH | Ensure nosuid option set on removable media partitions"
   command: /bin/true
@@ -259,6 +264,7 @@
       - notscored
       - patch
       - rule_1.1.19
+      - notimplemented
 
 - name: "NOTSCORED | 1.1.20 | PATCH | Ensure noexec option set on removable media partitions"
   command: /bin/true
@@ -268,6 +274,7 @@
       - notscored
       - patch
       - rule_1.1.20
+      - notimplemented
 
 - name: "SCORED | 1.1.21 | PATCH | Ensure sticky bit is set on all world-writable directories"
   shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d -perm -0002 2>/dev/null | xargs chmod a+t
@@ -296,6 +303,7 @@
       - notscored
       - patch
       - rule_1.2.1
+      - notimplemented
 
 - name: "SCORED | 1.2.2 | PATCH | Ensure gpgcheck is globally activated"
   replace:
@@ -341,6 +349,7 @@
       - notscored
       - patch
       - rule_1.2.3
+      - notimplemented
 
 - name: "NOTSCORED | 1.2.4 | PATCH | Ensure Red Hat Network or Subscription Manager connection is configured"
   command: /bin/true
@@ -351,6 +360,7 @@
       - notscored
       - patch
       - rule_1.2.4
+      - notimplemented
 
 - name: "NOTSCORED | 1.2.5 | PATCH | Disable the rhnsd Daemon"
   service:
@@ -466,6 +476,7 @@
       - level2
       - patch
       - rule_1.4.3
+      - notimplemented
 
 - name: "NOTSCORED | 1.4.3 | PATCH | Ensure authentication required for single user mode"
   command: /bin/true
@@ -475,6 +486,7 @@
       - level2
       - patch
       - rule_1.4.3
+      - notimplemented
 
 - name: "SCORED | 1.5.1 | PATCH | Ensure core dumps are restricted"
   lineinfile:
@@ -513,6 +525,7 @@
       - level2
       - patch
       - rule_1.5.2
+      - notimplemented
 
 - name: "SCORED | 1.5.3 | PATCH | Ensure address space layout randomization (ASLR) is enabled"
   sysctl:

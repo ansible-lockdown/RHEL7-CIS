@@ -5,6 +5,7 @@
       - level2
       - patch
       - rule_6.1.1
+      - notimplemented
 
 - name: "SCORED | 6.1.2 | PATCH | Ensure permissions on /etc/passwd are configured"
   file:
@@ -110,6 +111,7 @@
       - level2
       - patch
       - rule_6.1.10
+      - notimplemented
 
 - name: "SCORED | 6.1.11 | PATCH | Ensure no unowned files or directories exist"
   command: /bin/true
@@ -119,6 +121,7 @@
       - level2
       - patch
       - rule_6.1.11
+      - notimplemented
 
 - name: "SCORED | 6.1.12 | PATCH | Ensure no ungrouped files or directories exist"
   command: /bin/true
@@ -128,6 +131,7 @@
       - level2
       - patch
       - rule_6.1.12
+      - notimplemented
 
 - name: "NOTSCORED | 6.1.13 | PATCH | Audit SUID executables"
   command: /bin/true
@@ -137,6 +141,7 @@
       - level2
       - patch
       - rule_6.1.13
+      - notimplemented
 
 - name: "NOTSCORED | 6.1.14 | PATCH | Audit SGID executables"
   command: /bin/true
@@ -146,6 +151,7 @@
       - level2
       - patch
       - rule_6.1.14
+      - notimplemented
 
 - name: "SCORED | 6.2.1 | PATCH | Ensure password fields are not empty"
   command: passwd -l {{ item }}
@@ -199,6 +205,7 @@
       - level2
       - patch
       - rule_6.2.6
+      - notimplemented
 
 - name: "SCORED | 6.2.7 | PATCH | Ensure all users' home directories exist"
   command: /bin/true
@@ -208,6 +215,7 @@
       - level2
       - patch
       - rule_6.2.7
+      - notimplemented
 
 - name: "SCORED | 6.2.8 | PATCH | Ensure users' home directories permissions are 750 or more restrictive"
   command: /bin/true
@@ -217,6 +225,7 @@
       - level2
       - patch
       - rule_6.2.8
+      - notimplemented
 
 - name: "SCORED | 6.2.9 | PATCH | Ensure users own their home directories"
   command: /bin/true
@@ -226,6 +235,7 @@
       - level2
       - patch
       - rule_6.2.9
+      - notimplemented
 
 - name: "SCORED | 6.2.10 | PATCH | Ensure users' dot files are not group or world writable"
   command: /bin/true
@@ -235,6 +245,7 @@
       - level2
       - patch
       - rule_6.2.10
+      - notimplemented
 
 - name: "SCORED | 6.2.11 | PATCH | Ensure no users have .forward files"
   file:
@@ -288,6 +299,7 @@
       - level2
       - patch
       - rule_6.2.15
+      - notimplemented
 
 - name: "SCORED | 6.2.16 | PATCH | Ensure no duplicate UIDs exist"
   command: /bin/true
@@ -297,6 +309,7 @@
       - level2
       - patch
       - rule_6.2.16
+      - notimplemented
 
 - name: "SCORED | 6.2.17 | PATCH | Ensure no duplicate GIDs exist"
   command: /bin/true
@@ -306,6 +319,7 @@
       - level2
       - patch
       - rule_6.2.17
+      - notimplemented
 
 - name: "SCORED | 6.2.18 | PATCH | Ensure no duplicate user names exist"
   command: /bin/true
@@ -315,6 +329,7 @@
       - level2
       - patch
       - rule_6.2.18
+      - notimplemented
 
 - name: "SCORED | 6.2.19 | PATCH | Ensure no duplicate group names exist"
   command: /bin/true
