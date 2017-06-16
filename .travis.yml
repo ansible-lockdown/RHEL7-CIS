@@ -15,7 +15,7 @@ before_install:
   # Pull container
   - 'docker pull ${container}'
   # Customize container
-  - 'docker build --rm=true --file=tests/Dockerfile.${distribution}-${version} --tag=${distro}-${version}:ansible tests'
+  - 'docker build --rm=true --file=tests/Dockerfile.${distro}-${version} --tag=${distro}-${version}:ansible tests'
 
 script:
   - container_id=$(mktemp)
