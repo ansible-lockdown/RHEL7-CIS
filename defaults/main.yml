@@ -86,7 +86,7 @@ rhel7cis_ypbind_required: false
 
 # Time Synchronization
 rhel7cis_time_synchronization: chrony
-#rhel7cis_time_Synchronization: ntp
+#rhel7cis_time_synchronization: ntp
 
 rhel7cis_time_synchronization_servers:
     - 0.pool.ntp.org

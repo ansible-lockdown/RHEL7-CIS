@@ -1,8 +1,8 @@
 RHEL 7 CIS STIG
 ================
 
-[![Build Status](https://travis-ci.org/daswars/RHEL7-CIS.svg?branch=devel)](https://travis-ci.org/daswars/RHEL7-CIS)
-
+[![Build Status](https://travis-ci.org/MindPointGroup/RHEL7-CIS.svg?branch=devel)](https://travis-ci.org/MindPointGroup/RHEL7-CIS)
+[![Ansible Role](https://img.shields.io/ansible/role/16089.svg)](https://galaxy.ansible.com/MindPointGroup/RHEL7-CIS/)
 
 Configure RHEL/Centos 7 machine to be CIS compliant. Level 1 and 2 findings will be corrected by default.
 
@@ -156,7 +156,7 @@ rhel7cis_firewall: iptables
 Dependencies
 ------------
 
-Ansible > 1.9
+Ansible > 2.2
 
 Example Playbook
 -------------------------
