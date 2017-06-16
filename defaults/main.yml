@@ -12,6 +12,29 @@ rhel7cis_section6: true
 
 rhel7cis_selinux_disable: false
 
+# These variables correspond with the CIS rule IDs or paragraph numbers defined in
+# the CIS benchmark documents.
+# PLEASE NOTE: These work in coordination with the section # group variables and tags.
+# You must enable an entire section in order for the variables below to take effect.
+# THESE ARE CURRENTLY PLACEHOLDERS FOR FUTURE WORK
+# Section 1 rules
+#rhel7cis_rule_1_1_1_1: true
+
+# Section 2 rules
+#rhel7cis_rule_2_1_1: true
+
+# Section 3 rules
+#rhel7cis_rule_3_1_1: true
+
+# Section 4 rules
+#rhel7cis_rule_4_1_1_1: true
+
+# Section 5 rules
+#rhel7cis_rule_5_1_1: true
+
+# Section 6 rules
+#rhel7cis_rule_6_1_1: true
+
 # Service configuration booleans set true to keep service
 rhel7cis_avahi_server: false
 rhel7cis_cups_server: false
@@ -75,6 +98,9 @@ rhel7cis_aide_cron:
 # SELinux policy
 rhel7cis_selinux_pol: targeted
 
+# Whether or not to run tasks related to auditing/patching the desktop environment
+rhel7cis_gui: no
+
 # Set to 'true' if X Windows is needed in your environment
 rhel7cis_xwindows_required: no
 
@@ -86,7 +112,7 @@ rhel7cis_ypbind_required: false
 
 # Time Synchronization
 rhel7cis_time_synchronization: chrony
-#rhel7cis_time_Synchronization: ntp
+#rhel7cis_time_synchronization: ntp
 
 rhel7cis_time_synchronization_servers:
     - 0.pool.ntp.org
