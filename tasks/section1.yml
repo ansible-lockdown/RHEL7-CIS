@@ -156,35 +156,23 @@
       - patch
       - rule_1.1.7
 
-- name: "SCORED | 1.1.8 | PATCH | Ensure nodev option set on /var/tmp partition"
-  command: /bin/true
-  changed_when: no
+- name: "SCORED | 1.1.8  | PATCH | Ensure nodev option set on /var/tmp partition\n
+         SCORED | 1.1.9  | PATCH | Ensure nosuid option set on /var/tmp partition\n
+         SCORED | 1.1.10 | PATCH | Ensure noexec option set on /var/tmp partition"
+  mount:
+      name: /var/tmp
+      src: /dev/mapper/rootvg-vtmplv
+      state: mounted
+      fstype: xfs
+      opts: "defaults,nodev,nosuid,noexec"
+  when: "rhel7cis_vartmp_src|default('') != ''"
   tags:
       - level1
       - scored
       - patch
       - rule_1.1.8
-      - notimplemented
-
-- name: "SCORED | 1.1.9 | PATCH | Ensure nosuid option set on /var/tmp partition"
-  command: /bin/true
-  changed_when: no
-  tags:
-      - level1
-      - scored
-      - patch
       - rule_1.1.9
-      - notimplemented
-
-- name: "SCORED | 1.1.10 | PATCH | Ensure noexec option set on /var/tmp partition"
-  command: /bin/true
-  changed_when: no
-  tags:
-      - level1
-      - scored
-      - patch
       - rule_1.1.10
-      - notimplemented
 
 - name: "SCORED | 1.1.11 | PATCH | Ensure separate partition exists for /var/log"
   shell: mount | grep "on /var/log "

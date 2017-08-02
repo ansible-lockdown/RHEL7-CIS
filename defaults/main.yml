@@ -149,3 +149,5 @@ rhel7cis_sshd:
 # Syslog system
 rhel7cis_syslog: rsyslog
 #rhel7cis_syslog: syslog-ng
+
+rhel7cis_vartmp_src: /dev/mapper/rootvg-vtmplv
