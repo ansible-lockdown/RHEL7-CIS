@@ -289,7 +289,7 @@
 - name: "SCORED | 4.2.1.3 | PATCH | Ensure rsyslog default file permissions configured"
   lineinfile:
       dest: /etc/rsyslog.conf
-      regexp: '^$FileCreateMode'
+      regexp: '^\$FileCreateMode'
       line: '$FileCreateMode 0640'
   tags:
       - level1
