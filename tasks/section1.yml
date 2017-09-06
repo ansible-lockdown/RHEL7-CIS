@@ -161,11 +161,13 @@
          SCORED | 1.1.10 | PATCH | Ensure noexec option set on /var/tmp partition"
   mount:
       name: /var/tmp
-      src: /dev/mapper/rootvg-vtmplv
+      src: "{{ rhel7cis_vartmp['source'] }}"
       state: mounted
-      fstype: xfs
+      fstype: "{{ rhel7cis_vartmp['fstype'] }}"
       opts: "defaults,nodev,nosuid,noexec"
-  when: "rhel7cis_vartmp_src|default('') != ''"
+  when: (rhel7cis_vartmp['source']|default('') != '') and
+        (rhel7cis_vartmp['fstype']|default('') != '')
+
   tags:
       - level1
       - scored

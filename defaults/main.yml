@@ -151,4 +151,6 @@ rhel7cis_sshd:
 rhel7cis_syslog: rsyslog
 #rhel7cis_syslog: syslog-ng
 
-rhel7cis_vartmp_src: /dev/mapper/rootvg-vtmplv
+rhel7cis_vartmp:
+    source: /dev/mapper/rootvg-vtmplv
+    fstype: xfs
