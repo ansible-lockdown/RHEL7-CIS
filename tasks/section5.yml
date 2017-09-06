@@ -281,7 +281,7 @@
       state: present
       dest: /etc/ssh/sshd_config
       regexp: '^ClientAliveInterval'
-      line: 'ClientAliveInterval 300'
+      line: "ClientAliveInterval {{ rhel7cis_sshd['clientaliveinterval'] }}"
   tags:
       - level1
       - level2
