@@ -534,7 +534,7 @@
   lineinfile:
       state: present
       dest: /etc/pam.d/su
-      regexp: '^auth\s+required\s+pam_wheel\.so'
+      regexp: '^(#)?auth\s+required\s+pam_wheel\.so'
       line: 'auth           required        pam_wheel.so use_uid'
   tags:
       - level1

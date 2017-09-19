@@ -164,10 +164,8 @@
       src: "{{ rhel7cis_vartmp['source'] }}"
       state: mounted
       fstype: "{{ rhel7cis_vartmp['fstype'] }}"
-      opts: "defaults,nodev,nosuid,noexec"
-  when: (rhel7cis_vartmp['source']|default('') != '') and
-        (rhel7cis_vartmp['fstype']|default('') != '')
-
+      opts: "{{ rhel7cis_vartmp['opts'] }}"
+  when: rhel7cis_vartmp['enabled'] == 'yes'
   tags:
       - level1
       - scored

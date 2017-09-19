@@ -152,5 +152,7 @@ rhel7cis_syslog: rsyslog
 #rhel7cis_syslog: syslog-ng
 
 rhel7cis_vartmp:
-    #source: /dev/mapper/rootvg-vtmplv
-    #fstype: xfs
+    source: /tmp
+    fstype: none
+    opts: "defaults, nodev, nosuid, noexec, bind"
+    enabled: no
