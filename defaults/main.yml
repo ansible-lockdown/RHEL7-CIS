@@ -140,6 +140,7 @@ rhel7cis_warning_banner: |
 
 rhel7cis_sshd:
     clientalivecountmax: 3
+    clientaliveinterval: 300
     # - make sure you understand the precedence when working with these values!!
     #allowusers:
     #allowgroups: systems dba
@@ -149,3 +150,9 @@ rhel7cis_sshd:
 # Syslog system
 rhel7cis_syslog: rsyslog
 #rhel7cis_syslog: syslog-ng
+
+rhel7cis_vartmp:
+    source: /tmp
+    fstype: none
+    opts: "defaults, nodev, nosuid, noexec, bind"
+    enabled: no

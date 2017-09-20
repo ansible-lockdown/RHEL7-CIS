@@ -95,10 +95,19 @@
       - patch
       - rule_5.1.8
 
+- stat:
+      path: "/etc/at.allow"
+  register: p
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.1.8
+
 - name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
   file:
       dest: /etc/at.allow
-      state: touch
+      state: '{{ "file" if  p.stat.exists else "touch"}}'
       owner: root
       group: root
       mode: 0600
@@ -118,10 +127,19 @@
       - patch
       - rule_5.1.8
 
+- stat:
+      path: "/etc/cron.allow"
+  register: p
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.1.8
+
 - name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
   file:
       dest: /etc/cron.allow
-      state: touch
+      state: '{{ "file" if  p.stat.exists else "touch"}}'
       owner: root
       group: root
       mode: 0600
@@ -281,7 +299,7 @@
       state: present
       dest: /etc/ssh/sshd_config
       regexp: '^ClientAliveInterval'
-      line: 'ClientAliveInterval 300'
+      line: "ClientAliveInterval {{ rhel7cis_sshd['clientaliveinterval'] }}"
   tags:
       - level1
       - level2
@@ -534,7 +552,7 @@
   lineinfile:
       state: present
       dest: /etc/pam.d/su
-      regexp: '^#auth\s+required\s+pam_wheel\.so'
+      regexp: '^(#)?auth\s+required\s+pam_wheel\.so'
       line: 'auth           required        pam_wheel.so use_uid'
   tags:
       - level1
