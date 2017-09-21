@@ -13,12 +13,13 @@ rm -f /lib/systemd/system/basic.target.wants/*; \
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 # Install Ansible
-RUN yum -y install epel-release openssh-server audit authconfig
+RUN yum -y install epel-release openssh-server audit authconfig grub2
 RUN yum -y install git ansible sudo
 RUN yum clean all
 
 # Fix for Travis docker containers
 RUN mkdir /var/log/audit; chmod 700 /var/log/audit;
+RUN touch /etc/default/grub; touch /etc/audit/audit.rules; touch /boot/grub2/grub.cfg;
 
 # Disable requiretty
 RUN sed -i -e 's/^\(Defaults\s*requiretty\)/#--- \1/'  /etc/sudoers
