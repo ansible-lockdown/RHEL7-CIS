@@ -41,7 +41,7 @@
   command: chkconfig chargen-stream off
   notify: restart xinetd
   when:
-      - chargen_stream_service is not defined and chargen_stream_service.stat.exists
+      - chargen_stream_service.skipped is not defined and chargen_stream_service.stat.exists
       - rhel7cis_rule_2_1_1
   tags:
       - level1
