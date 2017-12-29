@@ -16,9 +16,63 @@ rhel7cis_selinux_disable: false
 # the CIS benchmark documents.
 # PLEASE NOTE: These work in coordination with the section # group variables and tags.
 # You must enable an entire section in order for the variables below to take effect.
-# THESE ARE CURRENTLY PLACEHOLDERS FOR FUTURE WORK
 # Section 1 rules
-#rhel7cis_rule_1_1_1_1: true
+rhel7cis_rule_1_1_1_1: true
+rhel7cis_rule_1_1_1_2: true
+rhel7cis_rule_1_1_1_3: true
+rhel7cis_rule_1_1_1_4: true
+rhel7cis_rule_1_1_1_5: true
+rhel7cis_rule_1_1_1_6: true
+rhel7cis_rule_1_1_1_7: true
+rhel7cis_rule_1_1_1_8: true
+rhel7cis_rule_1_1_2: true
+rhel7cis_rule_1_1_3: true
+rhel7cis_rule_1_1_4: true
+rhel7cis_rule_1_1_5: true
+rhel7cis_rule_1_1_6: true
+rhel7cis_rule_1_1_7: true
+rhel7cis_rule_1_1_8: true
+rhel7cis_rule_1_1_9: true
+rhel7cis_rule_1_1_10: true
+rhel7cis_rule_1_1_11: true
+rhel7cis_rule_1_1_12: true
+rhel7cis_rule_1_1_13: true
+rhel7cis_rule_1_1_14: true
+rhel7cis_rule_1_1_15: true
+rhel7cis_rule_1_1_16: true
+rhel7cis_rule_1_1_17: true
+rhel7cis_rule_1_1_18: true
+rhel7cis_rule_1_1_19: true
+rhel7cis_rule_1_1_20: true
+rhel7cis_rule_1_1_21: true
+rhel7cis_rule_1_1_22: true
+rhel7cis_rule_1_2_1: true
+rhel7cis_rule_1_2_2: true
+rhel7cis_rule_1_2_3: true
+rhel7cis_rule_1_2_4: true
+rhel7cis_rule_1_2_5: true
+rhel7cis_rule_1_3_1: true
+rhel7cis_rule_1_3_2: true
+rhel7cis_rule_1_4_1: true
+rhel7cis_rule_1_4_2: true
+rhel7cis_rule_1_4_3: true
+rhel7cis_rule_1_5_1: true
+rhel7cis_rule_1_5_2: true
+rhel7cis_rule_1_5_3: true
+rhel7cis_rule_1_5_4: true
+rhel7cis_rule_1_6_1_1: true
+rhel7cis_rule_1_6_1_2: true
+rhel7cis_rule_1_6_1_3: true
+rhel7cis_rule_1_6_1_4: true
+rhel7cis_rule_1_6_1_5: true
+rhel7cis_rule_1_6_2: true
+rhel7cis_rule_1_7_1_1: true
+rhel7cis_rule_1_7_1_2: true
+rhel7cis_rule_1_7_1_3: true
+rhel7cis_rule_1_7_1_4: true
+rhel7cis_rule_1_7_1_5: true
+rhel7cis_rule_1_7_1_6: true
+rhel7cis_rule_1_7_2: true
 
 # Section 2 rules
 #rhel7cis_rule_2_1_1: true

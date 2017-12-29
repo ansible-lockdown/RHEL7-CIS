@@ -4,6 +4,8 @@
       regexp: "^(#)?install cramfs(\\s|$)"
       line: "install cramfs /bin/true"
       create: yes
+  when:
+      - rhel7cis_rule_1_1_1_1
   tags:
       - level1
       - scored
@@ -17,6 +19,8 @@
       regexp: "^(#)?install freevxfs(\\s|$)"
       line: "install freevxfs /bin/true"
       create: yes
+  when:
+      - rhel7cis_rule_1_1_1_2
   tags:
       - level1
       - scored
@@ -30,6 +34,8 @@
       regexp: "^(#)?install jffs2(\\s|$)"
       line: "install jffs2 /bin/true"
       create: yes
+  when:
+      - rhel7cis_rule_1_1_1_3
   tags:
       - level1
       - scored
@@ -43,6 +49,8 @@
       regexp: "^(#)?install hfs(\\s|$)"
       line: "install hfs /bin/true"
       create: yes
+  when:
+      - rhel7cis_rule_1_1_1_4
   tags:
       - level1
       - scored
@@ -56,6 +64,8 @@
       regexp: "^(#)?install hfsplus(\\s|$)"
       line: "install hfsplus /bin/true"
       create: yes
+  when:
+      - rhel7cis_rule_1_1_1_5
   tags:
       - level1
       - scored
@@ -69,6 +79,8 @@
       regexp: "^(#)?install squashfs(\\s|$)"
       line: "install squashfs /bin/true"
       create: yes
+  when:
+      - rhel7cis_rule_1_1_1_6
   tags:
       - level1
       - scored
@@ -82,6 +94,8 @@
       regexp: "^(#)?install udf(\\s|$)"
       line: "install udf /bin/true"
       create: yes
+  when:
+      - rhel7cis_rule_1_1_1_7
   tags:
       - level1
       - scored
@@ -95,6 +109,8 @@
       regexp: "^(#)?install vfat(\\s|$)"
       line: "install vfat /bin/true"
       create: yes
+  when:
+      - rhel7cis_rule_1_1_1_8
   tags:
       - level1
       - scored
@@ -109,6 +125,8 @@
       enabled: yes
       masked: no
       state: started
+  when:
+      - rhel7cis_rule_1_1_2
   tags:
       - level2
       - scored
@@ -126,6 +144,10 @@
       group: root
       mode: 0644
   notify: systemd restart tmp.mount
+  when:
+      - rhel7cis_rule_1_1_3
+      - rhel7cis_rule_1_1_4
+      - rhel7cis_rule_1_1_5
   tags:
       - level1
       - scored
@@ -139,6 +161,8 @@
   register: var_mounted
   changed_when: no
   failed_when: no
+  when:
+      - rhel7cis_rule_1_1_6
   tags:
       - level2
       - scored
@@ -150,6 +174,8 @@
   register: var_tmp_mounted
   changed_when: no
   failed_when: no
+  when:
+      - rhel7cis_rule_1_1_7
   tags:
       - level2
       - scored
@@ -165,7 +191,11 @@
       state: mounted
       fstype: "{{ rhel7cis_vartmp['fstype'] }}"
       opts: "{{ rhel7cis_vartmp['opts'] }}"
-  when: rhel7cis_vartmp['enabled'] == 'yes'
+  when:
+      - rhel7cis_vartmp['enabled'] == 'yes'
+      - rhel7cis_rule_1_1_8
+      - rhel7cis_rule_1_1_9
+      - rhel7cis_rule_1_1_10
   tags:
       - level1
       - scored
@@ -179,6 +209,8 @@
   register: var_log_mounted
   changed_when: no
   failed_when: no
+  when:
+      - rhel7cis_rule_1_1_11
   tags:
       - level2
       - scored
@@ -190,6 +222,8 @@
   register: var_log_audit_mounted
   changed_when: no
   failed_when: no
+  when:
+      - rhel7cis_rule_1_1_12
   tags:
       - level2
       - scored
@@ -201,6 +235,8 @@
   register: home_mounted
   changed_when: no
   failed_when: no
+  when:
+      - rhel7cis_rule_1_1_13
   tags:
       - level2
       - scored
@@ -210,6 +246,8 @@
 - name: "SCORED | 1.1.14 | PATCH | Ensure nodev option set on /home partition"
   command: /bin/true
   changed_when: no
+  when:
+      - rhel7cis_rule_1_1_14
   tags:
       - level1
       - level2
@@ -226,6 +264,10 @@
       state: mounted
       fstype: tmpfs
       opts: "defaults,nodev,nosuid,noexec"
+  when:
+      - rhel7cis_rule_1_1_15
+      - rhel7cis_rule_1_1_16
+      - rhel7cis_rule_1_1_17
   tags:
       - level1
       - scored
@@ -237,6 +279,8 @@
 - name: "NOTSCORED | 1.1.18 | PATCH | Ensure nodev option set on removable media partitions"
   command: /bin/true
   changed_when: no
+  when:
+      - rhel7cis_rule_1_1_18
   tags:
       - level1
       - notscored
@@ -247,6 +291,8 @@
 - name: "NOTSCORED | 1.1.19 | PATCH | Ensure nosuid option set on removable media partitions"
   command: /bin/true
   changed_when: no
+  when:
+      - rhel7cis_rule_1_1_19
   tags:
       - level1
       - notscored
@@ -257,6 +303,8 @@
 - name: "NOTSCORED | 1.1.20 | PATCH | Ensure noexec option set on removable media partitions"
   command: /bin/true
   changed_when: no
+  when:
+      - rhel7cis_rule_1_1_20
   tags:
       - level1
       - notscored
@@ -269,6 +317,8 @@
   changed_when: no
   failed_when: no
   #when: sticky_bit_on_worldwritable_dirs_audit.rc == '0'
+  when:
+      - rhel7cis_rule_1_1_21
   tags:
       - level1
       - level2
@@ -279,7 +329,9 @@
   service:
       name: autofs
       enabled: no
-  when: rhel7cis_allow_autofs == false and autofs_service_status.stdout == "loaded"
+  when:
+      - rhel7cis_allow_autofs == false and autofs_service_status.stdout == "loaded"
+      - rhel7cis_rule_1_1_22
   tags:
       - level1
       - patch
@@ -288,6 +340,8 @@
 - name: "NOTSCORED | 1.2.1 | PATCH | Ensure package manager repositories are configured"
   command: /bin/true
   changed_when: no
+  when:
+      - rhel7cis_rule_1_2_1
   tags:
       - level1
       - notscored
@@ -300,6 +354,8 @@
       name: /etc/yum.conf
       regexp: "^gpgcheck=0"
       replace: "gpgcheck=1"
+  when:
+      - rhel7cis_rule_1_2_2
   tags:
       - level1
       - scored
@@ -312,6 +368,8 @@
       patterns: "*.repo"
   register: yum_repos
   changed_when: no
+  when:
+      - rhel7cis_rule_1_2_2
   tags:
       - level1
       - scored
@@ -325,6 +383,8 @@
       replace: "gpgcheck=1"
   with_items:
       - "{{ yum_repos.files }}"
+  when:
+      - rhel7cis_rule_1_2_2
   tags:
       - level1
       - scored
@@ -334,6 +394,8 @@
 - name: "NOTSCORED | 1.2.3 | PATCH | Ensure GPG keys are configured"
   command: /bin/true
   changed_when: no
+  when:
+      - rhel7cis_rule_1_2_3
   tags:
       - level1
       - notscored
@@ -344,7 +406,9 @@
 - name: "NOTSCORED | 1.2.4 | PATCH | Ensure Red Hat Network or Subscription Manager connection is configured"
   command: /bin/true
   changed_when: no
-  when: ansible_distribution == "RedHat"
+  when:
+      - ansible_distribution == "RedHat"
+      - rhel7cis_rule_1_2_4
   tags:
       - level1
       - notscored
@@ -357,7 +421,9 @@
       name: rhnsd
       state: stopped
       enabled: no
-  when: ansible_distribution == "RedHat" and rhnsd_service_status.stdout == "loaded" and not rhel7cis_rhnsd_required
+  when:
+      - ansible_distribution == "RedHat" and rhnsd_service_status.stdout == "loaded" and not rhel7cis_rhnsd_required
+      - rhel7cis_rule_1_2_5
   tags:
       - level2
       - notscored
@@ -368,6 +434,8 @@
   yum:
       name: aide
       state: present
+  when:
+      - rhel7cis_rule_1_3_1
   tags:
       - level1
       - scored
@@ -381,9 +449,11 @@
       creates: /var/lib/aide/aide.db.gz
   changed_when: no
   failed_when: no
-  when: rhel7cis_config_aide
   async: 45
   poll: 0
+  when:
+      - rhel7cis_config_aide
+      - rhel7cis_rule_1_3_1
   tags:
       - level1
       - scored
@@ -402,6 +472,8 @@
       month: "{{ rhel7cis_aide_cron['aide_month'] | default('*') }}"
       weekday: "{{ rhel7cis_aide_cron['aide_weekday'] | default('*') }}"
       job: "{{ rhel7cis_aide_cron['aide_job'] }}"
+  when:
+      - rhel7cis_rule_1_3_2
   tags:
       - level1
       - scored
@@ -414,6 +486,8 @@
   stat:
       path: /etc/grub2.cfg
   register: grub_cfg
+  when:
+      - rhel7cis_rule_1_4_1
   tags:
       - level1
       - scored
@@ -427,7 +501,9 @@
       owner: root
       group: root
       mode: 0600
-  when: grub_cfg.stat.exists and grub_cfg.stat.islnk
+  when:
+      - grub_cfg.stat.exists and grub_cfg.stat.islnk
+      - rhel7cis_rule_1_4_1
   tags:
       - level1
       - scored
@@ -439,7 +515,9 @@
   grub_crypt:
       password: "{{ rhel7cis_bootloader_password }}"
   register: grub_pass
-  when: rhel7cis_set_boot_pass
+  when:
+      - rhel7cis_set_boot_pass
+      - rhel7cis_rule_1_4_2
   tags:
       - level1
       - scored
@@ -451,8 +529,10 @@
   copy:
       dest: /boot/grub2/user.cfg
       content: "GRUB2_PASSWORD={{ grub_pass.passhash }}"
-  when: rhel7cis_set_boot_pass and grub_pass is defined and grub_pass.passhash is defined and grub_pass.passhash != ''
   notify: generate new grub config
+  when:
+      - rhel7cis_set_boot_pass and grub_pass is defined and grub_pass.passhash is defined and grub_pass.passhash != ''
+      - rhel7cis_rule_1_4_2
   tags:
       - level1
       - scored
@@ -463,6 +543,8 @@
 - name: "NOTSCORED | 1.4.3 | PATCH | Ensure authentication required for single user mode"
   command: /bin/true
   changed_when: no
+  when:
+      - rhel7cis_rule_1_4_3
   tags:
       - level1
       - level2
@@ -473,6 +555,8 @@
 - name: "NOTSCORED | 1.4.3 | PATCH | Ensure authentication required for single user mode"
   command: /bin/true
   changed_when: no
+  when:
+      - rhel7cis_rule_1_4_3
   tags:
       - level1
       - level2
@@ -487,6 +571,8 @@
       regexp: '^#?\\*.*core'
       line: '*                hard    core            0'
       insertbefore: '^# End of file'
+  when:
+      - rhel7cis_rule_1_5_1
   tags:
       - level1
       - scored
@@ -502,6 +588,8 @@
       reload: yes
       sysctl_set: yes
       ignoreerrors: yes
+  when:
+      - rhel7cis_rule_1_5_1
   tags:
       - level1
       - scored
@@ -512,6 +600,8 @@
 - name: "NOTSCORED | 1.5.2 | PATCH | Ensure XD/NX support is enabled"
   command: /bin/true
   changed_when: no
+  when:
+      - rhel7cis_rule_1_5_2
   tags:
       - level1
       - level2
@@ -527,6 +617,8 @@
       reload: yes
       sysctl_set: yes
       ignoreerrors: yes
+  when:
+      - rhel7cis_rule_1_5_3
   tags:
       - level1
       - scored
@@ -535,7 +627,9 @@
 
 - name: "SCORED | 1.5.4 | PATCH | Ensure prelink is disabled"
   command: prelink -ua
-  when: prelink_installed.rc == 0
+  when:
+      - prelink_installed.rc == 0
+      - rhel7cis_rule_1_5_4
   tags:
       - level1
       - scored
@@ -546,6 +640,8 @@
   yum:
     name: prelink
     state: absent
+  when:
+      - rhel7cis_rule_1_5_4
   tags:
       - level1
       - scored
@@ -560,6 +656,8 @@
   register: selinux_grub_patch
   ignore_errors: yes
   notify: generate new grub config
+  when:
+      - rhel7cis_rule_1_6_1_1
   tags:
       - level2
       - scored
@@ -571,7 +669,9 @@
       conf: /etc/selinux/config
       policy: "{{ rhel7cis_selinux_pol }}"
       state: enforcing
-  when: not rhel7cis_selinux_disable
+  when:
+      - not rhel7cis_selinux_disable
+      - rhel7cis_rule_1_6_1_2
   tags:
       - level2
       - scored
@@ -584,7 +684,9 @@
       conf: /etc/selinux/config
       policy: "{{ rhel7cis_selinux_pol }}"
       state: enforcing
-  when: not rhel7cis_selinux_disable
+  when:
+      - not rhel7cis_selinux_disable
+      - rhel7cis_rule_1_6_1_3
   tags:
       - level2
       - scored
@@ -596,6 +698,8 @@
   yum:
       name: setroubleshoot
       state: absent
+  when:
+      - rhel7cis_rule_1_6_1_4
   tags:
       - level2
       - scored
@@ -607,6 +711,8 @@
   yum:
       name: mcstrans
       state: absent
+  when:
+      - rhel7cis_rule_1_6_1_5
   tags:
       - level2
       - scored
@@ -617,6 +723,8 @@
   yum:
       name: libselinux
       state: present
+  when:
+      - rhel7cis_rule_1_6_2
   tags:
       - level2
       - scored
@@ -627,6 +735,8 @@
   template:
       src: etc/motd.j2
       dest: /etc/motd
+  when:
+      - rhel7cis_rule_1_7_1_1
   tags:
       - level1
       - banner
@@ -637,6 +747,8 @@
   template:
       src: etc/issue.j2
       dest: /etc/issue
+  when:
+      - rhel7cis_rule_1_7_1_2
   tags:
       - level1
       - patch
@@ -646,6 +758,8 @@
   template:
       src: etc/issue.net.j2
       dest: /etc/issue.net
+  when:
+      - rhel7cis_rule_1_7_1_3
   tags:
       - level1
       - banner
@@ -659,6 +773,8 @@
       owner: root
       group: root
       mode: 0644
+  when:
+      - rhel7cis_rule_1_7_1_4
   tags:
       - level1
       - perms
@@ -672,6 +788,8 @@
       owner: root
       group: root
       mode: 0644
+  when:
+      - rhel7cis_rule_1_7_1_5
   tags:
       - level1
       - perms
@@ -685,6 +803,8 @@
       owner: root
       group: root
       mode: 0644
+  when:
+      - rhel7cis_rule_1_7_1_6
   tags:
       - level1
       - perms
@@ -708,7 +828,9 @@
       - { file: '/etc/dconf/db/gdm.d/01-banner-message', regexp:  '\[org\/gnome\/login-screen\]', line: '[org/gnome/login-screen]' }
       - { file: '/etc/dconf/db/gdm.d/01-banner-message', regexp:  'banner-message-enable', line: 'banner-message-enable=true' }
       - { file: '/etc/dconf/db/gdm.d/01-banner-message', regexp:  'banner-message-text', line: "banner-message-text='{{ rhel7cis_warning_banner }}' " }
-  when: rhel7cis_gui
+  when:
+      - rhel7cis_gui
+      - rhel7cis_rule_1_7_2
   tags:
       - level1
       - level2
