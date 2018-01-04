@@ -12,6 +12,8 @@ help:
 	@echo	make venv
 	@echo	. bin/activate
 	@echo
+	@echo To run an audit using 'molecule verify' look in tests/test_default.yml
+	@echo
 
 # virtualenv allows isolation of python libraries
 .PHONY: venv
@@ -29,7 +31,7 @@ bin/python:
 	bin/pip install -r requirements.txt
 	virtualenv --relocatable .
 
-# cleanup virtualenv and molecule
+# cleanup virtualenv and molecule leftovers
 clean:
 	rm -rf .molecule bin lib include lib64 share
 	rm -f .Python pip-selfcheck.json
