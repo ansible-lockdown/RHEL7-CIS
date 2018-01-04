@@ -43,7 +43,6 @@
       name: "{{ item }}"
       state: present
     with_items:
-     - unzip
      - java-1.8.0-openjdk-headless.x86_64
 
 
