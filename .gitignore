@@ -7,3 +7,12 @@ tests/.vagrant
 tests/Vagrantfile
 tests/test-inv
 tests/*.retry
+.Python
+.molecule/
+bin/
+etc/
+include/
+lib/
+pip-selfcheck.json
+share/
+
