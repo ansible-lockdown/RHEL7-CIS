@@ -427,6 +427,7 @@
       name: rpcbind
       state: stopped
       enabled: no
+  changed_when: no
   when:
       - rhel7cis_nfs_rpc_server == false
       - rhel7cis_rule_2_2_7
