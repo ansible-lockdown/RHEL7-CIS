@@ -1,0 +1,4 @@
+---
+- hosts: all
+  roles:
+    - role: RHEL7-CIS
