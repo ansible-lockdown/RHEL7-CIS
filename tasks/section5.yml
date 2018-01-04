@@ -95,7 +95,7 @@
       - patch
       - rule_5.1.8
 
-- name: stat at.allow
+- name: "SCORED | 5.1.8 | PATCH | Check if at.allow exists"
   stat:
       path: "/etc/at.allow"
   register: p
@@ -128,7 +128,7 @@
       - patch
       - rule_5.1.8
 
-- name: stat cron.allow
+- name: "SCORED | 5.1.8 | PATCH | Check if cron.allow exists"
   stat:
       path: "/etc/cron.allow"
   register: p
