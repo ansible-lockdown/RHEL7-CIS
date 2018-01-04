@@ -10,6 +10,11 @@
     install_dir: '/root'
 
   tasks:
+  - name: Add unzip for Ansible unarchive module
+    yum:
+      name: unzip
+      state: present
+
   - name: Ignore the rest when you are not a CIS Member
     unarchive:
       src: "{{ member_dir }}/{{ ciscat }}"
@@ -32,7 +37,7 @@
       state: directory
       mode: 0700
 
-  - name: Add packages for security audit
+  - name: Add Java to run security audit
     when: rhelcis7_ciscat.stat.exists
     yum:
       name: "{{ item }}"
