@@ -4,15 +4,23 @@ help:
 	@echo
 	@echo This Makefile is used to test this role. Typical use:
 	@echo
-	@echo	make test
-	@echo	make clean
+	@echo '   make test'
+	@echo '   make clean'
 	@echo
-	@echo To use an isolated python from this directory: 
 	@echo
-	@echo	make venv
-	@echo	. bin/activate
+	@echo To use the isolated environment from this directory:
 	@echo
-	@echo To run an audit using 'molecule verify' look in tests/test_default.yml
+	@echo '   make venv'
+	@echo '   . bin/activate'
+	@echo
+	@echo Molecule has built-in help
+	@echo
+	@echo '   molecule'
+	@echo
+	@echo "Run just the role 'molecule converge'"
+	@echo "Login to the VM 'molecule login'"
+	@echo
+	@echo To run an audit using 'molecule verify' see tests/test_default.yml
 	@echo
 
 # virtualenv allows isolation of python libraries
@@ -35,10 +43,10 @@ bin/python:
 clean:
 	rm -rf .molecule bin lib include lib64 share
 	rm -f .Python pip-selfcheck.json
-	
+
 .PHONY: lint
 lint: bin/python
-	( . bin/activate && find . -name "*.yml" |grep -v .molecule |xargs yamllint )
+	( . bin/activate && find . -name "*.yml" |grep -v .molecule |xargs bin/yamllint )
 
 .PHONY: test
 test: bin/python
