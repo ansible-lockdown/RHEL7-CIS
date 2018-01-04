@@ -25,13 +25,13 @@ bin/python:
 	virtualenv --version || sudo easy_install virtualenv
 
 	# Now with those two we can isolate our test setup.
-	virtualenv --system-site-packages .
+	virtualenv .
 	bin/pip install -r requirements.txt
 	virtualenv --relocatable .
 
 # cleanup virtualenv and molecule
 clean:
-	rm -rf .molecule bin lib include lib64
+	rm -rf .molecule bin lib include lib64 share
 	rm -f .Python pip-selfcheck.json
 	
 .PHONY: lint
@@ -40,4 +40,4 @@ lint: bin/python
 
 .PHONY: test
 test: bin/python
-	( . bin/activate && molecule test )
+	( . bin/activate && bin/molecule test )
