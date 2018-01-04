@@ -1,0 +1,64 @@
+#!/usr/bin/env ansible-playbook -i ansible_inventory -vv
+- hosts: all
+  gather_facts: True
+  become: yes
+
+  vars:
+    ansible_user: vagrant
+    ciscat: ciscat-full-bundle-2017-11-06-v3.0.44.zip
+    member_dir: '/usr/local/share/CIS'
+    install_dir: '/root'
+
+  tasks:
+  - name: ensure /root/CIS-CAT_Results/ exists
+    file:
+      path: /root/CIS-CAT_Results/
+      state: directory
+      mode: 0700
+
+  - name: add packages for security audit
+    yum:
+      name: "{{ item }}"
+      state: present
+    with_items:
+     - unzip
+     - java-1.8.0-openjdk-headless.x86_64
+
+  - name: unzip
+    unarchive:
+      src: "{{ member_dir }}/{{ ciscat }}"
+      dest: "{{ install_dir }}"
+      creates: "{{ install_dir  }}/cis-cat-full/CIS-CAT.sh"
+
+  - name: chmod script
+    file:
+      path: "{{ install_dir  }}/cis-cat-full/CIS-CAT.sh"
+      mode: 0700
+      owner: root
+      group: root
+
+  - name: run CIS_CAT
+    shell: './CIS-CAT.sh -a -t -rn report -b "`pwd`/benchmarks/CIS_CentOS_Linux_7_Benchmark_v2.1.1-xccdf.xml" -p xccdf_org.cisecurity.benchmarks_profile_Level_1_-_Server'
+    args:
+      chdir: "{{ install_dir }}/cis-cat-full"
+
+  - name: move the html report
+    shell: "mv -f /root/CIS-CAT_Results/*/report.html /home/{{ ansible_user }}/"
+
+  - name: move the text report
+    shell: "mv -f /root/CIS-CAT_Results/*/report.txt /home/{{ ansible_user }}/"
+
+  - name: clear the text reports
+    shell: "rm -rf /root/CIS-CAT_Results/*"
+
+  - name: fetch the text report
+    fetch:
+      flat: True
+      src: "/home/{{ ansible_user }}/report.txt"
+      dest: ./
+
+  - name: fetch the html report
+    fetch:
+      flat: True
+      src: "/home/{{ ansible_user }}/report.html"
+      dest: ./
