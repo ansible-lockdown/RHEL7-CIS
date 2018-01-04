@@ -95,7 +95,8 @@
       - patch
       - rule_5.1.8
 
-- stat:
+- name: stat at.allow
+  stat:
       path: "/etc/at.allow"
   register: p
   tags:
@@ -127,7 +128,8 @@
       - patch
       - rule_5.1.8
 
-- stat:
+- name: stat cron.allow
+  stat:
       path: "/etc/cron.allow"
   register: p
   tags:

@@ -9,6 +9,8 @@
         command: chkconfig chargen-dgram off
         notify: restart xinetd
         when: chargen_dgram_service.stat.exists
+        tags:
+          - skip_ansible_lint
 
       - name: "SCORED | 2.1.1 | PATCH | Ensure chargen services are not enabled | chargen-stream"
         stat:
@@ -19,6 +21,8 @@
         command: chkconfig chargen-stream off
         notify: restart xinetd
         when: chargen_stream_service.stat.exists
+        tags:
+            - skip_ansible_lint
   when:
       - rhel7cis_rule_2_1_1
   tags:
@@ -39,6 +43,8 @@
         command: chkconfig daytime-dgram off
         notify: restart xinetd
         when: daytime_dgram_service.stat.exists
+        tags:
+          - skip_ansible_lint
 
       - name: "SCORED | 2.1.2 | PATCH | Ensure daytime services are not enabled | daytime-stream"
         stat:
@@ -49,6 +55,8 @@
         command: chkconfig daytime-stream off
         notify: restart xinetd
         when: daytime_stream_service.stat.exists
+        tags:
+            - skip_ansible_lint
   when:
       - rhel7cis_rule_2_1_2
   tags:
@@ -68,6 +76,8 @@
         command: chkconfig discard-dgram off
         notify: restart xinetd
         when: discard_dgram_service.stat.exists
+        tags:
+            - skip_ansible_lint
 
       - name: "SCORED | 2.1.3 | PATCH | Ensure discard services are not enabled | discard-stream"
         stat:
@@ -78,6 +88,9 @@
         command: chkconfig discard-stream off
         notify: restart xinetd
         when: discard_stream_service.stat.exists
+        tags:
+            - skip_ansible_lint
+
   when:
       - rhel7cis_rule_2_1_3
   tags:
@@ -97,6 +110,8 @@
         command: chkconfig echo-dgram off
         notify: restart xinetd
         when: echo_dgram_service.stat.exists
+        tags:
+            - skip_ansible_lint
 
       - name: "SCORED | 2.1.4 | PATCH | Ensure echo services are not enabled | echo-stream"
         stat:
@@ -107,6 +122,9 @@
         command: chkconfig echo-stream off
         notify: restart xinetd
         when: echo_stream_service.stat.exists
+        tags:
+            - skip_ansible_lint
+
   when:
       - rhel7cis_rule_2_1_4
   tags:
@@ -126,6 +144,8 @@
         command: chkconfig time-dgram off
         notify: restart xinetd
         when: time_dgram_service.stat.exists
+        tags:
+            - skip_ansible_lint
 
       - name: "SCORED | 2.1.5 | PATCH | Ensure time services are not enabled | time-stream"
         stat:
@@ -136,6 +156,9 @@
         command: chkconfig time-stream off
         notify: restart xinetd
         when: time_stream_service.stat.exists
+        tags:
+            - skip_ansible_lint
+
   when:
       - rhel7cis_rule_2_1_5
   tags:
@@ -155,6 +178,9 @@
         command: chkconfig tftp off
         notify: restart xinetd
         when: tftp_service.stat.exists and rhel7cis_tftp_server == false
+        tags:
+            - skip_ansible_lint
+
   when:
       - rhel7cis_rule_2_1_6
   tags:
@@ -385,7 +411,7 @@
       state: stopped
       enabled: no
   when:
-      - rhel7cis_nfs_rpc_server == false and nfs_service_status.stdout == "loaded"
+      - rhel7cis_nfs_rpc_server == false
       - rhel7cis_rule_2_2_7
   tags:
       - level1
@@ -396,13 +422,13 @@
       - patch
       - rule_2.2.7
 
-- name: "SCORED | 2.2.7 | PATCH | Ensure NFS and RPC are not enabled"
+- name: "SCORED | 2.2.7 | PATCH | Ensure RPC is not enabled"
   service:
       name: rpcbind
       state: stopped
       enabled: no
   when:
-      - rhel7cis_nfs_rpc_server == false and rpcbind_service_status.stdout == "loaded"
+      - rhel7cis_nfs_rpc_server == false
       - rhel7cis_rule_2_2_7
   tags:
       - level1

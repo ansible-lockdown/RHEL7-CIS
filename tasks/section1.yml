@@ -168,6 +168,7 @@
       - scored
       - patch
       - rule_1.1.6
+      - skip_ansible_lint
 
 - name: "SCORED | 1.1.7 | PATCH | Ensure separate partition exists for /var/tmp"
   shell: mount | grep "on /var/tmp "
@@ -181,6 +182,7 @@
       - scored
       - patch
       - rule_1.1.7
+      - skip_ansible_lint
 
 - name: "SCORED | 1.1.8  | PATCH | Ensure nodev option set on /var/tmp partition\n
          SCORED | 1.1.9  | PATCH | Ensure nosuid option set on /var/tmp partition\n
@@ -216,6 +218,7 @@
       - scored
       - patch
       - rule_1.1.11
+      - skip_ansible_lint
 
 - name: "SCORED | 1.1.12 | PATCH | Ensure separate partition exists for /var/log/audit"
   shell: mount | grep "on /var/log/audit "
@@ -229,6 +232,7 @@
       - scored
       - patch
       - rule_1.1.12
+      - skip_ansible_lint
 
 - name: "SCORED | 1.1.13 | PATCH | Ensure separate partition exists for /home"
   shell: mount | grep "on /home "
@@ -242,6 +246,7 @@
       - scored
       - patch
       - rule_1.1.13
+      - skip_ansible_lint
 
 - name: "SCORED | 1.1.14 | PATCH | Ensure nodev option set on /home partition"
   command: /bin/true
@@ -846,3 +851,4 @@
       - level2
       - patch
       - rule_1.8
+      - skip_ansible_lint
