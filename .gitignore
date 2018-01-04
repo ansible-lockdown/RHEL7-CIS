@@ -6,6 +6,8 @@ tests/local-test.yml
 tests/.vagrant
 tests/Vagrantfile
 tests/test-inv
+tests/report.html
+tests/report.txt
 tests/*.retry
 .Python
 .molecule/
