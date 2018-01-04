@@ -1,6 +1,5 @@
 ---
 
-
 # AIDE cron settings
 rhel7cis_aide_cron:
   cron_user: root
@@ -12,3 +11,11 @@ rhel7cis_aide_cron:
   aide_month: '*'
   aide_weekday: '*'
 
+rhel7cis_sshd:
+    clientalivecountmax: 3
+    clientaliveinterval: 300
+    # - make sure you understand the precedence when working with these values!!
+    allowusers: vagrant
+    allowgroups: vagrant
+    denyusers: root
+    denygroups: root
