@@ -1,5 +1,5 @@
 ---
-
+ansible_user: vagrant
 # AIDE cron settings
 rhel7cis_aide_cron:
   cron_user: root
@@ -20,6 +20,6 @@ rhel7cis_sshd:
     denyusers: root
     denygroups: root
 
-# Workarounds for Docker
-rhel7cis_skip_for_travis: true
-rhel7cis_selinux_disable: true
+# Vagrant can touch code that Docker cannot
+rhel7cis_skip_for_travis: false
+rhel7cis_selinux_disable: false
