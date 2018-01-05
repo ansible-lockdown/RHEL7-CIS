@@ -155,6 +155,7 @@
       dest: /etc/audit/rules.d/audit.rules
       line: "-a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=4294967295 -k mounts"
       state: present
+  when: rhel7cis_skip_for_travis == false
   tags:
       - level2
       - auditd
@@ -166,6 +167,7 @@
       dest: /etc/audit/audit.rules
       line: "-a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=4294967295 -k mounts"
       state: present
+  when: rhel7cis_skip_for_travis == false
   tags:
       - level2
       - auditd
@@ -177,6 +179,7 @@
       dest: /etc/audit/rules.d/audit.rules
       line: "-a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=4294967295 -k mounts"
       state: present
+  when: rhel7cis_skip_for_travis == false
   tags:
       - level2
       - auditd
@@ -198,6 +201,7 @@
       dest: /etc/audit/rules.d/audit.rules
       line: "-w /etc/sudoers -p wa -k scope"
       state: present
+  when: rhel7cis_skip_for_travis == false
   tags:
       - level2
       - auditd
@@ -209,6 +213,7 @@
       dest: /etc/audit/audit.rules
       line: "-w /etc/sudoers -p wa -k scope"
       state: present
+  when: rhel7cis_skip_for_travis == false
   tags:
       - level2
       - auditd
@@ -220,6 +225,7 @@
       dest: /etc/audit/rules.d/audit.rules
       line: "-w /etc/sudoers.d -p wa -k scope"
       state: present
+  when: rhel7cis_skip_for_travis == false
   tags:
       - level2
       - auditd

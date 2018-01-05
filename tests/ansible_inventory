@@ -1,5 +1,5 @@
 [all]
-RHEL7-CIS ansible_host=127.0.0.1 ansible_port=2222 ansible_ssh_private_key_file="/Users/bas/.vagrant.d/insecure_private_key" ansible_user=vagrant
+centos7 ansible_connection=docker
 
-[group1]
+[role_test]
 RHEL7-CIS

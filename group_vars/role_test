@@ -19,3 +19,7 @@ rhel7cis_sshd:
     allowgroups: vagrant
     denyusers: root
     denygroups: root
+
+# Workarounds for Docker
+rhel7cis_skip_for_travis: true
+rhel7cis_selinux_disable: true
