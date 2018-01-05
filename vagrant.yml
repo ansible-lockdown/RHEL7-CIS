@@ -26,6 +26,6 @@ vagrant:
   instances:
     - name: vagrant
       ansible_groups:
-        - docker
+        - vagrant
 verifier:
   name: goss
