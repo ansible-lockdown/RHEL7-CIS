@@ -9,6 +9,7 @@
         - selinux-policy
         - libselinux-python
         - openssh-server
+        - which
 
   roles:
     - role: RHEL7-CIS

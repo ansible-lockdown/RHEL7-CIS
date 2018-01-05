@@ -1,10 +1,9 @@
 #!/usr/bin/env ansible-playbook -i ansible_inventory -vv
 - hosts: all
-  gather_facts: True
-  become: yes
+  gather_facts: False
 
   vars:
-    ansible_user: vagrant
+    ansible_user: root
     ciscat: ciscat-full-bundle-2017-11-06-v3.0.44.zip
     member_dir: '/usr/local/share/CIS'
     install_dir: '/root'
@@ -37,6 +36,14 @@
       state: directory
       mode: 0700
 
+  - name: Ensure previous reports are absent
+    file:
+      path: "{{ item }}"
+      state: absent
+    with_items:
+      - /tmp/report.txt
+      - /tmp/report.html
+
   - name: Add Java to run security audit
     when: rhelcis7_ciscat.stat.exists
     yum:
@@ -62,11 +69,11 @@
 
   - name: Move the html report
     when: rhelcis7_ciscat.stat.exists
-    shell: "mv -f /root/CIS-CAT_Results/*/report.html /home/{{ ansible_user }}/"
+    shell: "mv -f /root/CIS-CAT_Results/*/report.html /tmp/"
 
   - name: Move the text report
     when: rhelcis7_ciscat.stat.exists
-    shell: "mv -f /root/CIS-CAT_Results/*/report.txt /home/{{ ansible_user }}/"
+    shell: "mv -f /root/CIS-CAT_Results/*/report.txt /tmp"
 
   - name: Clear the text reports
     when: rhelcis7_ciscat.stat.exists
@@ -76,12 +83,12 @@
     when: rhelcis7_ciscat.stat.exists
     fetch:
       flat: True
-      src: "/home/{{ ansible_user }}/report.txt"
+      src: "/tmp/report.txt"
       dest: ./
 
   - name: Fetch the html report
     when: rhelcis7_ciscat.stat.exists
     fetch:
       flat: True
-      src: "/home/{{ ansible_user }}/report.html"
+      src: "/tmp/report.html"
       dest: ./
