@@ -6,6 +6,7 @@ help:
 	@echo
 	@echo '   make test'
 	@echo '   make clean'
+	@echo '   make compare'
 	@echo
 	@echo
 	@echo To use the isolated environment from this directory:
@@ -21,7 +22,7 @@ help:
 	@echo "Login to the VM 'molecule login'"
 	@echo
 	@echo To run an audit using 'molecule verify' see tests/test_default.yml
-	@echo
+	@echo To compare audit results between setups with docker vs vagrant run 'make compare'
 
 # virtualenv allows isolation of python libraries
 .PHONY: venv
@@ -51,3 +52,13 @@ lint: bin/python
 .PHONY: test
 test: bin/python
 	( . bin/activate && bin/molecule test )
+
+.PHONY: compare
+compare:
+	rm -rf .molecule
+	cp vagrant.yml molecule.yml
+	molecule test
+	rm -rf .molecule
+	cp docker.yml molecule.yml
+	molecule test
+	diff tests/vagrant.txt tests/docker.txt
