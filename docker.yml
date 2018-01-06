@@ -11,7 +11,7 @@ driver:
 docker:
   containers:
     - name: docker
-      image: milcom/centos7-systemd
+      image: centos/systemd
       image_version: latest
       privileged: True
       ansible_groups:
