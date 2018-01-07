@@ -5,9 +5,11 @@
       state: present
       reload: yes
       ignoreerrors: yes
-  when: rhel7cis_is_router == false
   notify:
       - sysctl flush ipv4 route table
+  when:
+      - rhel7cis_is_router == false
+      - rhel7cis_rule_3_1_1
   tags:
       - level1
       - sysctl
@@ -25,9 +27,11 @@
   with_items:
       - { name: net.ipv4.conf.all.send_redirects, value: 0 }
       - { name: net.ipv4.conf.default.send_redirects, value: 0 }
-  when: rhel7cis_is_router == false
   notify:
       - sysctl flush ipv4 route table
+  when:
+      - rhel7cis_is_router == false
+      - rhel7cis_rule_3_1_2
   tags:
       - level1
       - sysctl
@@ -47,6 +51,8 @@
       - { name: net.ipv4.conf.default.accept_source_route, value: 0 }
   notify:
       - sysctl flush ipv4 route table
+  when:
+      - rhel7cis_rule_3_2_1
   tags:
       - level1
       - sysctl
@@ -66,6 +72,8 @@
       - { name: net.ipv4.conf.default.accept_redirects, value: 0 }
   notify:
       - sysctl flush ipv4 route table
+  when:
+      - rhel7cis_rule_3_2_2
   tags:
       - level1
       - sysctl
@@ -85,6 +93,8 @@
       - { name: net.ipv4.conf.default.secure_redirects, value: 0 }
   notify:
       - sysctl flush ipv4 route table
+  when:
+      - rhel7cis_rule_3_2_3
   tags:
       - level1
       - sysctl
@@ -104,6 +114,8 @@
       - { name: net.ipv4.conf.default.log_martians, value: 1 }
   notify:
       - sysctl flush ipv4 route table
+  when:
+      - rhel7cis_rule_3_2_4
   tags:
       - level1
       - sysctl
@@ -119,6 +131,8 @@
       ignoreerrors: yes
   notify:
       - sysctl flush ipv4 route table
+  when:
+      - rhel7cis_rule_3_2_5
   tags:
       - level1
       - sysctl
@@ -134,6 +148,8 @@
       ignoreerrors: yes
   notify:
       - sysctl flush ipv4 route table
+  when:
+      - rhel7cis_rule_3_2_6
   tags:
       - level1
       - sysctl
@@ -153,6 +169,8 @@
       - { name: net.ipv4.conf.default.rp_filter, value: 1 }
   notify:
       - sysctl flush ipv4 route table
+  when:
+      - rhel7cis_rule_3_2_7
   tags:
       - level1
       - sysctl
@@ -168,6 +186,8 @@
       ignoreerrors: yes
   notify:
       - sysctl flush ipv4 route table
+  when:
+      - rhel7cis_rule_3_2_8
   tags:
       - level1
       - sysctl
@@ -185,9 +205,11 @@
   with_items:
       - { name: net.ipv6.conf.all.accept_ra, value: 0 }
       - { name: net.ipv6.conf.default.accept_ra, value: 0 }
-  when: rhel7cis_ipv6_required == true
   notify:
       - sysctl flush ipv6 route table
+  when:
+      - rhel7cis_ipv6_required == true
+      - rhel7cis_rule_3_3_1
   tags:
       - level1
       - sysctl
@@ -205,9 +227,11 @@
   with_items:
       - { name: net.ipv6.conf.all.accept_redirects, value: 0 }
       - { name: net.ipv6.conf.default.accept_redirects, value: 0 }
-  when: rhel7cis_ipv6_required == true
   notify:
       - sysctl flush ipv6 route table
+  when:
+      - rhel7cis_ipv6_required == true
+      - rhel7cis_rule_3_3_2
   tags:
       - level1
       - sysctl
@@ -220,7 +244,9 @@
       regexp: "^(#)?options ipv6 disable="
       line: "options ipv6 disable=1"
       create: yes
-  when: rhel7cis_ipv6_required == false
+  when:
+      - rhel7cis_ipv6_required == false
+      - rhel7cis_rule_3_3_3
   tags:
       - level1
       - patch
@@ -230,6 +256,8 @@
   yum:
     name: tcp_wrappers
     state: present
+  when:
+      - rhel7cis_rule_3_4_1
   tags:
       - level1
       - patch
@@ -242,6 +270,8 @@
       owner: root
       group: root
       mode: 0644
+  when:
+      - rhel7cis_rule_3_4_2
   tags:
       - level1
       - patch
@@ -252,6 +282,8 @@
       dest: /etc/hosts.deny
       regexp: "^(#)?ALL"
       line: "ALL: ALL"
+  when:
+      - rhel7cis_rule_3_4_3
   tags:
       - level1
       - patch
@@ -263,6 +295,8 @@
       owner: root
       group: root
       mode: 0644
+  when:
+      - rhel7cis_rule_3_4_4
   tags:
       - level1
       - patch
@@ -274,6 +308,8 @@
       owner: root
       group: root
       mode: 0644
+  when:
+      - rhel7cis_rule_3_4_5
   tags:
       - level1
       - patch
@@ -285,6 +321,8 @@
       regexp: "^(#)?install dccp(\\s|$)"
       line: "install dccp /bin/true"
       create: yes
+  when:
+      - rhel7cis_rule_3_5_1
   tags:
       - level1
       - patch
@@ -296,6 +334,8 @@
       regexp: "^(#)?install sctp(\\s|$)"
       line: "install sctp /bin/true"
       create: yes
+  when:
+      - rhel7cis_rule_3_5_2
   tags:
       - level1
       - patch
@@ -307,6 +347,8 @@
       regexp: "^(#)?install rds(\\s|$)"
       line: "install rds /bin/true"
       create: yes
+  when:
+      - rhel7cis_rule_3_5_3
   tags:
       - level1
       - patch
@@ -318,6 +360,8 @@
       regexp: "^(#)?install tipc(\\s|$)"
       line: "install tipc /bin/true"
       create: yes
+  when:
+      - rhel7cis_rule_3_5_4
   tags:
       - level1
       - patch
@@ -348,7 +392,9 @@
   yum:
       name: iptables
       state: present
-  when: rhel7cis_firewall == "iptables"
+  when:
+      - rhel7cis_firewall == "iptables"
+      - rhel7cis_rule_3_6_1
   tags:
       - level1
       - patch
@@ -359,7 +405,9 @@
       name: iptables
       state: started
       enabled: yes
-  when: rhel7cis_firewall == "iptables"
+  when:
+      - rhel7cis_firewall == "iptables"
+      - rhel7cis_rule_3_6_1
   tags:
       - level1
       - patch
@@ -370,7 +418,9 @@
       dest: /etc/firewalld/firewalld.conf
       regexp: "^DefaultZone"
       line: "DefaultZone=drop"
-  when: rhel7cis_firewall == "firewalld"
+  when:
+      - rhel7cis_firewall == "firewalld"
+      - rhel7cis_rule_3_6_2
   tags:
       - level1
       - patch
@@ -381,7 +431,9 @@
       state: enabled
       zone: drop
       permanent: true
-  when: rhel7cis_firewall == "firewalld"
+  when:
+      - rhel7cis_firewall == "firewalld"
+      - rhel7cis_rule_3_6_2
   tags:
       - level1
       - patch
@@ -390,7 +442,9 @@
 - name: "SCORED | 3.6.2 | PATCH | Ensure default deny firewall policy"
   command: /bin/true
   changed_when: no
-  when: rhel7cis_firewall == "iptables"
+  when:
+      - rhel7cis_firewall == "iptables"
+      - rhel7cis_rule_3_6_2
   tags:
       - level1
       - patch
@@ -400,7 +454,9 @@
 - name: "SCORED | 3.6.3 | PATCH | Ensure loopback traffic is configured"
   command: /bin/true
   changed_when: no
-  when: rhel7cis_firewall == "iptables"
+  when:
+      - rhel7cis_firewall == "iptables"
+      - rhel7cis_rule_3_6_3
   tags:
       - level1
       - patch
@@ -410,7 +466,9 @@
 - name: "NOTSCORED | 3.6.4 | PATCH | Ensure outbound and established connections are configured"
   command: /bin/true
   changed_when: no
-  when: rhel7cis_firewall == "iptables"
+  when:
+      - rhel7cis_firewall == "iptables"
+      - rhel7cis_rule_3_6_4
   tags:
       - level1
       - patch
@@ -424,9 +482,11 @@
       zone: drop
       permanent: true
       immediate: true
-  when: rhel7cis_firewall == "firewalld"
   notify: restart firewalld
   with_items: "{{ rhel7cis_firewall_services }}"
+  when:
+      - rhel7cis_firewall == "firewalld"
+      - rhel7cis_rule_3_6_5
   tags:
       - level1
       - patch
@@ -435,7 +495,9 @@
 - name: "SCORED | 3.6.5 | PATCH | Ensure firewall rules exist for all open ports"
   command: /bin/true
   changed_when: no
-  when: rhel7cis_firewall == "iptables"
+  when:
+      - rhel7cis_firewall == "iptables"
+      - rhel7cis_rule_3_6_5
   tags:
       - level1
       - patch
