@@ -2,6 +2,8 @@
   service:
       name: crond
       enabled: yes
+  when:
+      - rhel7cis_rule_5_1_1
   tags:
       - level1
       - level2
@@ -14,6 +16,8 @@
       owner: root
       group: root
       mode: 0600
+  when:
+      - rhel7cis_rule_5_1_2
   tags:
       - level1
       - level2
@@ -27,6 +31,8 @@
       owner: root
       group: root
       mode: 0700
+  when:
+      - rhel7cis_rule_5_1_3
   tags:
       - level1
       - level2
@@ -40,6 +46,8 @@
       owner: root
       group: root
       mode: 0700
+  when:
+      - rhel7cis_rule_5_1_4
   tags:
       - level1
       - level2
@@ -53,6 +61,8 @@
       owner: root
       group: root
       mode: 0700
+  when:
+      - rhel7cis_rule_5_1_5
   tags:
       - level1
       - level2
@@ -66,6 +76,8 @@
       owner: root
       group: root
       mode: 0700
+  when:
+      - rhel7cis_rule_5_1_6
   tags:
       - level1
       - level2
@@ -79,6 +91,8 @@
       owner: root
       group: root
       mode: 0700
+  when:
+      - rhel7cis_rule_5_1_7
   tags:
       - level1
       - level2
@@ -86,65 +100,44 @@
       - rule_5.1.7
 
 - name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
-  file:
-      dest: /etc/at.deny
-      state: absent
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_5.1.8
+  block:
+      - name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
+        file:
+            dest: /etc/at.deny
+            state: absent
 
-- name: "SCORED | 5.1.8 | PATCH | Check if at.allow exists"
-  stat:
-      path: "/etc/at.allow"
-  register: p
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_5.1.8
+      - name: "SCORED | 5.1.8 | PATCH | Check if at.allow exists"
+        stat:
+            path: "/etc/at.allow"
+        register: p
 
-- name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
-  file:
-      dest: /etc/at.allow
-      state: '{{ "file" if  p.stat.exists else "touch"}}'
-      owner: root
-      group: root
-      mode: 0600
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_5.1.8
+      - name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
+        file:
+            dest: /etc/at.allow
+            state: '{{ "file" if  p.stat.exists else "touch"}}'
+            owner: root
+            group: root
+            mode: 0600
 
-- name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
-  file:
-      dest: /etc/cron.deny
-      state: absent
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_5.1.8
+      - name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
+        file:
+            dest: /etc/cron.deny
+            state: absent
 
-- name: "SCORED | 5.1.8 | PATCH | Check if cron.allow exists"
-  stat:
-      path: "/etc/cron.allow"
-  register: p
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_5.1.8
+      - name: "SCORED | 5.1.8 | PATCH | Check if cron.allow exists"
+        stat:
+            path: "/etc/cron.allow"
+        register: p
 
-- name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
-  file:
-      dest: /etc/cron.allow
-      state: '{{ "file" if  p.stat.exists else "touch"}}'
-      owner: root
-      group: root
-      mode: 0600
+      - name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
+        file:
+            dest: /etc/cron.allow
+            state: '{{ "file" if  p.stat.exists else "touch"}}'
+            owner: root
+            group: root
+            mode: 0600
+  when:
+      - rhel7cis_rule_5_1_8
   tags:
       - level1
       - level2
@@ -158,6 +151,8 @@
       owner: root
       group: root
       mode: 0600
+  when:
+      - rhel7cis_rule_5_2_1
   tags:
       - level1
       - level2
@@ -170,6 +165,8 @@
       dest: /etc/ssh/sshd_config
       regexp: '^Protocol'
       line: 'Protocol 2'
+  when:
+      - rhel7cis_rule_5_2_2
   tags:
       - level1
       - level2
@@ -182,6 +179,8 @@
       dest: /etc/ssh/sshd_config
       regexp: '^LogLevel'
       line: 'LogLevel INFO'
+  when:
+      - rhel7cis_rule_5_2_3
   tags:
       - level1
       - level2
@@ -194,6 +193,8 @@
       dest: /etc/ssh/sshd_config
       regexp: '^X11Forwarding'
       line: 'X11Forwarding no'
+  when:
+      - rhel7cis_rule_5_2_4
   tags:
       - level1
       - level2
@@ -206,6 +207,8 @@
       dest: /etc/ssh/sshd_config
       regexp: '^(#)?MaxAuthTries \d'
       line: 'MaxAuthTries 4'
+  when:
+      - rhel7cis_rule_5_2_5
   tags:
       - level1
       - level2
@@ -218,6 +221,8 @@
       dest: /etc/ssh/sshd_config
       regexp: '^IgnoreRhosts'
       line: 'IgnoreRhosts yes'
+  when:
+      - rhel7cis_rule_5_2_6
   tags:
       - level1
       - level2
@@ -230,6 +235,8 @@
       dest: /etc/ssh/sshd_config
       regexp: '^HostbasedAuthentication'
       line: 'HostbasedAuthentication no'
+  when:
+      - rhel7cis_rule_5_2_7
   tags:
       - level1
       - level2
@@ -242,6 +249,8 @@
       dest: /etc/ssh/sshd_config
       regexp: '^PermitRootLogin'
       line: 'PermitRootLogin no'
+  when:
+      - rhel7cis_rule_5_2_8
   tags:
       - level1
       - level2
@@ -254,6 +263,8 @@
       dest: /etc/ssh/sshd_config
       regexp: '^PermitEmptyPasswords'
       line: 'PermitEmptyPasswords no'
+  when:
+      - rhel7cis_rule_5_2_9
   tags:
       - level1
       - level2
@@ -266,6 +277,8 @@
       dest: /etc/ssh/sshd_config
       regexp: '^PermitUserEnvironment'
       line: 'PermitUserEnvironment no'
+  when:
+      - rhel7cis_rule_5_2_10
   tags:
       - level1
       - level2
@@ -278,6 +291,8 @@
       dest: /etc/ssh/sshd_config
       regexp: '^Ciphers'
       line: 'Ciphers aes256-ctr,aes192-ctr,aes128-ctr'
+  when:
+      - rhel7cis_rule_5_2_11
   tags:
       - level1
       - level2
@@ -290,6 +305,8 @@
       dest: /etc/ssh/sshd_config
       regexp: '^MACs'
       line: 'MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com'
+  when:
+      - rhel7cis_rule_5_2_12
   tags:
       - level1
       - level2
@@ -297,23 +314,22 @@
       - rule_5.2.12
 
 - name: "SCORED | 5.2.13 | PATCH | Ensure SSH Idle Timeout Interval is configured"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^ClientAliveInterval'
-      line: "ClientAliveInterval {{ rhel7cis_sshd['clientaliveinterval'] }}"
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_5.2.13
+  block:
+      - name: "SCORED | 5.2.13 | PATCH | Ensure SSH Idle Timeout Interval is configured"
+        lineinfile:
+            state: present
+            dest: /etc/ssh/sshd_config
+            regexp: '^ClientAliveInterval'
+            line: "ClientAliveInterval {{ rhel7cis_sshd['clientaliveinterval'] }}"
 
-- name: "SCORED | 5.2.13 | PATCH | Ensure SSH ClientAliveCountMax set to <= 3"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^ClientAliveCountMax'
-      line: "ClientAliveCountMax {{ rhel7cis_sshd['clientalivecountmax'] }}"
+      - name: "SCORED | 5.2.13 | PATCH | Ensure SSH ClientAliveCountMax set to <= 3"
+        lineinfile:
+            state: present
+            dest: /etc/ssh/sshd_config
+            regexp: '^ClientAliveCountMax'
+            line: "ClientAliveCountMax {{ rhel7cis_sshd['clientalivecountmax'] }}"
+  when:
+      - rhel7cis_rule_5_2_13
   tags:
       - level1
       - level2
@@ -326,66 +342,61 @@
       dest: /etc/ssh/sshd_config
       regexp: '^LoginGraceTime'
       line: 'LoginGraceTime 60'
+  when:
+      - rhel7cis_rule_5_2_14
   tags:
       - level1
       - level2
       - patch
       - rule_5.2.14
 
-- name: "SCORED | 5.2.15 | PATCH | Ensure SSH access is limited - allowusers"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: "^AllowUsers"
-      line: AllowUsers {{ rhel7cis_sshd['allowusers'] }}
-  notify:
-      - restart sshd
-  when: "rhel7cis_sshd['allowusers']|default('') != ''"
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_5.2.15
+- name: "SCORED | 5.2.15 | PATCH | Ensure SSH access is limited"
+  block:
+      - name: "SCORED | 5.2.15 | PATCH | Ensure SSH access is limited - allowusers"
+        lineinfile:
+            state: present
+            dest: /etc/ssh/sshd_config
+            regexp: "^AllowUsers"
+            line: AllowUsers {{ rhel7cis_sshd['allowusers'] }}
+        notify:
+            - restart sshd
+        when:
+            - "rhel7cis_sshd['allowusers']|default('') != ''"
 
-- name: "SCORED | 5.2.15 | PATCH | Ensure SSH access is limited - allowgroups"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: "^AllowGroups"
-      line: AllowGroups {{ rhel7cis_sshd['allowgroups'] }}
-  notify:
-      - restart sshd
-  when: "rhel7cis_sshd['allowgroups']|default('') != ''"
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_5.2.15
+      - name: "SCORED | 5.2.15 | PATCH | Ensure SSH access is limited - allowgroups"
+        lineinfile:
+            state: present
+            dest: /etc/ssh/sshd_config
+            regexp: "^AllowGroups"
+            line: AllowGroups {{ rhel7cis_sshd['allowgroups'] }}
+        notify:
+            - restart sshd
+        when:
+            - "rhel7cis_sshd['allowgroups']|default('') != ''"
 
-- name: "SCORED | 5.2.15 | PATCH | Ensure SSH access is limited - denyusers"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: "^DenyUsers"
-      line: DenyUsers {{ rhel7cis_sshd['denyusers'] }}
-  notify:
-      - restart sshd
-  when: "rhel7cis_sshd['denyusers']|default('') != ''"
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_5.2.15
+      - name: "SCORED | 5.2.15 | PATCH | Ensure SSH access is limited - denyusers"
+        lineinfile:
+            state: present
+            dest: /etc/ssh/sshd_config
+            regexp: "^DenyUsers"
+            line: DenyUsers {{ rhel7cis_sshd['denyusers'] }}
+        notify:
+            - restart sshd
+        when:
+            - "rhel7cis_sshd['denyusers']|default('') != ''"
 
-- name: "SCORED | 5.2.15 | PATCH | Ensure SSH access is limited - denygroups"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: "^DenyGroups"
-      line: DenyGroups {{ rhel7cis_sshd['denygroups'] }}
-  notify:
-      - restart sshd
-  when: "rhel7cis_sshd['denygroups']|default('') != ''"
+      - name: "SCORED | 5.2.15 | PATCH | Ensure SSH access is limited - denygroups"
+        lineinfile:
+            state: present
+            dest: /etc/ssh/sshd_config
+            regexp: "^DenyGroups"
+            line: DenyGroups {{ rhel7cis_sshd['denygroups'] }}
+        notify:
+            - restart sshd
+        when:
+            - "rhel7cis_sshd['denygroups']|default('') != ''"
+  when:
+      - rhel7cis_rule_5_2_15
   tags:
       - level1
       - level2
@@ -398,6 +409,8 @@
       dest: /etc/ssh/sshd_config
       regexp: '^Banner'
       line: 'Banner /etc/issue.net'
+  when:
+      - rhel7cis_rule_5_2_16
   tags:
       - level1
       - level2
@@ -416,6 +429,8 @@
       - { key: 'ucredit', value: '-1' }
       - { key: 'ocredit', value: '-1' }
       - { key: 'lcredit', value: '-1' }
+  when:
+      - rhel7cis_rule_5_3_1
   tags:
       - level1
       - level2
@@ -425,6 +440,8 @@
 - name: "SCORED | 5.3.2 | PATCH | Ensure lockout for failed password attempts is configured"
   command: /bin/true
   changed_when: no
+  when:
+      - rhel7cis_rule_5_3_2
   tags:
       - level1
       - level2
@@ -435,6 +452,8 @@
 - name: "SCORED | 5.3.3 | PATCH | Ensure password reuse is limited"
   command: /bin/true
   changed_when: no
+  when:
+      - rhel7cis_rule_5_3_3
   tags:
       - level1
       - level2
@@ -446,6 +465,8 @@
   command: authconfig --passalgo=sha512 --update
   changed_when: no
   failed_when: no
+  when:
+      - rhel7cis_rule_5_3_4
   tags:
       - level1
       - level2
@@ -458,6 +479,8 @@
       dest: /etc/login.defs
       regexp: '^PASS_MAX_DAYS'
       line: 'PASS_MAX_DAYS 90'
+  when:
+      - rhel7cis_rule_5_4_1_1
   tags:
       - level1
       - level2
@@ -470,6 +493,8 @@
       dest: /etc/login.defs
       regexp: '^PASS_MIN_DAYS'
       line: 'PASS_MIN_DAYS 7'
+  when:
+      - rhel7cis_rule_5_4_1_2
   tags:
       - level1
       - level2
@@ -482,6 +507,8 @@
       dest: /etc/login.defs
       regexp: '^PASS_WARN_AGE'
       line: 'PASS_WARN_AGE 7'
+  when:
+      - rhel7cis_rule_5_4_1_3
   tags:
       - level1
       - level2
@@ -491,6 +518,8 @@
 - name: "SCORED | 5.4.1.4 | PATCH | Ensure inactive password lock is 30 days or less"
   command: /bin/true
   changed_when: no
+  when:
+      - rhel7cis_rule_5_4_1_4
   tags:
       - level1
       - level2
@@ -501,6 +530,8 @@
 - name: "SCORED | 5.4.2 | PATCH | Ensure system accounts are non-login"
   command: /bin/true
   changed_when: no
+  when:
+      - rhel7cis_rule_5_4_2
   tags:
       - level1
       - level2
@@ -512,28 +543,29 @@
   command: usermod -g 0 root
   changed_when: no
   failed_when: no
+  when:
+      - rhel7cis_rule_5_4_3
   tags:
       - level1
       - level2
       - patch
       - rule_5.4.3
 
-- name: "SCORED | 5.4.4 | PATCH | Ensure default user umask is 027 or more restrictive - /etc/bashrc"
-  replace:
-      path: /etc/bashrc
-      regexp: '(^\s+umask) 002'
-      replace: '\1 027'
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_5.4.4
+- name: "SCORED | 5.4.4 | PATCH | Ensure default user umask is 027 or more restrictive"
+  block:
+      - name: "SCORED | 5.4.4 | PATCH | Ensure default user umask is 027 or more restrictive - /etc/bashrc"
+        replace:
+            path: /etc/bashrc
+            regexp: '(^\s+umask) 002'
+            replace: '\1 027'
 
-- name: "SCORED | 5.4.4 | PATCH | Ensure default user umask is 027 or more restrictive - /etc/profile"
-  replace:
-      path: /etc/profile
-      regexp: '(^\s+umask) 002'
-      replace: '\1 027'
+      - name: "SCORED | 5.4.4 | PATCH | Ensure default user umask is 027 or more restrictive - /etc/profile"
+        replace:
+            path: /etc/profile
+            regexp: '(^\s+umask) 002'
+            replace: '\1 027'
+  when:
+      - rhel7cis_rule_5_4_4
   tags:
       - level1
       - level2

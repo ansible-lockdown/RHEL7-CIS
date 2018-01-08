@@ -3,12 +3,12 @@
 rhel7cis_skip_for_travis: false
 
 rhel7cis_notauto: false
-rhel7cis_section1: true
-rhel7cis_section2: true
-rhel7cis_section3: true
-rhel7cis_section4: true
+rhel7cis_section1: false
+rhel7cis_section2: false
+rhel7cis_section3: false
+rhel7cis_section4: false
 rhel7cis_section5: true
-rhel7cis_section6: true
+rhel7cis_section6: false
 
 rhel7cis_selinux_disable: false
 
@@ -175,7 +175,41 @@ rhel7cis_rule_4_2_2_5: true
 rhel7cis_rule_4_2_4: true
 
 # Section 5 rules
-#rhel7cis_rule_5_1_1: true
+rhel7cis_rule_5_1_1: true
+rhel7cis_rule_5_1_2: true
+rhel7cis_rule_5_1_3: true
+rhel7cis_rule_5_1_4: true
+rhel7cis_rule_5_1_5: true
+rhel7cis_rule_5_1_6: true
+rhel7cis_rule_5_1_7: true
+rhel7cis_rule_5_1_8: true
+rhel7cis_rule_5_2_1: true
+rhel7cis_rule_5_2_2: true
+rhel7cis_rule_5_2_3: true
+rhel7cis_rule_5_2_4: true
+rhel7cis_rule_5_2_5: true
+rhel7cis_rule_5_2_6: true
+rhel7cis_rule_5_2_7: true
+rhel7cis_rule_5_2_8: true
+rhel7cis_rule_5_2_9: true
+rhel7cis_rule_5_2_10: true
+rhel7cis_rule_5_2_11: true
+rhel7cis_rule_5_2_12: true
+rhel7cis_rule_5_2_13: true
+rhel7cis_rule_5_2_14: true
+rhel7cis_rule_5_2_15: true
+rhel7cis_rule_5_2_16: true
+rhel7cis_rule_5_3_1: true
+rhel7cis_rule_5_3_2: true
+rhel7cis_rule_5_3_3: true
+rhel7cis_rule_5_3_4: true
+rhel7cis_rule_5_4_1_1: true
+rhel7cis_rule_5_4_1_2: true
+rhel7cis_rule_5_4_1_3: true
+rhel7cis_rule_5_4_1_4: true
+rhel7cis_rule_5_4_2: true
+rhel7cis_rule_5_4_3: true
+rhel7cis_rule_5_4_4: true
 
 # Section 6 rules
 #rhel7cis_rule_6_1_1: true
