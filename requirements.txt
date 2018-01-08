@@ -1,0 +1,4 @@
+molecule==1.25.1
+yamllint==1.8.1
+python-vagrant==0.5.15
+docker

@@ -1,0 +1,5 @@
+[all]
+centos7 ansible_connection=docker
+
+[role_test]
+RHEL7-CIS

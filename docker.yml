@@ -1,0 +1,20 @@
+---
+molecule:
+  ignore_paths:
+    - lib
+    - bin
+    - library
+dependency:
+  name: galaxy
+driver:
+  name: docker
+docker:
+  containers:
+    - name: docker
+      image: centos/systemd
+      image_version: latest
+      privileged: True
+      ansible_groups:
+        - docker
+verifier:
+  name: goss

@@ -1,0 +1,31 @@
+---
+molecule:
+  ignore_paths:
+    - lib
+    - bin
+    - library
+dependency:
+  name: galaxy
+driver:
+  name: vagrant
+provisioner:
+vagrant:
+  raw_config_args:
+    - "vbguest.auto_update = false"
+    - "vm.synced_folder './', '/vagrant', disabled: true"
+    - "ssh.insert_key = false"
+  platforms:
+    - name: centos/7
+      box: centos/7
+  providers:
+    - name: virtualbox
+      type: virtualbox
+      options:
+        memory: 512
+        cpus: 2
+  instances:
+    - name: vagrant
+      ansible_groups:
+        - vagrant
+verifier:
+  name: goss

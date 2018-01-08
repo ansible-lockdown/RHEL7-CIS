@@ -35,6 +35,8 @@
   changed_when: no
   failed_when: no
   check_mode: no
+  tags:
+      - skip_ansible_lint
 
 - name: "PRELIM | Check if postfix package is installed"
   command: rpm -q postfix
@@ -42,6 +44,8 @@
   changed_when: no
   failed_when: no
   check_mode: no
+  tags:
+      - skip_ansible_lint
 
 # Individual service checks
 - name: "PRELIM | Check for xinetd service"

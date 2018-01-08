@@ -185,6 +185,7 @@
       state: present
   when:
       - rhel7cis_rule_4_1_13
+      - rhel7cis_skip_for_travis == false
   tags:
       - level2
       - auditd
@@ -198,6 +199,7 @@
       state: present
   when:
       - rhel7cis_rule_4_1_13
+      - rhel7cis_skip_for_travis == false
   tags:
       - level2
       - auditd
@@ -211,6 +213,7 @@
       state: present
   when:
       - rhel7cis_rule_4_1_13
+      - rhel7cis_skip_for_travis == false
   tags:
       - level2
       - auditd
@@ -236,6 +239,7 @@
       state: present
   when:
       - rhel7cis_rule_4_1_15
+      - rhel7cis_skip_for_travis == false
   tags:
       - level2
       - auditd
@@ -249,6 +253,7 @@
       state: present
   when:
       - rhel7cis_rule_4_1_15
+      - rhel7cis_skip_for_travis == false
   tags:
       - level2
       - auditd
@@ -262,6 +267,7 @@
       state: present
   when:
       - rhel7cis_rule_4_1_15
+      - rhel7cis_skip_for_travis == false
   tags:
       - level2
       - auditd

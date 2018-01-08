@@ -6,4 +6,15 @@ tests/local-test.yml
 tests/.vagrant
 tests/Vagrantfile
 tests/test-inv
+tests/*.html
+tests/*.txt
 tests/*.retry
+.Python
+.molecule/
+bin/
+etc/
+include/
+lib/
+pip-selfcheck.json
+share/
+

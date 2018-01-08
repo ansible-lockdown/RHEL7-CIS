@@ -1,45 +1,15 @@
 ---
-sudo: required
 
-env:
-  - distro: centos
-    version: 7
-    container: "centos:7"
-    init: /usr/lib/systemd/systemd
-    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro --tmpfs /run --tmpfs /run/lock"
+sudo: required
 
 services:
   - docker
 
 before_install:
-  # Pull container
-  - 'docker pull ${container}'
-  # Customize container
-  - 'docker build --rm=true --file=tests/Dockerfile.${distro}-${version} --tag=${distro}-${version}:ansible tests'
+  - docker pull centos/systemd
 
 script:
-  - container_id=$(mktemp)
-
-  # Run container in detached state
-  - 'docker run --detach --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} ${distro}-${version}:ansible "${init}" > "${container_id}"'
-
-  # Ansible syntax check.
-  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/test.yml --syntax-check'
-
-  # Test role.
-  - docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/test.yml -e 'rhel7cis_selinux_disable=true rhel7cis_skip_for_travis=true' --skip-tags "sysctl" -vv
-
-  # Test role idempotence.
-  - idempotence=$(mktemp)
-
-  - docker exec "$(cat ${container_id})" ansible-playbook /etc/ansible/roles/role_under_test/tests/test.yml -e 'rhel7cis_selinux_disable=true rhel7cis_skip_for_travis=true' --skip-tags "sysctl" -vv | tee -a ${idempotence}
-  - >
-    grep -q "changed=0.*failed=0" ${idempotence}
-    && (echo 'Idempotence test: pass' && exit 0)
-    || (echo 'Idempotence test: fail' && exit 1)
-
-  # Clean up
-  - 'docker stop "$(cat ${container_id})"'
+  - make test
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
