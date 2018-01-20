@@ -28,6 +28,7 @@ Requirements
 ------------
 
 You should carefully read through the tasks to make sure these changes will not break your systems before running this playbook.
+If you want to do a dry run without changing anything, set the below sections (rhel7cis_section1-6) to false. 
 
 Role Variables
 --------------
@@ -160,6 +161,8 @@ Ansible > 2.2
 
 Example Playbook
 -------------------------
+
+This sample playbook should be run in a folder that is above the main RHEL7-CIS / RHEL7-CIS-devel folder.
 
 ```
 - name: Harden Server
