@@ -949,6 +949,7 @@
 - name: "NOTSCORED | 1.8 | PATCH | Ensure updates, patches, and additional security software are installed"
   yum:
       name: "*"
+      security: yes
       state: latest
   tags:
       - level1
