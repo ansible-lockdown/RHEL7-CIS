@@ -13,12 +13,38 @@
       - rule_1.1.1.1
       - cramfs
 
+- name: "SCORED | 1.1.1.1 | PATCH | Remove cramfs module"
+  modprobe:
+    name: cramfs
+    state: absent
+  when:
+      - rhel7cis_rule_1_1_1_1
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_1.1.1.1
+      - cramfs
+
 - name: "SCORED | 1.1.1.2 | PATCH | Ensure mounting of freevxfs filesystems is disabled"
   lineinfile:
       dest: /etc/modprobe.d/CIS.conf
       regexp: "^(#)?install freevxfs(\\s|$)"
       line: "install freevxfs /bin/true"
       create: yes
+  when:
+      - rhel7cis_rule_1_1_1_2
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_1.1.1.2
+      - freevxfs
+
+- name: "SCORED | 1.1.1.2 | PATCH | Remove freevxfs module"
+  modprobe:
+    name: freevxfs
+    state: absent
   when:
       - rhel7cis_rule_1_1_1_2
   tags:
@@ -43,12 +69,38 @@
       - rule_1.1.1.3
       - jffs2
 
+- name: "SCORED | 1.1.1.3 | PATCH | Remove jffs2 module"
+  modprobe:
+    name: jffs2
+    state: absent
+  when:
+      - rhel7cis_rule_1_1_1_3
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_1.1.1.3
+      - jffs2
+
 - name: "SCORED | 1.1.1.4 | PATCH | Ensure mounting of hfs filesystems is disabled"
   lineinfile:
       dest: /etc/modprobe.d/CIS.conf
       regexp: "^(#)?install hfs(\\s|$)"
       line: "install hfs /bin/true"
       create: yes
+  when:
+      - rhel7cis_rule_1_1_1_4
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_1.1.1.4
+      - hfs
+
+- name: "SCORED | 1.1.1.4 | PATCH | Remove hfs module"
+  modprobe:
+    name: hfs
+    state: absent
   when:
       - rhel7cis_rule_1_1_1_4
   tags:
@@ -73,12 +125,38 @@
       - rule_1.1.1.5
       - hfsplus
 
+- name: "SCORED | 1.1.1.5 | PATCH | Remove hfsplus module"
+  modprobe:
+    name: hfsplus
+    state: absent
+  when:
+      - rhel7cis_rule_1_1_1_5
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_1.1.1.5
+      - hfsplus
+
 - name: "SCORED | 1.1.1.6 | PATCH | Ensure mounting of squashfs filesystems is disabled"
   lineinfile:
       dest: /etc/modprobe.d/CIS.conf
       regexp: "^(#)?install squashfs(\\s|$)"
       line: "install squashfs /bin/true"
       create: yes
+  when:
+      - rhel7cis_rule_1_1_1_6
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_1.1.1.6
+      - squashfs
+
+- name: "SCORED | 1.1.1.6 | PATCH | Remove squashfs module"
+  modprobe:
+    name: squashfs
+    state: absent
   when:
       - rhel7cis_rule_1_1_1_6
   tags:
@@ -103,6 +181,19 @@
       - rule_1.1.1.7
       - udf
 
+- name: "SCORED | 1.1.1.7 | PATCH | Remove udf module"
+  modprobe:
+    name: udf
+    state: absent
+  when:
+      - rhel7cis_rule_1_1_1_7
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_1.1.1.7
+      - udf
+
 - name: "SCORED | 1.1.1.8 | PATCH | Ensure mounting of FAT filesystems is disabled"
   lineinfile:
       dest: /etc/modprobe.d/CIS.conf
@@ -113,6 +204,19 @@
       - rhel7cis_rule_1_1_1_8
   tags:
       - level1
+      - scored
+      - patch
+      - rule_1.1.1.8
+      - vfat
+
+- name: "SCORED | 1.1.1.8 | PATCH | Remove FAT module"
+  modprobe:
+    name: vfat
+    state: absent
+  when:
+      - rhel7cis_rule_1_1_1_8
+  tags:
+      - level2
       - scored
       - patch
       - rule_1.1.1.8
