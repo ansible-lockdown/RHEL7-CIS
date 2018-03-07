@@ -343,21 +343,37 @@ rhel7cis_firewall_services:
     - ssh
     - dhcpv6-client
 
+
 # Warning Banner Content (issue, issue.net, motd)
 rhel7cis_warning_banner: |
     Authorized uses only. All activity may be monitored and reported.
 # End Banner
 
+## Section4 vars
+
+rhel7cis_auditd:
+    admin_space_left_action: halt
+    max_log_file_action: keep_logs
+
+## Section5 vars
+
 rhel7cis_sshd:
     clientalivecountmax: 3
     clientaliveinterval: 300
+    ciphers: "aes256-ctr,aes192-ctr,aes128-ctr"
+    macs: "hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com"
+    logingracetime: 60
     # - make sure you understand the precedence when working with these values!!
     #allowusers:
     #allowgroups: systems dba
     #denyusers:
     #denygroups:
 
-# Syslog system
+rhel7cis_pass:
+    max_days: 90
+    min_days: 7
+    warn_age: 7
+# Syslog system 
 rhel7cis_syslog: rsyslog
 #rhel7cis_syslog: syslog-ng
 
