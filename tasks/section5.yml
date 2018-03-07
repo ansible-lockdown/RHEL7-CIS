@@ -290,7 +290,7 @@
       state: present
       dest: /etc/ssh/sshd_config
       regexp: '^Ciphers'
-      line: 'Ciphers aes256-ctr,aes192-ctr,aes128-ctr'
+      line: "Ciphers {{ rhel7cis_sshd['ciphers'] }}"
   when:
       - rhel7cis_rule_5_2_11
   tags:
@@ -304,7 +304,7 @@
       state: present
       dest: /etc/ssh/sshd_config
       regexp: '^MACs'
-      line: 'MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com'
+      line: "MACs {{ rhel7cis_sshd['macs'] }}"
   when:
       - rhel7cis_rule_5_2_12
   tags:
@@ -341,7 +341,7 @@
       state: present
       dest: /etc/ssh/sshd_config
       regexp: '^LoginGraceTime'
-      line: 'LoginGraceTime 60'
+      line: "LoginGraceTime {{ rhel7cis_sshd['logingracetime'] }}'\""
   when:
       - rhel7cis_rule_5_2_14
   tags:
@@ -478,7 +478,7 @@
       state: present
       dest: /etc/login.defs
       regexp: '^PASS_MAX_DAYS'
-      line: 'PASS_MAX_DAYS 90'
+      line: "PASS_MAX_DAYS {{ rhel7cis_pass['max_days'] }}"
   when:
       - rhel7cis_rule_5_4_1_1
   tags:
@@ -492,7 +492,7 @@
       state: present
       dest: /etc/login.defs
       regexp: '^PASS_MIN_DAYS'
-      line: 'PASS_MIN_DAYS 7'
+      line: "PASS_MIN_DAYS {{ rhel7cis_pass['min_days'] }}"
   when:
       - rhel7cis_rule_5_4_1_2
   tags:
@@ -506,7 +506,7 @@
       state: present
       dest: /etc/login.defs
       regexp: '^PASS_WARN_AGE'
-      line: 'PASS_WARN_AGE 7'
+      line: "PASS_WARN_AGE {{ rhel7cis_pass['warn_age'] }}"
   when:
       - rhel7cis_rule_5_4_1_3
   tags:

@@ -1,6 +1,7 @@
 *.swp
 *.retry
 .DS_Store
+.vscode-root
 test.yml
 tests/local-test.yml
 tests/.vagrant
