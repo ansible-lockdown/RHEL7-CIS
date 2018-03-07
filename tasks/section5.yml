@@ -341,7 +341,7 @@
       state: present
       dest: /etc/ssh/sshd_config
       regexp: '^LoginGraceTime'
-      line: "LoginGraceTime {{ rhel7cis_sshd['logingracetime'] }}'\""
+      line: "LoginGraceTime {{ rhel7cis_sshd['logingracetime'] }}"
   when:
       - rhel7cis_rule_5_2_14
   tags:

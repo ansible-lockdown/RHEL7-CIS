@@ -343,7 +343,6 @@ rhel7cis_firewall_services:
     - ssh
     - dhcpv6-client
 
-
 # Warning Banner Content (issue, issue.net, motd)
 rhel7cis_warning_banner: |
     Authorized uses only. All activity may be monitored and reported.
@@ -373,7 +372,7 @@ rhel7cis_pass:
     max_days: 90
     min_days: 7
     warn_age: 7
-# Syslog system 
+# Syslog system
 rhel7cis_syslog: rsyslog
 #rhel7cis_syslog: syslog-ng
 
