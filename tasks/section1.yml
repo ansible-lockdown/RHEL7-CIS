@@ -339,30 +339,39 @@
       - skip_ansible_lint
 
 - name: "SCORED | 1.1.13 | PATCH | Ensure separate partition exists for /home"
-  shell: mount | grep "on /home "
-  register: home_mounted
-  changed_when: no
-  failed_when: no
+  mount:
+    name: "/var/tmp"
+    src: "{{ item.device }}"
+    state: mounted
+    fstype: "{{ item.fstype }}"
+    opts: "nodev,nosuid,noexec"
   when:
       - rhel7cis_rule_1_1_13
+      - item.mount == "/home"
+  with_items: "{{ ansible_mounts }}" 
   tags:
       - level2
       - scored
       - patch
       - rule_1.1.13
-      - skip_ansible_lint
+    #   - skip_ansible_lint
 
 - name: "SCORED | 1.1.14 | PATCH | Ensure nodev option set on /home partition"
-  command: /bin/true
-  changed_when: no
+  mount:
+    name: "/home"
+    src: "{{ item.device }}"
+    state: mounted
+    fstype: "{{ item.fstype }}"
+    opts: "nodev"
   when:
-      - rhel7cis_rule_1_1_14
+      - rhel7cis_rule_1_1_14 
+      - item.mount == "/home"
+  with_items: "{{ ansible_mounts }}" 
   tags:
       - level1
       - level2
       - patch
       - rule_1.1.14
-      - notimplemented
 
 - name: "SCORED | 1.1.15 | PATCH | Ensure nodev option set on /dev/shm partition\n
          SCORED | 1.1.16 | PATCH | Ensure nosuid option set on /dev/shm partition\n
