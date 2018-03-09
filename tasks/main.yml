@@ -34,7 +34,7 @@
 
 - include: section3.yml
   become: yes
-  when: rhel7cis_section3  
+  when: rhel7cis_section3
 
 - include: section4.yml
   become: yes

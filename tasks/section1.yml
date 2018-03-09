@@ -339,22 +339,18 @@
       - skip_ansible_lint
 
 - name: "SCORED | 1.1.13 | PATCH | Ensure separate partition exists for /home"
-  mount:
-    name: "/var/tmp"
-    src: "{{ item.device }}"
-    state: mounted
-    fstype: "{{ item.fstype }}"
-    opts: "nodev,nosuid,noexec"
+  shell: mount | grep "on /var/log/audit "
+  register: home_mounted
+  changed_when: no
+  failed_when: no
   when:
       - rhel7cis_rule_1_1_13
-      - item.mount == "/home"
-  with_items: "{{ ansible_mounts }}" 
   tags:
       - level2
       - scored
       - patch
       - rule_1.1.13
-    #   - skip_ansible_lint
+      - skip_ansible_lint
 
 - name: "SCORED | 1.1.14 | PATCH | Ensure nodev option set on /home partition"
   mount:
@@ -364,9 +360,9 @@
     fstype: "{{ item.fstype }}"
     opts: "nodev"
   when:
-      - rhel7cis_rule_1_1_14 
+      - rhel7cis_rule_1_1_14
       - item.mount == "/home"
-  with_items: "{{ ansible_mounts }}" 
+  with_items: "{{ ansible_mounts }}"
   tags:
       - level1
       - level2
@@ -395,8 +391,7 @@
       - rule_1.1.17
 
 - name: "NOTSCORED | 1.1.18 | PATCH | Ensure nodev option set on removable media partitions"
-  command: /bin/true
-  debug: 
+  debug:
       msg: "--> Not relevant"
   changed_when: no
   when:
@@ -408,8 +403,7 @@
       - rule_1.1.18
 
 - name: "NOTSCORED | 1.1.19 | PATCH | Ensure nosuid option set on removable media partitions"
-  command: /bin/true
-  debug: 
+  debug:
       msg: "--> Not relevant"
   changed_when: no
   when:
@@ -421,8 +415,7 @@
       - rule_1.1.19
 
 - name: "NOTSCORED | 1.1.20 | PATCH | Ensure noexec option set on removable media partitions"
-  command: /bin/true
-  debug: 
+  debug:
       msg: "--> Not relevant"
   changed_when: no
   when:
@@ -460,7 +453,9 @@
 
 - name: "NOTSCORED | 1.2.1 | PATCH | Ensure package manager repositories are configured"
   command: yum check-update
-  failed_when: "result.rc == 1"
+  register: yum_configured
+  changed_when: no
+  failed_when: no
   when:
       - rhel7cis_rule_1_2_1
   tags:
@@ -468,6 +463,7 @@
       - notscored
       - patch
       - rule_1.2.1
+      - skip-ansible-lint
 
 - name: "SCORED | 1.2.2 | PATCH | Ensure gpgcheck is globally activated"
   replace:
@@ -660,30 +656,33 @@
       - rule_1.4.2
 
 - name: "NOTSCORED | 1.4.3 | PATCH | Ensure authentication required for single user mode"
-  command: /bin/true
-  changed_when: no
-  when:
-      - rhel7cis_rule_1_4_3
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_1.4.3
-
-
-- name: "NOTSCORED | 1.4.3 | PATCH | Ensure authentication required for single user mode"
-  lineinfile:
-    - dest: /usr/lib/systemd/system/rescue.service
-    - regexp: '/sbin/sulogin'
-    - line: 'ExecStart=-/bin/sh -c \"/usr/sbin/sulogin; /usr/bin/systemctl --fail --no-block default\"'
-  when:
-      - rhel7cis_rule_1_4_3
-      - ansible_distribution_major_version == 7
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_1.4.3
+  block:
+      - name: "NOTSCORED | 1.4.3 | PATCH | Ensure authentication required for single user mode - Emergency"
+        lineinfile:
+          dest: /usr/lib/systemd/system/emergency.service
+          regexp: '/sbin/sulogin'
+          line: 'ExecStart=-/bin/sh -c \"/usr/sbin/sulogin; /usr/bin/systemctl --fail --no-block default\"'
+        when:
+          - rhel7cis_rule_1_4_3
+          - ansible_distribution_major_version == 7
+        tags:
+          - level1
+          - level2
+          - patch
+          - rule_1.4.3
+      - name: "NOTSCORED | 1.4.3 | PATCH | Ensure authentication required for single user mode - Rescue"
+        lineinfile:
+          dest: /usr/lib/systemd/system/rescue.service
+          regexp: '/sbin/sulogin'
+          line: 'ExecStart=-/bin/sh -c \"/usr/sbin/sulogin; /usr/bin/systemctl --fail --no-block default\"'
+        when:
+          - rhel7cis_rule_1_4_3
+          - ansible_distribution_major_version == 7
+        tags:
+          - level1
+          - level2
+          - patch
+          - rule_1.4.3
 
 - name: "SCORED | 1.5.1 | PATCH | Ensure core dumps are restricted"
   lineinfile:
@@ -719,7 +718,7 @@
       - rule_1.5.1
 
 - name: "NOTSCORED | 1.5.2 | PATCH | Ensure XD/NX support is enabled"
-  command: "dmesg|grep -E "NX|XD" | grep \" active\"""
+  shell: dmesg|grep -E "NX|XD" | grep " active"
   changed_when: no
   when:
       - rhel7cis_rule_1_5_2
