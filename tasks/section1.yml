@@ -463,7 +463,7 @@
       - notscored
       - patch
       - rule_1.2.1
-      - skip-ansible-lint
+      - skip_ansible_lint
 
 - name: "SCORED | 1.2.2 | PATCH | Ensure gpgcheck is globally activated"
   replace:
