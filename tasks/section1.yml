@@ -950,6 +950,8 @@
   yum:
       name: "*"
       state: latest
+  when: 
+      - rhel7cis_rule_1_8
   tags:
       - level1
       - level2
