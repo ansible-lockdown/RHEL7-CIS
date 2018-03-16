@@ -339,7 +339,7 @@
       - skip_ansible_lint
 
 - name: "SCORED | 1.1.13 | PATCH | Ensure separate partition exists for /home"
-  shell: mount | grep "on /var/log/audit "
+  shell: mount | grep "on /home "
   register: home_mounted
   changed_when: no
   failed_when: no
