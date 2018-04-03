@@ -61,11 +61,5 @@
   become: yes
   command: dconf update
 
-- name: create functions file if it doesn't exist (docker)
-  copy:
-    content: ""
-    dest: /etc/init.d/functions 
-    force: no
-
 - name: restart auditd
   shell: /usr/libexec/initscripts/legacy-actions/auditd/restart
