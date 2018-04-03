@@ -62,5 +62,4 @@
   command: dconf update
 
 - name: restart auditd
-  shell: /sbin/service auditd restart
-  when: virtualization_type != "docker"
+  shell: /usr/libexec/initscripts/legacy-actions/auditd/restart
