@@ -62,4 +62,9 @@
   command: dconf update
 
 - name: restart auditd
-  shell: /usr/libexec/initscripts/legacy-actions/auditd/restart
+  shell: /sbin/service auditd restart
+  args:
+    warn: no
+  when:
+    - rhel7cis_skip_for_travis == false
+
