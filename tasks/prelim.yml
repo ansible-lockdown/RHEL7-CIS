@@ -207,6 +207,6 @@
 
 - name: "PRELIM | create functions file if it doesn't exist"
   copy:
-    content: ""
+    src: etc/init.d/functions
     dest: /etc/init.d/functions 
     force: no

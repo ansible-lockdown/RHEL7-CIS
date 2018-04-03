@@ -1,0 +1,53 @@
+# -*-Shell-script-*-
+#
+# functions This file contains functions to be used by most or all
+#       shell scripts in the /etc/init.d directory.
+#
+
+TEXTDOMAIN=initscripts
+
+# Make sure umask is sane
+umask 022
+
+# Set up a default search path.
+PATH="/sbin:/usr/sbin:/bin:/usr/bin"
+export PATH
+
+if [ $PPID -ne 1 -a -z "$SYSTEMCTL_SKIP_REDIRECT" ] && \
+        [ -d /run/systemd/system ] ; then
+    case "$0" in
+    /etc/init.d/*|/etc/rc.d/init.d/*)
+        _use_systemctl=1
+        ;;
+    esac
+fi
+
+systemctl_redirect () {
+    local s
+    local prog=${1##*/}
+    local command=$2
+    local options=""
+
+    case "$command" in
+    start)
+        s=$"Starting $prog (via systemctl): "
+        ;;
+    stop)
+        s=$"Stopping $prog (via systemctl): "
+        ;;
+    reload|try-reload)
+        s=$"Reloading $prog configuration (via systemctl): "
+        ;;
+    restart|try-restart|condrestart)
+        s=$"Restarting $prog (via systemctl): "
+        ;;
+    esac
+
+    if [ -n "$SYSTEMCTL_IGNORE_DEPENDENCIES" ] ; then
+        options="--ignore-dependencies"
+    fi
+
+    if ! systemctl show "$prog.service" > /dev/null 2>&1 || \
+            systemctl show -p LoadState "$prog.service" | grep -q 'not-found' ; then
+        action $"Reloading systemd: " /bin/systemctl daemon-reload
+    fi
