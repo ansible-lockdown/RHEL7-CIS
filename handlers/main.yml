@@ -63,4 +63,4 @@
 
 - name: restart auditd
   shell: /sbin/service auditd restart
-  when: facter_virtual != "docker"
+  when: virtualization_type != "docker"
