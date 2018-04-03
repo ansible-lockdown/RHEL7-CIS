@@ -26,6 +26,15 @@
       masked: no
       state: reloaded
 
+- name: systemd restart var-tmp.mount
+  become: yes
+  systemd:
+      name: var-tmp.mount
+      daemon_reload: yes
+      enabled: yes
+      masked: no
+      state: reloaded
+
 - name: generate new grub config
   become: yes
   command: grub2-mkconfig -o "{{ grub_cfg.stat.lnk_source }}"
@@ -51,3 +60,6 @@
 - name: reload dconf
   become: yes
   command: dconf update
+
+- name: restart auditd
+  shell: /sbin/service auditd restart
