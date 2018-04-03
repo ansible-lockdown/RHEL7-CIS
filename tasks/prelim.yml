@@ -203,10 +203,3 @@
   register: rhnsd_service_status
   changed_when: no
   check_mode: no
-
-
-- name: "PRELIM | create functions file if it doesn't exist"
-  copy:
-    src: etc/init.d/functions
-    dest: /etc/init.d/functions 
-    force: no

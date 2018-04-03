@@ -63,8 +63,10 @@
 
 - name: restart auditd
   shell: /sbin/service auditd restart
+  changed_when: no
+  check_mode: no
+  failed_when: no
   args:
     warn: no
   when:
     - rhel7cis_skip_for_travis == false
-
