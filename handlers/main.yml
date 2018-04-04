@@ -70,3 +70,5 @@
     warn: no
   when:
     - rhel7cis_skip_for_travis == false
+  tags:
+    - skip_ansible_lint
