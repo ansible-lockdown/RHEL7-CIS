@@ -504,7 +504,7 @@
     regexp: '^(daily|weekly|monthly|yearly)$'
     line: "{{ rhel7cis_logrotate }}"
     create: yes
-  with_fileglob: 
+  with_fileglob:
     - /etc/logrotate.d/*
     - /etc/logrotate.conf
   tags:
