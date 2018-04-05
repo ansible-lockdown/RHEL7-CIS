@@ -503,7 +503,7 @@
     path: "{{ item }}"
     regexp: '^(daily|weekly|monthly|yearly)$'
     line: "{{ rhel7cis_logrotate }}"
-		create: yes
+    create: yes
   with_fileglob: 
     - /etc/logrotate.d/*
     - /etc/logrotate.conf
