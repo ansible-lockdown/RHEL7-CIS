@@ -339,7 +339,7 @@
       - skip_ansible_lint
 
 - name: "SCORED | 1.1.13 | PATCH | Ensure separate partition exists for /home"
-  shell: mount | grep "on /home "
+  shell: mount | grep "on /home"
   register: home_mounted
   changed_when: no
   failed_when: no
@@ -353,16 +353,21 @@
       - skip_ansible_lint
 
 - name: "SCORED | 1.1.14 | PATCH | Ensure nodev option set on /home partition"
-  command: /bin/true
-  changed_when: no
+  mount:
+    name: "/home"
+    src: "{{ item.device }}"
+    state: mounted
+    fstype: "{{ item.fstype }}"
+    opts: "nodev"
   when:
       - rhel7cis_rule_1_1_14
+      - item.mount == "/home"
+  with_items: "{{ ansible_mounts }}"
   tags:
       - level1
       - level2
       - patch
       - rule_1.1.14
-      - notimplemented
 
 - name: "SCORED | 1.1.15 | PATCH | Ensure nodev option set on /dev/shm partition\n
          SCORED | 1.1.16 | PATCH | Ensure nosuid option set on /dev/shm partition\n
@@ -386,7 +391,8 @@
       - rule_1.1.17
 
 - name: "NOTSCORED | 1.1.18 | PATCH | Ensure nodev option set on removable media partitions"
-  command: /bin/true
+  debug:
+      msg: "--> Not relevant"
   changed_when: no
   when:
       - rhel7cis_rule_1_1_18
@@ -395,10 +401,10 @@
       - notscored
       - patch
       - rule_1.1.18
-      - notimplemented
 
 - name: "NOTSCORED | 1.1.19 | PATCH | Ensure nosuid option set on removable media partitions"
-  command: /bin/true
+  debug:
+      msg: "--> Not relevant"
   changed_when: no
   when:
       - rhel7cis_rule_1_1_19
@@ -407,10 +413,10 @@
       - notscored
       - patch
       - rule_1.1.19
-      - notimplemented
 
 - name: "NOTSCORED | 1.1.20 | PATCH | Ensure noexec option set on removable media partitions"
-  command: /bin/true
+  debug:
+      msg: "--> Not relevant"
   changed_when: no
   when:
       - rhel7cis_rule_1_1_20
@@ -419,7 +425,6 @@
       - notscored
       - patch
       - rule_1.1.20
-      - notimplemented
 
 - name: "SCORED | 1.1.21 | PATCH | Ensure sticky bit is set on all world-writable directories"
   shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d -perm -0002 2>/dev/null | xargs chmod a+t
@@ -447,8 +452,10 @@
       - rule_1.1.22
 
 - name: "NOTSCORED | 1.2.1 | PATCH | Ensure package manager repositories are configured"
-  command: /bin/true
+  command: yum check-update
+  register: yum_configured
   changed_when: no
+  failed_when: no
   when:
       - rhel7cis_rule_1_2_1
   tags:
@@ -456,7 +463,7 @@
       - notscored
       - patch
       - rule_1.2.1
-      - notimplemented
+      - skip_ansible_lint
 
 - name: "SCORED | 1.2.2 | PATCH | Ensure gpgcheck is globally activated"
   replace:
@@ -501,20 +508,20 @@
       - rule_1.2.2
 
 - name: "NOTSCORED | 1.2.3 | PATCH | Ensure GPG keys are configured"
-  command: /bin/true
-  changed_when: no
+  command: gpg --quiet --with-fingerprint /etc/pki/rpm-gpg/RPM-GPG-KEY-{{ ansible_distribution|lower }}-release
   when:
       - rhel7cis_rule_1_2_3
+      - ansible_distribution == "RedHat"
   tags:
       - level1
       - notscored
       - patch
       - rule_1.2.3
-      - notimplemented
 
 - name: "NOTSCORED | 1.2.4 | PATCH | Ensure Red Hat Network or Subscription Manager connection is configured"
-  command: /bin/true
+  command: subscription-manager identity
   changed_when: no
+  failed_when: no
   when:
       - ansible_distribution == "RedHat"
       - rhel7cis_rule_1_2_4
@@ -523,7 +530,6 @@
       - notscored
       - patch
       - rule_1.2.4
-      - notimplemented
 
 - name: "NOTSCORED | 1.2.5 | PATCH | Disable the rhnsd Daemon"
   service:
@@ -650,28 +656,33 @@
       - rule_1.4.2
 
 - name: "NOTSCORED | 1.4.3 | PATCH | Ensure authentication required for single user mode"
-  command: /bin/true
-  changed_when: no
-  when:
-      - rhel7cis_rule_1_4_3
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_1.4.3
-      - notimplemented
-
-- name: "NOTSCORED | 1.4.3 | PATCH | Ensure authentication required for single user mode"
-  command: /bin/true
-  changed_when: no
-  when:
-      - rhel7cis_rule_1_4_3
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_1.4.3
-      - notimplemented
+  block:
+      - name: "NOTSCORED | 1.4.3 | PATCH | Ensure authentication required for single user mode - Emergency"
+        lineinfile:
+          dest: /usr/lib/systemd/system/emergency.service
+          regexp: '/sbin/sulogin'
+          line: 'ExecStart=-/bin/sh -c \"/usr/sbin/sulogin; /usr/bin/systemctl --fail --no-block default\"'
+        when:
+          - rhel7cis_rule_1_4_3
+          - ansible_distribution_major_version == 7
+        tags:
+          - level1
+          - level2
+          - patch
+          - rule_1.4.3
+      - name: "NOTSCORED | 1.4.3 | PATCH | Ensure authentication required for single user mode - Rescue"
+        lineinfile:
+          dest: /usr/lib/systemd/system/rescue.service
+          regexp: '/sbin/sulogin'
+          line: 'ExecStart=-/bin/sh -c \"/usr/sbin/sulogin; /usr/bin/systemctl --fail --no-block default\"'
+        when:
+          - rhel7cis_rule_1_4_3
+          - ansible_distribution_major_version == 7
+        tags:
+          - level1
+          - level2
+          - patch
+          - rule_1.4.3
 
 - name: "SCORED | 1.5.1 | PATCH | Ensure core dumps are restricted"
   lineinfile:
@@ -707,7 +718,7 @@
       - rule_1.5.1
 
 - name: "NOTSCORED | 1.5.2 | PATCH | Ensure XD/NX support is enabled"
-  command: /bin/true
+  shell: dmesg|grep -E "NX|XD" | grep " active"
   changed_when: no
   when:
       - rhel7cis_rule_1_5_2
@@ -716,7 +727,6 @@
       - level2
       - patch
       - rule_1.5.2
-      - notimplemented
 
 - name: "SCORED | 1.5.3 | PATCH | Ensure address space layout randomization (ASLR) is enabled"
   sysctl:
