@@ -500,9 +500,12 @@
 
 - name: "NOTSCORED | 4.3 | PATCH | Ensure logrotate is configured"
   lineinfile:
-    path: /etc/logrotate.conf
+    path: "{{ item }}"
     regexp: '^(daily|weekly|monthly|yearly)$'
-    line: 'daily'
+    line: "{{ rhel7cis_logrotate }}"
+  with_fileglob: 
+    - /etc/logrotate.d/*
+    - /etc/logrotate.conf
   tags:
       - level1
       - level2
