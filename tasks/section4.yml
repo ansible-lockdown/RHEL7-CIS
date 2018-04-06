@@ -501,9 +501,8 @@
 - name: "NOTSCORED | 4.3 | PATCH | Ensure logrotate is configured"
   lineinfile:
     path: "{{ item }}"
-    regexp: '^(daily|weekly|monthly|yearly)$'
+    regexp: '^\s*\t*(daily|weekly|monthly|yearly)$'
     line: "{{ rhel7cis_logrotate }}"
-    create: yes
   with_fileglob:
     - /etc/logrotate.d/*
     - /etc/logrotate.conf
