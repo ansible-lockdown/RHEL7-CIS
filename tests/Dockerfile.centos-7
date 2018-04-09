@@ -13,7 +13,7 @@ rm -f /lib/systemd/system/basic.target.wants/*; \
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 # Install Ansible
-RUN yum -y install epel-release openssh-server audit authconfig grub2
+RUN yum -y install epel-release openssh-server audit authconfig grub2 logrotate
 RUN yum -y install git ansible sudo
 RUN yum clean all
 

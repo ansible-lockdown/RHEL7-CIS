@@ -355,6 +355,8 @@ rhel7cis_auditd:
     admin_space_left_action: halt
     max_log_file_action: keep_logs
 
+rhel7cis_logrotate: "daily"
+
 ## Section5 vars
 
 rhel7cis_sshd:
