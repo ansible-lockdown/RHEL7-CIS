@@ -18,7 +18,7 @@
 # better to use IP numbers than host names.
 
 {% for server in rhel7cis_time_synchronization_servers -%}
-server {{ server }} minpoll 8
+server {{ server }} {{ rhel7cis_chrony_server_options }}
 {% endfor %}
 
 # Look here for the admin password needed for chronyc.  The initial
