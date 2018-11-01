@@ -206,6 +206,7 @@
       - level2
       - patch
       - rule_6.2.2
+      - skip_ansible_lint #  ANSIBLE0006
 
 - name: "SCORED | 6.2.3 | PATCH | Ensure no legacy '+' entries exist in /etc/shadow"
   command: sed -i '/^+/ d' /etc/shadow
@@ -218,6 +219,7 @@
       - level2
       - patch
       - rule_6.2.3
+      - skip_ansible_lint #  ANSIBLE0006
 
 - name: "SCORED | 6.2.4 | PATCH | Ensure no legacy '+' entries exist in /etc/group"
   command: sed -i '/^+/ d' /etc/group
@@ -230,6 +232,7 @@
       - level2
       - patch
       - rule_6.2.4
+      - skip_ansible_lint #  ANSIBLE0006
 
 - name: "SCORED | 6.2.5 | PATCH | Ensure root is the only UID 0 account"
   command: passwd -l {{ item }}
