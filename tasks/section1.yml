@@ -341,7 +341,7 @@
   tags:
       - level2
       - scored
-      - level1_scored
+      - level2_scored
       - patch
       - rule_1.1.11
       - skip_ansible_lint
