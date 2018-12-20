@@ -390,8 +390,6 @@
   tags:
       - level1
       - level2
-      - level1_scored
-      - level2_scored
       - patch
       - rule_1.1.14
 
@@ -466,8 +464,6 @@
   tags:
       - level1
       - level2
-      - level1_scored
-      - level2_scored
       - patch
       - rule_1.1.21
 
