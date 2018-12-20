@@ -28,6 +28,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - services
       - patch
       - rule_2.1.1
@@ -62,6 +63,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - patch
       - rule_2.1.2
 
@@ -96,6 +98,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - patch
       - rule_2.1.3
 
@@ -130,6 +133,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - patch
       - rule_2.1.4
 
@@ -164,6 +168,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - patch
       - rule_2.1.5
 
@@ -186,6 +191,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - patch
       - rule_2.1.6
 
@@ -199,8 +205,9 @@
       - rhel7cis_rule_2_1_7
   tags:
       - level1
-      - patch
       - scored
+      - level1_scored
+      - patch
       - rule_2.1.7
 
 - name: "NOTSCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use - service install"
@@ -337,6 +344,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - xwindows
       - patch
       - rule_2.2.2
@@ -352,6 +360,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - avahi
       - services
       - patch
@@ -368,6 +377,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - cups
       - services
       - patch
@@ -384,6 +394,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - dhcp
       - services
       - patch
@@ -400,6 +411,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - ldap
       - services
       - patch
@@ -416,6 +428,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - nfs
       - rpc
       - services
@@ -433,6 +446,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - nfs
       - rpc
       - services
@@ -619,6 +633,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - insecure_services
       - tftp
       - patch

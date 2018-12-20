@@ -9,6 +9,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - patch
       - rule_1.1.1.1
       - cramfs
@@ -22,6 +23,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - patch
       - rule_1.1.1.1
       - cramfs
@@ -37,6 +39,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - patch
       - rule_1.1.1.2
       - freevxfs
@@ -50,6 +53,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - patch
       - rule_1.1.1.2
       - freevxfs
@@ -65,6 +69,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - patch
       - rule_1.1.1.3
       - jffs2
@@ -78,6 +83,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - patch
       - rule_1.1.1.3
       - jffs2
@@ -93,6 +99,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - patch
       - rule_1.1.1.4
       - hfs
@@ -106,6 +113,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - patch
       - rule_1.1.1.4
       - hfs
@@ -121,6 +129,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - patch
       - rule_1.1.1.5
       - hfsplus
@@ -134,6 +143,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - patch
       - rule_1.1.1.5
       - hfsplus
@@ -149,6 +159,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - patch
       - rule_1.1.1.6
       - squashfs
@@ -162,6 +173,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - patch
       - rule_1.1.1.6
       - squashfs
@@ -177,6 +189,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - patch
       - rule_1.1.1.7
       - udf
@@ -190,6 +203,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - patch
       - rule_1.1.1.7
       - udf
@@ -205,6 +219,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - patch
       - rule_1.1.1.8
       - vfat
@@ -218,6 +233,7 @@
   tags:
       - level2
       - scored
+      - level2_scored
       - patch
       - rule_1.1.1.8
       - vfat
@@ -234,6 +250,7 @@
   tags:
       - level2
       - scored
+      - level2_scored
       - patch
       - rule_1.1.2
 
@@ -255,6 +272,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - patch
       - rule_1.1.3
       - rule_1.1.4
@@ -270,6 +288,7 @@
   tags:
       - level2
       - scored
+      - level2_scored
       - patch
       - rule_1.1.6
       - skip_ansible_lint
@@ -284,6 +303,7 @@
   tags:
       - level2
       - scored
+      - level2_scored
       - patch
       - rule_1.1.7
       - skip_ansible_lint
@@ -305,6 +325,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - patch
       - rule_1.1.8
       - rule_1.1.9
@@ -320,6 +341,7 @@
   tags:
       - level2
       - scored
+      - level1_scored
       - patch
       - rule_1.1.11
       - skip_ansible_lint
@@ -334,6 +356,7 @@
   tags:
       - level2
       - scored
+      - level2_scored
       - patch
       - rule_1.1.12
       - skip_ansible_lint
@@ -348,6 +371,7 @@
   tags:
       - level2
       - scored
+      - level2_scored
       - patch
       - rule_1.1.13
       - skip_ansible_lint
@@ -366,6 +390,8 @@
   tags:
       - level1
       - level2
+      - level1_scored
+      - level2_scored
       - patch
       - rule_1.1.14
 
@@ -385,6 +411,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - patch
       - rule_1.1.15
       - rule_1.1.16
@@ -399,6 +426,7 @@
   tags:
       - level1
       - notscored
+      - level1_notscored
       - patch
       - rule_1.1.18
 
@@ -411,6 +439,7 @@
   tags:
       - level1
       - notscored
+      - level1_notscored
       - patch
       - rule_1.1.19
 
@@ -423,6 +452,7 @@
   tags:
       - level1
       - notscored
+      - level1_notscored
       - patch
       - rule_1.1.20
 
@@ -436,6 +466,8 @@
   tags:
       - level1
       - level2
+      - level1_scored
+      - level2_scored
       - patch
       - rule_1.1.21
 
@@ -461,6 +493,7 @@
   tags:
       - level1
       - notscored
+      - level1_notscored
       - patch
       - rule_1.2.1
       - skip_ansible_lint
@@ -475,6 +508,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - patch
       - rule_1.2.2
 
@@ -489,6 +523,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - patch
       - rule_1.2.2
 
@@ -504,6 +539,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - patch
       - rule_1.2.2
 
@@ -515,6 +551,7 @@
   tags:
       - level1
       - notscored
+      - level1_notscored
       - patch
       - rule_1.2.3
 
@@ -528,6 +565,7 @@
   tags:
       - level1
       - notscored
+      - level1_notscored
       - patch
       - rule_1.2.4
 
@@ -542,6 +580,7 @@
   tags:
       - level2
       - notscored
+      - level2_notscored
       - patch
       - rule_1.2.5
 
@@ -554,6 +593,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - aide
       - patch
       - rule_1.3.1
@@ -572,6 +612,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - aide
       - patch
       - rule_1.3.1
@@ -592,6 +633,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - aide
       - file_integrity
       - patch
@@ -606,6 +648,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - grub
       - patch
       - rule_1.4.1
@@ -622,6 +665,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - grub
       - patch
       - rule_1.4.1
@@ -636,6 +680,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - grub
       - patch
       - rule_1.4.2
@@ -651,6 +696,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - grub
       - patch
       - rule_1.4.2
@@ -696,6 +742,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - limits
       - patch
       - rule_1.5.1
@@ -713,6 +760,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - sysctl
       - patch
       - rule_1.5.1
@@ -741,6 +789,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - patch
       - rule_1.5.3
 
@@ -752,6 +801,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - patch
       - rule_1.5.4
 
@@ -764,6 +814,7 @@
   tags:
       - level1
       - scored
+      - level1_scored
       - patch
       - rule_1.5.4
 
@@ -780,6 +831,7 @@
   tags:
       - level2
       - scored
+      - level2_scored
       - patch
       - rule_1.6.1.1
 
@@ -794,6 +846,7 @@
   tags:
       - level2
       - scored
+      - level2_scored
       - selinux
       - patch
       - rule_1.6.1.2
@@ -809,6 +862,7 @@
   tags:
       - level2
       - scored
+      - level2_scored
       - selinux
       - patch
       - rule_1.6.1.3
@@ -822,6 +876,7 @@
   tags:
       - level2
       - scored
+      - level2_scored
       - selinux
       - patch
       - rule_1.6.1.4
@@ -835,6 +890,7 @@
   tags:
       - level2
       - scored
+      - level2_scored
       - patch
       - rule_1.6.1.5
 
@@ -847,6 +903,7 @@
   tags:
       - level2
       - scored
+      - level2_scored
       - patch
       - rule_1.6.2
 
