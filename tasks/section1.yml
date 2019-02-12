@@ -298,7 +298,7 @@
       fstype: "{{ rhel7cis_vartmp['fstype'] }}"
       opts: "{{ rhel7cis_vartmp['opts'] }}"
   when:
-      - rhel7cis_vartmp['enabled'] == 'yes'
+      - rhel7cis_vartmp['enabled']
       - rhel7cis_rule_1_1_8
       - rhel7cis_rule_1_1_9
       - rhel7cis_rule_1_1_10
