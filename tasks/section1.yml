@@ -294,7 +294,7 @@
   mount:
       name: /var/tmp
       src: "{{ rhel7cis_vartmp['source'] }}"
-      state: mounted
+      state: present
       fstype: "{{ rhel7cis_vartmp['fstype'] }}"
       opts: "{{ rhel7cis_vartmp['opts'] }}"
   when:
