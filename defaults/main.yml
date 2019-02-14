@@ -385,5 +385,5 @@ rhel7cis_syslog: rsyslog
 rhel7cis_vartmp:
     source: /tmp
     fstype: none
-    opts: "defaults, nodev, nosuid, noexec, bind"
+    opts: "defaults,nodev,nosuid,noexec,bind"
     enabled: no
