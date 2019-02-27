@@ -3,13 +3,12 @@
   pre_tasks:
     - name: install packages for testing under docker
       yum:
-        name: "{{ item }}"
+        name:
+          - selinux-policy
+          - libselinux-python
+          - openssh-server
+          - which
         state: present
-      with_items:
-        - selinux-policy
-        - libselinux-python
-        - openssh-server
-        - which
-
+       
   roles:
     - role: RHEL7-CIS
