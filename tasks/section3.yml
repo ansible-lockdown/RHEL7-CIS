@@ -252,6 +252,22 @@
       - patch
       - rule_3.3.3
 
+- name: "NOTSCORED | 3.3.3 | PATCH | Ensure IPv6 is disabled"
+  lineinfile:
+    dest: /etc/default/grub
+    regexp: '^(GRUB_CMDLINE_LINUX=.*(?!.*ipv6\.disable=1)\"[^\"]+)(\".*)'
+    line: '\1 ipv6.disable=1\2'
+    backrefs: yes
+  notify:
+    - grub2cfg
+  when:
+      - rhel7cis_ipv6_required == false
+      - rhel7cis_rule_3_3_3
+  tags:
+      - level1
+      - patch
+      - rule_3.3.3
+
 - name: "SCORED | 3.4.1 | PATCH | Ensure TCP Wrappers is installed"
   yum:
     name: tcp_wrappers
