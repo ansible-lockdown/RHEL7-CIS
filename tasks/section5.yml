@@ -528,8 +528,9 @@
       - notimplemented
 
 - name: "SCORED | 5.4.2 | PATCH | Ensure system accounts are non-login"
-  command: /bin/true
+  shell: "awk -F: '($3 < {{ rhel7cis_rule_5_4_2_min_uid }}) {print $1 }' /etc/passwd"
   changed_when: no
+  register: system_account
   when:
       - rhel7cis_rule_5_4_2
   tags:
@@ -537,7 +538,39 @@
       - level2
       - patch
       - rule_5.4.2
-      - notimplemented
+
+- name: "SCORED | 5.4.2 | PATCH | Ensure system accounts are non-login"
+  user:
+    name: "{{ item }}"
+    password_lock: true
+  with_items:
+    - "{{ system_account.stdout_lines }}"
+  when:
+      - rhel7cis_rule_5_4_2
+      - item != "root"
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.4.2
+
+- name: "SCORED | 5.4.2 | PATCH | Ensure system accounts are non-login"
+  user:
+    name: "{{ item }}"
+    shell: /sbin/nologin
+  with_items:
+    - "{{ system_account.stdout_lines }}"
+  when:
+      - rhel7cis_rule_5_4_2
+      - item != "root"
+      - item != "sync"
+      - item != "shutdown"
+      - item != "halt"
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.4.2
 
 - name: "SCORED | 5.4.3 | PATCH | Ensure default group for the root account is GID 0"
   command: usermod -g 0 root
