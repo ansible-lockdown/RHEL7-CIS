@@ -297,8 +297,53 @@
       - notimplemented
 
 - name: "SCORED | 6.2.10 | PATCH | Ensure users' dot files are not group or world writable"
-  command: /bin/true
-  changed_when: no
+  find:
+    paths: '{{ item }}'
+    patterns: '\.[0-9A-Za-z].*'
+    file_type: file
+    follow: no
+    hidden: yes
+    recurse: yes
+    use_regex: yes
+    depth: 4
+  register: dotfiles
+  when:
+      - rhel7cis_rule_6_2_10
+  loop:
+    - /root
+    - /home
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.10
+
+- name: "SCORED | 6.2.10 | PATCH | Ensure users' dot files are not group or world writable"
+  find:
+    paths: '{{ item }}'
+    patterns: '\.[0-9A-Za-z].*'
+    file_type: directory
+    follow: no
+    hidden: yes
+    recurse: yes
+    use_regex: yes
+    depth: 4
+  register: dotdirs
+  when:
+      - rhel7cis_rule_6_2_10
+  loop:
+    - /root
+    - /home
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.10
+
+- name: "SCORED | 6.2.10 | PATCH | Ensure users' dot files are not group or world writable"
+  set_fact:
+    filepath: "{{item.files}}"
+  loop: "{{dotfiles.results|list}}"
   when:
       - rhel7cis_rule_6_2_10
   tags:
@@ -306,7 +351,44 @@
       - level2
       - patch
       - rule_6.2.10
-      - notimplemented
+
+- name: "SCORED | 6.2.10 | PATCH | Ensure users' dot files are not group or world writable"
+  set_fact:
+    dirpath: "{{item.files}}"
+  loop: "{{dotdirs.results|list}}"
+  when:
+      - rhel7cis_rule_6_2_10
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.10
+
+- name: "SCORED | 6.2.10 | PATCH | Ensure users' dot files are not group or world writable"
+  file:
+    path: "{{ item.path }}"
+    mode: g-w,o-w
+  with_items: "{{ filepath }}"
+  when:
+      - rhel7cis_rule_6_2_10
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.10
+
+- name: "SCORED | 6.2.10 | PATCH | Ensure users' dot files are not group or world writable"
+  file:
+    path: "{{ item.path }}"
+    mode: g-w,o-w
+  with_items: "{{ dirpath }}"
+  when:
+      - rhel7cis_rule_6_2_10
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.10
 
 - name: "SCORED | 6.2.11 | PATCH | Ensure no users have .forward files"
   file:
