@@ -72,3 +72,7 @@
     - rhel7cis_skip_for_travis == false
   tags:
     - skip_ansible_lint
+
+- name: grub2cfg
+  command: /sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
+  ignore_errors: True
