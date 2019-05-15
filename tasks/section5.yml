@@ -517,6 +517,8 @@
 
 - name: "SCORED | 5.4.1.4 | PATCH | Ensure inactive password lock is 30 days or less"
   command: useradd -D -f 30
+  changed_when: no
+  failed_when: no
   when:
       - rhel7cis_rule_5_4_1_4
   tags:
