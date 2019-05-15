@@ -501,7 +501,6 @@
             mode: 0600
   when:
       - rhel7cis_rule_4_2_1_3
-  notify: restart rsyslog
   tags:
       - level1
       - level2
