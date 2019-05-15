@@ -516,8 +516,9 @@
       - rule_5.4.1.3
 
 - name: "SCORED | 5.4.1.4 | PATCH | Ensure inactive password lock is 30 days or less"
-  command: /bin/true
+  command: useradd -D -f 30
   changed_when: no
+  failed_when: no
   when:
       - rhel7cis_rule_5_4_1_4
   tags:
@@ -525,7 +526,6 @@
       - level2
       - patch
       - rule_5.4.1.4
-      - notimplemented
 
 - name: "SCORED | 5.4.2 | PATCH | Ensure system accounts are non-login"
   shell: "awk -F: '($3 < {{ rhel7cis_rule_5_4_2_min_uid }}) {print $1 }' /etc/passwd"
