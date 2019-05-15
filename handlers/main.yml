@@ -45,6 +45,12 @@
       name: firewalld
       state: restarted
 
+- name: restart rsyslog
+  become: yes
+  service:
+      name: rsyslog
+      state: restarted
+
 - name: restart xinetd
   become: yes
   service:
