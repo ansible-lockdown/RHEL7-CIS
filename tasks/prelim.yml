@@ -23,11 +23,19 @@
   yum:
       name: audit
       state: present
+  register: audit_present
+  retries: 3
+  until: audit_present is succeeded
+  delay: 5
 
 - name: "PRELIM | Section 5.1 | Configure cron"
   yum:
       name: cronie
       state: present
+  register: cronie_present
+  retries: 3
+  until: cronie_present is succeeded
+  delay: 5
 
 - name: "PRELIM | Check if prelink package is installed"
   command: rpm -q prelink

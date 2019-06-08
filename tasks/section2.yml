@@ -177,7 +177,7 @@
       - name: "SCORED | 2.1.6 | PATCH | Ensure tftp server is not enabled"
         command: chkconfig tftp off
         notify: restart xinetd
-        when: tftp_service.stat.exists and rhel7cis_tftp_server == false
+        when: tftp_service.stat.exists and not rhel7cis_tftp_server
         tags:
             - skip_ansible_lint
 
@@ -207,6 +207,10 @@
   yum:
       name: "{{ rhel7cis_time_synchronization }}"
       state: present
+  register: rhel7cis_time_synchronization_present
+  retries: 3
+  until: rhel7cis_time_synchronization_present is succeeded
+  delay: 5
   when:
       - rhel7cis_rule_2_2_1_1
   tags:
@@ -326,11 +330,12 @@
 
 - name: "SCORED | 2.2.2 | PATCH | Ensure X Window System is not installed"
   yum:
-      name: "{{item}}"
+      name: "@X Window System"
       state: absent
-  with_items:
-      - "@X Window System"
-      - "xorg-x11*"
+  register: window_system_present
+  retries: 3
+  until: window_system_present is succeeded
+  delay: 5
   when:
       - not rhel7cis_xwindows_required
       - rhel7cis_rule_2_2_2
@@ -341,13 +346,31 @@
       - patch
       - rule_2.2.2
 
+- name: "SCORED | 2.2.2 | PATCH | Ensure X Window System is not installed"
+  yum:
+    name: "xorg-x11*"
+    state: absent
+  register: xorg_present
+  retries: 3
+  until: xorg_present is succeeded
+  delay: 5
+  when:
+  - not rhel7cis_xwindows_required
+  - rhel7cis_rule_2_2_2
+  tags:
+  - level1
+  - scored
+  - xwindows
+  - patch
+  - rule_2.2.2
+
 - name: "SCORED | 2.2.3 | PATCH | Ensure Avahi Server is not enabled"
   service:
       name: avahi-daemon
       state: stopped
       enabled: no
   when:
-      - rhel7cis_avahi_server == false and avahi_service_status.stdout == "loaded"
+      - not rhel7cis_avahi_server and avahi_service_status.stdout == "loaded"
       - rhel7cis_rule_2_2_3
   tags:
       - level1
@@ -363,7 +386,7 @@
       state: stopped
       enabled: no
   when:
-      - rhel7cis_cups_server == false and cups_service_status.stdout == "loaded"
+      - not rhel7cis_cups_server and cups_service_status.stdout == "loaded"
       - rhel7cis_rule_2_2_4
   tags:
       - level1
@@ -379,7 +402,7 @@
       state: stopped
       enabled: no
   when:
-      - rhel7cis_dhcp_server == false and dhcpd_service_status.stdout == "loaded"
+      - not rhel7cis_dhcp_server and dhcpd_service_status.stdout == "loaded"
       - rhel7cis_rule_2_2_5
   tags:
       - level1
@@ -395,7 +418,7 @@
       state: stopped
       enabled: no
   when:
-      - rhel7cis_ldap_server == false and slapd_service_status.stdout == "loaded"
+      - not rhel7cis_ldap_server and slapd_service_status.stdout == "loaded"
       - rhel7cis_rule_2_2_6
   tags:
       - level1
@@ -411,7 +434,7 @@
       state: stopped
       enabled: no
   when:
-      - rhel7cis_nfs_rpc_server == false and nfs_service_status.stdout == "loaded"
+      - not rhel7cis_nfs_rpc_server and nfs_service_status.stdout == "loaded"
       - rhel7cis_rule_2_2_7
   tags:
       - level1
@@ -428,7 +451,7 @@
       state: stopped
       enabled: no
   when:
-      - rhel7cis_nfs_rpc_server == false and rpcbind_service_status.stdout == "loaded"
+      - not rhel7cis_nfs_rpc_server and rpcbind_service_status.stdout == "loaded"
       - rhel7cis_rule_2_2_7
   tags:
       - level1
@@ -445,7 +468,7 @@
       state: stopped
       enabled: no
   when:
-      - rhel7cis_named_server == false and named_service_status.stdout == "loaded"
+      - not rhel7cis_named_server and named_service_status.stdout == "loaded"
       - rhel7cis_rule_2_2_8
   tags:
       - level1
@@ -458,7 +481,7 @@
       state: stopped
       enabled: no
   when:
-      - rhel7cis_vsftpd_server == false and vsftpd_service_status.stdout == "loaded"
+      - not rhel7cis_vsftpd_server and vsftpd_service_status.stdout == "loaded"
       - rhel7cis_rule_2_2_9
   tags:
       - level1
@@ -471,7 +494,7 @@
       state: stopped
       enabled: no
   when:
-      - rhel7cis_httpd_server == false and httpd_service_status.stdout == "loaded"
+      - not rhel7cis_httpd_server and httpd_service_status.stdout == "loaded"
       - rhel7cis_rule_2_2_10
   tags:
       - level1
@@ -484,7 +507,7 @@
       state: stopped
       enabled: no
   when:
-      - rhel7cis_dovecot_server == false and dovecot_service_status.stdout == "loaded"
+      - not rhel7cis_dovecot_server and dovecot_service_status.stdout == "loaded"
       - rhel7cis_rule_2_2_11
   tags:
       - level1
@@ -497,7 +520,7 @@
       state: stopped
       enabled: no
   when:
-      - rhel7cis_smb_server == false and smb_service_status.stdout == "loaded"
+      - not rhel7cis_smb_server and smb_service_status.stdout == "loaded"
       - rhel7cis_rule_2_2_12
   tags:
       - level1
@@ -510,7 +533,7 @@
       state: stopped
       enabled: no
   when:
-      - rhel7cis_squid_server == false and squid_service_status.stdout == "loaded"
+      - not rhel7cis_squid_server and squid_service_status.stdout == "loaded"
       - rhel7cis_rule_2_2_13
   tags:
       - level1
@@ -523,7 +546,7 @@
       state: stopped
       enabled: no
   when:
-      - rhel7cis_snmp_server == false and snmpd_service_status.stdout == "loaded"
+      - not rhel7cis_snmp_server and snmpd_service_status.stdout == "loaded"
       - rhel7cis_rule_2_2_14
   tags:
       - level1
@@ -536,7 +559,7 @@
       regexp: "^(#)?inet_interfaces"
       line: "inet_interfaces = localhost"
   when:
-      - rhel7cis_is_mail_server == false and postfix_installed.rc == 0
+      - not rhel7cis_is_mail_server and postfix_installed.rc == 0
       - rhel7cis_rule_2_2_15
   tags:
       - level1
@@ -549,7 +572,7 @@
       state: stopped
       enabled: no
   when:
-      - rhel7cis_nis_server == false and ypserv_service_status.stdout == "loaded"
+      - not rhel7cis_nis_server and ypserv_service_status.stdout == "loaded"
       - rhel7cis_rule_2_2_16
   tags:
       - level1
@@ -562,7 +585,7 @@
       state: stopped
       enabled: no
   when:
-      - rhel7cis_rsh_server == false and rsh_service_status.stdout == "loaded"
+      - not rhel7cis_rsh_server and rsh_service_status.stdout == "loaded"
       - rhel7cis_rule_2_2_17
   tags:
       - level1
@@ -575,7 +598,7 @@
       state: stopped
       enabled: no
   when:
-      - rhel7cis_rsh_server == false and rlogin_service_status.stdout == "loaded"
+      - not rhel7cis_rsh_server and rlogin_service_status.stdout == "loaded"
       - rhel7cis_rule_2_2_17
   tags:
       - level1
@@ -588,7 +611,7 @@
       state: stopped
       enabled: no
   when:
-      - rhel7cis_rsh_server == false and rexec_service_status.stdout == "loaded"
+      - not rhel7cis_rsh_server and rexec_service_status.stdout == "loaded"
       - rhel7cis_rule_2_2_17
   tags:
       - level1
@@ -601,7 +624,7 @@
       state: stopped
       enabled: no
   when:
-      - rhel7cis_telnet_server == false and telnet_service_status.stdout == "loaded"
+      - not rhel7cis_telnet_server and telnet_service_status.stdout == "loaded"
       - rhel7cis_rule_2_2_18
   tags:
       - level1
@@ -614,7 +637,7 @@
       state: stopped
       enabled: no
   when:
-      - rhel7cis_tftp_server == false and tftp_service_status.stdout == "loaded"
+      - not rhel7cis_tftp_server and tftp_service_status.stdout == "loaded"
       - rhel7cis_rule_2_2_19
   tags:
       - level1
@@ -630,7 +653,7 @@
       state: stopped
       enabled: no
   when:
-      - rhel7cis_rsyncd_server == false and rsyncd_service_status.stdout == "loaded"
+      - not rhel7cis_rsyncd_server and rsyncd_service_status.stdout == "loaded"
       - rhel7cis_rule_2_2_20
   tags:
       - level1
@@ -643,7 +666,7 @@
       state: stopped
       enabled: no
   when:
-      - rhel7cis_ntalk_server == false and ntalk_service_status.stdout == "loaded"
+      - not rhel7cis_ntalk_server and ntalk_service_status.stdout == "loaded"
       - rhel7cis_rule_2_2_21
   tags:
       - level1
@@ -654,8 +677,12 @@
   yum:
       name: ypbind
       state: absent
+  register: ypbind_absent
+  retries: 3
+  until: ypbind_absent is succeeded
+  delay: 5
   when:
-      - rhel7cis_ypbind_required == false
+      - not rhel7cis_ypbind_required
       - rhel7cis_rule_2_3_1
   tags:
       - level1
@@ -666,8 +693,12 @@
   yum:
       name: rsh
       state: absent
+  register: rsh_absent
+  retries: 3
+  until: rsh_absent is succeeded
+  delay: 5
   when:
-      - rhel7cis_rsh_required == false
+      - not rhel7cis_rsh_required
       - rhel7cis_rule_2_3_2
   tags:
       - level1
@@ -678,8 +709,12 @@
   yum:
       name: talk
       state: absent
+  register: talk_absent
+  retries: 3
+  until: talk_absent is succeeded
+  delay: 5
   when:
-      - rhel7cis_talk_required == false
+      - not rhel7cis_talk_required
       - rhel7cis_rule_2_3_3
   tags:
       - level1
@@ -690,8 +725,12 @@
   yum:
       name: telnet
       state: absent
+  register: telnet_absent
+  retries: 3
+  until: telnet_absent is succeeded
+  delay: 5
   when:
-      - rhel7cis_telnet_required == false
+      - not rhel7cis_telnet_required
       - rhel7cis_rule_2_3_4
   tags:
       - level1
@@ -702,8 +741,12 @@
   yum:
       name: openldap-clients
       state: absent
+  register: openldap_clients_absent
+  retries: 3
+  until: openldap_clients_absent is succeeded
+  delay: 5
   when:
-      - rhel7cis_openldap_clients_required == false
+      - not rhel7cis_openldap_clients_required
       - rhel7cis_rule_2_3_5
   tags:
       - level1

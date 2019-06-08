@@ -38,6 +38,8 @@
 - name: generate new grub config
   become: yes
   command: grub2-mkconfig -o "{{ grub_cfg.stat.lnk_source }}"
+  when:
+    - grup_cfg is defined
 
 - name: restart firewalld
   become: yes
@@ -62,14 +64,16 @@
   command: dconf update
 
 - name: restart auditd
-  command: /sbin/service auditd restart
+  service:
+    name: auditd
+    state: restarted
   changed_when: no
   check_mode: no
   failed_when: no
   args:
     warn: no
   when:
-    - rhel7cis_skip_for_travis == false
+    - not rhel7cis_skip_for_travis
   tags:
     - skip_ansible_lint
 

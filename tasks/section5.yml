@@ -114,7 +114,7 @@
       - name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
         file:
             dest: /etc/at.allow
-            state: '{{ "file" if  p.stat.exists else "touch"}}'
+            state: '{{ "file" if  p.stat.exists else "touch" }}'
             owner: root
             group: root
             mode: 0600
@@ -132,7 +132,7 @@
       - name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
         file:
             dest: /etc/cron.allow
-            state: '{{ "file" if  p.stat.exists else "touch"}}'
+            state: '{{ "file" if  p.stat.exists else "touch" }}'
             owner: root
             group: root
             mode: 0600
@@ -361,7 +361,7 @@
         notify:
             - restart sshd
         when:
-            - "rhel7cis_sshd['allowusers']|default('') != ''"
+            - "rhel7cis_sshd['allowusers']|default('') | length > 0"
 
       - name: "SCORED | 5.2.15 | PATCH | Ensure SSH access is limited - allowgroups"
         lineinfile:
@@ -372,7 +372,7 @@
         notify:
             - restart sshd
         when:
-            - "rhel7cis_sshd['allowgroups']|default('') != ''"
+            - "rhel7cis_sshd['allowgroups']|default('') | length > 0"
 
       - name: "SCORED | 5.2.15 | PATCH | Ensure SSH access is limited - denyusers"
         lineinfile:
@@ -383,7 +383,7 @@
         notify:
             - restart sshd
         when:
-            - "rhel7cis_sshd['denyusers']|default('') != ''"
+            - "rhel7cis_sshd['denyusers']|default('') | length > 0"
 
       - name: "SCORED | 5.2.15 | PATCH | Ensure SSH access is limited - denygroups"
         lineinfile:
@@ -394,7 +394,7 @@
         notify:
             - restart sshd
         when:
-            - "rhel7cis_sshd['denygroups']|default('') != ''"
+            - "rhel7cis_sshd['denygroups']|default('') | length > 0"
   when:
       - rhel7cis_rule_5_2_15
   tags:

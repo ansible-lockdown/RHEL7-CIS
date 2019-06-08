@@ -2,7 +2,8 @@
 # tasks file for RHEL7-CIS
 - name: Check OS version and family
   fail:
-      msg: "This role can only be run against RHEL 7. {{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported."
+      msg: "This role can only be run against RHEL 7.
+      {{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported."
   when:
       - ansible_os_family == 'RedHat'
       - ansible_distribution_major_version | version_compare('7', '!=')
