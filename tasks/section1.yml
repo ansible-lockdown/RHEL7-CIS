@@ -364,6 +364,7 @@
       - item.mount == "/home"
   with_items: "{{ ansible_mounts }}"
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -434,6 +435,7 @@
   when:
       - rhel7cis_rule_1_1_21
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -447,6 +449,7 @@
       - rhel7cis_allow_autofs == false and autofs_service_status.stdout == "loaded"
       - rhel7cis_rule_1_1_22
   tags:
+      - scored
       - level1
       - patch
       - rule_1.1.22
@@ -857,6 +860,7 @@
   when:
       - rhel7cis_rule_1_7_1_1
   tags:
+      - scored
       - level1
       - banner
       - patch
@@ -910,6 +914,7 @@
   when:
       - rhel7cis_rule_1_7_1_5
   tags:
+      - scored
       - level1
       - perms
       - patch
@@ -951,6 +956,7 @@
       - rhel7cis_gui
       - rhel7cis_rule_1_7_2
   tags:
+      - scored
       - level1
       - level2
       - patch

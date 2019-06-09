@@ -18,6 +18,7 @@
   when:
       - rhel7cis_rule_6_1_2
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -32,6 +33,7 @@
   when:
       - rhel7cis_rule_6_1_3
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -46,6 +48,7 @@
   when:
       - rhel7cis_rule_6_1_4
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -60,6 +63,7 @@
   when:
       - rhel7cis_rule_6_1_5
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -74,6 +78,7 @@
   when:
       - rhel7cis_rule_6_1_6
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -88,6 +93,7 @@
   when:
       - rhel7cis_rule_6_1_7
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -102,6 +108,7 @@
   when:
       - rhel7cis_rule_6_1_8
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -116,6 +123,7 @@
   when:
       - rhel7cis_rule_6_1_9
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -127,6 +135,7 @@
   when:
       - rhel7cis_rule_6_1_10
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -139,6 +148,7 @@
   when:
       - rhel7cis_rule_6_1_11
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -151,6 +161,7 @@
   when:
       - rhel7cis_rule_6_1_12
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -190,6 +201,7 @@
       - empty_password_accounts.rc
       - rhel7cis_rule_6_2_1
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -202,6 +214,7 @@
   when:
       - rhel7cis_rule_6_2_2
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -215,6 +228,7 @@
   when:
       - rhel7cis_rule_6_2_3
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -228,6 +242,7 @@
   when:
       - rhel7cis_rule_6_2_4
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -243,6 +258,7 @@
       - uid_zero_accounts_except_root.rc
       - rhel7cis_rule_6_2_5
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -254,6 +270,7 @@
   when:
       - rhel7cis_rule_6_2_6
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -266,6 +283,7 @@
   when:
       - rhel7cis_rule_6_2_7
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -278,6 +296,7 @@
   when:
       - rhel7cis_rule_6_2_8
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -290,6 +309,7 @@
   when:
       - rhel7cis_rule_6_2_9
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -302,6 +322,7 @@
   when:
       - rhel7cis_rule_6_2_10
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -316,6 +337,7 @@
   when:
       - rhel7cis_rule_6_2_11
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -329,6 +351,7 @@
   when:
       - rhel7cis_rule_6_2_12
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -353,6 +376,7 @@
   when:
       - rhel7cis_rule_6_2_14
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -364,6 +388,7 @@
   when:
       - rhel7cis_rule_6_2_15
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -376,6 +401,7 @@
   when:
       - rhel7cis_rule_6_2_16
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -388,6 +414,7 @@
   when:
       - rhel7cis_rule_6_2_17
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -400,6 +427,7 @@
   when:
       - rhel7cis_rule_6_2_18
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -412,6 +440,7 @@
   when:
       - rhel7cis_rule_6_2_19
   tags:
+      - scored
       - level1
       - level2
       - patch

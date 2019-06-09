@@ -5,6 +5,7 @@
   when:
       - rhel7cis_rule_5_1_1
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -19,6 +20,7 @@
   when:
       - rhel7cis_rule_5_1_2
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -34,6 +36,7 @@
   when:
       - rhel7cis_rule_5_1_3
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -49,6 +52,7 @@
   when:
       - rhel7cis_rule_5_1_4
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -64,6 +68,7 @@
   when:
       - rhel7cis_rule_5_1_5
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -79,6 +84,7 @@
   when:
       - rhel7cis_rule_5_1_6
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -94,6 +100,7 @@
   when:
       - rhel7cis_rule_5_1_7
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -139,6 +146,7 @@
   when:
       - rhel7cis_rule_5_1_8
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -154,6 +162,7 @@
   when:
       - rhel7cis_rule_5_2_1
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -168,6 +177,7 @@
   when:
       - rhel7cis_rule_5_2_2
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -182,6 +192,7 @@
   when:
       - rhel7cis_rule_5_2_3
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -196,6 +207,7 @@
   when:
       - rhel7cis_rule_5_2_4
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -210,6 +222,7 @@
   when:
       - rhel7cis_rule_5_2_5
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -224,6 +237,7 @@
   when:
       - rhel7cis_rule_5_2_6
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -238,6 +252,7 @@
   when:
       - rhel7cis_rule_5_2_7
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -252,6 +267,7 @@
   when:
       - rhel7cis_rule_5_2_8
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -266,6 +282,7 @@
   when:
       - rhel7cis_rule_5_2_9
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -280,6 +297,7 @@
   when:
       - rhel7cis_rule_5_2_10
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -294,6 +312,7 @@
   when:
       - rhel7cis_rule_5_2_11
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -308,6 +327,7 @@
   when:
       - rhel7cis_rule_5_2_12
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -331,6 +351,7 @@
   when:
       - rhel7cis_rule_5_2_13
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -345,6 +366,7 @@
   when:
       - rhel7cis_rule_5_2_14
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -398,6 +420,7 @@
   when:
       - rhel7cis_rule_5_2_15
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -412,6 +435,7 @@
   when:
       - rhel7cis_rule_5_2_16
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -432,6 +456,7 @@
   when:
       - rhel7cis_rule_5_3_1
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -443,6 +468,7 @@
   when:
       - rhel7cis_rule_5_3_2
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -455,6 +481,7 @@
   when:
       - rhel7cis_rule_5_3_3
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -468,6 +495,7 @@
   when:
       - rhel7cis_rule_5_3_4
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -482,6 +510,7 @@
   when:
       - rhel7cis_rule_5_4_1_1
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -496,6 +525,7 @@
   when:
       - rhel7cis_rule_5_4_1_2
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -521,6 +551,7 @@
   when:
       - rhel7cis_rule_5_4_1_4
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -534,6 +565,7 @@
   when:
       - rhel7cis_rule_5_4_2
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -549,6 +581,7 @@
       - rhel7cis_rule_5_4_2
       - item != "root"
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -567,6 +600,7 @@
       - item != "shutdown"
       - item != "halt"
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -579,6 +613,7 @@
   when:
       - rhel7cis_rule_5_4_3
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -600,6 +635,7 @@
   when:
       - rhel7cis_rule_5_4_4
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -622,6 +658,7 @@
       regexp: '^(#)?auth\s+required\s+pam_wheel\.so'
       line: 'auth           required        pam_wheel.so use_uid'
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -632,6 +669,7 @@
       name: root
       groups: wheel
   tags:
+      - scored
       - level1
       - level2
       - patch

@@ -23,6 +23,7 @@
       - rhel7cis_rule_4_1_1_2
   notify: restart auditd
   tags:
+      - scored
       - level2
       - auditd
       - patch
@@ -38,6 +39,7 @@
       - rhel7cis_rule_4_1_1_2
   notify: restart auditd
   tags:
+      - scored
       - level2
       - auditd
       - patch
@@ -53,6 +55,7 @@
       - rhel7cis_rule_4_1_1_3
   notify: restart auditd
   tags:
+      - scored
       - level2
       - auditd
       - patch
@@ -67,6 +70,7 @@
       - rhel7cis_skip_for_travis == false
       - rhel7cis_rule_4_1_2
   tags:
+      - scored
       - level2
       - auditd
       - patch
@@ -83,6 +87,7 @@
   when:
       - rhel7cis_rule_4_1_3
   tags:
+      - scored
       - level2
       - auditd
       - patch
@@ -99,6 +104,7 @@
       - rhel7cis_rule_4_1_4
   notify: restart auditd
   tags:
+      - scored
       - level2
       - auditd
       - patch
@@ -115,6 +121,7 @@
       - rhel7cis_rule_4_1_5
   notify: restart auditd
   tags:
+      - scored
       - level2
       - auditd
       - patch
@@ -131,6 +138,7 @@
       - rhel7cis_rule_4_1_6
   notify: restart auditd
   tags:
+      - scored
       - level2
       - auditd
       - patch
@@ -147,6 +155,7 @@
       - rhel7cis_rule_4_1_7
   notify: restart auditd
   tags:
+      - scored
       - level2
       - auditd
       - patch
@@ -163,6 +172,7 @@
       - rhel7cis_rule_4_1_8
   notify: restart auditd
   tags:
+      - scored
       - level2
       - auditd
       - patch
@@ -179,6 +189,7 @@
       - rhel7cis_rule_4_1_9
   notify: restart auditd
   tags:
+      - scored
       - level2
       - auditd
       - patch
@@ -195,6 +206,7 @@
       - rhel7cis_rule_4_1_10
   notify: restart auditd
   tags:
+      - scored
       - level2
       - auditd
       - patch
@@ -211,6 +223,7 @@
       - rhel7cis_rule_4_1_11
   notify: restart auditd
   tags:
+      - scored
       - level2
       - auditd
       - patch
@@ -224,6 +237,7 @@
   when:
       - rhel7cis_rule_4_1_12
   tags:
+      - scored
       - level2
       - auditd
       - patch
@@ -240,6 +254,7 @@
   when:
       - rhel7cis_rule_4_1_12
   tags:
+      - scored
       - level2
       - auditd
       - patch
@@ -256,6 +271,7 @@
       - rhel7cis_rule_4_1_13
   notify: restart auditd
   tags:
+      - scored
       - level2
       - auditd
       - patch
@@ -272,6 +288,7 @@
       - rhel7cis_rule_4_1_14
   notify: restart auditd
   tags:
+      - scored
       - level2
       - auditd
       - patch
@@ -288,6 +305,7 @@
       - rhel7cis_rule_4_1_15
   notify: restart auditd
   tags:
+      - scored
       - level2
       - auditd
       - patch
@@ -304,6 +322,7 @@
       - rhel7cis_rule_4_1_16
   notify: restart auditd
   tags:
+      - scored
       - level2
       - auditd
       - patch
@@ -320,6 +339,7 @@
       - rhel7cis_rule_4_1_17
   notify: restart auditd
   tags:
+      - scored
       - level2
       - auditd
       - patch
@@ -336,6 +356,7 @@
       - rhel7cis_rule_4_1_18
   notify: restart auditd
   tags:
+      - scored
       - level2
       - auditd
       - patch
@@ -348,6 +369,7 @@
   when:
       - rhel7cis_rule_4_2_3
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -359,6 +381,7 @@
   when:
       - rhel7cis_rule_4_2_1_1
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -385,6 +408,7 @@
   when:
       - rhel7cis_rule_4_2_1_3
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -396,6 +420,7 @@
   when:
       - rhel7cis_rule_4_2_1_4
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -432,6 +457,7 @@
   when:
       - rhel7cis_rule_4_2_2_1
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -456,6 +482,7 @@
   when:
       - rhel7cis_rule_4_2_2_3
   tags:
+      - scored
       - level1
       - level2
       - patch
@@ -493,6 +520,7 @@
   when:
       - rhel7cis_rule_4_2_4
   tags:
+      - scored
       - level1
       - level2
       - patch
