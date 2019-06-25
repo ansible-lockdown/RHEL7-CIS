@@ -2,7 +2,7 @@
   command: /bin/true
   changed_when: no
   when:
-      - rhel7cis_rule_6_1_1
+      - rhel7cis_rule_6_1_1|bool
   tags:
       - level2
       - patch
@@ -16,7 +16,7 @@
       group: root
       mode: 0644
   when:
-      - rhel7cis_rule_6_1_2
+      - rhel7cis_rule_6_1_2|bool
   tags:
       - level1
       - level2
@@ -30,7 +30,7 @@
       group: root
       mode: 0000
   when:
-      - rhel7cis_rule_6_1_3
+      - rhel7cis_rule_6_1_3|bool
   tags:
       - level1
       - level2
@@ -44,7 +44,7 @@
       group: root
       mode: 0644
   when:
-      - rhel7cis_rule_6_1_4
+      - rhel7cis_rule_6_1_4|bool
   tags:
       - level1
       - level2
@@ -58,7 +58,7 @@
       group: root
       mode: 0000
   when:
-      - rhel7cis_rule_6_1_5
+      - rhel7cis_rule_6_1_5|bool
   tags:
       - level1
       - level2
@@ -72,7 +72,7 @@
       group: root
       mode: 0600
   when:
-      - rhel7cis_rule_6_1_6
+      - rhel7cis_rule_6_1_6|bool
   tags:
       - level1
       - level2
@@ -86,7 +86,7 @@
       group: root
       mode: 0000
   when:
-      - rhel7cis_rule_6_1_7
+      - rhel7cis_rule_6_1_7|bool
   tags:
       - level1
       - level2
@@ -100,7 +100,7 @@
       group: root
       mode: 0600
   when:
-      - rhel7cis_rule_6_1_8
+      - rhel7cis_rule_6_1_8|bool
   tags:
       - level1
       - level2
@@ -114,7 +114,7 @@
       group: root
       mode: 0600
   when:
-      - rhel7cis_rule_6_1_9
+      - rhel7cis_rule_6_1_9|bool
   tags:
       - level1
       - level2
@@ -125,7 +125,7 @@
   command: /bin/true
   changed_when: no
   when:
-      - rhel7cis_rule_6_1_10
+      - rhel7cis_rule_6_1_10|bool
   tags:
       - level1
       - level2
@@ -137,7 +137,7 @@
   command: /bin/true
   changed_when: no
   when:
-      - rhel7cis_rule_6_1_11
+      - rhel7cis_rule_6_1_11|bool
   tags:
       - level1
       - level2
@@ -149,7 +149,7 @@
   command: /bin/true
   changed_when: no
   when:
-      - rhel7cis_rule_6_1_12
+      - rhel7cis_rule_6_1_12|bool
   tags:
       - level1
       - level2
@@ -161,7 +161,7 @@
   command: /bin/true
   changed_when: no
   when:
-      - rhel7cis_rule_6_1_13
+      - rhel7cis_rule_6_1_13|bool
   tags:
       - level1
       - level2
@@ -173,7 +173,7 @@
   command: /bin/true
   changed_when: no
   when:
-      - rhel7cis_rule_6_1_14
+      - rhel7cis_rule_6_1_14|bool
   tags:
       - level1
       - level2
@@ -188,7 +188,7 @@
   with_items: "{{ empty_password_accounts.stdout_lines }}"
   when:
       - empty_password_accounts.rc
-      - rhel7cis_rule_6_2_1
+      - rhel7cis_rule_6_2_1|bool
   tags:
       - level1
       - level2
@@ -200,7 +200,7 @@
   changed_when: no
   failed_when: no
   when:
-      - rhel7cis_rule_6_2_2
+      - rhel7cis_rule_6_2_2|bool
   tags:
       - level1
       - level2
@@ -213,7 +213,7 @@
   changed_when: no
   failed_when: no
   when:
-      - rhel7cis_rule_6_2_3
+      - rhel7cis_rule_6_2_3|bool
   tags:
       - level1
       - level2
@@ -226,7 +226,7 @@
   changed_when: no
   failed_when: no
   when:
-      - rhel7cis_rule_6_2_4
+      - rhel7cis_rule_6_2_4|bool
   tags:
       - level1
       - level2
@@ -241,7 +241,7 @@
   with_items: "{{ uid_zero_accounts_except_root.stdout_lines }}"
   when:
       - uid_zero_accounts_except_root.rc
-      - rhel7cis_rule_6_2_5
+      - rhel7cis_rule_6_2_5|bool
   tags:
       - level1
       - level2
@@ -252,7 +252,7 @@
   command: /bin/true
   changed_when: no
   when:
-      - rhel7cis_rule_6_2_6
+      - rhel7cis_rule_6_2_6|bool
   tags:
       - level1
       - level2
@@ -264,7 +264,7 @@
   command: /bin/true
   changed_when: no
   when:
-      - rhel7cis_rule_6_2_7
+      - rhel7cis_rule_6_2_7|bool
   tags:
       - level1
       - level2
@@ -276,7 +276,7 @@
   command: /bin/true
   changed_when: no
   when:
-      - rhel7cis_rule_6_2_8
+      - rhel7cis_rule_6_2_8|bool
   tags:
       - level1
       - level2
@@ -288,7 +288,7 @@
   command: /bin/true
   changed_when: no
   when:
-      - rhel7cis_rule_6_2_9
+      - rhel7cis_rule_6_2_9|bool
   tags:
       - level1
       - level2
@@ -300,7 +300,7 @@
   command: /bin/true
   changed_when: no
   when:
-      - rhel7cis_rule_6_2_10
+      - rhel7cis_rule_6_2_10|bool
   tags:
       - level1
       - level2
@@ -314,7 +314,7 @@
       dest: "~{{ item }}/.forward"
   with_items: "{{ users.stdout_lines }}"
   when:
-      - rhel7cis_rule_6_2_11
+      - rhel7cis_rule_6_2_11|bool
   tags:
       - level1
       - level2
@@ -327,7 +327,7 @@
       dest: "~{{ item }}/.netrc"
   with_items: "{{ users.stdout_lines }}"
   when:
-      - rhel7cis_rule_6_2_12
+      - rhel7cis_rule_6_2_12|bool
   tags:
       - level1
       - level2
@@ -351,7 +351,7 @@
       dest: "~{{ item }}/.rhosts"
   with_items: "{{ users.stdout_lines }}"
   when:
-      - rhel7cis_rule_6_2_14
+      - rhel7cis_rule_6_2_14|bool
   tags:
       - level1
       - level2
@@ -362,7 +362,7 @@
   command: /bin/true
   changed_when: no
   when:
-      - rhel7cis_rule_6_2_15
+      - rhel7cis_rule_6_2_15|bool
   tags:
       - level1
       - level2
@@ -374,7 +374,7 @@
   command: /bin/true
   changed_when: no
   when:
-      - rhel7cis_rule_6_2_16
+      - rhel7cis_rule_6_2_16|bool
   tags:
       - level1
       - level2
@@ -386,7 +386,7 @@
   command: /bin/true
   changed_when: no
   when:
-      - rhel7cis_rule_6_2_17
+      - rhel7cis_rule_6_2_17|bool
   tags:
       - level1
       - level2
@@ -398,7 +398,7 @@
   command: /bin/true
   changed_when: no
   when:
-      - rhel7cis_rule_6_2_18
+      - rhel7cis_rule_6_2_18|bool
   tags:
       - level1
       - level2
@@ -410,7 +410,7 @@
   command: /bin/true
   changed_when: no
   when:
-      - rhel7cis_rule_6_2_19
+      - rhel7cis_rule_6_2_19|bool
   tags:
       - level1
       - level2

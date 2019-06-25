@@ -35,6 +35,8 @@
   changed_when: no
   failed_when: no
   check_mode: no
+  args:
+    warn: false
   tags:
       - skip_ansible_lint
 
@@ -44,6 +46,8 @@
   changed_when: no
   failed_when: no
   check_mode: no
+  args:
+    warn: false
   tags:
       - skip_ansible_lint
 

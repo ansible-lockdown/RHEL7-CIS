@@ -5,7 +5,7 @@
       line: "max_log_file = 10"
       state: present
   when:
-      - rhel7cis_rule_4_1_1_1
+      - rhel7cis_rule_4_1_1_1|bool
   notify: restart auditd
   tags:
       - level2
@@ -20,7 +20,7 @@
       line: "admin_space_left_action = {{ rhel7cis_auditd['admin_space_left_action'] }}"
       state: present
   when:
-      - rhel7cis_rule_4_1_1_2
+      - rhel7cis_rule_4_1_1_2|bool
   notify: restart auditd
   tags:
       - level2
@@ -35,7 +35,7 @@
       line: "space_left_action = email"
       state: present
   when:
-      - rhel7cis_rule_4_1_1_2
+      - rhel7cis_rule_4_1_1_2|bool
   notify: restart auditd
   tags:
       - level2
@@ -50,7 +50,7 @@
       line: "max_log_file_action = {{ rhel7cis_auditd['max_log_file_action'] }}"
       state: present
   when:
-      - rhel7cis_rule_4_1_1_3
+      - rhel7cis_rule_4_1_1_3|bool
   notify: restart auditd
   tags:
       - level2
@@ -65,7 +65,7 @@
       enabled: yes
   when:
       - rhel7cis_skip_for_travis == false
-      - rhel7cis_rule_4_1_2
+      - rhel7cis_rule_4_1_2|bool
   tags:
       - level2
       - auditd
@@ -81,7 +81,7 @@
   ignore_errors: yes
   notify: generate new grub config
   when:
-      - rhel7cis_rule_4_1_3
+      - rhel7cis_rule_4_1_3|bool
   tags:
       - level2
       - auditd
@@ -96,7 +96,7 @@
       group: root
       mode: 0600
   when:
-      - rhel7cis_rule_4_1_4
+      - rhel7cis_rule_4_1_4|bool
   notify: restart auditd
   tags:
       - level2
@@ -112,7 +112,7 @@
       group: root
       mode: 0600
   when:
-      - rhel7cis_rule_4_1_5
+      - rhel7cis_rule_4_1_5|bool
   notify: restart auditd
   tags:
       - level2
@@ -128,7 +128,7 @@
       group: root
       mode: 0600
   when:
-      - rhel7cis_rule_4_1_6
+      - rhel7cis_rule_4_1_6|bool
   notify: restart auditd
   tags:
       - level2
@@ -144,7 +144,7 @@
       group: root
       mode: 0600
   when:
-      - rhel7cis_rule_4_1_7
+      - rhel7cis_rule_4_1_7|bool
   notify: restart auditd
   tags:
       - level2
@@ -160,7 +160,7 @@
       group: root
       mode: 0600
   when:
-      - rhel7cis_rule_4_1_8
+      - rhel7cis_rule_4_1_8|bool
   notify: restart auditd
   tags:
       - level2
@@ -176,7 +176,7 @@
       group: root
       mode: 0600
   when:
-      - rhel7cis_rule_4_1_9
+      - rhel7cis_rule_4_1_9|bool
   notify: restart auditd
   tags:
       - level2
@@ -192,7 +192,7 @@
       group: root
       mode: 0600
   when:
-      - rhel7cis_rule_4_1_10
+      - rhel7cis_rule_4_1_10|bool
   notify: restart auditd
   tags:
       - level2
@@ -208,7 +208,7 @@
       group: root
       mode: 0600
   when:
-      - rhel7cis_rule_4_1_11
+      - rhel7cis_rule_4_1_11|bool
   notify: restart auditd
   tags:
       - level2
@@ -222,7 +222,7 @@
   changed_when: no
   check_mode: no
   when:
-      - rhel7cis_rule_4_1_12
+      - rhel7cis_rule_4_1_12|bool
   tags:
       - level2
       - auditd
@@ -238,7 +238,7 @@
       mode: 0600
   notify: restart auditd
   when:
-      - rhel7cis_rule_4_1_12
+      - rhel7cis_rule_4_1_12|bool
   tags:
       - level2
       - auditd
@@ -253,7 +253,7 @@
       group: root
       mode: 0600
   when:
-      - rhel7cis_rule_4_1_13
+      - rhel7cis_rule_4_1_13|bool
   notify: restart auditd
   tags:
       - level2
@@ -269,7 +269,7 @@
       group: root
       mode: 0600
   when:
-      - rhel7cis_rule_4_1_14
+      - rhel7cis_rule_4_1_14|bool
   notify: restart auditd
   tags:
       - level2
@@ -285,7 +285,7 @@
       group: root
       mode: 0600
   when:
-      - rhel7cis_rule_4_1_15
+      - rhel7cis_rule_4_1_15|bool
   notify: restart auditd
   tags:
       - level2
@@ -301,7 +301,7 @@
       group: root
       mode: 0600
   when:
-      - rhel7cis_rule_4_1_16
+      - rhel7cis_rule_4_1_16|bool
   notify: restart auditd
   tags:
       - level2
@@ -317,7 +317,7 @@
       group: root
       mode: 0600
   when:
-      - rhel7cis_rule_4_1_17
+      - rhel7cis_rule_4_1_17|bool
   notify: restart auditd
   tags:
       - level2
@@ -333,7 +333,7 @@
       group: root
       mode: 0600
   when:
-      - rhel7cis_rule_4_1_18
+      - rhel7cis_rule_4_1_18|bool
   notify: restart auditd
   tags:
       - level2
@@ -346,7 +346,7 @@
       name: "{{ rhel7cis_syslog }}"
       state: present
   when:
-      - rhel7cis_rule_4_2_3
+      - rhel7cis_rule_4_2_3|bool
   tags:
       - level1
       - level2
@@ -357,7 +357,7 @@
   command: /bin/true
   changed_when: no
   when:
-      - rhel7cis_rule_4_2_1_1
+      - rhel7cis_rule_4_2_1_1|bool
   tags:
       - level1
       - level2
@@ -369,7 +369,7 @@
   command: /bin/true
   changed_when: no
   when:
-      - rhel7cis_rule_4_2_1_2
+      - rhel7cis_rule_4_2_1_2|bool
   tags:
       - level1
       - level2
@@ -383,7 +383,7 @@
       regexp: '^\$FileCreateMode'
       line: '$FileCreateMode 0640'
   when:
-      - rhel7cis_rule_4_2_1_3
+      - rhel7cis_rule_4_2_1_3|bool
   tags:
       - level1
       - level2
@@ -394,7 +394,7 @@
   command: /bin/true
   changed_when: no
   when:
-      - rhel7cis_rule_4_2_1_4
+      - rhel7cis_rule_4_2_1_4|bool
   tags:
       - level1
       - level2
@@ -406,7 +406,7 @@
   command: /bin/true
   changed_when: no
   when:
-      - rhel7cis_rule_4_2_1_5
+      - rhel7cis_rule_4_2_1_5|bool
   tags:
       - level1
       - level2
@@ -418,7 +418,7 @@
   command: /bin/true
   changed_when: no
   when:
-      - rhel7cis_rule_4_2_1_5
+      - rhel7cis_rule_4_2_1_5|bool
   tags:
       - level1
       - level2
@@ -430,7 +430,7 @@
   command: /bin/true
   changed_when: no
   when:
-      - rhel7cis_rule_4_2_2_1
+      - rhel7cis_rule_4_2_2_1|bool
   tags:
       - level1
       - level2
@@ -442,7 +442,7 @@
   command: /bin/true
   changed_when: no
   when:
-      - rhel7cis_rule_4_2_2_2
+      - rhel7cis_rule_4_2_2_2|bool
   tags:
       - level1
       - level2
@@ -454,7 +454,7 @@
   command: /bin/true
   changed_when: no
   when:
-      - rhel7cis_rule_4_2_2_3
+      - rhel7cis_rule_4_2_2_3|bool
   tags:
       - level1
       - level2
@@ -466,7 +466,7 @@
   command: /bin/true
   changed_when: no
   when:
-      - rhel7cis_rule_4_2_2_4
+      - rhel7cis_rule_4_2_2_4|bool
   tags:
       - level1
       - level2
@@ -478,7 +478,7 @@
   command: /bin/true
   changed_when: no
   when:
-      - rhel7cis_rule_4_2_2_5
+      - rhel7cis_rule_4_2_2_5|bool
   tags:
       - level1
       - level2
@@ -491,7 +491,7 @@
   changed_when: no
   failed_when: no
   when:
-      - rhel7cis_rule_4_2_4
+      - rhel7cis_rule_4_2_4|bool
   tags:
       - level1
       - level2

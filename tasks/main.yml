@@ -5,14 +5,14 @@
       msg: "This role can only be run against RHEL 7. {{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported."
   when:
       - ansible_os_family == 'RedHat'
-      - ansible_distribution_major_version | version_compare('7', '!=')
+      - ansible_distribution_major_version is version_compare('7', '!=')
   tags:
       - always
 
 - name: Check ansible version
   fail:
       msg: You must use ansible 2.1 or greater
-  when: not ansible_version.full | version_compare('2.1', '>=')
+  when: not ansible_version.full is version_compare('2.1', '>=')
   tags:
       - always
 
@@ -24,29 +24,29 @@
 
 - include: section1.yml
   become: yes
-  when: rhel7cis_section1
+  when: rhel7cis_section1|bool
   tags:
       - rhel7cis_section1
 
 - include: section2.yml
   become: yes
-  when: rhel7cis_section2
+  when: rhel7cis_section2|bool
 
 - include: section3.yml
   become: yes
-  when: rhel7cis_section3
+  when: rhel7cis_section3|bool
 
 - include: section4.yml
   become: yes
-  when: rhel7cis_section4
+  when: rhel7cis_section4|bool
 
 - include: section5.yml
   become: yes
-  when: rhel7cis_section5
+  when: rhel7cis_section5|bool
 
 - include: section6.yml
   become: yes
-  when: rhel7cis_section6
+  when: rhel7cis_section6|bool
 
 - include: post.yml
   become: yes
