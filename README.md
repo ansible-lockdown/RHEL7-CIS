@@ -152,7 +152,18 @@ rhel7cis_host_allow:
 rhel7cis_firewall: firewalld
 rhel7cis_firewall: iptables
 ``` 
-  
+
+##### 5.4.1.1 | PATCH | Ensure password expiration is 90 days or less
+##### 5.4.1.2 | PATCH | Ensure minimum days between password changes is 7 or more
+##### 5.4.1.3 | PATCH | Ensure password expiration warning days is 7 or more
+##### 5.4.1.4 | PATCH | Ensure inactive password lock is 30 days or less
+
+```
+rhel7cis_pass.max_days: 90
+rhel7cis_pass.min_days: 7
+rhel7cis_pass.warn_age: 7
+rhel7cis_pass.inactive_age: 30
+```  
 
 Dependencies
 ------------

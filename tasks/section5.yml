@@ -516,8 +516,36 @@
       - rule_5.4.1.3
 
 - name: "SCORED | 5.4.1.4 | PATCH | Ensure inactive password lock is 30 days or less"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "SCORED | 5.4.1.4 | PATCH | Ensure inactive password lock is 30 days or less - Get default INACTIVE setting"
+        shell: "useradd -D | grep INACTIVE"
+        changed_when: no
+        register: inactive_setting
+
+      - name: "SCORED | 5.4.1.4 | PATCH | Ensure inactive password lock is 30 days or less - Set default INACTIVE setting"
+        shell: "useradd --defaults --inactive {{ rhel7cis_pass['inactive_age'] }} "
+        when: inactive_setting.stdout != 'INACTIVE=30'
+
+      - name: "SCORED | 5.4.1.4 | PATCH | Ensure inactive password lock is 30 days or less - Find all passworded accounts with expir"
+        shell: 'egrep "^[^:]+:[^\\!*]" /etc/shadow | cut -d: -f1,7'
+        changed_when: no
+        register: user_account
+
+      - name: "SCORED | 5.4.1.4 | PATCH | Ensure inactive password lock is 30 days or less - Change each user"
+        shell: |
+            INPUT="{{ item }}"
+            PARAMETERS=(${INPUT//:/ })
+            USER=${PARAMETERS[0]}
+            EXPIRY=${PARAMETERS[1]}
+            if [[ ($EXPIRY) && ($EXPIRY -gt {{ rhel7cis_pass['inactive_age'] }}) ]]; then
+                echo "Changing ${USER}'s inactive password lock setting"
+                chage --inactive {{ rhel7cis_pass['inactive_age'] }} ${USER}
+            fi
+
+        register: output
+        with_items:
+            - "{{ user_account.stdout_lines }} "
+        changed_when: output.stdout != ""
   when:
       - rhel7cis_rule_5_4_1_4|bool
   tags:
@@ -525,7 +553,6 @@
       - level2
       - patch
       - rule_5.4.1.4
-      - notimplemented
 
 - name: "SCORED | 5.4.2 | PATCH | Ensure system accounts are non-login"
   shell: "awk -F: '($3 < {{ rhel7cis_rule_5_4_2_min_uid }}) {print $1 }' /etc/passwd"

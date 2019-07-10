@@ -378,6 +378,8 @@ rhel7cis_pass:
     max_days: 90
     min_days: 7
     warn_age: 7
+    inactive_age: 30
+
 # Syslog system
 rhel7cis_syslog: rsyslog
 #rhel7cis_syslog: syslog-ng
