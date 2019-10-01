@@ -163,7 +163,7 @@
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
-      regexp: '^Protocol'
+      regexp: '(?i)^Protocol'
       line: 'Protocol 2'
   when:
       - rhel7cis_rule_5_2_2
@@ -177,7 +177,7 @@
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
-      regexp: '^LogLevel'
+      regexp: '(?i)^LogLevel'
       line: 'LogLevel INFO'
   when:
       - rhel7cis_rule_5_2_3
@@ -191,7 +191,7 @@
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
-      regexp: '^X11Forwarding'
+      regexp: '(?i)^X11Forwarding'
       line: 'X11Forwarding no'
   when:
       - rhel7cis_rule_5_2_4
@@ -205,7 +205,7 @@
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
-      regexp: '^(#)?MaxAuthTries \d'
+      regexp: '(?i)^(#)?MaxAuthTries \d'
       line: 'MaxAuthTries 4'
   when:
       - rhel7cis_rule_5_2_5
@@ -219,7 +219,7 @@
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
-      regexp: '^IgnoreRhosts'
+      regexp: '(?i)^IgnoreRhosts'
       line: 'IgnoreRhosts yes'
   when:
       - rhel7cis_rule_5_2_6
@@ -233,7 +233,7 @@
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
-      regexp: '^HostbasedAuthentication'
+      regexp: '(?i)^HostbasedAuthentication'
       line: 'HostbasedAuthentication no'
   when:
       - rhel7cis_rule_5_2_7
@@ -247,7 +247,7 @@
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
-      regexp: '^PermitRootLogin'
+      regexp: '(?i)^PermitRootLogin'
       line: 'PermitRootLogin no'
   when:
       - rhel7cis_rule_5_2_8
@@ -261,7 +261,7 @@
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
-      regexp: '^PermitEmptyPasswords'
+      regexp: '(?i)^PermitEmptyPasswords'
       line: 'PermitEmptyPasswords no'
   when:
       - rhel7cis_rule_5_2_9
@@ -275,7 +275,7 @@
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
-      regexp: '^PermitUserEnvironment'
+      regexp: '(?i)^PermitUserEnvironment'
       line: 'PermitUserEnvironment no'
   when:
       - rhel7cis_rule_5_2_10
@@ -289,7 +289,7 @@
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
-      regexp: '^Ciphers'
+      regexp: '(?i)^Ciphers'
       line: "Ciphers {{ rhel7cis_sshd['ciphers'] }}"
   when:
       - rhel7cis_rule_5_2_11
@@ -303,7 +303,7 @@
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
-      regexp: '^MACs'
+      regexp: '(?i)^MACs'
       line: "MACs {{ rhel7cis_sshd['macs'] }}"
   when:
       - rhel7cis_rule_5_2_12
@@ -319,14 +319,14 @@
         lineinfile:
             state: present
             dest: /etc/ssh/sshd_config
-            regexp: '^ClientAliveInterval'
+            regexp: '(?i)^ClientAliveInterval'
             line: "ClientAliveInterval {{ rhel7cis_sshd['clientaliveinterval'] }}"
 
       - name: "SCORED | 5.2.13 | PATCH | Ensure SSH ClientAliveCountMax set to <= 3"
         lineinfile:
             state: present
             dest: /etc/ssh/sshd_config
-            regexp: '^ClientAliveCountMax'
+            regexp: '(?i)^ClientAliveCountMax'
             line: "ClientAliveCountMax {{ rhel7cis_sshd['clientalivecountmax'] }}"
   when:
       - rhel7cis_rule_5_2_13
@@ -340,7 +340,7 @@
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
-      regexp: '^LoginGraceTime'
+      regexp: '(?i)^LoginGraceTime'
       line: "LoginGraceTime {{ rhel7cis_sshd['logingracetime'] }}"
   when:
       - rhel7cis_rule_5_2_14
@@ -356,7 +356,7 @@
         lineinfile:
             state: present
             dest: /etc/ssh/sshd_config
-            regexp: "^AllowUsers"
+            regexp: "(?i)^AllowUsers"
             line: AllowUsers {{ rhel7cis_sshd['allowusers'] }}
         notify:
             - restart sshd
@@ -367,7 +367,7 @@
         lineinfile:
             state: present
             dest: /etc/ssh/sshd_config
-            regexp: "^AllowGroups"
+            regexp: "(?i)^AllowGroups"
             line: AllowGroups {{ rhel7cis_sshd['allowgroups'] }}
         notify:
             - restart sshd
@@ -378,7 +378,7 @@
         lineinfile:
             state: present
             dest: /etc/ssh/sshd_config
-            regexp: "^DenyUsers"
+            regexp: "(?i)^DenyUsers"
             line: DenyUsers {{ rhel7cis_sshd['denyusers'] }}
         notify:
             - restart sshd
@@ -389,7 +389,7 @@
         lineinfile:
             state: present
             dest: /etc/ssh/sshd_config
-            regexp: "^DenyGroups"
+            regexp: "(?i)^DenyGroups"
             line: DenyGroups {{ rhel7cis_sshd['denygroups'] }}
         notify:
             - restart sshd
@@ -407,7 +407,7 @@
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
-      regexp: '^Banner'
+      regexp: '(?i)^Banner'
       line: 'Banner /etc/issue.net'
   when:
       - rhel7cis_rule_5_2_16
