@@ -169,7 +169,10 @@
 
 
 - name: "SCORED | 2.2.1.2 | AUDIT | Ensure ntp is configured"
-  command: egrep -q "^restrict \-[46] default kod nomodify notrap nopeer noquery" /etc/ntp.conf && grep -q "^server" /etc/ntp.conf && grep -q "^OPTIONS=\"-u ntp:ntp\"" /etc/sysconfig/ntpd
+  command: |
+    egrep -q "^restrict \-[46] default kod nomodify notrap nopeer noquery" /etc/ntp.conf \
+    && grep -q "^server" /etc/ntp.conf \
+    && grep -q "^OPTIONS=\"-u ntp:ntp\"" /etc/sysconfig/ntpd
   register: check_ntp_restrict_audit
   failed_when: check_ntp_restrict_audit.rc == 1
   check_mode: no
