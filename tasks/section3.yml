@@ -436,6 +436,7 @@
   when:
       - rhel7cis_firewall == "firewalld"
       - rhel7cis_rule_3_6_2|bool
+      - ansible_connection != 'docker'
   tags:
       - level1
       - patch
@@ -489,6 +490,7 @@
   when:
       - rhel7cis_firewall == "firewalld"
       - rhel7cis_rule_3_6_5|bool
+      - ansible_connection != 'docker'
   tags:
       - level1
       - patch
