@@ -21,5 +21,9 @@ provisioner:
     converge: playbook.yml
   lint:
     name: ansible-lint
+    options:
+      exclude:
+        - tasks/old_content
+      x: ["303", "306", "602"]
 scenario:
   name: default
