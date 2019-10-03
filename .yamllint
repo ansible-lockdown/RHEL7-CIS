@@ -1,5 +1,9 @@
 ---
-
+ignore: |
+  bin/
+  lib/
+  include/
+  share/
 extends: default
 
 rules:
