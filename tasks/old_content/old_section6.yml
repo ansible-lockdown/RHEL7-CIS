@@ -1,5 +1,5 @@
 - name: "SCORED | 6.1.1 | AUDIT | Enable anacron Daemon"
-  shell: rpm -q cronie-anacron
+  command: rpm -q cronie-anacron
   register: result
   check_mode: no
   changed_when: no
@@ -281,7 +281,7 @@
       - rule_6.1.11
 
 - name: "SCORED | 6.1.11 | AUDIT | Restrict at/cron to Authorized Users"
-  shell: ls -l /etc/cron.allow
+  command: ls -l /etc/cron.allow
   register: result
   check_mode: no
   changed_when: no
@@ -293,7 +293,7 @@
       - rule_6.1.11
 
 - name: "SCORED | 6.1.11 | AUDIT | Restrict at/cron to Authorized Users"
-  shell: ls -l /etc/at.allow
+  command: ls -l /etc/at.allow
   register: result
   check_mode: no
   changed_when: no
@@ -448,7 +448,7 @@
       - rule_6.2.4
 
 - name: "SCORED | 6.2.5 | AUDIT | Set SSH MaxAuthTries to 4 or Less"
-  shell: grep "^MaxAuthTries 4" /etc/ssh/sshd_config
+  command: grep "^MaxAuthTries 4" /etc/ssh/sshd_config
   register: result
   check_mode: no
   changed_when: no

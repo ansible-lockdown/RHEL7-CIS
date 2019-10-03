@@ -716,7 +716,9 @@
       - rule_4.7
 
 - name: "SCORED | 4.7 | PATCH | Enable firewalld"
-  command: systemctl enable firewalld
+  systemd:
+      name: firewalld
+      enabled: true
   tags:
       - level1
       - level2

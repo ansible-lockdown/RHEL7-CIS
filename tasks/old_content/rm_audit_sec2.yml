@@ -142,7 +142,7 @@
 
 
 - name: "SCORED | 2.1.7 | AUDIT | Ensure xinetd is not enabled"
-  shell: "systemctl is-enabled xinetd"
+  command: "systemctl is-enabled xinetd"
   register: xinetd_server_enabled_audit
   failed_when: "'enabled' in xinetd_server_enabled_audit.stdout"
   check_mode: no
@@ -155,7 +155,7 @@
 
 
 - name: "NOTSCORED | 2.2.1.1 | AUDIT | Ensure time synchronization is in use"
-  shell: "systemctl is-enabled {{ rhel7cis_time_Synchronization }}"
+  command: "systemctl is-enabled {{ rhel7cis_time_Synchronization }}"
   register: timesync_server_enabled_audit
   failed_when: "'enabled' in timesync_server_enabled_audit.stdout"
   check_mode: no
@@ -478,7 +478,7 @@
 
 
 - name: "SCORED | 2.2.20 | AUDIT | Ensure rsync service is not enabled "
-  shell: "systemctl is-enabled rsyncd"
+  command: "systemctl is-enabled rsyncd"
   register: rsyncd_server_enabled_audit
   failed_when: "'enabled' in rsyncd_server_enabled_audit.stdout"
   check_mode: no
@@ -491,7 +491,7 @@
 
 
 - name: "SCORED | 2.2.21 | AUDIT | Ensure talk server is not enabled"
-  shell: "systemctl is-enabled ntalk"
+  command: "systemctl is-enabled ntalk"
   register: ntalk_server_enabled_audit
   failed_when: "'enabled' in ntalk_server_enabled_audit.stdout"
   check_mode: no

@@ -169,7 +169,7 @@
 
 
 - name: "SCORED | 3.4.2 | AUDIT | Ensure /etc/hosts.allow is configured"
-  shell: "/usr/bin/egrep '^ALL' /etc/hosts.allow"
+  command: "/usr/bin/egrep '^ALL' /etc/hosts.allow"
   register: check_host_allow_audit
   check_mode: no
   changed_when: no
@@ -181,7 +181,7 @@
 
 
 - name: "SCORED | 3.4.3 | AUDIT | Ensure /etc/hosts.deny is configured"
-  shell: "/usr/bin/egrep '^ALL: ALL' /etc/hosts.deny"
+  command: "/usr/bin/egrep '^ALL: ALL' /etc/hosts.deny"
   register: check_host_deny_audit
   check_mode: no
   changed_when: no
