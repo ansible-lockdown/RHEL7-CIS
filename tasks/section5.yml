@@ -167,6 +167,7 @@
       line: 'Protocol 2'
   when:
       - rhel7cis_rule_5_2_2|bool
+
   tags:
       - level1
       - level2
@@ -181,6 +182,7 @@
       line: 'LogLevel INFO'
   when:
       - rhel7cis_rule_5_2_3|bool
+  notify: restart sshd
   tags:
       - level1
       - level2
@@ -195,6 +197,7 @@
       line: 'X11Forwarding no'
   when:
       - rhel7cis_rule_5_2_4|bool
+  notify: restart sshd
   tags:
       - level1
       - level2
@@ -209,6 +212,7 @@
       line: 'MaxAuthTries 4'
   when:
       - rhel7cis_rule_5_2_5|bool
+  notify: restart sshd
   tags:
       - level1
       - level2
@@ -223,6 +227,7 @@
       line: 'IgnoreRhosts yes'
   when:
       - rhel7cis_rule_5_2_6|bool
+  notify: restart sshd
   tags:
       - level1
       - level2
@@ -237,6 +242,8 @@
       line: 'HostbasedAuthentication no'
   when:
       - rhel7cis_rule_5_2_7|bool
+      - rhel7cis_rule_5_2_7
+  notify: restart sshd
   tags:
       - level1
       - level2
@@ -251,6 +258,8 @@
       line: 'PermitRootLogin no'
   when:
       - rhel7cis_rule_5_2_8|bool
+      - rhel7cis_rule_5_2_8
+  notify: restart sshd
   tags:
       - level1
       - level2
@@ -265,6 +274,7 @@
       line: 'PermitEmptyPasswords no'
   when:
       - rhel7cis_rule_5_2_9|bool
+  notify: restart sshd
   tags:
       - level1
       - level2
@@ -279,6 +289,8 @@
       line: 'PermitUserEnvironment no'
   when:
       - rhel7cis_rule_5_2_10|bool
+      - rhel7cis_rule_5_2_10
+  notify: restart sshd
   tags:
       - level1
       - level2
@@ -293,6 +305,8 @@
       line: "Ciphers {{ rhel7cis_sshd['ciphers'] }}"
   when:
       - rhel7cis_rule_5_2_11|bool
+      - rhel7cis_rule_5_2_11
+  notify: restart sshd
   tags:
       - level1
       - level2
@@ -307,6 +321,7 @@
       line: "MACs {{ rhel7cis_sshd['macs'] }}"
   when:
       - rhel7cis_rule_5_2_12|bool
+  notify: restart sshd
   tags:
       - level1
       - level2
@@ -330,6 +345,7 @@
             line: "ClientAliveCountMax {{ rhel7cis_sshd['clientalivecountmax'] }}"
   when:
       - rhel7cis_rule_5_2_13|bool
+  notify: restart sshd
   tags:
       - level1
       - level2
@@ -344,6 +360,7 @@
       line: "LoginGraceTime {{ rhel7cis_sshd['logingracetime'] }}"
   when:
       - rhel7cis_rule_5_2_14|bool
+  notify: restart sshd
   tags:
       - level1
       - level2
@@ -411,6 +428,7 @@
       line: 'Banner /etc/issue.net'
   when:
       - rhel7cis_rule_5_2_16|bool
+  notify: restart sshd
   tags:
       - level1
       - level2
