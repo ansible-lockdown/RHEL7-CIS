@@ -1,0 +1,25 @@
+---
+dependency:
+  name: galaxy
+  requirements_file: requirements.yml
+driver:
+  name: docker
+verifier:
+  name: goss
+  lint:
+    name: yamllint
+platforms:
+  - name: CIS-centos7
+    image: milcom/centos7-systemd
+    privileged: true
+provisioner:
+  name: ansible
+  config_options:
+    defaults:
+      remote_tmp: /tmp
+  playbooks:
+    converge: playbook.yml
+  lint:
+    name: ansible-lint
+scenario:
+  name: default

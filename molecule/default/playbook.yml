@@ -1,0 +1,14 @@
+---
+- hosts: all
+  pre_tasks:
+    - name: install packages for testing under docker
+      yum:
+        name:
+          - selinux-policy
+          - libselinux-python
+          - openssh-server
+          - which
+        state: present
+
+  roles:
+    - role: RHEL7-CIS
