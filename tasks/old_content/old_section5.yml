@@ -33,7 +33,9 @@
       - rule_5.1.2
 
 - name: "SCORED | 5.1.2 | PATCH | Activate the rsyslog Service"
-  command: systemctl enable rsyslog
+  systemd:
+      name: rsyslog
+      enabled: true
   tags:
       - level1
       - level2
