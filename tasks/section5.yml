@@ -336,6 +336,7 @@
             dest: /etc/ssh/sshd_config
             regexp: '^ClientAliveInterval'
             line: "ClientAliveInterval {{ rhel7cis_sshd['clientaliveinterval'] }}"
+        notify: restart sshd
 
       - name: "SCORED | 5.2.13 | PATCH | Ensure SSH ClientAliveCountMax set to <= 3"
         lineinfile:
@@ -343,6 +344,7 @@
             dest: /etc/ssh/sshd_config
             regexp: '^ClientAliveCountMax'
             line: "ClientAliveCountMax {{ rhel7cis_sshd['clientalivecountmax'] }}"
+        notify: restart sshd
   when:
       - rhel7cis_rule_5_2_13|bool
   notify: restart sshd
