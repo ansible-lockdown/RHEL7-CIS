@@ -114,7 +114,7 @@
       - name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
         file:
             dest: /etc/at.allow
-            state: '{{ "file" if  p.stat.exists else "touch"}}'
+            state: '{{ "file" if  p.stat.exists else "touch" }}'
             owner: root
             group: root
             mode: 0600
@@ -132,7 +132,7 @@
       - name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
         file:
             dest: /etc/cron.allow
-            state: '{{ "file" if  p.stat.exists else "touch"}}'
+            state: '{{ "file" if  p.stat.exists else "touch" }}'
             owner: root
             group: root
             mode: 0600
