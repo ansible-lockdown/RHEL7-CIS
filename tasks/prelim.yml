@@ -54,7 +54,7 @@
   changed_when: no
   check_mode: no
   tags:
-    - skip_ansible_lint #  ANSIBLE0006
+      - skip_ansible_lint #  ANSIBLE0006
 
 - name: "PRELIM | Check for ntpd service"
   shell: "systemctl show ntpd | grep LoadState | cut -d = -f 2"
@@ -62,7 +62,7 @@
   changed_when: no
   check_mode: no
   tags:
-    - skip_ansible_lint #  ANSIBLE0006
+      - skip_ansible_lint #  ANSIBLE0006
 
 
 - name: "PRELIM | Check for chronyd service"
@@ -71,7 +71,7 @@
   changed_when: no
   check_mode: no
   tags:
-    - skip_ansible_lint #  ANSIBLE0006
+      - skip_ansible_lint #  ANSIBLE0006
 
 - name: "PRELIM | Check for avahi-daemon service"
   shell: "systemctl show avahi-daemon | grep LoadState | cut -d = -f 2"
@@ -79,7 +79,7 @@
   changed_when: no
   check_mode: no
   tags:
-    - skip_ansible_lint #  ANSIBLE0006
+      - skip_ansible_lint #  ANSIBLE0006
 
 - name: "PRELIM | Check for cups service"
   shell: "systemctl show cups | grep LoadState | cut -d = -f 2"
@@ -87,7 +87,7 @@
   changed_when: no
   check_mode: no
   tags:
-    - skip_ansible_lint #  ANSIBLE0006
+      - skip_ansible_lint #  ANSIBLE0006
 
 - name: "PRELIM | Check for dhcpd service"
   shell: "systemctl show dhcpd | grep LoadState | cut -d = -f 2"
@@ -95,7 +95,7 @@
   changed_when: no
   check_mode: no
   tags:
-    - skip_ansible_lint #  ANSIBLE0006
+      - skip_ansible_lint #  ANSIBLE0006
 
 - name: "PRELIM | Check for slapd service"
   shell: "systemctl show slapd | grep LoadState | cut -d = -f 2"
@@ -103,7 +103,7 @@
   changed_when: no
   check_mode: no
   tags:
-    - skip_ansible_lint #  ANSIBLE0006
+      - skip_ansible_lint #  ANSIBLE0006
 
 - name: "PRELIM | Check for nfs service"
   shell: "systemctl show nfs | grep LoadState | cut -d = -f 2"
@@ -111,7 +111,7 @@
   changed_when: no
   check_mode: no
   tags:
-    - skip_ansible_lint #  ANSIBLE0006
+      - skip_ansible_lint #  ANSIBLE0006
 
 - name: "PRELIM | Check for rpcbind service"
   shell: "systemctl show rpcbind | grep LoadState | cut -d = -f 2"
@@ -119,7 +119,7 @@
   changed_when: no
   check_mode: no
   tags:
-    - skip_ansible_lint #  ANSIBLE0006
+      - skip_ansible_lint #  ANSIBLE0006
 
 - name: "PRELIM | Check for named service"
   shell: "systemctl show named | grep LoadState | cut -d = -f 2"
@@ -127,7 +127,7 @@
   changed_when: no
   check_mode: no
   tags:
-    - skip_ansible_lint #  ANSIBLE0006
+      - skip_ansible_lint #  ANSIBLE0006
 
 - name: "PRELIM | Check for vsftpd service"
   shell: "systemctl show vsftpd | grep LoadState | cut -d = -f 2"
@@ -135,7 +135,7 @@
   changed_when: no
   check_mode: no
   tags:
-    - skip_ansible_lint #  ANSIBLE0006
+      - skip_ansible_lint #  ANSIBLE0006
 
 - name: "PRELIM | Check for httpd service"
   shell: "systemctl show httpd | grep LoadState | cut -d = -f 2"
@@ -143,7 +143,7 @@
   changed_when: no
   check_mode: no
   tags:
-    - skip_ansible_lint #  ANSIBLE0006
+      - skip_ansible_lint #  ANSIBLE0006
 
 - name: "PRELIM | Check for dovecot service"
   shell: "systemctl show dovecot | grep LoadState | cut -d = -f 2"
@@ -151,7 +151,7 @@
   changed_when: no
   check_mode: no
   tags:
-    - skip_ansible_lint #  ANSIBLE0006
+      - skip_ansible_lint #  ANSIBLE0006
 
 - name: "PRELIM | Check for smb service"
   shell: "systemctl show smb | grep LoadState | cut -d = -f 2"
@@ -159,7 +159,7 @@
   changed_when: no
   check_mode: no
   tags:
-    - skip_ansible_lint #  ANSIBLE0006
+      - skip_ansible_lint #  ANSIBLE0006
 
 - name: "PRELIM | Check for squid service"
   shell: "systemctl show squid | grep LoadState | cut -d = -f 2"
@@ -167,7 +167,7 @@
   changed_when: no
   check_mode: no
   tags:
-    - skip_ansible_lint #  ANSIBLE0006
+      - skip_ansible_lint #  ANSIBLE0006
 
 - name: "PRELIM | Check for snmpd service"
   shell: "systemctl show snmpd | grep LoadState | cut -d = -f 2"
@@ -175,7 +175,7 @@
   changed_when: no
   check_mode: no
   tags:
-    - skip_ansible_lint #  ANSIBLE0006
+      - skip_ansible_lint #  ANSIBLE0006
 
 - name: "PRELIM | Check for ypserv service"
   shell: "systemctl show ypserv | grep LoadState | cut -d = -f 2"
@@ -183,7 +183,7 @@
   changed_when: no
   check_mode: no
   tags:
-    - skip_ansible_lint #  ANSIBLE0006
+      - skip_ansible_lint #  ANSIBLE0006
 
 - name: "PRELIM | Check for rsh.socket service"
   shell: "systemctl show rsh.socket | grep LoadState | cut -d = -f 2"
@@ -191,7 +191,7 @@
   changed_when: no
   check_mode: no
   tags:
-    - skip_ansible_lint #  ANSIBLE0006
+      - skip_ansible_lint #  ANSIBLE0006
 
 - name: "PRELIM | Check for rlogin.socket service"
   shell: "systemctl show rlogin.socket | grep LoadState | cut -d = -f 2"
@@ -199,7 +199,7 @@
   changed_when: no
   check_mode: no
   tags:
-    - skip_ansible_lint #  ANSIBLE0006
+      - skip_ansible_lint #  ANSIBLE0006
 
 - name: "PRELIM | Check for rexec.socket service"
   shell: "systemctl show rexec.socket | grep LoadState | cut -d = -f 2"
@@ -207,7 +207,7 @@
   changed_when: no
   check_mode: no
   tags:
-    - skip_ansible_lint #  ANSIBLE0006
+      - skip_ansible_lint #  ANSIBLE0006
 
 - name: "PRELIM | Check for telnet service"
   shell: "systemctl show telnet | grep LoadState | cut -d = -f 2"
@@ -215,7 +215,7 @@
   changed_when: no
   check_mode: no
   tags:
-    - skip_ansible_lint #  ANSIBLE0006
+      - skip_ansible_lint #  ANSIBLE0006
 
 - name: "PRELIM | Check for tftp service"
   shell: "systemctl show tftp | grep LoadState | cut -d = -f 2"
@@ -223,7 +223,7 @@
   changed_when: no
   check_mode: no
   tags:
-    - skip_ansible_lint #  ANSIBLE0006
+      - skip_ansible_lint #  ANSIBLE0006
 
 - name: "PRELIM | Check for rsyncd service"
   shell: "systemctl show rsyncd | grep LoadState | cut -d = -f 2"
@@ -231,7 +231,7 @@
   changed_when: no
   check_mode: no
   tags:
-    - skip_ansible_lint #  ANSIBLE0006
+      - skip_ansible_lint #  ANSIBLE0006
 
 - name: "PRELIM | Check for ntalk service"
   shell: "systemctl show ntalk | grep LoadState | cut -d = -f 2"
@@ -239,7 +239,7 @@
   changed_when: no
   check_mode: no
   tags:
-    - skip_ansible_lint #  ANSIBLE0006
+      - skip_ansible_lint #  ANSIBLE0006
 
 - name: "PRELIM | Check for autofs service"
   shell: "systemctl show autofs | grep LoadState | cut -d = -f 2"
@@ -247,7 +247,7 @@
   changed_when: no
   check_mode: no
   tags:
-    - skip_ansible_lint #  ANSIBLE0006
+      - skip_ansible_lint #  ANSIBLE0006
 
 - name: "PRELIM | Check for rhnsd service"
   shell: "systemctl show rhnsd | grep LoadState | cut -d = -f 2"
@@ -255,4 +255,4 @@
   changed_when: no
   check_mode: no
   tags:
-    - skip_ansible_lint #  ANSIBLE0006
+      - skip_ansible_lint #  ANSIBLE0006

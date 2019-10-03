@@ -500,7 +500,7 @@
 
 - name: "NOTSCORED | 4.3 | PATCH | Ensure logrotate is configured"
   find:
-    paths: /etc/logrotate.d/
+      paths: /etc/logrotate.d/
   register: log_rotates
   tags:
       - level1
@@ -510,12 +510,12 @@
 
 - name: "NOTSCORED | 4.3 | PATCH | Ensure logrotate is configured"
   replace:
-    path: "{{ item.path }}"
-    regexp: '^(\s*)(daily|weekly|monthly|yearly)$'
-    replace: "\\1{{ rhel7cis_logrotate }}"
+      path: "{{ item.path }}"
+      regexp: '^(\s*)(daily|weekly|monthly|yearly)$'
+      replace: "\\1{{ rhel7cis_logrotate }}"
   with_items:
-    - "{{ log_rotates.files }}"
-    - { path: "/etc/logrotate.conf" }
+      - "{{ log_rotates.files }}"
+      - { path: "/etc/logrotate.conf" }
   tags:
       - level1
       - level2

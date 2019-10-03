@@ -180,7 +180,6 @@
 
 
 
-
 - name: "SCORED | 4.1.14 | AUDIT | Ensure file deletion events by users are collected"
   command: grep delete /etc/audit/audit.rules
   register: file_deletion_events_are_collected_audit
@@ -203,7 +202,6 @@
       - level2
       - audit
       - rule_4.1.15
-
 
 
 

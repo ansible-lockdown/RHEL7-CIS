@@ -353,13 +353,13 @@
 - name: "SCORED | 5.3.1 | AUDIT | Ensure password creation requirements are configured"
   shell: '{{ item }}'
   with_items:
-    - grep pam_pwquality.so /etc/pam.d/password-auth
-    - grep pam_pwquality.so /etc/pam.d/system-auth
-    - grep ^minlen /etc/security/pwquality.conf
-    - grep ^dcredit /etc/security/pwquality.conf
-    - grep ^lcredit /etc/security/pwquality.conf
-    - grep ^ocredit /etc/security/pwquality.conf
-    - grep ^ucredit /etc/security/pwquality.conf
+      - grep pam_pwquality.so /etc/pam.d/password-auth
+      - grep pam_pwquality.so /etc/pam.d/system-auth
+      - grep ^minlen /etc/security/pwquality.conf
+      - grep ^dcredit /etc/security/pwquality.conf
+      - grep ^lcredit /etc/security/pwquality.conf
+      - grep ^ocredit /etc/security/pwquality.conf
+      - grep ^ucredit /etc/security/pwquality.conf
   register: pass_quality_audit
   always_run: yes
   changed_when: no

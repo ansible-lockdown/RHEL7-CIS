@@ -297,14 +297,14 @@ rhel7cis_ipv6_required: true
 rhel7cis_config_aide: true
 # AIDE cron settings
 rhel7cis_aide_cron:
-  cron_user: root
-  cron_file: /etc/crontab
-  aide_job: '/usr/sbin/aide --check'
-  aide_minute: 0
-  aide_hour: 5
-  aide_day: '*'
-  aide_month: '*'
-  aide_weekday: '*'
+    cron_user: root
+    cron_file: /etc/crontab
+    aide_job: '/usr/sbin/aide --check'
+    aide_minute: 0
+    aide_hour: 5
+    aide_day: '*'
+    aide_month: '*'
+    aide_weekday: '*'
 
 # SELinux policy
 rhel7cis_selinux_pol: targeted

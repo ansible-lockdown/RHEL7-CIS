@@ -10,7 +10,7 @@
         notify: restart xinetd
         when: chargen_dgram_service.stat.exists
         tags:
-          - skip_ansible_lint
+            - skip_ansible_lint
 
       - name: "SCORED | 2.1.1 | PATCH | Ensure chargen services are not enabled | chargen-stream"
         stat:
@@ -44,7 +44,7 @@
         notify: restart xinetd
         when: daytime_dgram_service.stat.exists
         tags:
-          - skip_ansible_lint
+            - skip_ansible_lint
 
       - name: "SCORED | 2.1.2 | PATCH | Ensure daytime services are not enabled | daytime-stream"
         stat:

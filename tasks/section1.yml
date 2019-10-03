@@ -15,8 +15,8 @@
 
 - name: "SCORED | 1.1.1.1 | PATCH | Remove cramfs module"
   modprobe:
-    name: cramfs
-    state: absent
+      name: cramfs
+      state: absent
   when:
       - rhel7cis_rule_1_1_1_1
   tags:
@@ -43,8 +43,8 @@
 
 - name: "SCORED | 1.1.1.2 | PATCH | Remove freevxfs module"
   modprobe:
-    name: freevxfs
-    state: absent
+      name: freevxfs
+      state: absent
   when:
       - rhel7cis_rule_1_1_1_2
   tags:
@@ -71,8 +71,8 @@
 
 - name: "SCORED | 1.1.1.3 | PATCH | Remove jffs2 module"
   modprobe:
-    name: jffs2
-    state: absent
+      name: jffs2
+      state: absent
   when:
       - rhel7cis_rule_1_1_1_3
   tags:
@@ -99,8 +99,8 @@
 
 - name: "SCORED | 1.1.1.4 | PATCH | Remove hfs module"
   modprobe:
-    name: hfs
-    state: absent
+      name: hfs
+      state: absent
   when:
       - rhel7cis_rule_1_1_1_4
   tags:
@@ -127,8 +127,8 @@
 
 - name: "SCORED | 1.1.1.5 | PATCH | Remove hfsplus module"
   modprobe:
-    name: hfsplus
-    state: absent
+      name: hfsplus
+      state: absent
   when:
       - rhel7cis_rule_1_1_1_5
   tags:
@@ -155,8 +155,8 @@
 
 - name: "SCORED | 1.1.1.6 | PATCH | Remove squashfs module"
   modprobe:
-    name: squashfs
-    state: absent
+      name: squashfs
+      state: absent
   when:
       - rhel7cis_rule_1_1_1_6
   tags:
@@ -183,8 +183,8 @@
 
 - name: "SCORED | 1.1.1.7 | PATCH | Remove udf module"
   modprobe:
-    name: udf
-    state: absent
+      name: udf
+      state: absent
   when:
       - rhel7cis_rule_1_1_1_7
   tags:
@@ -211,8 +211,8 @@
 
 - name: "SCORED | 1.1.1.8 | PATCH | Remove FAT module"
   modprobe:
-    name: vfat
-    state: absent
+      name: vfat
+      state: absent
   when:
       - rhel7cis_rule_1_1_1_8
   tags:
@@ -354,11 +354,11 @@
 
 - name: "SCORED | 1.1.14 | PATCH | Ensure nodev option set on /home partition"
   mount:
-    name: "/home"
-    src: "{{ item.device }}"
-    state: mounted
-    fstype: "{{ item.fstype }}"
-    opts: "nodev"
+      name: "/home"
+      src: "{{ item.device }}"
+      state: mounted
+      fstype: "{{ item.fstype }}"
+      opts: "nodev"
   when:
       - rhel7cis_rule_1_1_14
       - item.mount == "/home"
@@ -659,30 +659,30 @@
   block:
       - name: "NOTSCORED | 1.4.3 | PATCH | Ensure authentication required for single user mode - Emergency"
         lineinfile:
-          dest: /usr/lib/systemd/system/emergency.service
-          regexp: '/sbin/sulogin'
-          line: 'ExecStart=-/bin/sh -c \"/usr/sbin/sulogin; /usr/bin/systemctl --fail --no-block default\"'
+            dest: /usr/lib/systemd/system/emergency.service
+            regexp: '/sbin/sulogin'
+            line: 'ExecStart=-/bin/sh -c \"/usr/sbin/sulogin; /usr/bin/systemctl --fail --no-block default\"'
         when:
-          - rhel7cis_rule_1_4_3
-          - ansible_distribution_major_version == 7
+            - rhel7cis_rule_1_4_3
+            - ansible_distribution_major_version == 7
         tags:
-          - level1
-          - level2
-          - patch
-          - rule_1.4.3
+            - level1
+            - level2
+            - patch
+            - rule_1.4.3
       - name: "NOTSCORED | 1.4.3 | PATCH | Ensure authentication required for single user mode - Rescue"
         lineinfile:
-          dest: /usr/lib/systemd/system/rescue.service
-          regexp: '/sbin/sulogin'
-          line: 'ExecStart=-/bin/sh -c \"/usr/sbin/sulogin; /usr/bin/systemctl --fail --no-block default\"'
+            dest: /usr/lib/systemd/system/rescue.service
+            regexp: '/sbin/sulogin'
+            line: 'ExecStart=-/bin/sh -c \"/usr/sbin/sulogin; /usr/bin/systemctl --fail --no-block default\"'
         when:
-          - rhel7cis_rule_1_4_3
-          - ansible_distribution_major_version == 7
+            - rhel7cis_rule_1_4_3
+            - ansible_distribution_major_version == 7
         tags:
-          - level1
-          - level2
-          - patch
-          - rule_1.4.3
+            - level1
+            - level2
+            - patch
+            - rule_1.4.3
 
 - name: "SCORED | 1.5.1 | PATCH | Ensure core dumps are restricted"
   lineinfile:
@@ -757,8 +757,8 @@
 
 - name: "SCORED | 1.5.4 | PATCH | Ensure prelink is disabled"
   yum:
-    name: prelink
-    state: absent
+      name: prelink
+      state: absent
   when:
       - rhel7cis_rule_1_5_4
   tags:
@@ -941,12 +941,12 @@
       group: root
       mode: 0644
   with_items:
-      - { file: '/etc/dconf/profile/gdm', regexp:  'user-db', line: 'user-db:user' }
-      - { file: '/etc/dconf/profile/gdm', regexp:  'system-db', line: 'system-db:gdm' }
-      - { file: '/etc/dconf/profile/gdm', regexp:  'file-db', line: 'file-db:/usr/share/gdm/greeter-dconf-defaults' }
-      - { file: '/etc/dconf/db/gdm.d/01-banner-message', regexp:  '\[org\/gnome\/login-screen\]', line: '[org/gnome/login-screen]' }
-      - { file: '/etc/dconf/db/gdm.d/01-banner-message', regexp:  'banner-message-enable', line: 'banner-message-enable=true' }
-      - { file: '/etc/dconf/db/gdm.d/01-banner-message', regexp:  'banner-message-text', line: "banner-message-text='{{ rhel7cis_warning_banner }}' " }
+      - { file: '/etc/dconf/profile/gdm', regexp: 'user-db', line: 'user-db:user' }
+      - { file: '/etc/dconf/profile/gdm', regexp: 'system-db', line: 'system-db:gdm' }
+      - { file: '/etc/dconf/profile/gdm', regexp: 'file-db', line: 'file-db:/usr/share/gdm/greeter-dconf-defaults' }
+      - { file: '/etc/dconf/db/gdm.d/01-banner-message', regexp: '\[org\/gnome\/login-screen\]', line: '[org/gnome/login-screen]' }
+      - { file: '/etc/dconf/db/gdm.d/01-banner-message', regexp: 'banner-message-enable', line: 'banner-message-enable=true' }
+      - { file: '/etc/dconf/db/gdm.d/01-banner-message', regexp: 'banner-message-text', line: "banner-message-text='{{ rhel7cis_warning_banner }}' " }
   when:
       - rhel7cis_gui
       - rhel7cis_rule_1_7_2
