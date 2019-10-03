@@ -453,7 +453,8 @@
       name: autofs
       enabled: no
   when:
-      - rhel7cis_allow_autofs == false and autofs_service_status.stdout == "loaded"
+      - not rhel7cis_allow_autofs
+      - autofs_service_status.stdout == "loaded"
       - rhel7cis_rule_1_1_22 | bool
   tags:
       - level1

@@ -69,7 +69,7 @@
   args:
       warn: no
   when:
-      - rhel7cis_skip_for_travis == false
+      - not rhel7cis_skip_for_travis
   tags:
       - skip_ansible_lint
 

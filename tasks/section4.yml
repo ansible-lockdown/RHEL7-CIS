@@ -64,7 +64,7 @@
       state: started
       enabled: yes
   when:
-      - rhel7cis_skip_for_travis == false
+      - not rhel7cis_skip_for_travis
       - rhel7cis_rule_4_1_2
   tags:
       - level2
