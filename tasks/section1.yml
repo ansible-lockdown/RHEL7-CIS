@@ -271,6 +271,8 @@
 
 - name: "SCORED | 1.1.6 | PATCH | Ensure separate partition exists for /var"
   shell: mount | grep "on /var "
+  args:
+      warn: false
   register: var_mounted
   changed_when: no
   failed_when: no
@@ -463,6 +465,8 @@
 
 - name: "NOTSCORED | 1.2.1 | PATCH | Ensure package manager repositories are configured"
   command: yum check-update
+  args:
+      warn: false
   register: yum_configured
   changed_when: no
   failed_when: no
@@ -641,7 +645,7 @@
       password: "{{ rhel7cis_bootloader_password }}"
   register: grub_pass
   when:
-      - rhel7cis_set_boot_pass
+      - rhel7cis_set_boot_pass|bool
       - rhel7cis_rule_1_4_2|bool
   tags:
       - level1
@@ -714,7 +718,7 @@
 - name: "SCORED | 1.5.1 | PATCH | Ensure core dumps are restricted"
   sysctl:
       name: fs.suid_dumpable
-      value: 0
+      value: '0'
       state: present
       reload: yes
       sysctl_set: yes
@@ -742,7 +746,7 @@
 - name: "SCORED | 1.5.3 | PATCH | Ensure address space layout randomization (ASLR) is enabled"
   sysctl:
       name: kernel.randomize_va_space
-      value: 2
+      value: '2'
       state: present
       reload: yes
       sysctl_set: yes

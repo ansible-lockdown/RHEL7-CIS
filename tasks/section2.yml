@@ -328,11 +328,10 @@
 
 - name: "SCORED | 2.2.2 | PATCH | Ensure X Window System is not installed"
   yum:
-      name: "{{ item }}"
       state: absent
-  with_items:
-      - "@X Window System"
-      - "xorg-x11*"
+      name:
+          - "@X Window System"
+          - "xorg-x11*"
   when:
       - not rhel7cis_xwindows_required
       - rhel7cis_rule_2_2_2|bool
