@@ -31,6 +31,8 @@
 
 - name: "PRELIM | Check if prelink package is installed"
   command: rpm -q prelink
+  args:
+    warn: false
   register: prelink_installed
   changed_when: no
   failed_when: no
@@ -40,6 +42,8 @@
 
 - name: "PRELIM | Check if postfix package is installed"
   command: rpm -q postfix
+  args:
+    warn: false
   register: postfix_installed
   changed_when: no
   failed_when: no

@@ -24,7 +24,7 @@
         tags:
             - skip_ansible_lint
   when:
-      - rhel7cis_rule_2_1_1
+      - rhel7cis_rule_2_1_1|bool
   tags:
       - level1
       - scored
@@ -58,7 +58,7 @@
         tags:
             - skip_ansible_lint
   when:
-      - rhel7cis_rule_2_1_2
+      - rhel7cis_rule_2_1_2|bool
   tags:
       - level1
       - scored
@@ -92,7 +92,7 @@
             - skip_ansible_lint
 
   when:
-      - rhel7cis_rule_2_1_3
+      - rhel7cis_rule_2_1_3|bool
   tags:
       - level1
       - scored
@@ -126,7 +126,7 @@
             - skip_ansible_lint
 
   when:
-      - rhel7cis_rule_2_1_4
+      - rhel7cis_rule_2_1_4|bool
   tags:
       - level1
       - scored
@@ -160,7 +160,7 @@
             - skip_ansible_lint
 
   when:
-      - rhel7cis_rule_2_1_5
+      - rhel7cis_rule_2_1_5|bool
   tags:
       - level1
       - scored
@@ -184,7 +184,7 @@
             - skip_ansible_lint
 
   when:
-      - rhel7cis_rule_2_1_6
+      - rhel7cis_rule_2_1_6|bool
   tags:
       - level1
       - scored
@@ -198,7 +198,7 @@
       enabled: no
   when:
       - xinetd_service_status.stdout == "loaded" and not rhel7cis_xinetd_required
-      - rhel7cis_rule_2_1_7
+      - rhel7cis_rule_2_1_7|bool
   tags:
       - level1
       - patch
@@ -210,7 +210,7 @@
       name: "{{ rhel7cis_time_synchronization }}"
       state: present
   when:
-      - rhel7cis_rule_2_2_1_1
+      - rhel7cis_rule_2_2_1_1|bool
   tags:
       - level1
       - patch
@@ -222,7 +222,7 @@
       state: started
       enabled: yes
   when:
-      - rhel7cis_rule_2_2_1_1
+      - rhel7cis_rule_2_2_1_1|bool
   tags:
       - level1
       - patch
@@ -235,7 +235,7 @@
       enabled: no
   when:
       - rhel7cis_time_synchronization == "chrony" and ntpd_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_1_1
+      - rhel7cis_rule_2_2_1_1|bool
   tags:
       - level1
       - patch
@@ -249,7 +249,7 @@
   ignore_errors: yes
   when:
       - rhel7cis_time_synchronization == "ntp" and chronyd_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_1_1
+      - rhel7cis_rule_2_2_1_1|bool
   tags:
       - level1
       - patch
@@ -264,7 +264,7 @@
       mode: 0644
   when:
       - rhel7cis_time_synchronization == "ntp"
-      - rhel7cis_rule_2_2_1_2
+      - rhel7cis_rule_2_2_1_2|bool
   tags:
       - level1
       - patch
@@ -277,7 +277,7 @@
       line: "OPTIONS=\"-u ntp:ntp\""
   when:
       - rhel7cis_time_synchronization == "ntp"
-      - rhel7cis_rule_2_2_1_2
+      - rhel7cis_rule_2_2_1_2|bool
   tags:
       - level1
       - patch
@@ -290,7 +290,7 @@
       line: "ExecStart=/usr/sbin/ntpd -u ntp:ntp $OPTIONS"
   when:
       - rhel7cis_time_synchronization == "ntp"
-      - rhel7cis_rule_2_2_1_2
+      - rhel7cis_rule_2_2_1_2|bool
   tags:
       - level1
       - patch
@@ -305,7 +305,7 @@
       mode: 0644
   when:
       - rhel7cis_time_synchronization == "chrony"
-      - rhel7cis_rule_2_2_1_3
+      - rhel7cis_rule_2_2_1_3|bool
   tags:
       - level1
       - patch
@@ -320,7 +320,7 @@
       create: yes
   when:
       - rhel7cis_time_synchronization == "chrony"
-      - rhel7cis_rule_2_2_1_3
+      - rhel7cis_rule_2_2_1_3|bool
   tags:
       - level1
       - patch
@@ -335,7 +335,7 @@
       - "xorg-x11*"
   when:
       - not rhel7cis_xwindows_required
-      - rhel7cis_rule_2_2_2
+      - rhel7cis_rule_2_2_2|bool
   tags:
       - level1
       - scored
@@ -351,7 +351,7 @@
   when:
       - not rhel7cis_avahi_server
       - avahi_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_3
+      - rhel7cis_rule_2_2_3|bool
   tags:
       - level1
       - scored
@@ -368,7 +368,7 @@
   when:
       - not rhel7cis_cups_server
       - cups_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_4
+      - rhel7cis_rule_2_2_4|bool
   tags:
       - level1
       - scored
@@ -385,7 +385,7 @@
   when:
       - not rhel7cis_dhcp_server
       - dhcpd_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_5
+      - rhel7cis_rule_2_2_5|bool
   tags:
       - level1
       - scored
@@ -402,7 +402,7 @@
   when:
       - not rhel7cis_ldap_server
       - slapd_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_6
+      - rhel7cis_rule_2_2_6|bool
   tags:
       - level1
       - scored
@@ -419,7 +419,7 @@
   when:
       - not rhel7cis_nfs_rpc_server
       - nfs_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_7
+      - rhel7cis_rule_2_2_7|bool
   tags:
       - level1
       - scored
@@ -437,7 +437,7 @@
   when:
       - not rhel7cis_nfs_rpc_server
       - rpcbind_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_7
+      - rhel7cis_rule_2_2_7|bool
   tags:
       - level1
       - scored
@@ -455,7 +455,7 @@
   when:
       - not rhel7cis_named_server
       - named_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_8
+      - rhel7cis_rule_2_2_8|bool
   tags:
       - level1
       - patch
@@ -469,7 +469,7 @@
   when:
       - not rhel7cis_vsftpd_server
       - vsftpd_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_9
+      - rhel7cis_rule_2_2_9|bool
   tags:
       - level1
       - patch
@@ -483,7 +483,7 @@
   when:
       - not rhel7cis_httpd_server
       - httpd_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_10
+      - rhel7cis_rule_2_2_10|bool
   tags:
       - level1
       - patch
@@ -497,7 +497,7 @@
   when:
       - not rhel7cis_dovecot_server
       - dovecot_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_11
+      - rhel7cis_rule_2_2_11|bool
   tags:
       - level1
       - patch
@@ -511,7 +511,7 @@
   when:
       - not rhel7cis_smb_server
       - smb_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_12
+      - rhel7cis_rule_2_2_12|bool
   tags:
       - level1
       - patch
@@ -525,7 +525,7 @@
   when:
       - not rhel7cis_squid_server
       - squid_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_13
+      - rhel7cis_rule_2_2_13|bool
   tags:
       - level1
       - patch
@@ -539,7 +539,7 @@
   when:
       - not rhel7cis_snmp_server
       - snmpd_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_14
+      - rhel7cis_rule_2_2_14|bool
   tags:
       - level1
       - patch
@@ -553,7 +553,7 @@
   when:
       - not rhel7cis_is_mail_server
       - postfix_installed.rc == 0
-      - rhel7cis_rule_2_2_15
+      - rhel7cis_rule_2_2_15|bool
   tags:
       - level1
       - patch
@@ -567,7 +567,7 @@
   when:
       - not rhel7cis_nis_server
       - ypserv_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_16
+      - rhel7cis_rule_2_2_16|bool
   tags:
       - level1
       - patch
@@ -581,7 +581,7 @@
   when:
       - not rhel7cis_rsh_server
       - rsh_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_17
+      - rhel7cis_rule_2_2_17|bool
   tags:
       - level1
       - patch
@@ -595,7 +595,7 @@
   when:
       - not rhel7cis_rsh_server
       - rlogin_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_17
+      - rhel7cis_rule_2_2_17|bool
   tags:
       - level1
       - patch
@@ -609,7 +609,7 @@
   when:
       - not rhel7cis_rsh_server
       - rexec_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_17
+      - rhel7cis_rule_2_2_17|bool
   tags:
       - level1
       - patch
@@ -623,7 +623,7 @@
   when:
       - not rhel7cis_telnet_server
       - telnet_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_18
+      - rhel7cis_rule_2_2_18|bool
   tags:
       - level1
       - patch
@@ -637,7 +637,7 @@
   when:
       - not rhel7cis_tftp_server
       - tftp_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_19
+      - rhel7cis_rule_2_2_19|bool
   tags:
       - level1
       - scored
@@ -654,7 +654,7 @@
   when:
       - not rhel7cis_rsyncd_server
       - rsyncd_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_20
+      - rhel7cis_rule_2_2_20|bool
   tags:
       - level1
       - patch
@@ -668,7 +668,7 @@
   when:
       - not rhel7cis_ntalk_server
       - ntalk_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_21
+      - rhel7cis_rule_2_2_21|bool
   tags:
       - level1
       - patch
@@ -680,7 +680,7 @@
       state: absent
   when:
       - not rhel7cis_ypbind_required
-      - rhel7cis_rule_2_3_1
+      - rhel7cis_rule_2_3_1|bool
   tags:
       - level1
       - patch
@@ -692,7 +692,7 @@
       state: absent
   when:
       - not rhel7cis_rsh_required
-      - rhel7cis_rule_2_3_2
+      - rhel7cis_rule_2_3_2|bool
   tags:
       - level1
       - patch
@@ -704,7 +704,7 @@
       state: absent
   when:
       - not rhel7cis_talk_required
-      - rhel7cis_rule_2_3_3
+      - rhel7cis_rule_2_3_3|bool
   tags:
       - level1
       - patch
@@ -716,7 +716,7 @@
       state: absent
   when:
       - not rhel7cis_telnet_required
-      - rhel7cis_rule_2_3_4
+      - rhel7cis_rule_2_3_4|bool
   tags:
       - level1
       - patch
@@ -728,7 +728,7 @@
       state: absent
   when:
       - not rhel7cis_openldap_clients_required
-      - rhel7cis_rule_2_3_5
+      - rhel7cis_rule_2_3_5|bool
   tags:
       - level1
       - patch
