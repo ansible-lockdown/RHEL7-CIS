@@ -374,6 +374,7 @@
       name: firewalld
       state: present
   when: rhel7cis_firewall == "firewalld"
+  notify: restart firewalld
   tags:
       - level1
       - patch
