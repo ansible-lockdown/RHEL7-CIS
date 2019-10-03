@@ -1,7 +1,7 @@
 - name: "SCORED | 7.3 | AUDIT | Set Default Group for root Account"
   shell: grep "^root:" /etc/passwd | cut -f4 -d:|grep 0
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -21,7 +21,7 @@
 - name: "SCORED | 7.4 | AUDIT | Set Default umask for Users"
   command: grep "^umask 077" /etc/bashrc
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -33,7 +33,7 @@
 - name: "SCORED | 7.4 | AUDIT | Set Default umask for Users"
   command: grep "^umask 077" /etc/profile.d/*
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:

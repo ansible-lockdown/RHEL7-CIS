@@ -1,7 +1,7 @@
 - name: "SCORED | 4.1.1 | AUDIT | Disable IP Forwarding"
   shell: /sbin/sysctl net.ipv4.ip_forward|grep 0
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -26,7 +26,7 @@
 - name: "SCORED | 4.1.2 | AUDIT | Disable Send Packet Redirects"
   shell: /sbin/sysctl net.ipv4.conf.all.send_redirects | grep 0
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -51,7 +51,7 @@
 - name: "SCORED | 4.1.2 | AUDIT | Disable Send Packet Redirects"
   shell: /sbin/sysctl net.ipv4.conf.default.send_redirects | grep 0
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -76,7 +76,7 @@
 - name: "SCORED | 4.2.1 | AUDIT | Disable Source Routed Packet Acceptance"
   shell: /sbin/sysctl net.ipv4.conf.all.accept_source_route | grep 0
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -101,7 +101,7 @@
 - name: "SCORED | 4.2.2 | AUDIT | Disable ICMP Redirect Acceptance"
   shell: /sbin/sysctl net.ipv4.conf.all.accept_redirects | grep 0
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -126,7 +126,7 @@
 - name: "SCORED | 4.2.2 | AUDIT | Disable ICMP Redirect Acceptance"
   shell: /sbin/sysctl net.ipv4.conf.default.accept_redirects | grep 0
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -151,7 +151,7 @@
 - name: "SCORED | 4.2.3 | AUDIT | Disable Secure ICMP Redirect Acceptance"
   shell: /sbin/sysctl net.ipv4.conf.all.secure_redirects | grep 0
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -174,7 +174,7 @@
 - name: "SCORED | 4.2.3 | AUDIT | Disable Secure ICMP Redirect Acceptance"
   shell: /sbin/sysctl net.ipv4.conf.default.secure_redirects | grep 0
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -197,7 +197,7 @@
 - name: "SCORED | 4.2.4 | AUDIT | Log Suspicious Packets"
   shell: /sbin/sysctl net.ipv4.conf.all.log_martians | grep 1
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -222,7 +222,7 @@
 - name: "SCORED | 4.2.4 | AUDIT | Log Suspicious Packets"
   shell: /sbin/sysctl net.ipv4.conf.default.log_martians | grep 1
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -247,7 +247,7 @@
 - name: "SCORED | 4.2.5 | AUDIT | Enable Ignore Broadcast Requests"
   shell: /sbin/sysctl net.ipv4.icmp_echo_ignore_broadcasts | grep 1
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -272,7 +272,7 @@
 - name: "SCORED | 4.2.6 | AUDIT | Enable Bad Error Message Protection"
   shell: /sbin/sysctl net.ipv4.icmp_ignore_bogus_error_responses | grep 1
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -297,7 +297,7 @@
 - name: "SCORED | 4.2.7 | AUDIT | Enable RFC-recommended Source Route Validation"
   shell: /sbin/sysctl net.ipv4.conf.all.rp_filter | grep 1
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -320,7 +320,7 @@
 - name: "SCORED | 4.2.7 | AUDIT | Enable RFC-recommended Source Route Validation"
   shell: /sbin/sysctl net.ipv4.conf.default.rp_filter | grep 1
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -343,7 +343,7 @@
 - name: "SCORED | 4.2.8 | AUDIT | Enable TCP SYN Cookies"
   shell: /sbin/sysctl net.ipv4.tcp_syncookies | grep 1
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -368,7 +368,7 @@
 - name: "NOTSCORED | 4.3.1 | AUDIT | Deactivate Wireless Interfaces"
   command: iwconfig
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -380,7 +380,7 @@
 - name: "NOTSCORED | 4.4.1.1 | AUDIT | Disable IPv6 Router Advertisements"
   shell: /sbin/sysctl net.ipv6.conf.all.accept_ra | grep 0
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -405,7 +405,7 @@
 - name: "NOTSCORED | 4.4.1.1 | AUDIT | Disable IPv6 Router Advertisements"
   shell: /sbin/sysctl net.ipv6.conf.default.accept_ra | grep 0
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -430,7 +430,7 @@
 - name: "NOTSCORED | 4.4.1.2 | AUDIT | Disable IPv6 Redirect Acceptance"
   shell: /sbin/sysctl net.ipv6.conf.all.accept_redirect | grep 0
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -455,7 +455,7 @@
 - name: "NOTSCORED | 4.4.1.2 | AUDIT | Disable IPv6 Redirect Acceptance"
   shell: /sbin/sysctl net.ipv6.conf.default.accept_redirect | grep 0
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -480,7 +480,7 @@
 - name: "NOTSCORED | 4.4.2 | AUDIT | Disable IPv6"
   shell: /sbin/sysctl net.ipv6.conf.all.disable_ipv6 | grep 1
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -505,7 +505,7 @@
 - name: "NOTSCORED | 4.5.1 | AUDIT | Install TCP Wrappers"
   command: rpm -q tcp_wrappers
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -527,7 +527,7 @@
 - name: "NOTSCORED | 4.5.2 | AUDIT | Create /etc/hosts.allow"
   command: grep -v '^#' /etc/hosts.allow
   register: hosts_allow
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -539,7 +539,7 @@
 - name: "SCORED | 4.5.3 | AUDIT | Verify Permissions on /etc/hosts.allow"
   shell: stat -L -c "%a %u %g" /etc/hosts.allow | egrep "644 0 0"
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -563,7 +563,7 @@
 - name: "NOTSCORED | 4.5.4 | AUDIT | Create /etc/hosts.deny"
   command: grep -v '^#' /etc/hosts.deny
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -575,7 +575,7 @@
 - name: "SCORED | 4.5.5 | AUDIT | Verify Permissions on /etc/hosts.deny"
   shell: stat -L -c "%a %u %g" /etc/hosts.allow | egrep "644 0 0"
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -599,7 +599,7 @@
 - name: "NOTSCORED | 4.6.1 | AUDIT | Disable DCCP"
   command: grep -rs "^install\s*dccp\s*/bin/true$" /etc/modprobe.d
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -626,7 +626,7 @@
 - name: "NOTSCORED | 4.6.2 | AUDIT | Disable SCTP"
   command: grep -rs "^install\s*sctp\s*/bin/true$" /etc/modprobe.d
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -653,7 +653,7 @@
 - name: "NOTSCORED | 4.6.3 | AUDIT | Disable RDS"
   shell: find /etc/modprobe.* -type f -name '*.conf' -exec grep -ls '^install rds /bin/(true|false)' {} \;
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -679,7 +679,7 @@
 - name: "NOTSCORED | 4.6.4 | AUDIT | Disable TIPC"
   command: grep -rs "^install\s*tipc\s*/bin/true$" /etc/modprobe.d
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -706,7 +706,7 @@
 - name: "SCORED | 4.7 | AUDIT | Enable firewalld"
   shell: systemctl is-enabled firewalld|grep enabled
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
