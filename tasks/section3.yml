@@ -208,7 +208,6 @@
   notify:
       - sysctl flush ipv6 route table
   when:
-      - rhel7cis_ipv6_required == true
       - rhel7cis_rule_3_3_1
   tags:
       - level1
@@ -230,7 +229,6 @@
   notify:
       - sysctl flush ipv6 route table
   when:
-      - rhel7cis_ipv6_required == true
       - rhel7cis_rule_3_3_2
   tags:
       - level1
