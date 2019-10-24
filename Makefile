@@ -42,23 +42,14 @@ bin/python:
 
 # cleanup virtualenv and molecule leftovers
 clean:
-	rm -rf .molecule bin lib include lib64 share
+	rm -rf bin lib include lib64 share
 	rm -f .Python pip-selfcheck.json
 
 .PHONY: lint
 lint: bin/python
-	( . bin/activate && find . -name "*.yml" |grep -v .molecule |xargs bin/yamllint )
+	( . bin/activate && find . -name "*.yml" |xargs bin/yamllint )
+	( . bin/activate && bin/molecule lit )
 
 .PHONY: test
 test: bin/python
 	( . bin/activate && bin/molecule test )
-
-.PHONY: compare
-compare:
-	rm -rf .molecule
-	cp vagrant.yml molecule.yml
-	molecule test
-	rm -rf .molecule
-	cp docker.yml molecule.yml
-	molecule test
-	diff tests/vagrant.txt tests/docker.txt

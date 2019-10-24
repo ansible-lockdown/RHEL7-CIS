@@ -1,7 +1,7 @@
 - name: "SCORED | 5.1.1 | AUDIT | Install the rsyslog package"
   command: rpm -q rsyslog
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -23,7 +23,7 @@
 - name: "SCORED | 5.1.2 | AUDIT | Activate the rsyslog Service"
   command: systemctl is-enabled rsyslog
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -33,7 +33,9 @@
       - rule_5.1.2
 
 - name: "SCORED | 5.1.2 | PATCH | Activate the rsyslog Service"
-  command: systemctl enable rsyslog
+  systemd:
+      name: rsyslog
+      enabled: true
   tags:
       - level1
       - level2
@@ -43,7 +45,7 @@
 - name: "NOTSCORED | 5.1.3 | AUDIT | Configure /etc/rsyslog.conf"
   shell: rpm -Vv rsyslog|grep /etc/rsyslog.conf| grep '^\.\.\.\.\.'
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -67,7 +69,7 @@
 - name: "SCORED | 5.1.5 | AUDIT | Configure rsyslog to Send Logs to a Remote Log Host"
   command: grep "^*.*[^I][^I]*@" /etc/rsyslog.conf
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -79,7 +81,7 @@
 - name: "NOTSCORED | 5.1.6 | AUDIT | Accept Remote rsyslog Messages Only on Designated Log Hosts"
   command: grep '^$ModLoad imtcp' /etc/rsyslog.conf
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -102,7 +104,7 @@
 - name: "NOTSCORED | 5.1.6 | AUDIT | Accept Remote rsyslog Messages Only on Designated Log Hosts"
   command: grep '^$InputTCPServerRun' /etc/rsyslog.conf
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:

@@ -1,15 +1,15 @@
 - name: "SCORED | 3.1.1 | PATCH | Ensure IP forwarding is disabled"
   sysctl:
       name: net.ipv4.ip_forward
-      value: 0
+      value: '0'
       state: present
       reload: yes
       ignoreerrors: yes
   notify:
       - sysctl flush ipv4 route table
   when:
-      - rhel7cis_is_router == false
-      - rhel7cis_rule_3_1_1
+      - not rhel7cis_is_router
+      - rhel7cis_rule_3_1_1|bool
   tags:
       - level1
       - sysctl
@@ -30,8 +30,8 @@
   notify:
       - sysctl flush ipv4 route table
   when:
-      - rhel7cis_is_router == false
-      - rhel7cis_rule_3_1_2
+      - not rhel7cis_is_router
+      - rhel7cis_rule_3_1_2|bool
   tags:
       - level1
       - sysctl
@@ -52,7 +52,7 @@
   notify:
       - sysctl flush ipv4 route table
   when:
-      - rhel7cis_rule_3_2_1
+      - rhel7cis_rule_3_2_1|bool
   tags:
       - level1
       - sysctl
@@ -73,7 +73,7 @@
   notify:
       - sysctl flush ipv4 route table
   when:
-      - rhel7cis_rule_3_2_2
+      - rhel7cis_rule_3_2_2|bool
   tags:
       - level1
       - sysctl
@@ -94,7 +94,7 @@
   notify:
       - sysctl flush ipv4 route table
   when:
-      - rhel7cis_rule_3_2_3
+      - rhel7cis_rule_3_2_3|bool
   tags:
       - level1
       - sysctl
@@ -115,7 +115,7 @@
   notify:
       - sysctl flush ipv4 route table
   when:
-      - rhel7cis_rule_3_2_4
+      - rhel7cis_rule_3_2_4|bool
   tags:
       - level1
       - sysctl
@@ -125,14 +125,14 @@
 - name: "SCORED | 3.2.5 | PATCH | Ensure broadcast ICMP requests are ignored"
   sysctl:
       name: net.ipv4.icmp_echo_ignore_broadcasts
-      value: 1
+      value: '1'
       state: present
       reload: yes
       ignoreerrors: yes
   notify:
       - sysctl flush ipv4 route table
   when:
-      - rhel7cis_rule_3_2_5
+      - rhel7cis_rule_3_2_5|bool
   tags:
       - level1
       - sysctl
@@ -142,14 +142,14 @@
 - name: "SCORED | 3.2.6 | PATCH | Ensure bogus ICMP responses are ignored"
   sysctl:
       name: net.ipv4.icmp_ignore_bogus_error_responses
-      value: 1
+      value: '1'
       state: present
       reload: yes
       ignoreerrors: yes
   notify:
       - sysctl flush ipv4 route table
   when:
-      - rhel7cis_rule_3_2_6
+      - rhel7cis_rule_3_2_6|bool
   tags:
       - level1
       - sysctl
@@ -170,7 +170,7 @@
   notify:
       - sysctl flush ipv4 route table
   when:
-      - rhel7cis_rule_3_2_7
+      - rhel7cis_rule_3_2_7|bool
   tags:
       - level1
       - sysctl
@@ -187,7 +187,7 @@
   notify:
       - sysctl flush ipv4 route table
   when:
-      - rhel7cis_rule_3_2_8
+      - rhel7cis_rule_3_2_8|bool
   tags:
       - level1
       - sysctl
@@ -208,8 +208,8 @@
   notify:
       - sysctl flush ipv6 route table
   when:
-      - rhel7cis_ipv6_required == true
-      - rhel7cis_rule_3_3_1
+      - rhel7cis_ipv6_required | bool
+      - rhel7cis_rule_3_3_1|bool
   tags:
       - level1
       - sysctl
@@ -230,8 +230,8 @@
   notify:
       - sysctl flush ipv6 route table
   when:
-      - rhel7cis_ipv6_required == true
-      - rhel7cis_rule_3_3_2
+      - rhel7cis_ipv6_required | bool
+      - rhel7cis_rule_3_3_2|bool
   tags:
       - level1
       - sysctl
@@ -240,15 +240,15 @@
 
 - name: "NOTSCORED | 3.3.3 | PATCH | Ensure IPv6 is disabled"
   lineinfile:
-    dest: /etc/default/grub
-    regexp: '^(GRUB_CMDLINE_LINUX=.*(?!.*ipv6\.disable=1)\"[^\"]+)(\".*)'
-    line: '\1 ipv6.disable=1\2'
-    backrefs: yes
+      dest: /etc/default/grub
+      regexp: '^(GRUB_CMDLINE_LINUX=.*(?!.*ipv6\.disable=1)\"[^\"]+)(\".*)'
+      line: '\1 ipv6.disable=1\2'
+      backrefs: yes
   notify:
-    - grub2cfg
+      - grub2cfg
   when:
-      - rhel7cis_ipv6_required == false
-      - rhel7cis_rule_3_3_3
+      - not rhel7cis_ipv6_required
+      - rhel7cis_rule_3_3_3|bool
   tags:
       - level1
       - patch
@@ -256,10 +256,10 @@
 
 - name: "SCORED | 3.4.1 | PATCH | Ensure TCP Wrappers is installed"
   yum:
-    name: tcp_wrappers
-    state: present
+      name: tcp_wrappers
+      state: present
   when:
-      - rhel7cis_rule_3_4_1
+      - rhel7cis_rule_3_4_1|bool
   tags:
       - level1
       - patch
@@ -273,7 +273,7 @@
       group: root
       mode: 0644
   when:
-      - rhel7cis_rule_3_4_2
+      - rhel7cis_rule_3_4_2|bool
   tags:
       - level1
       - patch
@@ -285,7 +285,7 @@
       regexp: "^(#)?ALL"
       line: "ALL: ALL"
   when:
-      - rhel7cis_rule_3_4_3
+      - rhel7cis_rule_3_4_3|bool
   tags:
       - level1
       - patch
@@ -298,7 +298,7 @@
       group: root
       mode: 0644
   when:
-      - rhel7cis_rule_3_4_4
+      - rhel7cis_rule_3_4_4|bool
   tags:
       - level1
       - patch
@@ -311,7 +311,7 @@
       group: root
       mode: 0644
   when:
-      - rhel7cis_rule_3_4_5
+      - rhel7cis_rule_3_4_5|bool
   tags:
       - level1
       - patch
@@ -324,7 +324,7 @@
       line: "install dccp /bin/true"
       create: yes
   when:
-      - rhel7cis_rule_3_5_1
+      - rhel7cis_rule_3_5_1|bool
   tags:
       - level1
       - patch
@@ -337,7 +337,7 @@
       line: "install sctp /bin/true"
       create: yes
   when:
-      - rhel7cis_rule_3_5_2
+      - rhel7cis_rule_3_5_2|bool
   tags:
       - level1
       - patch
@@ -350,7 +350,7 @@
       line: "install rds /bin/true"
       create: yes
   when:
-      - rhel7cis_rule_3_5_3
+      - rhel7cis_rule_3_5_3|bool
   tags:
       - level1
       - patch
@@ -363,7 +363,7 @@
       line: "install tipc /bin/true"
       create: yes
   when:
-      - rhel7cis_rule_3_5_4
+      - rhel7cis_rule_3_5_4|bool
   tags:
       - level1
       - patch
@@ -374,6 +374,7 @@
       name: firewalld
       state: present
   when: rhel7cis_firewall == "firewalld"
+  notify: restart firewalld
   tags:
       - level1
       - patch
@@ -396,7 +397,7 @@
       state: present
   when:
       - rhel7cis_firewall == "iptables"
-      - rhel7cis_rule_3_6_1
+      - rhel7cis_rule_3_6_1|bool
   tags:
       - level1
       - patch
@@ -409,7 +410,7 @@
       enabled: yes
   when:
       - rhel7cis_firewall == "iptables"
-      - rhel7cis_rule_3_6_1
+      - rhel7cis_rule_3_6_1|bool
   tags:
       - level1
       - patch
@@ -422,7 +423,7 @@
       line: "DefaultZone=drop"
   when:
       - rhel7cis_firewall == "firewalld"
-      - rhel7cis_rule_3_6_2
+      - rhel7cis_rule_3_6_2|bool
   tags:
       - level1
       - patch
@@ -435,7 +436,8 @@
       permanent: true
   when:
       - rhel7cis_firewall == "firewalld"
-      - rhel7cis_rule_3_6_2
+      - rhel7cis_rule_3_6_2|bool
+      - ansible_connection != 'docker'
   tags:
       - level1
       - patch
@@ -446,7 +448,7 @@
   changed_when: no
   when:
       - rhel7cis_firewall == "iptables"
-      - rhel7cis_rule_3_6_2
+      - rhel7cis_rule_3_6_2|bool
   tags:
       - level1
       - patch
@@ -458,7 +460,7 @@
   changed_when: no
   when:
       - rhel7cis_firewall == "iptables"
-      - rhel7cis_rule_3_6_3
+      - rhel7cis_rule_3_6_3|bool
   tags:
       - level1
       - patch
@@ -470,7 +472,7 @@
   changed_when: no
   when:
       - rhel7cis_firewall == "iptables"
-      - rhel7cis_rule_3_6_4
+      - rhel7cis_rule_3_6_4|bool
   tags:
       - level1
       - patch
@@ -488,7 +490,8 @@
   with_items: "{{ rhel7cis_firewall_services }}"
   when:
       - rhel7cis_firewall == "firewalld"
-      - rhel7cis_rule_3_6_5
+      - rhel7cis_rule_3_6_5|bool
+      - ansible_connection != 'docker'
   tags:
       - level1
       - patch
@@ -499,7 +502,7 @@
   changed_when: no
   when:
       - rhel7cis_firewall == "iptables"
-      - rhel7cis_rule_3_6_5
+      - rhel7cis_rule_3_6_5|bool
   tags:
       - level1
       - patch

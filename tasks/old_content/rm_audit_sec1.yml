@@ -1,7 +1,7 @@
 - name: "SCORED | 1.1.1.1 | AUDIT | Ensure mounting of cramfs filesystems is disabled"
-  shell: modprobe -n -v cramfs
+  command: modprobe -n -v cramfs
   register: cramfs_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -14,7 +14,7 @@
 - name: "SCORED | 1.1.1.1 | AUDIT | Ensure mounting of cramfs filesystems is disabled"
   shell: lsmod | grep -vq cramfs
   register: cramfs_loaded_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -25,9 +25,9 @@
       - cramfs
 
 - name: "SCORED | 1.1.1.2 | AUDIT | Ensure mounting of freevxfs filesystems is disabled"
-  shell: modprobe -n -v freevxfs
+  command: modprobe -n -v freevxfs
   register: freevxfs_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -40,7 +40,7 @@
 - name: "SCORED | 1.1.1.2 | AUDIT | Ensure mounting of freevxfs filesystems is disabled"
   shell: lsmod | grep -vq freevxfs
   register: freevxfs_loaded_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -51,9 +51,9 @@
       - freevxfs
 
 - name: "SCORED | 1.1.1.3 | AUDIT | Ensure mounting of jffs2 filesystems is disabled"
-  shell: modprobe -n -v jffs2
+  command: modprobe -n -v jffs2
   register: jffs2_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -66,7 +66,7 @@
 - name: "SCORED | 1.1.1.3 | AUDIT | Ensure mounting of jffs2 filesystems is disabled"
   shell: lsmod | grep -vq jffs2
   register: jffs2_loaded_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -77,9 +77,9 @@
       - jffs2
 
 - name: "SCORED | 1.1.1.4 | AUDIT | Ensure mounting of hfs filesystems is disabled"
-  shell: modprobe -n -v hfs
+  command: modprobe -n -v hfs
   register: hfs_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -92,7 +92,7 @@
 - name: "SCORED | 1.1.1.4 | AUDIT | Ensure mounting of hfs filesystems is disabled"
   shell: lsmod | grep -vq hfs
   register: hfs_loaded_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -103,9 +103,9 @@
       - hfs
 
 - name: "SCORED | 1.1.1.5 | AUDIT | Ensure mounting of hfsplus filesystems is disabled"
-  shell: modprobe -n -v hfsplus
+  command: modprobe -n -v hfsplus
   register: hfsplus_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -118,7 +118,7 @@
 - name: "SCORED | 1.1.1.5 | AUDIT | Ensure mounting of hfsplus filesystems is disabled"
   shell: lsmod | grep -vq hfsplus
   register: hfsplus_loaded_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -129,9 +129,9 @@
       - hfsplus
 
 - name: "SCORED | 1.1.1.6 | AUDIT | Ensure mounting of squashfs filesystems is disabled"
-  shell: modprobe -n -v squashfs
+  command: modprobe -n -v squashfs
   register: squashfs_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -144,7 +144,7 @@
 - name: "SCORED | 1.1.1.6 | AUDIT | Ensure mounting of squashfs filesystems is disabled"
   shell: lsmod | grep -vq squashfs
   register: squashfs_loaded_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -155,9 +155,9 @@
       - squashfs
 
 - name: "SCORED | 1.1.1.7 | AUDIT | Ensure mounting of udf filesystems is disabled"
-  shell: modprobe -n -v udf
+  command: modprobe -n -v udf
   register: udf_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -170,7 +170,7 @@
 - name: "SCORED | 1.1.1.7 | AUDIT | Ensure mounting of udf filesystems is disabled"
   shell: lsmod | grep -vq udf
   register: udf_loaded_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -181,9 +181,9 @@
       - udf
 
 - name: "SCORED | 1.1.1.8 | AUDIT | Ensure mounting of FAT filesystems is disabled"
-  shell: modprobe -n -v vfat
+  command: modprobe -n -v vfat
   register: vfat_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -196,7 +196,7 @@
 - name: "SCORED | 1.1.1.8 | AUDIT | Ensure mounting of FAT filesystems is disabled"
   shell: lsmod | grep -vq vfat
   register: vfat_loaded_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -209,7 +209,7 @@
 - name: "SCORED | 1.1.3 | AUDIT | Ensure nodev option set on /tmp partition"
   shell: mount | grep "on /tmp " | grep nodev
   register: tmp_nodev_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -221,7 +221,7 @@
 - name: "SCORED | 1.1.4 | AUDIT | Ensure nosuid option set on /tmp partition"
   shell: mount | grep /tmp | grep nosuid
   register: mount_nosuid_tmp_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -233,7 +233,7 @@
 - name: "SCORED | 1.1.5 | AUDIT | Ensure noexec option set on /tmp partition"
   shell: mount | grep ' /tmp' | grep noexec
   register: mount_noexec_tmp_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -245,7 +245,7 @@
 - name: "SCORED | 1.1.8 | AUDIT | Ensure nodev option set on /var/tmp partition"
   shell: mount | grep /var/tmp | grep nodev
   register: mount_nodev_var_tmp_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -257,7 +257,7 @@
 - name: "SCORED | 1.1.9 | AUDIT | Ensure nosuid option set on /var/tmp partition"
   shell: mount | grep /var/tmp | grep nosuid
   register: mount_nosuid_var_tmp_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -269,7 +269,7 @@
 - name: "SCORED | 1.1.10 | AUDIT | Ensure noexec option set on /var/tmp partition"
   shell: mount | grep /var/tmp | grep noexec
   register: mount_noexec_var_tmp_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -281,7 +281,7 @@
 - name: "SCORED | 1.1.14 | AUDIT | Ensure nodev option set on /home partition"
   shell: mount | grep /home | grep nodev
   register: mount_nodev_home_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -293,7 +293,7 @@
 - name: "SCORED | 1.1.15 | AUDIT | Ensure nodev option set on /dev/shm partition"
   shell: mount | grep /dev/shm | grep nodev
   register: mount_nodev_dev_shm_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -305,7 +305,7 @@
 - name: "SCORED | 1.1.16 | AUDIT | Ensure nosuid option set on /dev/shm partition"
   shell: mount | grep /dev/shm | grep nosuid
   register: mount_nosuid_dev_shm_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -317,7 +317,7 @@
 - name: "SCORED | 1.1.17 | AUDIT | Ensure noexec option set on /dev/shm partition"
   shell: mount | grep /dev/shm | grep noexec
   register: mount_noexec_dev_shm_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -329,7 +329,7 @@
 - name: "NOTSCORED | 1.1.18 | AUDIT | Ensure nodev option set on removable media partitions"
   command: /bin/true
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -341,7 +341,7 @@
 - name: "NOTSCORED | 1.1.19 | AUDIT | Ensure nosuid option set on removable media partitions"
   command: /bin/true
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -353,7 +353,7 @@
 - name: "NOTSCORED | 1.1.20 | AUDIT | Ensure noexec option set on removable media partitions"
   command: /bin/true
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -365,7 +365,7 @@
 - name: "SCORED | 1.1.21 | AUDIT | Ensure sticky bit is set on all world-writable directories"
   shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d \( -perm -0002 -a ! -perm -1000 \) 2>/dev/null
   register: sticky_bit_on_worldwritable_dirs_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -377,7 +377,7 @@
 - name: "SCORED | 1.1.22 | AUDIT | Disable Automounting"
   command: rpm -q autofs
   register: autofs_installed_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -390,7 +390,7 @@
   command: systemctl is-enabled autofs
   when: autofs_installed_audit.rc == '0'
   register: disable_automounting_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -402,7 +402,7 @@
 - name: "NOTSCORED | 1.2.1 | AUDIT | Ensure package manager repositories are configured"
   command: yum repolist
   register: yum_repositories_configured_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -414,7 +414,7 @@
 - name: "SCORED | 1.2.2 | AUDIT | Ensure gpgcheck is globally activated"
   shell: grep ^gpgcheck /etc/yum.repos.d/*|grep -v '0$'
   register: yum_gpgcheck_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -426,7 +426,7 @@
 - name: "NOTSCORED | 1.2.3 | AUDIT | Ensure GPG keys are configured"
   shell: grep ^gpgcheck /etc/yum.repos.d/* | grep -v 0$
   register: yum_gpg_keys_configured_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -438,7 +438,7 @@
 - name: "NOTSCORED | 1.2.4 | AUDIT | Ensure Red Hat Network or Subscription Manager connection is configured"
   command: /bin/true
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -450,7 +450,7 @@
 - name: "NOTSCORED | 1.2.5 | AUDIT | Disable the rhnsd Daemon"
   command: /bin/true
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -461,7 +461,7 @@
 - name: "SCORED | 1.3.1 | AUDIT | Ensure AIDE is installed"
   command: rpm -q aide
   register: aide_installed_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   failed_when: no
   ignore_errors: yes
@@ -476,7 +476,7 @@
   stat:
       path: /var/lib/aide/aide.db.gz
   register: aide_db
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -489,7 +489,7 @@
 - name: "SCORED | 1.3.2 | AUDIT | Ensure filesystem integrity is regularly checked"
   shell: grep aide {{ rhel7cis_aide_cron['cron_file'] }} /etc/cron.*/*
   register: aide_cron_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -503,7 +503,7 @@
 - name: "SCORED | 1.4.1 | AUDIT | Ensure permissions on bootloader config are configured"
   shell: stat -L -c "%a %u %g" /boot/grub2/grub.cfg | egrep "600 0 0"
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -515,7 +515,7 @@
 - name: "SCORED | 1.4.2 | AUDIT | Ensure bootloader password is set"
   command: grep "^password" /boot/grub2/grub.cfg
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -527,7 +527,7 @@
 - name: "NOTSCORED | 1.4.3 | AUDIT | Ensure authentication required for single user mode"
   command: grep /sbin/sulogin /usr/lib/systemd/system/rescue.service
   register: authentications_for_rescue_service_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -539,7 +539,7 @@
 - name: "NOTSCORED | 1.4.3 | AUDIT | Ensure authentication required for single user mode"
   command: grep /sbin/sulogin /usr/lib/systemd/system/emergency.service
   register: authentications_for_emergency_service_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -551,7 +551,7 @@
 - name: "SCORED | 1.5.1 | AUDIT | Ensure core dumps are restricted"
   shell: grep -E "^\*\s*hard\s*core\s*" /etc/security/limits.conf /etc/security/limits.d/* | awk '{print $4}'
   register: coredump_limits_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -564,7 +564,7 @@
 - name: "SCORED | 1.5.1 | AUDIT | Ensure core dumps are restricted"
   shell: "sysctl fs.suid_dumpable | awk '{print $3}' | grep 0"
   register: coredump_sysctl_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -577,7 +577,7 @@
 - name: "NOTSCORED | 1.5.2 | AUDIT | Ensure XD/NX support is enabled"
   shell: dmesg | grep NX| grep Execute
   register: xdnx_support_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -589,7 +589,7 @@
 - name: "SCORED | 1.5.3 | AUDIT | Ensure address space layout randomization (ASLR) is enabled"
   shell: "sysctl kernel.randomize_va_space | awk '{print $3}' | grep 2"
   register: aslr_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -602,7 +602,7 @@
 - name: "SCORED | 1.5.4 | AUDIT | Ensure prelink is disabled"
   command: rpm -q prelink
   register: prelink_disabled_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -614,7 +614,7 @@
 - name: "SCORED | 1.6.1.1 | AUDIT | Ensure SELinux is not disabled in bootloader configuration"
   shell: grep -E "^\s*linux.*(selinux|enforcing)=0" /boot/grub2/grub.cfg
   register: selinux_grub_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   failed_when: selinux_grub_audit.rc == 0
   ignore_errors: yes
@@ -627,7 +627,7 @@
 - name: "SCORED | 1.6.1.2 | AUDIT | Ensure the SELinux state is enforcing"
   shell: getenforce|grep Enforcing
   register: selinux_state_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   when: not rhel7cis_selinux_disable
@@ -641,7 +641,7 @@
 # - name: "SCORED | 1.6.1.2 | AUDIT | Ensure the SELinux state is enforcing"
 #   shell: sestatus|grep "SELinux status\: enabled"
 #   register: selinux_running_state_audit
-#   always_run: yes
+#   check_mode: no
 #   changed_when: no
 #   ignore_errors: yes
 #   tags:
@@ -652,9 +652,9 @@
 #       - rule_1.6.1.2
 
 - name: "SCORED | 1.6.1.3 | AUDIT | Ensure SELinux policy is configured"
-  shell: grep 'SELINUXTYPE=targeted' /etc/selinux/config
+  command: grep 'SELINUXTYPE=targeted' /etc/selinux/config
   register: selinux_policy_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -667,7 +667,7 @@
 - name: "SCORED | 1.6.1.4 | AUDIT | Ensure SETroubleshoot is not installed"
   command: rpm -q setroubleshoot
   register: setroubleshoot_removed_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -680,7 +680,7 @@
 - name: "SCORED | 1.6.1.5 | AUDIT | Ensure the MCS Translation Service (mcstrans) is not installed"
   command: rpm -q mcstrans
   register: mcstrans_removed_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -693,7 +693,7 @@
   shell: "ps -eZ | egrep 'initrc' | egrep -vw 'tr|ps|egrep|bash|awk' | tr ':' ' ' | awk '{
 print $NF }'"
   register: unconfined_daemon_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -705,7 +705,7 @@ print $NF }'"
 - name: "SCORED | 1.6.2 | AUDIT | Ensure SELinux is installed"
   command: rpm -q libselinux
   register: selinux_installed_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -718,7 +718,7 @@ print $NF }'"
 - name: "SCORED | 1.7.1.1 | AUDIT | Ensure message of the day is configured properly"
   command: egrep -v '(\\v|\\r|\\m|\\s)' /etc/motd
   register: configured_etc_motd_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -730,7 +730,7 @@ print $NF }'"
 - name: "NOTSCORED | 1.7.1.2 | AUDIT | Ensure local login warning banner is configured properly"
   command: egrep -v '(\\v|\\r|\\m|\\s)' /etc/issue
   register: configured_etc_issue_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -742,7 +742,7 @@ print $NF }'"
 - name: "NOTSCORED | 1.7.1.3 | AUDIT | Ensure remote login warning banner is configured properly"
   command: egrep -v '(\\v|\\r|\\m|\\s)' /etc/issue.net
   register: configured_etc_issue_net_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -754,7 +754,7 @@ print $NF }'"
 - name: "NOTSCORED | 1.7.1.4 | AUDIT | Ensure permissions on /etc/motd are configured"
   shell: stat -L -c "%a %u %g" /etc/motd  | egrep "644 0 0"
   register: permissions_etc_motd_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -766,7 +766,7 @@ print $NF }'"
 - name: "SCORED | 1.7.1.5 | AUDIT | Ensure permissions on /etc/issue are configured"
   shell: stat -L -c "%a %u %g" /etc/issue  | egrep "644 0 0"
   register: permissions_etc_issue_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -778,7 +778,7 @@ print $NF }'"
 - name: "NOTSCORED | 1.7.1.6 | AUDIT | Ensure permissions on /etc/issue.net are configured"
   shell: stat -L -c "%a %u %g" /etc/issue.net  | egrep "644 0 0"
   register: permissions_etc_issue_net_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -790,7 +790,7 @@ print $NF }'"
 - name: "SCORED | 1.7.2 | AUDIT | Ensure GDM login banner is configured"
   command: rpm -q gdm
   register: gdm_installed_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -803,7 +803,7 @@ print $NF }'"
   command: grep 'banner-message-enable=true' /etc/dconf/db/gdm.d/01-banner-message
   register: gdm_login_banner_configured_audit
   when: gdm_installed_audit.rc == '0'
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -815,7 +815,7 @@ print $NF }'"
 - name: "NOTSCORED | 1.8 | AUDIT | Ensure updates, patches, and additional security software are installed"
   command: yum check-update
   register: software_updates_audit
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:

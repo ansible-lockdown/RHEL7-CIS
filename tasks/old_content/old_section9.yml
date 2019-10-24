@@ -1,7 +1,7 @@
 - name: "SCORED | 9.1.2 | AUDIT | Verify Permissions on /etc/passwd"
   shell: stat -L -c "%a %u %g" /etc/hosts.allow | egrep "644 0 0"
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -23,7 +23,7 @@
 - name: "SCORED | 9.1.3 | AUDIT | Verify Permissions on /etc/shadow"
   shell: stat -L -c "%a %u %g" /etc/hosts.allow | egrep "640 0 0"
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -45,7 +45,7 @@
 - name: "SCORED | 9.1.4 | AUDIT | Verify Permissions on /etc/gshadow"
   shell: stat -L -c "%a %u %g" /etc/hosts.allow | egrep "0 0 0"
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -67,7 +67,7 @@
 - name: "SCORED | 9.1.5 | AUDIT | Verify Permissions on /etc/group"
   shell: stat -L -c "%a %u %g" /etc/hosts.allow | egrep "644 0 0"
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -89,7 +89,7 @@
 - name: "SCORED | 9.1.6 | AUDIT | Verify User/Group Ownership on /etc/passwd"
   shell: stat -L -c "%u %g" /etc/passwd | egrep "0 0"
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -112,7 +112,7 @@
 - name: "SCORED | 9.1.7 | AUDIT | Verify User/Group Ownership on /etc/shadow"
   shell: stat -L -c "%u %g" /etc/shadow | egrep "0 0"
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -135,7 +135,7 @@
 - name: "SCORED | 9.1.8 | AUDIT | Verify User/Group Ownership on /etc/gshadow"
   shell: stat -L -c "%u %g" /etc/gshadow | egrep "0 0"
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -158,7 +158,7 @@
 - name: "SCORED | 9.1.9 | AUDIT | Verify User/Group Ownership on /etc/group"
   shell: stat -L -c "%u %g" /etc/group | egrep "0 0"
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -181,7 +181,7 @@
 - name: "SCORED | 9.2.2 | AUDIT | Verify No Legacy '+' Entries Exist in /etc/passwd File"
   command: /bin/grep '^+:' /etc/passwd
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -193,7 +193,7 @@
 - name: "SCORED | 9.2.3 | AUDIT | Verify No Legacy '+' Entries Exist in /etc/shadow File"
   command: /bin/grep '^+:' /etc/shadow
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:
@@ -205,7 +205,7 @@
 - name: "SCORED | 9.2.4 | AUDIT | Verify No Legacy '+' Entries Exist in /etc/group File"
   command: /bin/grep '^+:' /etc/group
   register: result
-  always_run: yes
+  check_mode: no
   changed_when: no
   ignore_errors: yes
   tags:

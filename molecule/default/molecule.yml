@@ -1,0 +1,65 @@
+---
+dependency:
+  name: galaxy
+  requirements_file: requirements.yml
+driver:
+  name: docker
+verifier:
+  name: goss
+  lint:
+    name: yamllint
+platforms:
+  - name: CIS-centos7
+    image: milcom/centos7-systemd
+    privileged: true
+provisioner:
+  name: ansible
+  config_options:
+    defaults:
+      remote_tmp: /tmp
+  playbooks:
+    converge: playbook.yml
+  lint:
+    name: ansible-lint
+    options:
+      exclude:
+        - tasks/old_content
+      x: ["303", "306", "602"]
+scenario:
+  name: default
+  create_sequence:
+    - dependency
+    - create
+    - prepare
+  check_sequence:
+    - dependency
+    - cleanup
+    - destroy
+    - create
+    - prepare
+    - converge
+    - check
+    - destroy
+  converge_sequence:
+    - dependency
+    - create
+    - prepare
+    - converge
+  destroy_sequence:
+    - dependency
+    - cleanup
+    - destroy
+  test_sequence:
+    - lint
+    - dependency
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+#    - idempotence
+#    - side_effect
+    - verify
+    - cleanup
+    - destroy
