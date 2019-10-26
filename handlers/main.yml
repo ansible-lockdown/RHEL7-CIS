@@ -60,7 +60,7 @@
       - check sshd configuration
       - restart sshd - after config check
 
-- name: check sshd configuration
+- name: generate host keys
   command: '/usr/bin/ssh-keygen -A'
   register: ssh_host_keys
 
