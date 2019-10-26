@@ -56,8 +56,13 @@
       msg: "checking /etc/ssh/sshd_config first"
   changed_when: true
   notify:
+      - generate host keys
       - check sshd configuration
       - restart sshd - after config check
+
+- name: check sshd configuration
+  command: '/usr/bin/ssh-keygen -A'
+  register: ssh_host_keys
 
 - name: check sshd configuration
   command: '/usr/sbin/sshd -t'
