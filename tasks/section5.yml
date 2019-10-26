@@ -347,7 +347,6 @@
         notify: restart sshd
   when:
       - rhel7cis_rule_5_2_13|bool
-  notify: restart sshd
   tags:
       - level1
       - level2
