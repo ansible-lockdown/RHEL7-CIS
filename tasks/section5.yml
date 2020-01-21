@@ -148,22 +148,6 @@
   command: /usr/bin/ssh-keygen -A
   args:
       creates: /etc/ssh/ssh_host_ed25519_key
-  when:
-      - rhel7cis_rule_5_2_2|bool
-      - rhel7cis_rule_5_2_3|bool
-      - rhel7cis_rule_5_2_4|bool
-      - rhel7cis_rule_5_2_5|bool
-      - rhel7cis_rule_5_2_6|bool
-      - rhel7cis_rule_5_2_7|bool
-      - rhel7cis_rule_5_2_8|bool
-      - rhel7cis_rule_5_2_9|bool
-      - rhel7cis_rule_5_2_10|bool
-      - rhel7cis_rule_5_2_11|bool
-      - rhel7cis_rule_5_2_12|bool
-      - rhel7cis_rule_5_2_13|bool
-      - rhel7cis_rule_5_2_14|bool
-      - rhel7cis_rule_5_2_15|bool
-      - rhel7cis_rule_5_2_16|bool
 
 - name: "SCORED | 5.2.1 | PATCH | Ensure permissions on /etc/ssh/sshd_config are configured"
   file:
