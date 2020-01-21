@@ -165,6 +165,7 @@
       dest: /etc/ssh/sshd_config
       regexp: '^Protocol'
       line: 'Protocol 2'
+      validate: /usr/sbin/sshd -t -f %s
   when:
       - rhel7cis_rule_5_2_2|bool
 
@@ -180,6 +181,7 @@
       dest: /etc/ssh/sshd_config
       regexp: '^LogLevel'
       line: 'LogLevel INFO'
+      validate: /usr/sbin/sshd -t -f %s
   when:
       - rhel7cis_rule_5_2_3|bool
   notify: restart sshd
@@ -195,6 +197,7 @@
       dest: /etc/ssh/sshd_config
       regexp: '^X11Forwarding'
       line: 'X11Forwarding no'
+      validate: /usr/sbin/sshd -t -f %s
   when:
       - rhel7cis_rule_5_2_4|bool
   notify: restart sshd
@@ -210,6 +213,7 @@
       dest: /etc/ssh/sshd_config
       regexp: '^(#)?MaxAuthTries \d'
       line: 'MaxAuthTries 4'
+      validate: /usr/sbin/sshd -t -f %s
   when:
       - rhel7cis_rule_5_2_5|bool
   notify: restart sshd
@@ -225,6 +229,7 @@
       dest: /etc/ssh/sshd_config
       regexp: '^IgnoreRhosts'
       line: 'IgnoreRhosts yes'
+      validate: /usr/sbin/sshd -t -f %s
   when:
       - rhel7cis_rule_5_2_6|bool
   notify: restart sshd
@@ -240,6 +245,7 @@
       dest: /etc/ssh/sshd_config
       regexp: '^HostbasedAuthentication'
       line: 'HostbasedAuthentication no'
+      validate: /usr/sbin/sshd -t -f %s
   when:
       - rhel7cis_rule_5_2_7|bool
   notify: restart sshd
@@ -255,6 +261,7 @@
       dest: /etc/ssh/sshd_config
       regexp: '^PermitRootLogin'
       line: 'PermitRootLogin no'
+      validate: /usr/sbin/sshd -t -f %s
   when:
       - rhel7cis_rule_5_2_8|bool
       - rhel7cis_rule_5_2_8
@@ -271,6 +278,7 @@
       dest: /etc/ssh/sshd_config
       regexp: '^PermitEmptyPasswords'
       line: 'PermitEmptyPasswords no'
+      validate: /usr/sbin/sshd -t -f %s
   when:
       - rhel7cis_rule_5_2_9|bool
   notify: restart sshd
@@ -286,6 +294,7 @@
       dest: /etc/ssh/sshd_config
       regexp: '^PermitUserEnvironment'
       line: 'PermitUserEnvironment no'
+      validate: /usr/sbin/sshd -t -f %s
   when:
       - rhel7cis_rule_5_2_10|bool
       - rhel7cis_rule_5_2_10
@@ -302,6 +311,7 @@
       dest: /etc/ssh/sshd_config
       regexp: '^Ciphers'
       line: "Ciphers {{ rhel7cis_sshd['ciphers'] }}"
+      validate: /usr/sbin/sshd -t -f %s
   when:
       - rhel7cis_rule_5_2_11|bool
       - rhel7cis_rule_5_2_11
@@ -318,6 +328,7 @@
       dest: /etc/ssh/sshd_config
       regexp: '^MACs'
       line: "MACs {{ rhel7cis_sshd['macs'] }}"
+      validate: /usr/sbin/sshd -t -f %s
   when:
       - rhel7cis_rule_5_2_12|bool
   notify: restart sshd
@@ -335,6 +346,7 @@
             dest: /etc/ssh/sshd_config
             regexp: '^ClientAliveInterval'
             line: "ClientAliveInterval {{ rhel7cis_sshd['clientaliveinterval'] }}"
+            validate: /usr/sbin/sshd -t -f %s
         notify: restart sshd
 
       - name: "SCORED | 5.2.13 | PATCH | Ensure SSH ClientAliveCountMax set to <= 3"
@@ -343,6 +355,7 @@
             dest: /etc/ssh/sshd_config
             regexp: '^ClientAliveCountMax'
             line: "ClientAliveCountMax {{ rhel7cis_sshd['clientalivecountmax'] }}"
+            validate: /usr/sbin/sshd -t -f %s
         notify: restart sshd
   when:
       - rhel7cis_rule_5_2_13|bool
@@ -358,6 +371,7 @@
       dest: /etc/ssh/sshd_config
       regexp: '^LoginGraceTime'
       line: "LoginGraceTime {{ rhel7cis_sshd['logingracetime'] }}"
+      validate: /usr/sbin/sshd -t -f %s
   when:
       - rhel7cis_rule_5_2_14|bool
   notify: restart sshd
@@ -375,6 +389,7 @@
             dest: /etc/ssh/sshd_config
             regexp: "^AllowUsers"
             line: AllowUsers {{ rhel7cis_sshd['allowusers'] }}
+            validate: /usr/sbin/sshd -t -f %s
         notify:
             - restart sshd
         when:
@@ -386,6 +401,7 @@
             dest: /etc/ssh/sshd_config
             regexp: "^AllowGroups"
             line: AllowGroups {{ rhel7cis_sshd['allowgroups'] }}
+            validate: /usr/sbin/sshd -t -f %s
         notify:
             - restart sshd
         when:
@@ -397,6 +413,7 @@
             dest: /etc/ssh/sshd_config
             regexp: "^DenyUsers"
             line: DenyUsers {{ rhel7cis_sshd['denyusers'] }}
+            validate: /usr/sbin/sshd -t -f %s
         notify:
             - restart sshd
         when:
@@ -408,6 +425,7 @@
             dest: /etc/ssh/sshd_config
             regexp: "^DenyGroups"
             line: DenyGroups {{ rhel7cis_sshd['denygroups'] }}
+            validate: /usr/sbin/sshd -t -f %s
         notify:
             - restart sshd
         when:
@@ -426,6 +444,7 @@
       dest: /etc/ssh/sshd_config
       regexp: '^Banner'
       line: 'Banner /etc/issue.net'
+      validate: /usr/sbin/sshd -t -f %s
   when:
       - rhel7cis_rule_5_2_16|bool
   notify: restart sshd
