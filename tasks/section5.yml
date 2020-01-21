@@ -242,7 +242,6 @@
       line: 'HostbasedAuthentication no'
   when:
       - rhel7cis_rule_5_2_7|bool
-      - rhel7cis_rule_5_2_7
   notify: restart sshd
   tags:
       - level1
