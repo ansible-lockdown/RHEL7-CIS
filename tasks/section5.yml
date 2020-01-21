@@ -145,7 +145,7 @@
       - rule_5.1.8
 
 - name: "CI | 5.2 | PATCH | Ensure host keys are present."
-  command: /usr/bin/ssh-keygen -ancestor::
+  command: /usr/bin/ssh-keygen -A
   args:
       creates: /etc/ssh/ssh_host_ed25519_key
   when:
