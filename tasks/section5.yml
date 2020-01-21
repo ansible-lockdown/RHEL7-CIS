@@ -144,6 +144,27 @@
       - patch
       - rule_5.1.8
 
+- name: "CI | 5.2 | PATCH | Ensure host keys are present."
+  command: /usr/bin/ssh-keygen -ancestor::
+  args:
+      creates: /etc/ssh/ssh_host_ed25519_key
+  when:
+      - rhel7cis_rule_5_2_2|bool
+      - rhel7cis_rule_5_2_3|bool
+      - rhel7cis_rule_5_2_4|bool
+      - rhel7cis_rule_5_2_5|bool
+      - rhel7cis_rule_5_2_6|bool
+      - rhel7cis_rule_5_2_7|bool
+      - rhel7cis_rule_5_2_8|bool
+      - rhel7cis_rule_5_2_9|bool
+      - rhel7cis_rule_5_2_10|bool
+      - rhel7cis_rule_5_2_11|bool
+      - rhel7cis_rule_5_2_12|bool
+      - rhel7cis_rule_5_2_13|bool
+      - rhel7cis_rule_5_2_14|bool
+      - rhel7cis_rule_5_2_15|bool
+      - rhel7cis_rule_5_2_16|bool
+
 - name: "SCORED | 5.2.1 | PATCH | Ensure permissions on /etc/ssh/sshd_config are configured"
   file:
       dest: /etc/ssh/sshd_config
@@ -264,7 +285,6 @@
       validate: /usr/sbin/sshd -t -f %s
   when:
       - rhel7cis_rule_5_2_8|bool
-      - rhel7cis_rule_5_2_8
   notify: restart sshd
   tags:
       - level1
@@ -297,7 +317,6 @@
       validate: /usr/sbin/sshd -t -f %s
   when:
       - rhel7cis_rule_5_2_10|bool
-      - rhel7cis_rule_5_2_10
   notify: restart sshd
   tags:
       - level1
@@ -314,7 +333,6 @@
       validate: /usr/sbin/sshd -t -f %s
   when:
       - rhel7cis_rule_5_2_11|bool
-      - rhel7cis_rule_5_2_11
   notify: restart sshd
   tags:
       - level1
