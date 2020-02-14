@@ -518,20 +518,25 @@
 - name: "SCORED | 5.4.1.4 | PATCH | Ensure inactive password lock is 30 days or less"
   block:
       - name: "SCORED | 5.4.1.4 | PATCH | Ensure inactive password lock is 30 days or less - Get default INACTIVE setting"
-        shell: "useradd -D | grep INACTIVE"
+        shell: "useradd -D | grep INACTIVE | cut -f2 -d="
         changed_when: no
         register: inactive_setting
 
       - name: "SCORED | 5.4.1.4 | PATCH | Ensure inactive password lock is 30 days or less - Set default INACTIVE setting"
-        shell: "useradd --defaults --inactive {{ rhel7cis_pass['inactive_age'] }} "
-        when: inactive_setting.stdout != 'INACTIVE=30'
+        shell: |
+            if [ {{ inactive_setting.stdout }} -ge {{ rhel7cis_pass['inactive_age'] }} ]; then
+                echo "Changed"
+                useradd --defaults --inactive {{ rhel7cis_pass['inactive_age'] }}
+            fi
+        register: output
+        changed_when: output.stdout == "Changed"
 
-      - name: "SCORED | 5.4.1.4 | PATCH | Ensure inactive password lock is 30 days or less - Find all passworded accounts with expir"
+      - name: "SCORED | 5.4.1.4 | PATCH | Ensure inactive password lock is 30 days or less - Find all passworded accounts"
         shell: 'egrep "^[^:]+:[^\\!*]" /etc/shadow | cut -d: -f1,7'
         changed_when: no
         register: user_account
 
-      - name: "SCORED | 5.4.1.4 | PATCH | Ensure inactive password lock is 30 days or less - Change each user"
+      - name: "SCORED | 5.4.1.4 | PATCH | Ensure inactive password lock is 30 days or less - Change each user that doesn't conform"
         shell: |
             INPUT="{{ item }}"
             PARAMETERS=(${INPUT//:/ })
@@ -541,7 +546,6 @@
                 echo "Changing ${USER}'s inactive password lock setting"
                 chage --inactive {{ rhel7cis_pass['inactive_age'] }} ${USER}
             fi
-
         register: output
         with_items:
             - "{{ user_account.stdout_lines }} "
@@ -553,6 +557,7 @@
       - level2
       - patch
       - rule_5.4.1.4
+      - skip_ansible_lint
 
 - name: "SCORED | 5.4.2 | PATCH | Ensure system accounts are non-login"
   shell: "awk -F: '($3 < {{ rhel7cis_rule_5_4_2_min_uid }}) {print $1 }' /etc/passwd"
