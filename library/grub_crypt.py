@@ -12,7 +12,7 @@ from ansible.module_utils.basic import AnsibleModule
 
 def gen_pass(size=16, chars=string.ascii_letters + string.digits):
     '''Generate a random password.'''
-    return ''.join(random.choice(chars) for _ in range(size))
+    return ''.join(random.choice(chars) for x in range(size))
 
 
 def gen_salt(salt):
