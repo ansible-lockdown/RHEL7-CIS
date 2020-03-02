@@ -438,7 +438,7 @@
       - rule_1.1.20
 
 - name: "SCORED | 1.1.21 | PATCH | Ensure sticky bit is set on all world-writable directories"
-  shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d -perm -0002 2>/dev/null | xargs chmod a+t
+  shell: "set -o pipefail && df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d -perm -0002 2>/dev/null | xargs chmod a+t"
   changed_when: no
   failed_when: no
   #when: sticky_bit_on_worldwritable_dirs_audit.rc == '0'
@@ -661,7 +661,7 @@
   notify: generate new grub config
   when:
       - rhel7cis_set_boot_pass|bool
-      - grub_pass is defined and grub_pass.passhash is defined and grub_pass.passhash != ''
+      - grub_pass is defined and grub_pass.passhash is defined and grub_pass.passhash
       - rhel7cis_rule_1_4_2|bool
   tags:
       - level1
@@ -733,7 +733,7 @@
       - rule_1.5.1
 
 - name: "NOTSCORED | 1.5.2 | PATCH | Ensure XD/NX support is enabled"
-  shell: dmesg|grep -E "NX|XD" | grep " active"
+  shell: 'set -o pipefail && dmesg | grep -E "NX|XD" | grep " active"'
   changed_when: no
   when:
       - rhel7cis_rule_1_5_2|bool

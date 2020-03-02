@@ -218,7 +218,10 @@
       - rule_4.1.11
 
 - name: "SCORED | 4.1.12 | PATCH | Ensure use of privileged commands is collected"
-  shell: for i in  $(df | grep '^/dev' | awk '{ print $NF }'); do find $i -xdev -type f -perm -4000 -o -type f -perm -2000 2>/dev/null; done
+  shell: "set -o pipefail && \
+    for i in $(df | grep '^/dev' | awk '{ print $NF }'); do \
+      find $i -xdev -type f -perm -4000 -o -type f -perm -2000 2>/dev/null; \
+    done"
   register: priv_procs
   changed_when: no
   check_mode: no

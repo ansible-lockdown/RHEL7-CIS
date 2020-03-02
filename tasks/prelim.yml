@@ -8,13 +8,13 @@
   check_mode: no
 
 - name: "PRELIM | Gather accounts with empty password fields"
-  shell: "cat /etc/shadow | awk -F: '($2 == \"\" ) {j++;print $1; } END {exit j}'"
+  command: "awk -F: '($2 == \"\" ) {j++;print $1; } END {exit j}' /etc/shadow"
   register: empty_password_accounts
   changed_when: no
   check_mode: no
 
 - name: "PRELIM | Gather UID 0 accounts other than root"
-  shell: "cat /etc/passwd | awk -F: '($3 == 0 && $1 != \"root\") {i++;print $1 } END {exit i}'"
+  command: "awk -F: '($3 == 0 && $1 != \"root\") {i++;print $1 } END {exit i}' /etc/passwd"
   register: uid_zero_accounts_except_root
   changed_when: no
   check_mode: no
