@@ -1,3 +1,7 @@
 ---
 exclude_paths:
   - ./tasks/old_content
+x:
+  - '303'
+  - '306'
+  - '602'

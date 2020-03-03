@@ -4,10 +4,10 @@ dependency:
   requirements_file: requirements.yml
 driver:
   name: docker
-verifier:
-  name: goss
-  lint:
-    name: yamllint
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
 platforms:
   - name: CIS-centos7
     image: milcom/centos7-systemd
@@ -19,12 +19,6 @@ provisioner:
       remote_tmp: /tmp
   playbooks:
     converge: playbook.yml
-  lint:
-    name: ansible-lint
-    options:
-      exclude:
-        - tasks/old_content
-      x: ["303", "306", "602"]
 scenario:
   name: default
   create_sequence:

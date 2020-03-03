@@ -47,8 +47,7 @@ clean:
 
 .PHONY: lint
 lint: bin/python
-	( . bin/activate && find . -name "*.yml" |xargs bin/yamllint )
-	( . bin/activate && bin/molecule lit )
+	( . bin/activate && bin/molecule lint )
 
 .PHONY: test
 test: bin/python
