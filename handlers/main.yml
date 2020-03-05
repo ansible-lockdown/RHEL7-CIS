@@ -5,7 +5,7 @@
   become: yes
   sysctl:
       name: net.ipv4.route.flush
-      value: 1
+      value: '1'
       sysctl_set: yes
   when: ansible_virtualization_type != "docker"
 
@@ -13,7 +13,7 @@
   become: yes
   sysctl:
       name: net.ipv6.route.flush
-      value: 1
+      value: '1'
       sysctl_set: yes
   when: ansible_virtualization_type != "docker"
 

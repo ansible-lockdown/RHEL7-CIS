@@ -25,8 +25,8 @@
       reload: yes
       ignoreerrors: yes
   with_items:
-      - { name: net.ipv4.conf.all.send_redirects, value: 0 }
-      - { name: net.ipv4.conf.default.send_redirects, value: 0 }
+      - { name: net.ipv4.conf.all.send_redirects, value: '0' }
+      - { name: net.ipv4.conf.default.send_redirects, value: '0' }
   notify:
       - sysctl flush ipv4 route table
   when:
@@ -47,8 +47,8 @@
       reload: yes
       ignoreerrors: yes
   with_items:
-      - { name: net.ipv4.conf.all.accept_source_route, value: 0 }
-      - { name: net.ipv4.conf.default.accept_source_route, value: 0 }
+      - { name: net.ipv4.conf.all.accept_source_route, value: '0' }
+      - { name: net.ipv4.conf.default.accept_source_route, value: '0' }
   notify:
       - sysctl flush ipv4 route table
   when:
@@ -68,8 +68,8 @@
       reload: yes
       ignoreerrors: yes
   with_items:
-      - { name: net.ipv4.conf.all.accept_redirects, value: 0 }
-      - { name: net.ipv4.conf.default.accept_redirects, value: 0 }
+      - { name: net.ipv4.conf.all.accept_redirects, value: '0' }
+      - { name: net.ipv4.conf.default.accept_redirects, value: '0' }
   notify:
       - sysctl flush ipv4 route table
   when:
@@ -89,8 +89,8 @@
       reload: yes
       ignoreerrors: yes
   with_items:
-      - { name: net.ipv4.conf.all.secure_redirects, value: 0 }
-      - { name: net.ipv4.conf.default.secure_redirects, value: 0 }
+      - { name: net.ipv4.conf.all.secure_redirects, value: '0' }
+      - { name: net.ipv4.conf.default.secure_redirects, value: '0' }
   notify:
       - sysctl flush ipv4 route table
   when:
@@ -110,8 +110,8 @@
       reload: yes
       ignoreerrors: yes
   with_items:
-      - { name: net.ipv4.conf.all.log_martians, value: 1 }
-      - { name: net.ipv4.conf.default.log_martians, value: 1 }
+      - { name: net.ipv4.conf.all.log_martians, value: '1' }
+      - { name: net.ipv4.conf.default.log_martians, value: '1' }
   notify:
       - sysctl flush ipv4 route table
   when:
@@ -165,8 +165,8 @@
       reload: yes
       ignoreerrors: yes
   with_items:
-      - { name: net.ipv4.conf.all.rp_filter, value: 1 }
-      - { name: net.ipv4.conf.default.rp_filter, value: 1 }
+      - { name: net.ipv4.conf.all.rp_filter, value: '1' }
+      - { name: net.ipv4.conf.default.rp_filter, value: '1' }
   notify:
       - sysctl flush ipv4 route table
   when:
@@ -203,8 +203,8 @@
       reload: yes
       ignoreerrors: yes
   with_items:
-      - { name: net.ipv6.conf.all.accept_ra, value: 0 }
-      - { name: net.ipv6.conf.default.accept_ra, value: 0 }
+      - { name: net.ipv6.conf.all.accept_ra, value: '0' }
+      - { name: net.ipv6.conf.default.accept_ra, value: '0' }
   notify:
       - sysctl flush ipv6 route table
   when:
@@ -225,8 +225,8 @@
       reload: yes
       ignoreerrors: yes
   with_items:
-      - { name: net.ipv6.conf.all.accept_redirects, value: 0 }
-      - { name: net.ipv6.conf.default.accept_redirects, value: 0 }
+      - { name: net.ipv6.conf.all.accept_redirects, value: '0' }
+      - { name: net.ipv6.conf.default.accept_redirects, value: '0' }
   notify:
       - sysctl flush ipv6 route table
   when:
