@@ -733,7 +733,7 @@
       - rule_1.5.1
 
 - name: "NOTSCORED | 1.5.2 | PATCH | Ensure XD/NX support is enabled"
-  shell: 'set -o pipefail && dmesg | grep -E "NX|XD" | grep " active"'
+  shell: set -o pipefail && dmesg | grep -E "NX|XD" | grep " active"
   changed_when: no
   when:
       - rhel7cis_rule_1_5_2|bool
