@@ -438,7 +438,7 @@
       - rule_1.1.20
 
 - name: "SCORED | 1.1.21 | PATCH | Ensure sticky bit is set on all world-writable directories"
-  shell: "set -o pipefail && df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d -perm -0002 2>/dev/null | xargs chmod a+t"
+  shell: set -o pipefail && df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d -perm -0002 2>/dev/null | xargs chmod a+t
   changed_when: no
   failed_when: no
   #when: sticky_bit_on_worldwritable_dirs_audit.rc == '0'
