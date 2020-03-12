@@ -1,3 +1,5 @@
+ansible-lint
+yamllint
 tox
 molecule
 docker
