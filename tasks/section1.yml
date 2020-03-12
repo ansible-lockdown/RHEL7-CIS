@@ -631,8 +631,8 @@
       group: root
       mode: 0600
   when:
-      - grub_cfg.stat.exists and grub_cfg.stat.islnk
       - rhel7cis_rule_1_4_1|bool
+      - grub_cfg.stat.exists and grub_cfg.stat.islnk
   tags:
       - level1
       - scored
