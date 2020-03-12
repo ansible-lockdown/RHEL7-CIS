@@ -530,7 +530,7 @@
 - name: "SCORED | 5.4.2 | PATCH | Ensure system accounts are non-login"
   shell: "awk -F: '($3 < {{ rhel7cis_rule_5_4_2_min_uid }}) {print $1 }' /etc/passwd"
   changed_when: no
-  check_mode: false
+  check_mode: no
   register: system_account
   when:
       - rhel7cis_rule_5_4_2|bool
