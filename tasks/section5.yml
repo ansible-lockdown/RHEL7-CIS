@@ -418,15 +418,11 @@
       - rule_5.2.16
 
 - name: "SCORED | 5.3.1 | PATCH | Ensure password creation requirements are configured"
-  ini_file:
+  lineinfile:
       state: present
-      path: /etc/security/pwquality.conf
-      owner: root
-      group: root
-      mode: '0644'
-      section: null
-      option: "{{ item.key }}"
-      value: "{{ item.value }}"
+      dest: /etc/security/pwquality.conf
+      regexp: '^{{ item.key }}'
+      line: '{{ item.key }} = {{ item.value }}'
   loop: "{{ rhel7cis_pwquality | dict2items }}"
   when:
       - rhel7cis_rule_5_3_1|bool
