@@ -583,6 +583,7 @@
   when:
       - rhel7cis_config_aide|bool
       - rhel7cis_rule_1_3_1|bool
+      - not ansible_check_mode
   tags:
       - level1
       - scored
