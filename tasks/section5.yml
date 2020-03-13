@@ -423,7 +423,7 @@
       dest: /etc/security/pwquality.conf
       regexp: '^{{ item.key }}'
       line: '{{ item.key }} = {{ item.value }}'
-  loop: "{{ rhel7cis_pwquality | dict2items }}"
+  with_dict: "{{ rhel7cis_pwquality }}"
   when:
       - rhel7cis_rule_5_3_1|bool
   tags:
