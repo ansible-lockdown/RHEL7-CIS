@@ -312,7 +312,7 @@
   file:
       state: absent
       dest: "~{{ item }}/.forward"
-  with_items: "{{ users.stdout_lines }}"
+  with_items: "{{ users }}"
   when:
       - rhel7cis_rule_6_2_11|bool
   tags:
@@ -325,7 +325,7 @@
   file:
       state: absent
       dest: "~{{ item }}/.netrc"
-  with_items: "{{ users.stdout_lines }}"
+  with_items: "{{ users }}"
   when:
       - rhel7cis_rule_6_2_12|bool
   tags:
@@ -349,7 +349,7 @@
   file:
       state: absent
       dest: "~{{ item }}/.rhosts"
-  with_items: "{{ users.stdout_lines }}"
+  with_items: "{{ users }}"
   when:
       - rhel7cis_rule_6_2_14|bool
   tags:
