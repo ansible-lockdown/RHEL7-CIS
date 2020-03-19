@@ -421,7 +421,7 @@
   lineinfile:
       state: present
       dest: /etc/security/pwquality.conf
-      regexp: '^{{ item.key }}'
+      regexp: ^{{ item.key }}[ =]
       line: '{{ item.key }} = {{ item.value }}'
   with_dict: "{{ rhel7cis_pwquality }}"
   when:
