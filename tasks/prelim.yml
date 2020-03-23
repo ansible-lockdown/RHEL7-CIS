@@ -11,15 +11,27 @@
   find:
       paths:
           - /home
-      file_type: directory
+      patterns:
+          - '.bash_profile'
+      depth: 2
+      recurse: no
+      hidden: no
   register: homes
+
+- name: "PRELIM | Resolve home directories to usernames"
+  command: "id -un {{ item }}"
+  with_items: "{{ homes | json_query('files[*].path') | map('dirname') | map('basename') | list }}"
+  changed_when: no
+  check_mode: no
+  ignore_errors: yes
+  register: home_usernames
 
 - name: "PRELIM | List all users"
   set_fact:
       users: "{{ list_passwd | union(list_homes) | unique }}"
   vars:
       list_passwd: "{{ passwd | json_query('stdout_lines') }}"
-      list_homes: "{{ homes | json_query('files[*].path') | regex_replace('/home/', '') }}"
+      list_homes: "{{ home_usernames.results | json_query('[*].stdout') }}"
 
 - name: "PRELIM | Gather accounts with empty password fields"
   command: "awk -F: '($2 == \"\" ) {j++;print $1; } END {exit j}' /etc/shadow"
