@@ -521,6 +521,8 @@
   with_items:
       - "{{ log_rotates.files }}"
       - { path: "/etc/logrotate.conf" }
+  when:
+      - rhel7cis_rule_4_3|bool
   tags:
       - level1
       - level2
