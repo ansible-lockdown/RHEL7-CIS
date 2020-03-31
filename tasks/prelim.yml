@@ -14,8 +14,8 @@
       patterns:
           - '.bash_profile'
       depth: 2
-      recurse: no
-      hidden: no
+      recurse: yes
+      hidden: yes
   register: homes
 
 - name: "PRELIM | Resolve home directories to usernames"
