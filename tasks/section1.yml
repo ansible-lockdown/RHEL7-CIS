@@ -521,7 +521,7 @@
       - patch
       - rule_1.2.2
 
-- name: "NOTSCORED | 1.2.3 | PATCH | Ensure GPG keys are configured"
+- name: "NOTSCORED | 1.2.3 | AUDIT | Ensure GPG keys are configured"
   command: gpg --quiet --with-fingerprint /etc/pki/rpm-gpg/RPM-GPG-KEY-{{ ansible_distribution|lower }}-release
   changed_when: no
   when:
