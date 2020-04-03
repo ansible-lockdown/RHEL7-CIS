@@ -52,7 +52,24 @@
       state: restarted
 
 - name: restart sshd
-  become: yes
+  debug:
+      msg: "checking /etc/ssh/sshd_config first"
+  changed_when: true
+  notify:
+      - generate host keys
+      - check sshd configuration
+      - restart sshd - after config check
+
+- name: generate host keys
+  command: '/usr/bin/ssh-keygen -A'
+  register: ssh_host_keys
+
+- name: check sshd configuration
+  command: '/usr/sbin/sshd -t'
+  register: sshd_config
+  changed_when: "sshd_config.rc != 0"
+
+- name: restart sshd - after config check
   service:
       name: sshd
       state: restarted
