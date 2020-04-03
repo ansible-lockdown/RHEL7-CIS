@@ -334,30 +334,16 @@
       - patch
       - rule_6.2.12
 
-- name: "SCORED | 6.2.13 | PATCH | Ensure users' .netrc Files are not group or world accessible"
-  stat:
-      path: "~{{ item }}/.netrc"
-  with_items: "{{ users.stdout_lines }}"
-  register: netrc_files
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_6.2.13
-
-- name: "SCORED | 6.2.13 | PATCH | Ensure users' .netrc Files are not group or world accessible"
-  file:
-      mode: 0600
-      dest: "{{ item.stat.path }}"
-  with_items: "{{ netrc_files.results }}"
-  loop_control:
-      label: "{{ item.item }}"
-  when: item.stat.exists
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_6.2.13
+# - name: "SCORED | 6.2.13 | PATCH | Ensure users' .netrc Files are not group or world accessible"
+#   file:
+#       mode: 0600
+#       dest: "~{{ item }}/.netrc"
+#   with_items: "{{ users.stdout_lines }}"
+#   tags:
+#       - level1
+#       - level2
+#       - patch
+#       - rule_6.2.13
 
 - name: "SCORED | 6.2.14 | PATCH | Ensure no users have .rhosts files"
   file:
