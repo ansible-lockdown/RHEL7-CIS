@@ -3,9 +3,35 @@
 # List users in order to look files inside each home directory
 - name: "PRELIM | List users accounts"
   command: "awk -F: '{print $1}' /etc/passwd"
-  register: users
+  register: passwd
   changed_when: no
   check_mode: no
+
+- name: "PRELIM | List home directories"
+  find:
+      paths:
+          - /home
+      patterns:
+          - '.bash_profile'
+      depth: 2
+      recurse: yes
+      hidden: yes
+  register: homes
+
+- name: "PRELIM | Resolve home directories to usernames"
+  command: "id -un {{ item }}"
+  with_items: "{{ homes | json_query('files[*].path') | map('dirname') | map('basename') | list }}"
+  changed_when: no
+  check_mode: no
+  ignore_errors: yes
+  register: home_usernames
+
+- name: "PRELIM | List all users"
+  set_fact:
+      users: "{{ list_passwd | union(list_homes) | unique }}"
+  vars:
+      list_passwd: "{{ passwd | json_query('stdout_lines') }}"
+      list_homes: "{{ home_usernames.results | json_query('[*].stdout') }}"
 
 - name: "PRELIM | Gather accounts with empty password fields"
   command: "awk -F: '($2 == \"\" ) {j++;print $1; } END {exit j}' /etc/shadow"
