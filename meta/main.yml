@@ -3,7 +3,7 @@ galaxy_info:
   description: "Apply RHEL 7 CIS Baseline"
   company: "MindPoint Group"
   license: MIT
-  min_ansible_version: 2.2
+  min_ansible_version: 2.5
 
   platforms:
     - name: EL
