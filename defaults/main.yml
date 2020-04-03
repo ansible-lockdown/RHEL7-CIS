@@ -381,6 +381,14 @@ rhel7cis_pass:
     max_days: 90
     min_days: 7
     warn_age: 7
+
+rhel7cis_pwquality:
+    minlen: '14'
+    dcredit: '-1'
+    ucredit: '-1'
+    ocredit: '-1'
+    lcredit: '-1'
+
 # Syslog system
 rhel7cis_syslog: rsyslog
 #rhel7cis_syslog: syslog-ng

@@ -421,14 +421,9 @@
   lineinfile:
       state: present
       dest: /etc/security/pwquality.conf
-      regexp: '^{{ item.key }}'
+      regexp: ^{{ item.key }}[ =]
       line: '{{ item.key }} = {{ item.value }}'
-  with_items:
-      - { key: 'minlen', value: '14' }
-      - { key: 'dcredit', value: '-1' }
-      - { key: 'ucredit', value: '-1' }
-      - { key: 'ocredit', value: '-1' }
-      - { key: 'lcredit', value: '-1' }
+  with_dict: "{{ rhel7cis_pwquality }}"
   when:
       - rhel7cis_rule_5_3_1|bool
   tags:
