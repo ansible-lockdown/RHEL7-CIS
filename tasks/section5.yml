@@ -701,7 +701,7 @@
       - rule_5.5
       - notimplemented
 
-  "SCORED | 5.6 | PATCH | Ensure access to the su command is restricted"
+- name: "SCORED | 5.6 | PATCH | Ensure access to the su command is restricted"
   lineinfile:
       state: present
       dest: /etc/pam.d/su
