@@ -6,6 +6,7 @@
   tags:
       - level2
       - patch
+      - notscored
       - rule_6.1.1
       - notimplemented
 
@@ -20,6 +21,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_6.1.2
 
@@ -34,6 +36,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_6.1.3
 
@@ -48,6 +51,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_6.1.4
 
@@ -62,6 +66,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_6.1.5
 
@@ -76,6 +81,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_6.1.6
 
@@ -90,6 +96,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_6.1.7
 
@@ -104,6 +111,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_6.1.8
 
@@ -118,6 +126,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_6.1.9
 
@@ -129,6 +138,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_6.1.10
       - notimplemented
@@ -141,6 +151,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_6.1.11
       - notimplemented
@@ -153,6 +164,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_6.1.12
       - notimplemented
@@ -165,6 +177,7 @@
   tags:
       - level1
       - level2
+      - notscored
       - patch
       - rule_6.1.13
       - notimplemented
@@ -177,6 +190,7 @@
   tags:
       - level1
       - level2
+      - notscored
       - patch
       - rule_6.1.14
       - notimplemented
@@ -192,6 +206,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_6.2.1
 
@@ -204,6 +219,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_6.2.2
       - skip_ansible_lint #  ANSIBLE0006
@@ -217,6 +233,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_6.2.3
       - skip_ansible_lint #  ANSIBLE0006
@@ -230,6 +247,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_6.2.4
       - skip_ansible_lint #  ANSIBLE0006
@@ -245,20 +263,60 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_6.2.5
 
 - name: "SCORED | 6.2.6 | PATCH | Ensure root PATH Integrity"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "SCORED | 6.2.6 | PATCH | Ensure root PATH Integrity (unimplemented)"
+        command: /bin/true
+        changed_when: false
+        tags:
+            - level1
+            - scored
+            - patch
+            - rule_6.2.6
+            - notimplemented
+
+      - name: "SCORED | 6.2.6 | PATCH | Ensure root PATH Integrity (collect paths)"
+        shell: |
+          set -o pipefail;
+          sudopath=($(grep secure_path /etc/sudoers | cut -f2 -d= |cut -f2 -d\"))
+          IFS=:
+          for i in ${sudopath[*]}
+          do
+            if [ -d "$i" ]
+              then newsudopath+=($i)
+            fi
+           done
+          echo "${newsudopath[*]}"
+        args:
+            executable: /bin/bash
+        register: fixsudo
+        changed_when: false
+        check_mode: false
+        tags:
+            - level1
+            - scored
+            - patch
+            - rule_6.2.6
+
+      - name: "SCORED | 6.2.6 | PATCH | Ensure root PATH Integrity (fix paths)"
+        lineinfile:
+            dest: /etc/sudoers
+            regexp: "(.*secure_path=).*"
+            line: '\1"{{ fixsudo.stdout_lines[0] }}"'
+            backrefs: true
+        when:
+            - fixsudo.stdout_lines[0]
+        tags:
+            - level1
+            - scored
+            - patch
+            - rule_6.2.6
   when:
       - rhel7cis_rule_6_2_6|bool
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_6.2.6
-      - notimplemented
 
 - name: "SCORED | 6.2.7 | PATCH | Ensure all users' home directories exist"
   command: /bin/true
@@ -273,16 +331,19 @@
       - notimplemented
 
 - name: "SCORED | 6.2.8 | PATCH | Ensure users' home directories permissions are 750 or more restrictive"
-  command: /bin/true
-  changed_when: no
+  shell: |
+      for dir in {{ homes_with_perms.stdout }};
+      do
+        chmod g-w,o-rwx $dir;
+      done
   when:
       - rhel7cis_rule_6_2_8|bool
+      - homes_with_perms.stdout | length > 0
   tags:
       - level1
-      - level2
+      - scored
       - patch
       - rule_6.2.8
-      - notimplemented
 
 - name: "SCORED | 6.2.9 | PATCH | Ensure users own their home directories"
   command: /bin/true
@@ -292,6 +353,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_6.2.9
       - notimplemented
@@ -304,6 +366,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_6.2.10
       - notimplemented
@@ -318,6 +381,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_6.2.11
 
@@ -331,6 +395,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_6.2.12
 
@@ -355,6 +420,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_6.2.14
 
@@ -366,6 +432,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_6.2.15
       - notimplemented
@@ -378,6 +445,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_6.2.16
       - notimplemented
@@ -390,6 +458,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_6.2.17
       - notimplemented
@@ -402,6 +471,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_6.2.18
       - notimplemented
@@ -414,5 +484,6 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_6.2.19

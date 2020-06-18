@@ -286,3 +286,25 @@
   check_mode: no
   tags:
       - skip_ansible_lint #  ANSIBLE0006
+
+- name: "PRELIM | Check that users last password change date are in the future"
+  shell: "cat /etc/shadow | cut -d: -f1"
+  register: users_password_change_date_in_future
+  changed_when: no
+  check_mode: no
+
+- name: "PRELIM | Gather homes with wrong permissions on /home"
+  shell: 'set -o pipefail;
+      for dir in $(getent passwd | cut -d '':'' -f 6 | awk ''$1 ~ /^\/home\//'');
+      do
+        perm=$(stat -L -c "%A" "$dir" );
+        if [ -d $dir ] && ([ "${perm:7:3}" != "---" ] || [ "${perm:5:1}" == "w" ] );
+        then
+          echo -n "$dir ";
+        fi;
+      done'
+  args:
+    executable: /bin/bash
+  register: homes_with_perms
+  changed_when: no
+  check_mode: no

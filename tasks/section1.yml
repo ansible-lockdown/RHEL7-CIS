@@ -3,7 +3,11 @@
       dest: /etc/modprobe.d/CIS.conf
       regexp: "^(#)?install cramfs(\\s|$)"
       line: "install cramfs /bin/true"
-      create: yes
+      state: present
+      owner: root
+      group: root
+      mode: 0644
+      create: true
   when:
       - rhel7cis_rule_1_1_1_1|bool
   tags:
@@ -377,6 +381,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_1.1.14
 
@@ -447,6 +452,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_1.1.21
 
@@ -460,6 +466,7 @@
       - rhel7cis_rule_1_1_22|bool
   tags:
       - level1
+      - scored
       - patch
       - rule_1.1.22
 
@@ -479,34 +486,46 @@
       - rule_1.2.1
       - skip_ansible_lint
 
-- name: "SCORED | 1.2.2 | PATCH | Ensure gpgcheck is globally activated"
+- name: "NOTSCORED | 1.2.2 | AUDIT | Ensure GPG keys are configured"
+  command: gpg --quiet --with-fingerprint /etc/pki/rpm-gpg/RPM-GPG-KEY-{{ ansible_distribution|lower }}-release
+  changed_when: no
+  when:
+      - rhel7cis_rule_1_2_2bool
+      - ansible_distribution == "RedHat"
+  tags:
+      - level1
+      - notscored
+      - patch
+      - rule_1.2.2
+
+- name: "SCORED | 1.2.3 | PATCH | Ensure gpgcheck is globally activated"
   replace:
       name: /etc/yum.conf
       regexp: "^gpgcheck=0"
       replace: "gpgcheck=1"
   when:
-      - rhel7cis_rule_1_2_2|bool
+      - rhel7cis_rule_1_2_3|bool
   tags:
       - level1
       - scored
       - patch
-      - rule_1.2.2
+      - rule_1.2.3
 
-- name: "SCORED | 1.2.2 | PATCH | Ensure gpgcheck is globally activated"
+- name: "SCORED | 1.2.3 | PATCH | Ensure gpgcheck is globally activated"
   find:
       paths: /etc/yum.repos.d
       patterns: "*.repo"
   register: yum_repos
   changed_when: no
   when:
-      - rhel7cis_rule_1_2_2|bool
+      - rhel7cis_rule_1_2_3|bool
   tags:
       - level1
       - scored
       - patch
-      - rule_1.2.2
+      - rule_1.2.3
 
-- name: "SCORED | 1.2.2 | PATCH | Ensure gpgcheck is globally activated"
+- name: "SCORED | 1.2.3 | PATCH | Ensure gpgcheck is globally activated"
   replace:
       name: "{{ item.path }}"
       regexp: "^gpgcheck=0"
@@ -518,18 +537,6 @@
   tags:
       - level1
       - scored
-      - patch
-      - rule_1.2.2
-
-- name: "NOTSCORED | 1.2.3 | AUDIT | Ensure GPG keys are configured"
-  command: gpg --quiet --with-fingerprint /etc/pki/rpm-gpg/RPM-GPG-KEY-{{ ansible_distribution|lower }}-release
-  changed_when: no
-  when:
-      - rhel7cis_rule_1_2_3|bool
-      - ansible_distribution == "RedHat"
-  tags:
-      - level1
-      - notscored
       - patch
       - rule_1.2.3
 
@@ -672,9 +679,9 @@
       - patch
       - rule_1.4.2
 
-- name: "NOTSCORED | 1.4.3 | PATCH | Ensure authentication required for single user mode"
+- name: "SCORED | 1.4.3 | PATCH | Ensure authentication required for single user mode"
   block:
-      - name: "NOTSCORED | 1.4.3 | PATCH | Ensure authentication required for single user mode - Emergency"
+      - name: "SCORED | 1.4.3 | PATCH | Ensure authentication required for single user mode - Emergency"
         lineinfile:
             dest: /usr/lib/systemd/system/emergency.service
             regexp: '/sbin/sulogin'
@@ -685,9 +692,10 @@
         tags:
             - level1
             - level2
+            - scored
             - patch
             - rule_1.4.3
-      - name: "NOTSCORED | 1.4.3 | PATCH | Ensure authentication required for single user mode - Rescue"
+      - name: "SCORED | 1.4.3 | PATCH | Ensure authentication required for single user mode - Rescue"
         lineinfile:
             dest: /usr/lib/systemd/system/rescue.service
             regexp: '/sbin/sulogin'
@@ -698,6 +706,7 @@
         tags:
             - level1
             - level2
+            - scored
             - patch
             - rule_1.4.3
 
@@ -734,6 +743,21 @@
       - patch
       - rule_1.5.1
 
+- name: "SCORED | 1.5.1 | PATCH | Ensure hard core 0 is set"
+  lineinfile:
+    dest: /etc/security/limits.conf
+    line: '* hard core 0'
+    regexp: '(^#\s*?\*\s+hard\s+core\s+[0-9]+)'
+    state: present
+    create: true
+  when:
+      - rhel7cis_rule_1_5_1|bool
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_1.5.1
+
 - name: "NOTSCORED | 1.5.2 | PATCH | Ensure XD/NX support is enabled"
   shell: set -o pipefail && dmesg | grep -E "NX|XD" | grep " active"
   changed_when: no
@@ -742,6 +766,7 @@
   tags:
       - level1
       - level2
+      - notscored
       - patch
       - rule_1.5.2
 
@@ -875,6 +900,7 @@
       - rhel7cis_rule_1_7_1_1|bool
   tags:
       - level1
+      - scored
       - banner
       - patch
       - rule_1.7.1.1
@@ -887,6 +913,7 @@
       - rhel7cis_rule_1_7_1_2|bool
   tags:
       - level1
+      - notscored
       - patch
       - rule_1.7.1.2
 
@@ -898,6 +925,7 @@
       - rhel7cis_rule_1_7_1_3|bool
   tags:
       - level1
+      - notscored
       - banner
       - patch
       - rule_1.7.1.3
@@ -913,6 +941,7 @@
       - rhel7cis_rule_1_7_1_4|bool
   tags:
       - level1
+      - notscored
       - perms
       - patch
       - rule_1.7.1.4
@@ -928,6 +957,7 @@
       - rhel7cis_rule_1_7_1_5|bool
   tags:
       - level1
+      - scored
       - perms
       - patch
       - rule_1.7.1.5
@@ -943,6 +973,7 @@
       - rhel7cis_rule_1_7_1_6|bool
   tags:
       - level1
+      - notscored
       - perms
       - patch
       - rule_1.7.1.6
@@ -969,11 +1000,12 @@
       - rhel7cis_rule_1_7_2|bool
   tags:
       - level1
+      - scored
       - level2
       - patch
       - rule_1.7.2
 
-- name: "NOTSCORED | 1.8 | PATCH | Ensure updates, patches, and additional security software are installed"
+- name: "SCORED | 1.8 | PATCH | Ensure updates, patches, and additional security software are installed"
   yum:
       name: "*"
       state: latest
@@ -982,6 +1014,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_1.8
       - skip_ansible_lint

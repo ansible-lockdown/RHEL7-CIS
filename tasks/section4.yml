@@ -9,6 +9,7 @@
   notify: restart auditd
   tags:
       - level2
+      - notscored
       - auditd
       - patch
       - rule_4.1.1.1
@@ -24,6 +25,7 @@
   notify: restart auditd
   tags:
       - level2
+      - scored
       - auditd
       - patch
       - rule_4.1.1.2
@@ -39,6 +41,7 @@
   notify: restart auditd
   tags:
       - level2
+      - scored
       - auditd
       - patch
       - rule_4.1.1.2
@@ -54,6 +57,7 @@
   notify: restart auditd
   tags:
       - level2
+      - scored
       - auditd
       - patch
       - rule_4.1.1.3
@@ -69,6 +73,7 @@
       - ansible_connection != 'docker'
   tags:
       - level2
+      - scored
       - auditd
       - patch
       - rule_4.1.2
@@ -85,6 +90,7 @@
       - rhel7cis_rule_4_1_3|bool
   tags:
       - level2
+      - scored
       - auditd
       - patch
       - rule_4.1.3
@@ -101,6 +107,7 @@
   notify: restart auditd
   tags:
       - level2
+      - scored
       - auditd
       - patch
       - rule_4.1.4
@@ -117,6 +124,7 @@
   notify: restart auditd
   tags:
       - level2
+      - scored
       - auditd
       - patch
       - rule_4.1.5
@@ -133,6 +141,7 @@
   notify: restart auditd
   tags:
       - level2
+      - scored
       - auditd
       - patch
       - rule_4.1.6
@@ -149,6 +158,7 @@
   notify: restart auditd
   tags:
       - level2
+      - scored
       - auditd
       - patch
       - rule_4.1.7
@@ -165,6 +175,7 @@
   notify: restart auditd
   tags:
       - level2
+      - scored
       - auditd
       - patch
       - rule_4.1.8
@@ -181,6 +192,7 @@
   notify: restart auditd
   tags:
       - level2
+      - scored
       - auditd
       - patch
       - rule_4.1.9
@@ -197,6 +209,7 @@
   notify: restart auditd
   tags:
       - level2
+      - scored
       - auditd
       - patch
       - rule_4.1.10
@@ -213,6 +226,7 @@
   notify: restart auditd
   tags:
       - level2
+      - scored
       - auditd
       - patch
       - rule_4.1.11
@@ -230,6 +244,7 @@
       - rhel7cis_rule_4_1_12|bool
   tags:
       - level2
+      - scored
       - auditd
       - patch
       - rule_4.1.12
@@ -246,6 +261,7 @@
       - rhel7cis_rule_4_1_12|bool
   tags:
       - level2
+      - scored
       - auditd
       - patch
       - rule_4.1.12
@@ -262,6 +278,7 @@
   notify: restart auditd
   tags:
       - level2
+      - scored
       - auditd
       - patch
       - rule_4.1.13
@@ -278,6 +295,7 @@
   notify: restart auditd
   tags:
       - level2
+      - scored
       - auditd
       - patch
       - rule_4.1.14
@@ -294,6 +312,7 @@
   notify: restart auditd
   tags:
       - level2
+      - scored
       - auditd
       - patch
       - rule_4.1.15
@@ -310,6 +329,7 @@
   notify: restart auditd
   tags:
       - level2
+      - scored
       - auditd
       - patch
       - rule_4.1.16
@@ -326,6 +346,7 @@
   notify: restart auditd
   tags:
       - level2
+      - scored
       - auditd
       - patch
       - rule_4.1.17
@@ -342,33 +363,38 @@
   notify: restart auditd
   tags:
       - level2
+      - scored
       - auditd
       - patch
       - rule_4.1.18
 
-- name: "SCORED | 4.2.3 | PATCH | Ensure rsyslog or syslog-ng is installed"
+- name: "SCORED | 4.2.1.1 | PATCH | Ensure rsyslog or syslog-ng is installed"
   yum:
       name: "{{ rhel7cis_syslog }}"
       state: present
-  when:
-      - rhel7cis_rule_4_2_3|bool
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_4.2.3
-
-- name: "SCORED | 4.2.1.1 | PATCH | Ensure rsyslog Service is enabled"
-  command: /bin/true
-  changed_when: no
   when:
       - rhel7cis_rule_4_2_1_1|bool
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_4.2.1.1
-      - notimplemented
+
+- name: "SCORED | 4.2.1.1 | PATCH | Ensure rsyslog service is enabled"
+  service:
+      name: rsyslog
+      enabled: yes
+  changed_when: false
+  when:
+      - rhel7cis_rule_4_2_1_1|bool
+      - rhel7cis_syslog == "rsyslog"
+  tags:
+      - level1
+      - level2
+      - scored
+      - patch
+      - rule_4.2.1.1
 
 - name: "NOTSCORED | 4.2.1.2 | PATCH | Ensure logging is configured"
   command: /bin/true
@@ -378,6 +404,7 @@
   tags:
       - level1
       - level2
+      - notscored
       - patch
       - rule_4.2.1.2
       - notimplemented
@@ -392,6 +419,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_4.2.1.3
 
@@ -403,6 +431,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_4.2.1.4
       - notimplemented
@@ -415,6 +444,7 @@
   tags:
       - level1
       - level2
+      - notscored
       - patch
       - rule_4.2.1.5
       - notimplemented
@@ -427,21 +457,26 @@
   tags:
       - level1
       - level2
+      - notscored
       - patch
       - rule_4.2.1.5
       - notimplemented
 
+
 - name: "SCORED | 4.2.2.1 | PATCH | Ensure syslog-ng service is enabled"
-  command: /bin/true
-  changed_when: no
+  service:
+      name: rsyslog
+      enabled: yes
+  changed_when: false
   when:
       - rhel7cis_rule_4_2_2_1|bool
+      - rhel7cis_syslog == "syslog-ng"
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_4.2.2.1
-      - notimplemented
 
 - name: "NOTSCORED | 4.2.2.2 | PATCH | Ensure logging is configured"
   command: /bin/true
@@ -452,6 +487,7 @@
       - level1
       - level2
       - patch
+      - notscored
       - rule_4.2.2.2
       - notimplemented
 
@@ -463,6 +499,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_4.2.2.3
       - notimplemented
@@ -475,6 +512,7 @@
   tags:
       - level1
       - level2
+      - notscored
       - patch
       - rule_4.2.2.4
       - notimplemented
@@ -487,6 +525,7 @@
   tags:
       - level1
       - level2
+      - notscored
       - patch
       - rule_4.2.2.5
       - notimplemented
@@ -500,6 +539,7 @@
   tags:
       - level1
       - level2
+      - scored
       - patch
       - rule_4.2.4
 
@@ -510,6 +550,7 @@
   tags:
       - level1
       - level2
+      - notscored
       - patch
       - rule_4.3
 
@@ -526,5 +567,6 @@
   tags:
       - level1
       - level2
+      - notscored
       - patch
       - rule_4.3

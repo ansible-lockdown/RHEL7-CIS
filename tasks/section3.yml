@@ -12,6 +12,7 @@
       - rhel7cis_rule_3_1_1|bool
   tags:
       - level1
+      - scored
       - sysctl
       - patch
       - rule_3.1.1
@@ -34,6 +35,7 @@
       - rhel7cis_rule_3_1_2|bool
   tags:
       - level1
+      - scored
       - sysctl
       - patch
       - rule_3.1.2
@@ -55,6 +57,7 @@
       - rhel7cis_rule_3_2_1|bool
   tags:
       - level1
+      - scored
       - sysctl
       - patch
       - rule_3.2.1
@@ -76,6 +79,7 @@
       - rhel7cis_rule_3_2_2|bool
   tags:
       - level1
+      - scored
       - sysctl
       - patch
       - rule_3.2.2
@@ -97,6 +101,7 @@
       - rhel7cis_rule_3_2_3|bool
   tags:
       - level1
+      - scored
       - sysctl
       - patch
       - rule_3.2.3
@@ -118,6 +123,7 @@
       - rhel7cis_rule_3_2_4|bool
   tags:
       - level1
+      - scored
       - sysctl
       - patch
       - rule_3.2.4
@@ -135,6 +141,7 @@
       - rhel7cis_rule_3_2_5|bool
   tags:
       - level1
+      - scored
       - sysctl
       - patch
       - rule_3.2.5
@@ -152,6 +159,7 @@
       - rhel7cis_rule_3_2_6|bool
   tags:
       - level1
+      - scored
       - sysctl
       - patch
       - rule_3.2.6
@@ -173,6 +181,7 @@
       - rhel7cis_rule_3_2_7|bool
   tags:
       - level1
+      - scored
       - sysctl
       - patch
       - rule_3.2.7
@@ -190,11 +199,12 @@
       - rhel7cis_rule_3_2_8|bool
   tags:
       - level1
+      - scored
       - sysctl
       - patch
       - rule_3.2.8
 
-- name: "SCORED | 3.3.1 | PATCH | Ensure IPv6 router advertisements are not accepted"
+- name: "NOTSCORED | 3.3.1 | PATCH | Ensure IPv6 router advertisements are not accepted"
   sysctl:
       name: '{{ item.name }}'
       value: '{{ item.value }}'
@@ -212,11 +222,12 @@
       - rhel7cis_rule_3_3_1|bool
   tags:
       - level1
+      - notscored
       - sysctl
       - patch
       - rule_3.3.1
 
-- name: "SCORED | 3.3.2 | PATCH | Ensure IPv6 redirects are not accepted"
+- name: "NOTSCORED | 3.3.2 | PATCH | Ensure IPv6 redirects are not accepted"
   sysctl:
       name: '{{ item.name }}'
       value: '{{ item.value }}'
@@ -234,6 +245,7 @@
       - rhel7cis_rule_3_3_2|bool
   tags:
       - level1
+      - notscored
       - sysctl
       - patch
       - rule_3.3.2
@@ -251,6 +263,7 @@
       - rhel7cis_rule_3_3_3|bool
   tags:
       - level1
+      - notscored
       - patch
       - rule_3.3.3
 
@@ -262,6 +275,7 @@
       - rhel7cis_rule_3_4_1|bool
   tags:
       - level1
+      - scored
       - patch
       - rule_3.4.1
 
@@ -276,6 +290,7 @@
       - rhel7cis_rule_3_4_2|bool
   tags:
       - level1
+      - scored
       - patch
       - rule_3.4.2
 
@@ -288,6 +303,7 @@
       - rhel7cis_rule_3_4_3|bool
   tags:
       - level1
+      - scored
       - patch
       - rule_3.4.3
 
@@ -301,6 +317,7 @@
       - rhel7cis_rule_3_4_4|bool
   tags:
       - level1
+      - scored
       - patch
       - rule_3.4.4
 
@@ -314,6 +331,7 @@
       - rhel7cis_rule_3_4_5|bool
   tags:
       - level1
+      - scored
       - patch
       - rule_3.4.5
 
@@ -327,6 +345,7 @@
       - rhel7cis_rule_3_5_1|bool
   tags:
       - level1
+      - notscored
       - patch
       - rule_3.5.1
 
@@ -340,6 +359,7 @@
       - rhel7cis_rule_3_5_2|bool
   tags:
       - level1
+      - notscored
       - patch
       - rule_3.5.2
 
@@ -353,6 +373,7 @@
       - rhel7cis_rule_3_5_3|bool
   tags:
       - level1
+      - notscored
       - patch
       - rule_3.5.3
 
@@ -366,10 +387,11 @@
       - rhel7cis_rule_3_5_4|bool
   tags:
       - level1
+      - notscored
       - patch
       - rule_3.5.4
 
-- name: "SCORED | 3.6 | PATCH | Ensure firewalld is installed and started | CUSTOM"
+- name: "SCORED | 3.6.1 | PATCH | Ensure firewalld is installed and started | CUSTOM"
   yum:
       name: firewalld
       state: present
@@ -377,10 +399,11 @@
   notify: restart firewalld
   tags:
       - level1
+      - scored
       - patch
       - rule_3.6
 
-- name: "SCORED | 3.6 | PATCH | Ensure firewalld is installed and started | CUSTOM"
+- name: "SCORED | 3.6.1 | PATCH | Ensure firewalld is installed and started | CUSTOM"
   service:
       name: firewalld
       state: started
@@ -388,6 +411,7 @@
   when: rhel7cis_firewall == "firewalld"
   tags:
       - level1
+      - scored
       - patch
       - rule_3.6
 
@@ -400,6 +424,7 @@
       - rhel7cis_rule_3_6_1|bool
   tags:
       - level1
+      - scored
       - patch
       - rule_3.6.1
 
@@ -413,6 +438,7 @@
       - rhel7cis_rule_3_6_1|bool
   tags:
       - level1
+      - scored
       - patch
       - rule_3.6.1
 
@@ -426,6 +452,7 @@
       - rhel7cis_rule_3_6_2|bool
   tags:
       - level1
+      - scored
       - patch
       - rule_3.6.2
 
@@ -440,6 +467,7 @@
       - ansible_connection != 'docker'
   tags:
       - level1
+      - scored
       - patch
       - rule_3.6.2
 
@@ -451,6 +479,7 @@
       - rhel7cis_rule_3_6_2|bool
   tags:
       - level1
+      - scored
       - patch
       - rule_3.6.2
       - notimplemented
@@ -463,6 +492,7 @@
       - rhel7cis_rule_3_6_3|bool
   tags:
       - level1
+      - scored
       - patch
       - rule_3.6.3
       - notimplemented
@@ -475,6 +505,7 @@
       - rhel7cis_rule_3_6_4|bool
   tags:
       - level1
+      - notscored
       - patch
       - rule_3.6.4
       - notimplemented
@@ -494,6 +525,7 @@
       - ansible_connection != 'docker'
   tags:
       - level1
+      - scored
       - patch
       - rule_3.6.5
 
@@ -505,6 +537,7 @@
       - rhel7cis_rule_3_6_5|bool
   tags:
       - level1
+      - scored
       - patch
       - rule_3.6.5
       - notimplemented
@@ -512,8 +545,27 @@
 - name: "NOTSCORED | 3.7 | PATCH | Ensure wireless interfaces are disabled"
   command: /bin/true
   changed_when: no
+  when:
+      - rhel7cis_firewall == "iptables"
+      - rhel7cis_rule_3_7|bool
   tags:
       - level1
       - level2
       - patch
+      - notscored
       - rule_3.7
+      - notimplemented
+
+- name: "NOTSCORED | 3.7 | PATCH | Ensure wireless interfaces are disabled"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_firewall == "firewalld"
+      - rhel7cis_rule_3_7|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - notscored
+      - rule_3.7
+      - notimplemented
