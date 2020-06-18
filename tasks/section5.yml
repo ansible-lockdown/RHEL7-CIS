@@ -493,7 +493,7 @@
 
 - name: "SCORED | 5.3.3 | PATCH | Ensure password reuse is limited"
   lineinfile:
-      dest: {{ item }}
+      dest: "{{ item }}"
       line: "password required pam_pwhistory.so remember={{ rhel7cis_pass['history'] }}"
   with_items:
     - /etc/pam.d/password-auth
