@@ -288,10 +288,19 @@
       - skip_ansible_lint #  ANSIBLE0006
 
 - name: "PRELIM | Check that users last password change date are in the future"
-  shell: "cat /etc/shadow | cut -d: -f1"
+  shell: |
+      set -o pipefail;
+      awk -F: '{print $1}' /etc/shadow | while read -r usr
+      do
+        if [[ $(date --date="$(chage --list "$usr" | grep '^Last password change' | cut -d: -f2)" +%s) > $(date +%s) ]];then
+          echo "$usr"
+        fi
+      done
+  args:
+      executable: /bin/bash
   register: users_password_change_date_in_future
-  changed_when: no
-  check_mode: no
+  changed_when: False
+  check_mode: false
 
 - name: "PRELIM | Gather homes with wrong permissions on /home"
   shell: 'set -o pipefail;

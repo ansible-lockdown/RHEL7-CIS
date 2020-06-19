@@ -743,21 +743,6 @@
       - patch
       - rule_1.5.1
 
-- name: "SCORED | 1.5.1 | PATCH | Ensure hard core 0 is set"
-  lineinfile:
-    dest: /etc/security/limits.conf
-    line: '* hard core 0'
-    regexp: '(^#\s*?\*\s+hard\s+core\s+[0-9]+)'
-    state: present
-    create: true
-  when:
-      - rhel7cis_rule_1_5_1|bool
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_1.5.1
-
 - name: "NOTSCORED | 1.5.2 | PATCH | Ensure XD/NX support is enabled"
   shell: set -o pipefail && dmesg | grep -E "NX|XD" | grep " active"
   changed_when: no
