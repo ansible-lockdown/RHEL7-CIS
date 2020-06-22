@@ -417,7 +417,7 @@
 
 - name: "SCORED | 3.6.1 | PATCH | Ensure iptables is installed"
   yum:
-      name: iptables iptables-services
+      name: iptables,iptables-services
       state: present
   when:
       - rhel7cis_firewall == "iptables"
