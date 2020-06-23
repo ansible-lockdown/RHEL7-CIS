@@ -333,7 +333,7 @@
       line: "MACs {{ rhel7cis_sshd['macs'] }}"
       validate: /usr/sbin/sshd -t -f %s
   when:
-      - rhel7cis_rule_5_2_12|bool
+      - rhel7cis_rule_5_2_11|bool
   notify: restart sshd
   tags:
       - level1
