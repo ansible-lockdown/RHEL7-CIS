@@ -667,6 +667,9 @@
   copy:
       dest: /boot/grub2/user.cfg
       content: "GRUB2_PASSWORD={{ grub_pass.passhash }}"
+      owner: root
+      group: root
+      mode: 0600
   notify: generate new grub config
   when:
       - rhel7cis_set_boot_pass|bool
