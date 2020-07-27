@@ -1,30 +1,10 @@
-- name: "SCORED | 2.1.1 | PATCH | Ensure chargen services are not enabled | chargen-dgram,chargen-stream"
-  block:
-      - name: "SCORED | 2.1.1 | PATCH | Ensure chargen services are not enabled | chargen-dgram"
-        stat:
-            path: /etc/xinetd.d/chargen-dgram
-        register: chargen_dgram_service
-
-      - name: "SCORED | 2.1.1 | PATCH | Ensure chargen services are not enabled | chargen-dgram"
-        command: chkconfig chargen-dgram off
-        notify: restart xinetd
-        when: chargen_dgram_service.stat.exists
-        tags:
-            - skip_ansible_lint
-
-      - name: "SCORED | 2.1.1 | PATCH | Ensure chargen services are not enabled | chargen-stream"
-        stat:
-            path: /etc/xinetd.d/chargen-stream
-        register: chargen_stream_service
-
-      - name: "SCORED | 2.1.1 | PATCH | Ensure chargen services are not enabled | chargen-stream"
-        command: chkconfig chargen-stream off
-        notify: restart xinetd
-        when: chargen_stream_service.stat.exists
-        tags:
-            - skip_ansible_lint
+- name: "SCORED | 2.1.1 | PATCH | Ensure xinetd is not installed"
+  yum:
+      name: xinetd
+      state: absent
   when:
       - rhel7cis_rule_2_1_1|bool
+      - not rhel7cis_xinetd_required|bool
   tags:
       - level1
       - scored
@@ -32,271 +12,48 @@
       - patch
       - rule_2.1.1
 
-- name: "SCORED | 2.1.2 | PATCH | Ensure daytime services are not enabled | daytime-dgram,daytime-stream"
+- name: "SCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use"
   block:
-      - name: "SCORED | 2.1.2 | PATCH | Ensure daytime services are not enabled | daytime-dgram"
-        stat:
-            path: /etc/xinetd.d/daytime-dgram
-        register: daytime_dgram_service
+      - name: "SCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use - service install"
+        yum:
+            name: "{{ rhel7cis_time_synchronization }}"
+            state: present
 
-      - name: "SCORED | 2.1.2 | PATCH | Ensure daytime services are not enabled | daytime-dgram"
-        command: chkconfig daytime-dgram off
-        notify: restart xinetd
-        when: daytime_dgram_service.stat.exists
-        tags:
-            - skip_ansible_lint
+      - name: "SCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use - service start"
+        service:
+            name: "{{ rhel7cis_time_synchronization }}d"
+            state: started
+            enabled: true
 
-      - name: "SCORED | 2.1.2 | PATCH | Ensure daytime services are not enabled | daytime-stream"
-        stat:
-            path: /etc/xinetd.d/daytime-stream
-        register: daytime_stream_service
-
-      - name: "SCORED | 2.1.2 | PATCH | Ensure daytime services are not enabled | daytime-stream"
-        command: chkconfig daytime-stream off
-        notify: restart xinetd
-        when: daytime_stream_service.stat.exists
-        tags:
-            - skip_ansible_lint
-  when:
-      - rhel7cis_rule_2_1_2|bool
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_2.1.2
-
-- name: "SCORED | 2.1.3 | PATCH | Ensure discard services are not enabled | discard-dgram,discard-stream"
-  block:
-      - name: "SCORED | 2.1.3 | PATCH | Ensure discard services are not enabled | discard-dgram"
-        stat:
-            path: /etc/xinetd.d/discard-dgram
-        register: discard_dgram_service
-
-      - name: "SCORED | 2.1.3 | PATCH | Ensure discard services are not enabled | discard-dgram"
-        command: chkconfig discard-dgram off
-        notify: restart xinetd
-        when: discard_dgram_service.stat.exists
-        tags:
-            - skip_ansible_lint
-
-      - name: "SCORED | 2.1.3 | PATCH | Ensure discard services are not enabled | discard-stream"
-        stat:
-            path: /etc/xinetd.d/discard-stream
-        register: discard_stream_service
-
-      - name: "SCORED | 2.1.3 | PATCH | Ensure discard services are not enabled | discard-stream"
-        command: chkconfig discard-stream off
-        notify: restart xinetd
-        when: discard_stream_service.stat.exists
-        tags:
-            - skip_ansible_lint
-
-  when:
-      - rhel7cis_rule_2_1_3|bool
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_2.1.3
-
-- name: "SCORED | 2.1.4 | PATCH | Ensure echo services are not enabled | echo-dgram,echo-stream"
-  block:
-      - name: "SCORED | 2.1.4 | PATCH | Ensure echo services are not enabled | echo-dgram"
-        stat:
-            path: /etc/xinetd.d/echo-dgram
-        register: echo_dgram_service
-
-      - name: "SCORED | 2.1.4 | PATCH | Ensure echo services are not enabled | echo-dgram"
-        command: chkconfig echo-dgram off
-        notify: restart xinetd
-        when: echo_dgram_service.stat.exists
-        tags:
-            - skip_ansible_lint
-
-      - name: "SCORED | 2.1.4 | PATCH | Ensure echo services are not enabled | echo-stream"
-        stat:
-            path: /etc/xinetd.d/echo-stream
-        register: echo_stream_service
-
-      - name: "SCORED | 2.1.4 | PATCH | Ensure echo services are not enabled | echo-stream"
-        command: chkconfig echo-stream off
-        notify: restart xinetd
-        when: echo_stream_service.stat.exists
-        tags:
-            - skip_ansible_lint
-
-  when:
-      - rhel7cis_rule_2_1_4|bool
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_2.1.4
-
-- name: "SCORED | 2.1.5 | PATCH | Ensure time services are not enabled | time-dgram,time-stream"
-  block:
-      - name: "SCORED | 2.1.5 | PATCH | Ensure time services are not enabled | time-dgram"
-        stat:
-            path: /etc/xinetd.d/time-dgram
-        register: time_dgram_service
-
-      - name: "SCORED | 2.1.5 | PATCH | Ensure time services are not enabled | time-dgram"
-        command: chkconfig time-dgram off
-        notify: restart xinetd
-        when: time_dgram_service.stat.exists
-        tags:
-            - skip_ansible_lint
-
-      - name: "SCORED | 2.1.5 | PATCH | Ensure time services are not enabled | time-stream"
-        stat:
-            path: /etc/xinetd.d/time-stream
-        register: time_stream_service
-
-      - name: "SCORED | 2.1.5 | PATCH | Ensure time services are not enabled | time-stream"
-        command: chkconfig time-stream off
-        notify: restart xinetd
-        when: time_stream_service.stat.exists
-        tags:
-            - skip_ansible_lint
-
-  when:
-      - rhel7cis_rule_2_1_5|bool
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_2.1.5
-
-- name: "SCORED | 2.1.6 | PATCH | Ensure tftp server is not enabled"
-  block:
-      - name: "SCORED | 2.1.6 | PATCH | Ensure tftp server is not enabled"
-        stat:
-            path: /etc/xinetd.d/tftp
-        register: tftp_service
-
-      - name: "SCORED | 2.1.6 | PATCH | Ensure tftp server is not enabled"
-        command: chkconfig tftp off
-        notify: restart xinetd
+      - name: "SCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use - service stop ntp"
+        service:
+            name: "ntpd"
+            state: stopped
+            enabled: false
         when:
-            - tftp_service.stat.exists
-            - not rhel7cis_tftp_server
-        tags:
-            - skip_ansible_lint
+            - rhel7cis_time_synchronization == "chrony"
+            - ntpd_service_status.stdout == "loaded"
 
+      - name: "SCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use - service stop chrony"
+        service:
+            name: chronyd
+            state: stopped
+            enabled: false
+        ignore_errors: true
+        when:
+            - rhel7cis_time_synchronization == "ntp"
+            - chronyd_service_status.stdout == "loaded"
   when:
-      - rhel7cis_rule_2_1_6|bool
+      - rhel7cis_rule_2_2_1_1
   tags:
       - level1
       - scored
-      - patch
-      - rule_2.1.6
-
-- name: "SCORED | 2.1.7 | PATCH | Ensure xinetd is not enabled"
-  service:
-      name: xinetd
-      state: stopped
-      enabled: no
-  when:
-      - xinetd_service_status.stdout == "loaded" and not rhel7cis_xinetd_required
-      - rhel7cis_rule_2_1_7|bool
-  tags:
-      - level1
-      - patch
-      - scored
-      - rule_2.1.7
-
-- name: "NOTSCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use - service install"
-  yum:
-      name: "{{ rhel7cis_time_synchronization }}"
-      state: present
-  when:
-      - rhel7cis_rule_2_2_1_1|bool
-  tags:
-      - level1
+      - ntp
+      - chrony
       - patch
       - rule_2.2.1.1
 
-- name: "NOTSCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use - service start"
-  service:
-      name: "{{ rhel7cis_time_synchronization }}d"
-      state: started
-      enabled: yes
-  when:
-      - rhel7cis_rule_2_2_1_1|bool
-  tags:
-      - level1
-      - patch
-      - rule_2.2.1.1
-
-- name: "NOTSCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use - service stop ntp"
-  service:
-      name: ntpd
-      state: stopped
-      enabled: no
-  when:
-      - rhel7cis_time_synchronization == "chrony" and ntpd_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_1_1|bool
-  tags:
-      - level1
-      - patch
-      - rule_2.2.1.1
-
-- name: "NOTSCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use - service stop chrony"
-  service:
-      name: chronyd
-      state: stopped
-      enabled: no
-  ignore_errors: yes
-  when:
-      - rhel7cis_time_synchronization == "ntp" and chronyd_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_1_1|bool
-  tags:
-      - level1
-      - patch
-      - rule_2.2.1.1
-
-- name: "SCORED | 2.2.1.2 | PATCH | Ensure ntp is configured | modify /etc/ntp.conf"
-  template:
-      src: ntp.conf.j2
-      dest: /etc/ntp.conf
-      owner: root
-      group: root
-      mode: 0644
-  when:
-      - rhel7cis_time_synchronization == "ntp"
-      - rhel7cis_rule_2_2_1_2|bool
-  tags:
-      - level1
-      - patch
-      - rule_2.2.1.2
-
-- name: "SCORED | 2.2.1.2 | PATCH | Ensure ntp is configured | modify /etc/sysconfig/ntpd"
-  lineinfile:
-      dest: /etc/sysconfig/ntpd
-      regexp: "^(#)?OPTIONS"
-      line: "OPTIONS=\"-u ntp:ntp\""
-  when:
-      - rhel7cis_time_synchronization == "ntp"
-      - rhel7cis_rule_2_2_1_2|bool
-  tags:
-      - level1
-      - patch
-      - rule_2.2.1.2
-
-- name: "SCORED | 2.2.1.2 | PATCH | Ensure ntp is configured | modify /usr/lib/systemd/system/ntpd.service"
-  lineinfile:
-      dest: /usr/lib/systemd/system/ntpd.service
-      regexp: "^(#)?ExecStart"
-      line: "ExecStart=/usr/sbin/ntpd -u ntp:ntp $OPTIONS"
-  when:
-      - rhel7cis_time_synchronization == "ntp"
-      - rhel7cis_rule_2_2_1_2|bool
-  tags:
-      - level1
-      - patch
-      - rule_2.2.1.2
-
-- name: "SCORED | 2.2.1.3 | PATCH | Ensure chrony is configured"
+- name: "SCORED | 2.2.1.2 | PATCH | Ensure chrony is configured"
   template:
       src: chrony.conf.j2
       dest: /etc/chrony.conf
@@ -305,13 +62,13 @@
       mode: 0644
   when:
       - rhel7cis_time_synchronization == "chrony"
-      - rhel7cis_rule_2_2_1_3|bool
+      - rhel7cis_rule_2_2_1_2|bool
   tags:
       - level1
       - patch
-      - rule_2.2.1.3
+      - rule_2.2.1.2
 
-- name: "SCORED | 2.2.1.3 | PATCH | Ensure chrony is configured | modify /etc/sysconfig/chronyd | 1"
+- name: "SCORED | 2.2.1.2 | PATCH | Ensure chrony is configured | modify /etc/sysconfig/chronyd | 1"
   lineinfile:
       dest: /etc/sysconfig/chronyd
       regexp: "^(#)?OPTIONS"
@@ -320,36 +77,72 @@
       create: yes
   when:
       - rhel7cis_time_synchronization == "chrony"
+      - rhel7cis_rule_2_2_1_2|bool
+  tags:
+      - level1
+      - patch
+      - rule_2.2.1.2
+
+- name: "SCORED | 2.2.1.3 | PATCH | Ensure ntp is configured | modify /etc/ntp.conf"
+  template:
+      src: ntp.conf.j2
+      dest: /etc/ntp.conf
+      owner: root
+      group: root
+      mode: 0644
+  when:
+      - rhel7cis_time_synchronization == "ntp"
       - rhel7cis_rule_2_2_1_3|bool
   tags:
       - level1
       - patch
       - rule_2.2.1.3
 
-- name: "SCORED | 2.2.2 | PATCH | Ensure X Window System is not installed"
-  yum:
-      state: absent
-      name:
-          - "@X Window System"
-          - "xorg-x11*"
+- name: "SCORED | 2.2.1.3 | PATCH | Ensure ntp is configured | modify /etc/sysconfig/ntpd"
+  lineinfile:
+      dest: /etc/sysconfig/ntpd
+      regexp: "^(#)?OPTIONS"
+      line: "OPTIONS=\"-u ntp:ntp\""
   when:
-      - not rhel7cis_xwindows_required
-      - rhel7cis_rule_2_2_2|bool
+      - rhel7cis_time_synchronization == "ntp"
+      - rhel7cis_rule_2_2_1_3|bool
   tags:
       - level1
-      - scored
-      - xwindows
       - patch
+      - rule_2.2.1.3
+
+- name: "SCORED | 2.2.1.3 | PATCH | Ensure ntp is configured | modify /usr/lib/systemd/system/ntpd.service"
+  lineinfile:
+      dest: /usr/lib/systemd/system/ntpd.service
+      regexp: "^(#)?ExecStart"
+      line: "ExecStart=/usr/sbin/ntpd -u ntp:ntp $OPTIONS"
+  when:
+      - rhel7cis_time_synchronization == "ntp"
+      - rhel7cis_rule_2_2_1_3|bool
+  tags:
+      - level1
+      - patch
+      - rule_2.2.1.3
+
+- name: "SCORED | 2.2.2 | PATCH | Ensure X11 Server components are not installed"
+  yum:
+      name: xorg-x11-server*
+      state: absent
+  when:
+      - rhel7cis_rule_2_2_2|bool
+      - not rhel7cis_xwindows_required
+  tags:
+      - level1
+      - patch
+      - scored
       - rule_2.2.2
 
-- name: "SCORED | 2.2.3 | PATCH | Ensure Avahi Server is not enabled"
-  service:
-      name: avahi-daemon
-      state: stopped
-      enabled: no
+- name: "SCORED | 2.2.3 | PATCH | Ensure Avahi Server is not installed"
+  yum:
+      name: avahi-autoipd,avahi
+      state: absent
   when:
       - not rhel7cis_avahi_server
-      - avahi_service_status.stdout == "loaded"
       - rhel7cis_rule_2_2_3|bool
   tags:
       - level1
@@ -359,14 +152,12 @@
       - patch
       - rule_2.2.3
 
-- name: "SCORED | 2.2.4 | PATCH | Ensure CUPS is not enabled"
-  service:
+- name: "SCORED | 2.2.4 | PATCH | Ensure CUPS is not installed"
+  yum:
       name: cups
-      state: stopped
-      enabled: no
+      state: absent
   when:
       - not rhel7cis_cups_server
-      - cups_service_status.stdout == "loaded"
       - rhel7cis_rule_2_2_4|bool
   tags:
       - level1
@@ -376,14 +167,12 @@
       - patch
       - rule_2.2.4
 
-- name: "SCORED | 2.2.5 | PATCH | Ensure DHCP Server is not enabled"
-  service:
-      name: dhcpd
-      state: stopped
-      enabled: no
+- name: "SCORED | 2.2.5 | PATCH | Ensure DHCP Server is not installed"
+  yum:
+      name: dhcp
+      state: absent
   when:
       - not rhel7cis_dhcp_server
-      - dhcpd_service_status.stdout == "loaded"
       - rhel7cis_rule_2_2_5|bool
   tags:
       - level1
@@ -393,14 +182,12 @@
       - patch
       - rule_2.2.5
 
-- name: "SCORED | 2.2.6 | PATCH | Ensure LDAP server is not enabled"
-  service:
-      name: slapd
-      state: stopped
-      enabled: no
+- name: "SCORED | 2.2.6 | PATCH | Ensure LDAP server is not installed"
+  yum:
+      name: openldap-servers
+      state: absent
   when:
       - not rhel7cis_ldap_server
-      - slapd_service_status.stdout == "loaded"
       - rhel7cis_rule_2_2_6|bool
   tags:
       - level1
@@ -410,14 +197,12 @@
       - patch
       - rule_2.2.6
 
-- name: "SCORED | 2.2.7 | PATCH | Ensure NFS and RPC are not enabled"
-  service:
-      name: nfs
-      state: stopped
-      enabled: no
+- name: "SCORED | 2.2.7 | PATCH | Ensure nfs-utils is not installed or the nfs-server service is masked"
+  yum:
+      name: nfs-utils
+      state: absent
   when:
       - not rhel7cis_nfs_rpc_server
-      - nfs_service_status.stdout == "loaded"
       - rhel7cis_rule_2_2_7|bool
   tags:
       - level1
@@ -428,14 +213,12 @@
       - patch
       - rule_2.2.7
 
-- name: "SCORED | 2.2.7 | PATCH | Ensure RPC is not enabled"
-  service:
+- name: "SCORED | 2.2.8 | PATCH | Ensure rpcbind is not installed or the rpcbind services are masked"
+  yum:
       name: rpcbind
-      state: stopped
-      enabled: no
+      state: absent
   when:
       - not rhel7cis_nfs_rpc_server
-      - rpcbind_service_status.stdout == "loaded"
       - rhel7cis_rule_2_2_7|bool
   tags:
       - level1
@@ -443,235 +226,144 @@
       - nfs
       - rpc
       - services
-      - patch
-      - rule_2.2.7
-
-- name: "SCORED | 2.2.8 | PATCH | Ensure DNS Server is not enabled"
-  service:
-      name: named
-      state: stopped
-      enabled: no
-  when:
-      - not rhel7cis_named_server
-      - named_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_8|bool
-  tags:
-      - level1
       - patch
       - rule_2.2.8
 
-- name: "SCORED | 2.2.9 | PATCH | Ensure FTP Server is not enabled"
-  service:
-      name: vsftpd
-      state: stopped
-      enabled: no
+- name: "SCORED | 2.2.9 | PATCH | Ensure DNS Server is not installed"
+  yum:
+      name: bind
+      state: absent
   when:
-      - not rhel7cis_vsftpd_server
-      - vsftpd_service_status.stdout == "loaded"
+      - not rhel7cis_named_server
       - rhel7cis_rule_2_2_9|bool
   tags:
       - level1
       - patch
       - rule_2.2.9
 
-- name: "SCORED | 2.2.10 | PATCH | Ensure HTTP server is not enabled"
-  service:
-      name: httpd
-      state: stopped
-      enabled: no
+- name: "SCORED | 2.2.10 | PATCH | Ensure FTP Server is not installed"
+  yum:
+      name: vsftpd
+      state: absent
   when:
-      - not rhel7cis_httpd_server
-      - httpd_service_status.stdout == "loaded"
+      - not rhel7cis_vsftpd_server
       - rhel7cis_rule_2_2_10|bool
   tags:
       - level1
       - patch
       - rule_2.2.10
 
-- name: "SCORED | 2.2.11 | PATCH | Ensure IMAP and POP3 server is not enabled"
-  service:
-      name: dovecot
-      state: stopped
-      enabled: no
+- name: "SCORED | 2.2.11 | PATCH | Ensure HTTP server is not installed"
+  yum:
+      name: httpd
+      state: absent
   when:
-      - not rhel7cis_dovecot_server
-      - dovecot_service_status.stdout == "loaded"
+      - not rhel7cis_httpd_server
       - rhel7cis_rule_2_2_11|bool
   tags:
       - level1
       - patch
       - rule_2.2.11
 
-- name: "SCORED | 2.2.12 | PATCH | Ensure Samba is not enabled"
-  service:
-      name: smb
-      state: stopped
-      enabled: no
+- name: "SCORED | 2.2.12 | PATCH | Ensure IMAP and POP3 server is not installed"
+  yum:
+      name: dovecot
+      state: absent
   when:
-      - not rhel7cis_smb_server
-      - smb_service_status.stdout == "loaded"
+      - not rhel7cis_dovecot_server
       - rhel7cis_rule_2_2_12|bool
   tags:
       - level1
       - patch
       - rule_2.2.12
 
-- name: "SCORED | 2.2.13 | PATCH | Ensure HTTP Proxy Server is not enabled"
-  service:
-      name: squid
-      state: stopped
-      enabled: no
+- name: "SCORED | 2.2.13 | PATCH | Ensure Samba is not installed"
+  yum:
+      name: samba
+      state: absent
   when:
-      - not rhel7cis_squid_server
-      - squid_service_status.stdout == "loaded"
+      - not rhel7cis_smb_server
       - rhel7cis_rule_2_2_13|bool
   tags:
       - level1
       - patch
       - rule_2.2.13
 
-- name: "SCORED | 2.2.14 | PATCH | Ensure SNMP Server is not enabled"
-  service:
-      name: snmpd
-      state: stopped
-      enabled: no
+- name: "SCORED | 2.2.14 | PATCH | Ensure HTTP Proxy Server is not installed"
+  yum:
+      name: squid
+      state: absent
   when:
-      - not rhel7cis_snmp_server
-      - snmpd_service_status.stdout == "loaded"
+      - not rhel7cis_squid_server
       - rhel7cis_rule_2_2_14|bool
   tags:
       - level1
       - patch
       - rule_2.2.14
 
-- name: "SCORED | 2.2.15 | PATCH | Ensure mail transfer agent is configured for local-only mode"
-  lineinfile:
-      dest: /etc/postfix/main.cf
-      regexp: "^(#)?inet_interfaces"
-      line: "inet_interfaces = localhost"
+- name: "SCORED | 2.2.15 | PATCH | Ensure SNMP Server is not installed"
+  yum:
+      name: net-snmp
+      state: absent
   when:
-      - not rhel7cis_is_mail_server
-      - postfix_installed.rc == 0
+      - not rhel7cis_snmp_server
       - rhel7cis_rule_2_2_15|bool
   tags:
       - level1
       - patch
       - rule_2.2.15
 
-- name: "SCORED | 2.2.16 | PATCH | Ensure NIS Server is not enabled"
-  service:
-      name: ypserv
-      state: stopped
-      enabled: no
+- name: "SCORED | 2.2.16 | PATCH | Ensure mail transfer agent is configured for local-only mode"
+  lineinfile:
+      dest: /etc/postfix/main.cf
+      regexp: "^(#)?inet_interfaces"
+      line: "inet_interfaces = loopback-only"
+  notify:
+      - restart postfix
   when:
-      - not rhel7cis_nis_server
-      - ypserv_service_status.stdout == "loaded"
+      - not rhel7cis_is_mail_server
+      - postfix_installed.rc == 0
       - rhel7cis_rule_2_2_16|bool
   tags:
       - level1
       - patch
       - rule_2.2.16
 
-- name: "SCORED | 2.2.17 | PATCH | Ensure rsh server is not enabled | rsh"
-  service:
-      name: rsh.socket
-      state: stopped
-      enabled: no
+- name: "SCORED | 2.2.17 | PATCH | Ensure rsync service is not installed"
+  yum:
+      name: rsync
+      state: absent
   when:
-      - not rhel7cis_rsh_server
-      - rsh_service_status.stdout == "loaded"
+      - not rhel7cis_rsyncd_server
       - rhel7cis_rule_2_2_17|bool
   tags:
       - level1
       - patch
       - rule_2.2.17
 
-- name: "SCORED | 2.2.17 | PATCH | Ensure rsh server is not enabled | rlogin"
-  service:
-      name: rlogin.socket
-      state: stopped
-      enabled: no
+- name: "SCORED | 2.2.18 | PATCH | Ensure NIS Server is not installed"
+  yum:
+      name: ypserv
+      state: absent
   when:
-      - not rhel7cis_rsh_server
-      - rlogin_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_17|bool
-  tags:
-      - level1
-      - patch
-      - rule_2.2.17
-
-- name: "SCORED | 2.2.17 | PATCH | Ensure rsh server is not enabled | rexec"
-  service:
-      name: rexec.socket
-      state: stopped
-      enabled: no
-  when:
-      - not rhel7cis_rsh_server
-      - rexec_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_17|bool
-  tags:
-      - level1
-      - patch
-      - rule_2.2.17
-
-- name: "SCORED | 2.2.18 | PATCH | Ensure telnet server is not enabled"
-  service:
-      name: telnet
-      state: stopped
-      enabled: no
-  when:
-      - not rhel7cis_telnet_server
-      - telnet_service_status.stdout == "loaded"
+      - not rhel7cis_nis_server
       - rhel7cis_rule_2_2_18|bool
   tags:
       - level1
       - patch
       - rule_2.2.18
 
-- name: "SCORED | 2.2.19 | PATCH | Ensure tftp server is not enabled"
-  service:
-      name: tftp
-      state: stopped
-      enabled: no
+- name: "SCORED | 2.2.19 | PATCH | Ensure telnet-server is not installed"
+  yum:
+      name: telnet-server
+      state: absent
   when:
-      - not rhel7cis_tftp_server
-      - tftp_service_status.stdout == "loaded"
+      - not rhel7cis_telnet_server
       - rhel7cis_rule_2_2_19|bool
   tags:
       - level1
-      - scored
-      - insecure_services
-      - tftp
       - patch
       - rule_2.2.19
-
-- name: "SCORED | 2.2.20 | PATCH | Ensure rsync service is not enabled "
-  service:
-      name: rsyncd
-      state: stopped
-      enabled: no
-  when:
-      - not rhel7cis_rsyncd_server
-      - rsyncd_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_20|bool
-  tags:
-      - level1
-      - patch
-      - rule_2.2.20
-
-- name: "SCORED | 2.2.21 | PATCH | Ensure talk server is not enabled"
-  service:
-      name: ntalk
-      state: stopped
-      enabled: no
-  when:
-      - not rhel7cis_ntalk_server
-      - ntalk_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_21|bool
-  tags:
-      - level1
-      - patch
-      - rule_2.2.21
 
 - name: "SCORED | 2.3.1 | PATCH | Ensure NIS Client is not installed"
   yum:
@@ -714,7 +406,7 @@
       name: telnet
       state: absent
   when:
-      - not rhel7cis_telnet_required
+      - not rhel7cis_talk_required
       - rhel7cis_rule_2_3_4|bool
   tags:
       - level1
@@ -732,3 +424,15 @@
       - level1
       - patch
       - rule_2.3.5
+
+- name: "NOTSCORED | 2.4 | PATCH |  Ensure nonessential services are removed or masked"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_2_4|bool
+  tags:
+      - level1
+      - patch
+      - notscored
+      - rule_2.4
+      - notimplemented

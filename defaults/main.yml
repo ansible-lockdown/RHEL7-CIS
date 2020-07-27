@@ -10,8 +10,6 @@ rhel7cis_section4: true
 rhel7cis_section5: true
 rhel7cis_section6: true
 
-rhel7cis_selinux_disable: false
-
 # These variables correspond with the CIS rule IDs or paragraph numbers defined in
 # the CIS benchmark documents.
 # PLEASE NOTE: These work in coordination with the section # group variables and tags.
@@ -46,34 +44,40 @@ rhel7cis_rule_1_1_19: true
 rhel7cis_rule_1_1_20: true
 rhel7cis_rule_1_1_21: true
 rhel7cis_rule_1_1_22: true
+rhel7cis_rule_1_1_23: true
+rhel7cis_rule_1_1_24: true
 rhel7cis_rule_1_2_1: true
 rhel7cis_rule_1_2_2: true
 rhel7cis_rule_1_2_3: true
-rhel7cis_rule_1_2_4: true
-rhel7cis_rule_1_2_5: true
 rhel7cis_rule_1_3_1: true
 rhel7cis_rule_1_3_2: true
+rhel7cis_rule_1_3_3: true
 rhel7cis_rule_1_4_1: true
 rhel7cis_rule_1_4_2: true
-rhel7cis_rule_1_4_3: true
 rhel7cis_rule_1_5_1: true
 rhel7cis_rule_1_5_2: true
 rhel7cis_rule_1_5_3: true
-rhel7cis_rule_1_5_4: true
-rhel7cis_rule_1_6_1_1: true
-rhel7cis_rule_1_6_1_2: true
-rhel7cis_rule_1_6_1_3: true
-rhel7cis_rule_1_6_1_4: true
-rhel7cis_rule_1_6_1_5: true
+rhel7cis_rule_1_6_1: true
 rhel7cis_rule_1_6_2: true
+rhel7cis_rule_1_6_3: true
+rhel7cis_rule_1_6_4: true
 rhel7cis_rule_1_7_1_1: true
 rhel7cis_rule_1_7_1_2: true
 rhel7cis_rule_1_7_1_3: true
 rhel7cis_rule_1_7_1_4: true
 rhel7cis_rule_1_7_1_5: true
 rhel7cis_rule_1_7_1_6: true
+rhel7cis_rule_1_7_1_7: true
+rhel7cis_rule_1_7_1_8: true
+rhel7cis_rule_1_8_1_1: true
+rhel7cis_rule_1_8_1_2: true
+rhel7cis_rule_1_8_1_3: true
+rhel7cis_rule_1_8_1_4: true
+rhel7cis_rule_1_8_1_5: true
+rhel7cis_rule_1_8_1_6: true
 rhel7cis_rule_1_7_2: true
-rhel7cis_rule_1_8: true
+rhel7cis_rule_1_9: true
+rhel7cis_rule_1_10: true
 
 # Section 2 rules
 rhel7cis_rule_2_1_1: true
@@ -100,47 +104,75 @@ rhel7cis_rule_2_2_12: true
 rhel7cis_rule_2_2_13: true
 rhel7cis_rule_2_2_14: true
 rhel7cis_rule_2_2_15: true
+rhel7cis_rule_2_2_16: true
+rhel7cis_rule_2_2_17: true
+rhel7cis_rule_2_2_18: true
+rhel7cis_rule_2_2_19: true
 rhel7cis_rule_2_3_1: true
 rhel7cis_rule_2_3_2: true
 rhel7cis_rule_2_3_3: true
 rhel7cis_rule_2_3_4: true
 rhel7cis_rule_2_3_5: true
+rhel7cis_rule_2_4: true
 
 # Section 3 rules
 rhel7cis_rule_3_1_1: true
 rhel7cis_rule_3_1_2: true
 rhel7cis_rule_3_2_1: true
 rhel7cis_rule_3_2_2: true
-rhel7cis_rule_3_2_3: true
-rhel7cis_rule_3_2_4: true
-rhel7cis_rule_3_2_5: true
-rhel7cis_rule_3_2_6: true
-rhel7cis_rule_3_2_7: true
-rhel7cis_rule_3_2_8: true
 rhel7cis_rule_3_3_1: true
 rhel7cis_rule_3_3_2: true
 rhel7cis_rule_3_3_3: true
+rhel7cis_rule_3_3_4: true
+rhel7cis_rule_3_3_5: true
+rhel7cis_rule_3_3_6: true
+rhel7cis_rule_3_3_7: true
+rhel7cis_rule_3_3_8: true
+rhel7cis_rule_3_3_9: true
 rhel7cis_rule_3_4_1: true
 rhel7cis_rule_3_4_2: true
-rhel7cis_rule_3_4_3: true
-rhel7cis_rule_3_4_4: true
-rhel7cis_rule_3_4_5: true
-rhel7cis_rule_3_5_1: true
-rhel7cis_rule_3_5_2: true
-rhel7cis_rule_3_5_3: true
-rhel7cis_rule_3_5_4: true
-rhel7cis_rule_3_6_1: true
-rhel7cis_rule_3_6_2: true
-rhel7cis_rule_3_6_3: true
-rhel7cis_rule_3_6_4: true
-rhel7cis_rule_3_6_5: true
-rhel7cis_rule_3_7: true
+rhel7cis_rule_3_5_1_1: true
+rhel7cis_rule_3_5_1_2: true
+rhel7cis_rule_3_5_1_3: true
+rhel7cis_rule_3_5_1_4: true
+rhel7cis_rule_3_5_1_5: true
+rhel7cis_rule_3_5_1_6: true
+rhel7cis_rule_3_5_1_7: true
+rhel7cis_rule_3_5_2_1: true
+rhel7cis_rule_3_5_2_2: true
+rhel7cis_rule_3_5_2_3: true
+rhel7cis_rule_3_5_2_4: true
+rhel7cis_rule_3_5_2_5: true
+rhel7cis_rule_3_5_2_6: true
+rhel7cis_rule_3_5_2_7: true
+rhel7cis_rule_3_5_2_8: true
+rhel7cis_rule_3_5_2_9: true
+rhel7cis_rule_3_5_2_10: true
+rhel7cis_rule_3_5_2_11: true
+rhel7cis_rule_3_5_3_1_1: true
+rhel7cis_rule_3_5_3_1_2: true
+rhel7cis_rule_3_5_3_1_3: true
+rhel7cis_rule_3_5_3_2_1: true
+rhel7cis_rule_3_5_3_2_2: true
+rhel7cis_rule_3_5_3_2_3: true
+rhel7cis_rule_3_5_3_2_4: true
+rhel7cis_rule_3_5_3_2_5: true
+rhel7cis_rule_3_5_3_2_6: true
+rhel7cis_rule_3_5_3_3_1: true
+rhel7cis_rule_3_5_3_3_2: true
+rhel7cis_rule_3_5_3_3_3: true
+rhel7cis_rule_3_5_3_3_4: true
+rhel7cis_rule_3_5_3_3_5: true
+rhel7cis_rule_3_5_3_3_6: true
 
 # Section 4 rules
 rhel7cis_rule_4_1_1_1: true
 rhel7cis_rule_4_1_1_2: true
 rhel7cis_rule_4_1_1_3: true
-rhel7cis_rule_4_1_2: true
+rhel7cis_rule_4_1_2_1: true
+rhel7cis_rule_4_1_2_2: true
+rhel7cis_rule_4_1_2_3: true
+rhel7cis_rule_4_1_2_4: true
 rhel7cis_rule_4_1_3: true
 rhel7cis_rule_4_1_4: true
 rhel7cis_rule_4_1_5: true
@@ -156,20 +188,17 @@ rhel7cis_rule_4_1_14: true
 rhel7cis_rule_4_1_15: true
 rhel7cis_rule_4_1_16: true
 rhel7cis_rule_4_1_17: true
-rhel7cis_rule_4_1_18: true
-rhel7cis_rule_4_2_3: true
 rhel7cis_rule_4_2_1_1: true
 rhel7cis_rule_4_2_1_2: true
 rhel7cis_rule_4_2_1_3: true
 rhel7cis_rule_4_2_1_4: true
 rhel7cis_rule_4_2_1_5: true
+rhel7cis_rule_4_2_1_6: true
 rhel7cis_rule_4_2_2_1: true
 rhel7cis_rule_4_2_2_2: true
 rhel7cis_rule_4_2_2_3: true
-rhel7cis_rule_4_2_2_4: true
-rhel7cis_rule_4_2_2_5: true
+rhel7cis_rule_4_2_3: true
 rhel7cis_rule_4_2_4: true
-rhel7cis_rule_4_3: true
 
 # Section 5 rules
 rhel7cis_rule_5_1_1: true
@@ -180,6 +209,7 @@ rhel7cis_rule_5_1_5: true
 rhel7cis_rule_5_1_6: true
 rhel7cis_rule_5_1_7: true
 rhel7cis_rule_5_1_8: true
+rhel7cis_rule_5_1_9: true
 rhel7cis_rule_5_2_1: true
 rhel7cis_rule_5_2_2: true
 rhel7cis_rule_5_2_3: true
@@ -196,6 +226,12 @@ rhel7cis_rule_5_2_13: true
 rhel7cis_rule_5_2_14: true
 rhel7cis_rule_5_2_15: true
 rhel7cis_rule_5_2_16: true
+rhel7cis_rule_5_2_17: true
+rhel7cis_rule_5_2_18: true
+rhel7cis_rule_5_2_19: true
+rhel7cis_rule_5_2_20: true
+rhel7cis_rule_5_2_21: true
+rhel7cis_rule_5_2_22: true
 rhel7cis_rule_5_3_1: true
 rhel7cis_rule_5_3_2: true
 rhel7cis_rule_5_3_3: true
@@ -208,6 +244,9 @@ rhel7cis_rule_5_4_1_5: true
 rhel7cis_rule_5_4_2: true
 rhel7cis_rule_5_4_3: true
 rhel7cis_rule_5_4_4: true
+rhel7cis_rule_5_4_5: true
+rhel7cis_rule_5_5: true
+rhel7cis_rule_5_6: true
 
 # Section 6 rules
 rhel7cis_rule_6_1_1: true
@@ -234,14 +273,14 @@ rhel7cis_rule_6_2_7: true
 rhel7cis_rule_6_2_8: true
 rhel7cis_rule_6_2_9: true
 rhel7cis_rule_6_2_10: true
-rhel7cis_rule_6_2_11: true
+rhel7cis_rule_6_2_11: false
 rhel7cis_rule_6_2_12: true
+rhel7cis_rule_6_2_13: true
 rhel7cis_rule_6_2_14: true
 rhel7cis_rule_6_2_15: true
 rhel7cis_rule_6_2_16: true
 rhel7cis_rule_6_2_17: true
 rhel7cis_rule_6_2_18: true
-rhel7cis_rule_6_2_19: true
 
 # Service configuration booleans set true to keep service
 rhel7cis_avahi_server: false
@@ -306,6 +345,12 @@ rhel7cis_aide_cron:
 # SELinux policy
 rhel7cis_selinux_pol: targeted
 
+#SELinux mode
+rhel7cis_selinux_mode: enforcing # permissive
+
+# Check if SELinux should be disabled
+rhel7cis_selinux_disable: false
+
 # Whether or not to run tasks related to auditing/patching the desktop environment
 rhel7cis_gui: no
 
@@ -337,8 +382,9 @@ rhel7cis_host_allow:
     - "172.16.0.0/255.240.0.0"
     - "192.168.0.0/255.255.0.0"
 
-rhel7cis_firewall: firewalld
-#rhel7cis_firewall: iptables
+rhel7cis_firewall: firewalld # iptables / nftables
+
+rhel7cis_firewall_default_zone: public
 
 rhel7cis_firewall_services:
     - ssh
@@ -354,6 +400,7 @@ rhel7cis_warning_banner: |
 rhel7cis_auditd:
     admin_space_left_action: halt
     max_log_file_action: keep_logs
+    backlog_limit: "8192"
 
 rhel7cis_logrotate: "daily"
 
@@ -364,8 +411,9 @@ rhel7cis_sudolog: /var/log/secure
 rhel7cis_sshd:
     clientalivecountmax: 3
     clientaliveinterval: 300
-    ciphers: "aes256-ctr,aes192-ctr,aes128-ctr"
-    macs: "hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com"
+    ciphers: "chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr"
+    macs: "hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256"
+    kexalgorithms: "curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256"
     logingracetime: 60
     # - make sure you understand the precedence when working with these values!!
     #allowusers:
@@ -379,6 +427,8 @@ rhel7cis_pass:
     warn_age: 7
     inactive: 30
     history: 5
+
+rhel7cis_shell_timeout: 900
 
 rhel7cis_password_change_date_in_future_action: expire # lock
 

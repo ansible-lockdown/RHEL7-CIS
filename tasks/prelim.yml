@@ -317,3 +317,26 @@
   register: homes_with_perms
   changed_when: no
   check_mode: no
+
+- name: "PRELIM | Check that system accounts are non-login #1"
+  shell: >
+    set -o pipefail &&
+    egrep -v "^\+" /etc/passwd | awk -F: '($1!="root" && $1!="sync" &&
+    $1!="shutdown" && $1!="halt" && $3<1000 && $7!="/usr/sbin/nologin" &&
+    $7!="/bin/false") {print}'
+  args:
+      executable: /bin/bash
+  register: system_accounts_non_login_1
+  changed_when: false
+  check_mode: false
+
+- name: "PRELIM | Check that system accounts are non-login #2"
+  shell: >
+    set -o pipefail &&
+    for user in `awk -F: '($1!="root" && $3 < 1000) {print $1 }' /etc/passwd`; do
+    passwd -S $user | awk -F ' ' '($2!="L") {print $1}'; done
+  args:
+      executable: /bin/bash
+  register: system_accounts_non_login_2
+  changed_when: false
+  check_mode: false

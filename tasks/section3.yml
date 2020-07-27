@@ -1,23 +1,68 @@
-- name: "SCORED | 3.1.1 | PATCH | Ensure IP forwarding is disabled"
-  sysctl:
-      name: net.ipv4.ip_forward
-      value: '0'
-      state: present
-      reload: yes
-      ignoreerrors: yes
+- name: "NOTSCORED | 3.1.1 | PATCH | Ensure IPv6 is disabled"
+  lineinfile:
+      dest: /etc/default/grub
+      regexp: '^(GRUB_CMDLINE_LINUX=(?!.*ipv6.disable)\"[^\"]*)(\".*)'
+      replace: '\1 ipv6.disable=1\2'
+      follow: true
+      backrefs: true
   notify:
-      - sysctl flush ipv4 route table
+      - grub2cfg
+  when:
+      - not rhel7cis_ipv6_required
+      - rhel7cis_rule_3_1_1|bool
+  tags:
+      - level2
+      - notscored
+      - patch
+      - rule_3.1.1
+
+- name: "NOTSCORED | 3.1.2 | PATCH | Ensure wireless interfaces are disabled"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_firewall == "iptables"
+      - rhel7cis_rule_3_1_2|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - notscored
+      - rule_3.1.2
+      - notimplemented
+
+- name: "SCORED | 3.2.1 | PATCH | Ensure IP forwarding is disabled"
+  block:
+      - name: "SCORED | 3.2.1 | PATCH | Ensure IP forwarding is disabled | ipv4"
+        sysctl:
+            name: net.ipv4.ip_forward
+            value: '0'
+            state: present
+            reload: yes
+            ignoreerrors: yes
+        notify:
+            - sysctl flush ipv4 route table
+      - name: "SCORED | 3.2.1 | PATCH | Ensure IP forwarding is disabled | ipv6"
+        sysctl:
+            name: net.ipv6.ip_forward
+            value: '0'
+            state: present
+            reload: yes
+            ignoreerrors: yes
+        notify:
+            - sysctl flush ipv6 route table
+        when:
+            - not rhel7cis_ipv6_required
   when:
       - not rhel7cis_is_router
-      - rhel7cis_rule_3_1_1|bool
+      - rhel7cis_rule_3_2_1|bool
   tags:
       - level1
       - scored
       - sysctl
       - patch
-      - rule_3.1.1
+      - rule_3.2.1
 
-- name: "SCORED | 3.1.2 | PATCH | Ensure packet redirect sending is disabled"
+- name: "SCORED | 3.2.2 | PATCH | Ensure packet redirect sending is disabled"
   sysctl:
       name: '{{ item.name }}'
       value: '{{ item.value }}'
@@ -32,50 +77,6 @@
       - sysctl flush ipv4 route table
   when:
       - not rhel7cis_is_router
-      - rhel7cis_rule_3_1_2|bool
-  tags:
-      - level1
-      - scored
-      - sysctl
-      - patch
-      - rule_3.1.2
-
-- name: "SCORED | 3.2.1 | PATCH | Ensure source routed packets are not accepted"
-  sysctl:
-      name: '{{ item.name }}'
-      value: '{{ item.value }}'
-      sysctl_set: yes
-      state: present
-      reload: yes
-      ignoreerrors: yes
-  with_items:
-      - { name: net.ipv4.conf.all.accept_source_route, value: 0 }
-      - { name: net.ipv4.conf.default.accept_source_route, value: 0 }
-  notify:
-      - sysctl flush ipv4 route table
-  when:
-      - rhel7cis_rule_3_2_1|bool
-  tags:
-      - level1
-      - scored
-      - sysctl
-      - patch
-      - rule_3.2.1
-
-- name: "SCORED | 3.2.2 | PATCH | Ensure ICMP redirects are not accepted"
-  sysctl:
-      name: '{{ item.name }}'
-      value: '{{ item.value }}'
-      sysctl_set: yes
-      state: present
-      reload: yes
-      ignoreerrors: yes
-  with_items:
-      - { name: net.ipv4.conf.all.accept_redirects, value: 0 }
-      - { name: net.ipv4.conf.default.accept_redirects, value: 0 }
-  notify:
-      - sysctl flush ipv4 route table
-  when:
       - rhel7cis_rule_3_2_2|bool
   tags:
       - level1
@@ -84,7 +85,86 @@
       - patch
       - rule_3.2.2
 
-- name: "SCORED | 3.2.3 | PATCH | Ensure secure ICMP redirects are not accepted"
+- name: "SCORED | 3.3.1 | PATCH | Ensure source routed packets are not accepted"
+  block:
+      - name: "SCORED | 3.3.1 | PATCH | Ensure source routed packets are not accepted | ipv4"
+        sysctl:
+            name: '{{ item.name }}'
+            value: '{{ item.value }}'
+            sysctl_set: yes
+            state: present
+            reload: yes
+            ignoreerrors: yes
+        with_items:
+            - { name: net.ipv4.conf.all.accept_source_route, value: 0 }
+            - { name: net.ipv4.conf.default.accept_source_route, value: 0 }
+        notify:
+            - sysctl flush ipv4 route table
+      - name: "SCORED | 3.3.1 | PATCH | Ensure source routed packets are not accepted | ipv6"
+        sysctl:
+            name: '{{ item.name }}'
+            value: '{{ item.value }}'
+            sysctl_set: yes
+            state: present
+            reload: yes
+            ignoreerrors: yes
+        with_items:
+            - { name: net.ipv6.conf.all.accept_source_route, value: 0 }
+            - { name: net.ipv6.conf.default.accept_source_route, value: 0 }
+        notify:
+            - sysctl flush ipv6 route table
+        when:
+            - not rhel7cis_ipv6_required
+  when:
+      - rhel7cis_rule_3_3_1|bool
+  tags:
+      - level1
+      - scored
+      - sysctl
+      - patch
+      - rule_3.3.1
+
+- name: "SCORED | 3.3.2 | PATCH | Ensure ICMP redirects are not accepted"
+  block:
+      - name: "SCORED | 3.3.2 | PATCH | Ensure ICMP redirects are not accepted | ipv4"
+        sysctl:
+            name: '{{ item.name }}'
+            value: '{{ item.value }}'
+            sysctl_set: yes
+            state: present
+            reload: yes
+            ignoreerrors: yes
+        with_items:
+            - { name: net.ipv4.conf.all.accept_redirects, value: 0 }
+            - { name: net.ipv4.conf.default.accept_redirects, value: 0 }
+        notify:
+            - sysctl flush ipv4 route table
+
+      - name: "SCORED | 3.3.2 | PATCH | Ensure ICMP redirects are not accepted | ipv6"
+        sysctl:
+            name: '{{ item.name }}'
+            value: '{{ item.value }}'
+            sysctl_set: yes
+            state: present
+            reload: yes
+            ignoreerrors: yes
+        with_items:
+            - { name: net.ipv6.conf.all.accept_redirects, value: 0 }
+            - { name: net.ipv6.conf.default.accept_redirects, value: 0 }
+        notify:
+            - sysctl flush ipv6 route table
+        when:
+            - not rhel7cis_ipv6_required
+  when:
+      - rhel7cis_rule_3_3_2|bool
+  tags:
+      - level1
+      - scored
+      - sysctl
+      - patch
+      - rule_3.3.2
+
+- name: "SCORED | 3.3.3 | PATCH | Ensure secure ICMP redirects are not accepted | ipv4"
   sysctl:
       name: '{{ item.name }}'
       value: '{{ item.value }}'
@@ -98,15 +178,15 @@
   notify:
       - sysctl flush ipv4 route table
   when:
-      - rhel7cis_rule_3_2_3|bool
+      - rhel7cis_rule_3_3_3|bool
   tags:
       - level1
       - scored
       - sysctl
       - patch
-      - rule_3.2.3
+      - rule_3.3.3
 
-- name: "SCORED | 3.2.4 | PATCH | Ensure suspicious packets are logged"
+- name: "SCORED | 3.3.4 | PATCH | Ensure suspicious packets are logged | ipv4"
   sysctl:
       name: '{{ item.name }}'
       value: '{{ item.value }}'
@@ -120,15 +200,15 @@
   notify:
       - sysctl flush ipv4 route table
   when:
-      - rhel7cis_rule_3_2_4|bool
+      - rhel7cis_rule_3_3_4|bool
   tags:
       - level1
       - scored
       - sysctl
       - patch
-      - rule_3.2.4
+      - rule_3.3.4
 
-- name: "SCORED | 3.2.5 | PATCH | Ensure broadcast ICMP requests are ignored"
+- name: "SCORED | 3.3.5 | PATCH | Ensure broadcast ICMP requests are ignored | ipv4"
   sysctl:
       name: net.ipv4.icmp_echo_ignore_broadcasts
       value: '1'
@@ -138,15 +218,15 @@
   notify:
       - sysctl flush ipv4 route table
   when:
-      - rhel7cis_rule_3_2_5|bool
+      - rhel7cis_rule_3_3_5|bool
   tags:
       - level1
       - scored
       - sysctl
       - patch
-      - rule_3.2.5
+      - rule_3.3.5
 
-- name: "SCORED | 3.2.6 | PATCH | Ensure bogus ICMP responses are ignored"
+- name: "SCORED | 3.3.6 | PATCH | Ensure bogus ICMP responses are ignored | ipv4"
   sysctl:
       name: net.ipv4.icmp_ignore_bogus_error_responses
       value: '1'
@@ -156,15 +236,15 @@
   notify:
       - sysctl flush ipv4 route table
   when:
-      - rhel7cis_rule_3_2_6|bool
+      - rhel7cis_rule_3_3_6|bool
   tags:
       - level1
       - scored
       - sysctl
       - patch
-      - rule_3.2.6
+      - rule_3.3.6
 
-- name: "SCORED | 3.2.7 | PATCH | Ensure Reverse Path Filtering is enabled"
+- name: "SCORED | 3.3.7 | PATCH | Ensure Reverse Path Filtering is enabled"
   sysctl:
       name: '{{ item.name }}'
       value: '{{ item.value }}'
@@ -178,15 +258,15 @@
   notify:
       - sysctl flush ipv4 route table
   when:
-      - rhel7cis_rule_3_2_7|bool
+      - rhel7cis_rule_3_3_7|bool
   tags:
       - level1
       - scored
       - sysctl
       - patch
-      - rule_3.2.7
+      - rule_3.3.7
 
-- name: "SCORED | 3.2.8 | PATCH | Ensure TCP SYN Cookies is enabled"
+- name: "SCORED | 3.3.8 | PATCH | Ensure TCP SYN Cookies is enabled"
   sysctl:
       name: net.ipv4.tcp_syncookies
       value: 1
@@ -196,15 +276,15 @@
   notify:
       - sysctl flush ipv4 route table
   when:
-      - rhel7cis_rule_3_2_8|bool
+      - rhel7cis_rule_3_3_8|bool
   tags:
       - level1
       - scored
       - sysctl
       - patch
-      - rule_3.2.8
+      - rule_3.3.8
 
-- name: "NOTSCORED | 3.3.1 | PATCH | Ensure IPv6 router advertisements are not accepted"
+- name: "NOTSCORED | 3.3.9 | PATCH | Ensure IPv6 router advertisements are not accepted"
   sysctl:
       name: '{{ item.name }}'
       value: '{{ item.value }}'
@@ -219,353 +299,481 @@
       - sysctl flush ipv6 route table
   when:
       - rhel7cis_ipv6_required | bool
-      - rhel7cis_rule_3_3_1|bool
+      - rhel7cis_rule_3_3_9|bool
   tags:
       - level1
       - notscored
       - sysctl
       - patch
-      - rule_3.3.1
+      - rule_3.3.9
 
-- name: "NOTSCORED | 3.3.2 | PATCH | Ensure IPv6 redirects are not accepted"
-  sysctl:
-      name: '{{ item.name }}'
-      value: '{{ item.value }}'
-      sysctl_set: yes
-      state: present
-      reload: yes
-      ignoreerrors: yes
-  with_items:
-      - { name: net.ipv6.conf.all.accept_redirects, value: 0 }
-      - { name: net.ipv6.conf.default.accept_redirects, value: 0 }
-  notify:
-      - sysctl flush ipv6 route table
-  when:
-      - rhel7cis_ipv6_required | bool
-      - rhel7cis_rule_3_3_2|bool
-  tags:
-      - level1
-      - notscored
-      - sysctl
-      - patch
-      - rule_3.3.2
-
-- name: "NOTSCORED | 3.3.3 | PATCH | Ensure IPv6 is disabled"
-  lineinfile:
-      dest: /etc/default/grub
-      regexp: '^(GRUB_CMDLINE_LINUX=.*(?!.*ipv6\.disable=1)\"[^\"]+)(\".*)'
-      line: '\1 ipv6.disable=1\2'
-      backrefs: yes
-  notify:
-      - grub2cfg
-  when:
-      - not rhel7cis_ipv6_required
-      - rhel7cis_rule_3_3_3|bool
-  tags:
-      - level1
-      - notscored
-      - patch
-      - rule_3.3.3
-
-- name: "SCORED | 3.4.1 | PATCH | Ensure TCP Wrappers is installed"
-  yum:
-      name: tcp_wrappers
-      state: present
-  when:
-      - rhel7cis_rule_3_4_1|bool
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.4.1
-
-- name: "SCORED | 3.4.2 | PATCH | Ensure /etc/hosts.allow is configured"
-  template:
-      src: hosts.allow.j2
-      dest: /etc/hosts.allow
-      owner: root
-      group: root
-      mode: 0644
-  when:
-      - rhel7cis_rule_3_4_2|bool
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.4.2
-
-- name: "SCORED | 3.4.3 | PATCH | Ensure /etc/hosts.deny is configured"
-  lineinfile:
-      dest: /etc/hosts.deny
-      regexp: "^(#)?ALL"
-      line: "ALL: ALL"
-  when:
-      - rhel7cis_rule_3_4_3|bool
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.4.3
-
-- name: "SCORED | 3.4.4 | PATCH | Ensure permissions on /etc/hosts.allow are configured"
-  file:
-      dest: /etc/hosts.allow
-      owner: root
-      group: root
-      mode: 0644
-  when:
-      - rhel7cis_rule_3_4_4|bool
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.4.4
-
-- name: "SCORED | 3.4.5 | PATCH | Ensure permissions on /etc/hosts.deny are 644"
-  file:
-      dest: /etc/hosts.deny
-      owner: root
-      group: root
-      mode: 0644
-  when:
-      - rhel7cis_rule_3_4_5|bool
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.4.5
-
-- name: "NOTSCORED | 3.5.1 | PATCH | Ensure DCCP is disabled"
+- name: "NOTSCORED | 3.4.1 | PATCH | Ensure DCCP is disabled"
   lineinfile:
       dest: /etc/modprobe.d/CIS.conf
       regexp: "^(#)?install dccp(\\s|$)"
       line: "install dccp /bin/true"
       create: yes
   when:
-      - rhel7cis_rule_3_5_1|bool
+      - rhel7cis_rule_3_4_1|bool
   tags:
       - level1
       - notscored
       - patch
-      - rule_3.5.1
+      - rule_3.4.1
 
-- name: "NOTSCORED | 3.5.2 | PATCH | Ensure SCTP is disabled"
+- name: "NOTSCORED | 3.4.2 | PATCH | Ensure SCTP is disabled"
   lineinfile:
       dest: /etc/modprobe.d/CIS.conf
       regexp: "^(#)?install sctp(\\s|$)"
       line: "install sctp /bin/true"
       create: yes
   when:
-      - rhel7cis_rule_3_5_2|bool
+      - rhel7cis_rule_3_4_2|bool
   tags:
       - level1
       - notscored
       - patch
-      - rule_3.5.2
+      - rule_3.4.2
 
-- name: "NOTSCORED | 3.5.3 | PATCH | Ensure RDS is disabled"
-  lineinfile:
-      dest: /etc/modprobe.d/CIS.conf
-      regexp: "^(#)?install rds(\\s|$)"
-      line: "install rds /bin/true"
-      create: yes
-  when:
-      - rhel7cis_rule_3_5_3|bool
-  tags:
-      - level1
-      - notscored
-      - patch
-      - rule_3.5.3
-
-- name: "NOTSCORED | 3.5.4 | PATCH | Ensure TIPC is disabled"
-  lineinfile:
-      dest: /etc/modprobe.d/CIS.conf
-      regexp: "^(#)?install tipc(\\s|$)"
-      line: "install tipc /bin/true"
-      create: yes
-  when:
-      - rhel7cis_rule_3_5_4|bool
-  tags:
-      - level1
-      - notscored
-      - patch
-      - rule_3.5.4
-
-- name: "SCORED | 3.6.1 | PATCH | Ensure firewalld is installed and started | CUSTOM"
+- name: "SCORED | 3.5.1.1 | PATCH | Ensure firewalld is installed"
   yum:
       name: firewalld
       state: present
-  when: rhel7cis_firewall == "firewalld"
+  when:
+      - rhel7cis_rule_3_5_1_1|bool
+      - rhel7cis_firewall == "firewalld"
   notify: restart firewalld
   tags:
       - level1
       - scored
       - patch
-      - rule_3.6
+      - rule_3.5.1.1
 
-- name: "SCORED | 3.6.1 | PATCH | Ensure firewalld is installed and started | CUSTOM"
-  service:
-      name: firewalld
-      state: started
-      enabled: yes
-  when: rhel7cis_firewall == "firewalld"
+- name: "SCORED | 3.5.1.2 | PATCH | Ensure iptables-service package is not installed"
+  yum:
+      name: iptables-services
+      state: absent
+  when:
+      - rhel7cis_rule_3_5_1_2|bool
+      - rhel7cis_firewall == "firewalld"
   tags:
       - level1
       - scored
       - patch
-      - rule_3.6
+      - rule_3.5.1.2
 
-- name: "SCORED | 3.6.1 | PATCH | Ensure iptables is installed"
+- name: "SCORED | 3.5.1.3 | PATCH | Ensure nftables is not installed or stopped and masked"
+  yum:
+      name: nftables
+      state: absent
+  when:
+      - rhel7cis_rule_3_5_1_3|bool
+      - rhel7cis_firewall == "firewalld"
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.1.3
+
+- name: "SCORED | 3.5.1.4 | PATCH | Ensure firewalld is enabled and running"
+  service:
+      name: firewalld
+      state: started
+      enabled: yes
+  when:
+      - rhel7cis_rule_3_5_1_4|bool
+      - rhel7cis_firewall == "firewalld"
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.1.4
+
+- name: "SCORED | 3.5.1.5 | PATCH | Ensure default zone is set"
+  shell: "firewall-cmd --set-default-zone={{ rhel7cis_firewall_default_zone }}"
+  when:
+      - rhel7cis_rule_3_5_1_5|bool
+      - rhel7cis_firewall == "firewalld"
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.1.5
+
+- name: "SCORED | 3.5.1.6 | PATCH | Ensure network interfaces are assigned to appropriate zone"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_firewall == "firewalld"
+      - rhel7cis_rule_3_5_1_6|bool
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.1.6
+      - notimplemented
+
+- name: "SCORED | 3.5.1.7 | PATCH | Ensure unnecessary services and ports are not accepted"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_firewall == "firewalld"
+      - rhel7cis_rule_3_5_1_7|bool
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.1.7
+      - notimplemented
+
+- name: "SCORED | 3.5.2.1 | Ensure nftables is installed"
+  yum:
+      name: nftables
+      state: present
+  when:
+      - rhel7cis_firewall == "nftables"
+      - rhel7cis_rule_3_5_2_1|bool
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.2.1
+
+- name: "SCORED | 3.5.2.2 | Ensure firewalld is not installed or stopped and masked"
+  yum:
+      name: firewalld
+      state: absent
+  when:
+      - rhel7cis_firewall == "nftables"
+      - rhel7cis_rule_3_5_2_2|bool
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.2.2
+
+- name: "SCORED | 3.5.2.3 | Ensure iptables-services is not installed"
+  yum:
+      name: iptables-services
+      state: absent
+  when:
+      - rhel7cis_firewall == "nftables"
+      - rhel7cis_rule_3_5_2_3|bool
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.2.3
+
+- name: "SCORED | 3.5.2.4 | Ensure iptables are flushed"
+  block:
+
+      - name: "SCORED | 3.5.2.4 | Ensure iptables are flushed | ipv4"
+        iptables:
+            chain: "{{ item }}"
+            flush: yes
+            ip_version: ipv4
+        loop:  [ 'INPUT', 'FORWARD', 'OUTPUT' ]
+
+      - name: "SCORED | 3.5.2.4 | Ensure iptables are flushed | ipv6"
+        iptables:
+            chain: "{{ item }}"
+            flush: yes
+            ip_version: ipv6
+        loop:  [ 'INPUT', 'FORWARD', 'OUTPUT' ]
+  when:
+      - rhel7cis_firewall == "nftables"
+      - rhel7cis_rule_3_5_2_4|bool
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.2.4
+
+- name: "SCORED | 3.5.2.5 | PATCH | Ensure a table exists"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_firewall == "nftables"
+      - rhel7cis_rule_3_5_2_5|bool
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.2.5
+      - notimplemented
+
+- name: "SCORED | 3.5.2.6 | PATCH | Ensure base chains exist"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_firewall == "nftables"
+      - rhel7cis_rule_3_5_2_6|bool
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.2.6
+      - notimplemented
+
+- name: "SCORED | 3.5.2.7 | PATCH | Ensure loopback traffic is configured"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_firewall == "nftables"
+      - rhel7cis_rule_3_5_2_7|bool
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.2.7
+      - notimplemented
+
+- name: "SCORED | 3.5.2.8 | PATCH | Ensure outbound and established connections are configured"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_firewall == "nftables"
+      - rhel7cis_rule_3_5_2_8|bool
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.2.8
+      - notimplemented
+
+- name: "SCORED | 3.5.2.9 | PATCH | Ensure default deny firewall policy"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_firewall == "nftables"
+      - rhel7cis_rule_3_5_2_9|bool
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.2.9
+      - notimplemented
+
+- name: "SCORED | 3.5.2.10 | PATCH | Ensure nftables service is enabled"
+  service:
+      name: nftables
+      enabled: yes
+  when:
+      - rhel7cis_firewall == "nftables"
+      - rhel7cis_rule_3_5_2_10|bool
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.2.10
+
+- name: "SCORED | 3.5.2.11 | PATCH | Ensure nftables rules are permanent"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_firewall == "nftables"
+      - rhel7cis_rule_3_5_2_11|bool
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.2.11
+      - notimplemented
+
+- name: "SCORED | 3.5.3.1.1 | PATCH | Ensure iptables is installed"
   yum:
       name: iptables,iptables-services
       state: present
   when:
       - rhel7cis_firewall == "iptables"
-      - rhel7cis_rule_3_6_1|bool
+      - rhel7cis_rule_3_5_3_1_1|bool
   tags:
       - level1
       - scored
       - patch
-      - rule_3.6.1
+      - rule_3.5.3.1.1
 
-- name: "SCORED | 3.6.1 | PATCH | Ensure iptables is installed and started"
+- name: "SCORED | 3.5.3.1.2 | PATCH | Ensure nftables is not installed"
+  yum:
+      name: nftables
+      state: absent
+  when:
+      - rhel7cis_firewall == "iptables"
+      - rhel7cis_rule_3_5_3_1_2|bool
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.3.1.2
+
+- name: "SCORED | 3.5.3.1.3 | PATCH | Ensure firewalld is not installed or stopped and masked"
+  yum:
+      name: firewalld
+      state: absent
+  when:
+      - rhel7cis_firewall == "iptables"
+      - rhel7cis_rule_3_5_3_1_3|bool
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.3.1.3
+
+- name: "SCORED | 3.5.3.2.1 | PATCH | Ensure default deny firewall policy"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_firewall == "iptables"
+      - rhel7cis_rule_3_5_3_2_1|bool
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.3.2.1
+      - notimplemented
+
+- name: "SCORED | 3.5.3.2.2 | PATCH | Ensure loopback traffic is configured"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_firewall == "iptables"
+      - rhel7cis_rule_3_5_3_2_2|bool
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.3.2.2
+      - notimplemented
+
+- name: "NOTSCORED | 3.5.3.2.3 | PATCH | Ensure outbound and established connections are configured"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_firewall == "iptables"
+      - rhel7cis_rule_3_5_3_2_3|bool
+  tags:
+      - level1
+      - notscored
+      - patch
+      - rule_3.5.3.2.3
+      - notimplemented
+
+- name: "SCORED | 3.5.3.2.4 | PATCH | Ensure firewall rules exist for all open ports"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_firewall == "iptables"
+      - rhel7cis_rule_3_5_3_2_4|bool
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.3.2.4
+      - notimplemented
+
+- name: "SCORED | 3.5.3.2.5 | PATCH | Ensure iptables rules are saved"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_firewall == "iptables"
+      - rhel7cis_rule_3_5_3_2_5|bool
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.3.2.5
+      - notimplemented
+
+- name: "SCORED | 3.5.3.2.6 | PATCH | Ensure iptables is enabled and running"
   service:
       name: iptables
       state: started
       enabled: yes
   when:
       - rhel7cis_firewall == "iptables"
-      - rhel7cis_rule_3_6_1|bool
+      - rhel7cis_rule_3_5_3_2_6|bool
   tags:
       - level1
       - scored
       - patch
-      - rule_3.6.1
+      - rule_3.5.3.2.6
 
-- name: "SCORED | 3.6.2 | PATCH | Ensure default deny firewall policy"
-  lineinfile:
-      dest: /etc/firewalld/firewalld.conf
-      regexp: "^DefaultZone"
-      line: "DefaultZone=drop"
-  when:
-      - rhel7cis_firewall == "firewalld"
-      - rhel7cis_rule_3_6_2|bool
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.6.2
-
-- name: "SCORED | 3.6.2 | PATCH | Ensure default deny firewall policy"
-  firewalld:
-      state: enabled
-      zone: drop
-      permanent: true
-  when:
-      - rhel7cis_firewall == "firewalld"
-      - rhel7cis_rule_3_6_2|bool
-      - ansible_connection != 'docker'
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.6.2
-
-- name: "SCORED | 3.6.2 | PATCH | Ensure default deny firewall policy"
+- name: "SCORED | 3.5.3.3.1 | PATCH | Ensure IPv6 default deny firewall policy"
   command: /bin/true
   changed_when: no
   when:
       - rhel7cis_firewall == "iptables"
-      - rhel7cis_rule_3_6_2|bool
+      - rhel7cis_rule_3_5_3_3_1|bool
   tags:
       - level1
       - scored
       - patch
-      - rule_3.6.2
+      - rule_3.5.3.3.1
       - notimplemented
 
-- name: "SCORED | 3.6.3 | PATCH | Ensure loopback traffic is configured"
+- name: "SCORED | 3.5.3.3.2 | PATCH | Ensure IPv6 loopback traffic is configured"
   command: /bin/true
   changed_when: no
   when:
       - rhel7cis_firewall == "iptables"
-      - rhel7cis_rule_3_6_3|bool
+      - rhel7cis_rule_3_5_3_3_2|bool
   tags:
       - level1
       - scored
       - patch
-      - rule_3.6.3
+      - rule_3.5.3.3.2
       - notimplemented
 
-- name: "NOTSCORED | 3.6.4 | PATCH | Ensure outbound and established connections are configured"
+- name: "NOTSCORED | 3.5.3.3.3 | PATCH | Ensure IPv6 outbound and established connections are configured"
   command: /bin/true
   changed_when: no
   when:
       - rhel7cis_firewall == "iptables"
-      - rhel7cis_rule_3_6_4|bool
+      - rhel7cis_rule_3_5_3_3_3|bool
   tags:
       - level1
       - notscored
       - patch
-      - rule_3.6.4
+      - rule_3.5.3.3.3
       - notimplemented
 
-- name: "SCORED | 3.6.5 | PATCH | Ensure firewall rules exist for all open ports"
-  firewalld:
-      service: "{{ item }}"
-      state: enabled
-      zone: drop
-      permanent: true
-      immediate: true
-  notify: restart firewalld
-  with_items: "{{ rhel7cis_firewall_services }}"
-  when:
-      - rhel7cis_firewall == "firewalld"
-      - rhel7cis_rule_3_6_5|bool
-      - ansible_connection != 'docker'
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.6.5
-
-- name: "SCORED | 3.6.5 | PATCH | Ensure firewall rules exist for all open ports"
+- name: "SCORED | 3.5.3.3.4 | PATCH | Ensure IPv6 firewall rules exist for all open ports"
   command: /bin/true
   changed_when: no
   when:
       - rhel7cis_firewall == "iptables"
-      - rhel7cis_rule_3_6_5|bool
+      - rhel7cis_rule_3_5_3_3_4|bool
   tags:
       - level1
       - scored
       - patch
-      - rule_3.6.5
+      - rule_3.5.3.3.4
       - notimplemented
 
-- name: "NOTSCORED | 3.7 | PATCH | Ensure wireless interfaces are disabled"
+- name: "SCORED | 3.5.3.3.5 | PATCH | Ensure IPv6 iptables rules are saved"
   command: /bin/true
   changed_when: no
   when:
       - rhel7cis_firewall == "iptables"
-      - rhel7cis_rule_3_7|bool
+      - rhel7cis_rule_3_5_3_3_5|bool
   tags:
       - level1
-      - level2
+      - scored
       - patch
-      - notscored
-      - rule_3.7
+      - rule_3.5.3.3.5
       - notimplemented
 
-- name: "NOTSCORED | 3.7 | PATCH | Ensure wireless interfaces are disabled"
-  command: /bin/true
-  changed_when: no
+- name: "SCORED | 3.5.3.3.6 | PATCH | Ensure IPv6 iptables is enabled and running"
+  service:
+      name: iptables
+      state: started
+      enabled: yes
   when:
-      - rhel7cis_firewall == "firewalld"
-      - rhel7cis_rule_3_7|bool
+      - rhel7cis_firewall == "iptables"
+      - rhel7cis_rule_3_5_3_3_6|bool
   tags:
       - level1
-      - level2
+      - scored
       - patch
-      - notscored
-      - rule_3.7
-      - notimplemented
+      - rule_3.5.3.3.6

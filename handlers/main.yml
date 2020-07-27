@@ -51,6 +51,18 @@
       name: xinetd
       state: restarted
 
+- name: restart postfix
+  become: yes
+  service:
+      name: postfix
+      state: restarted
+
+- name: restart journald
+  become: yes
+  service:
+      name: systemd-journald
+      state: restarted
+
 - name: restart sshd
   debug:
       msg: "checking /etc/ssh/sshd_config first"
