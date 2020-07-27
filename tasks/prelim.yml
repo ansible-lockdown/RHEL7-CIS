@@ -134,7 +134,7 @@
   check_mode: no
   tags:
       - skip_ansible_lint #  ANSIBLE0006
-163
+
 - name: "PRELIM | Check for nfs service"
   shell: "systemctl show nfs | grep LoadState | cut -d = -f 2"
   register: nfs_service_status

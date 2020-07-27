@@ -473,15 +473,20 @@
             chain: "{{ item }}"
             flush: yes
             ip_version: ipv4
-        loop:  ['INPUT','FORWARD','OUTPUT']
+        loop:
+            - 'INPUT'
+            - 'FORWARD'
+            - 'OUTPUT'
 
       - name: "SCORED | 3.5.2.4 | Ensure iptables are flushed | ipv6"
         iptables:
             chain: "{{ item }}"
             flush: yes
             ip_version: ipv6
-        loop:  ['INPUT','FORWARD','OUTPUT']
-  when:
+        loop:
+            - 'INPUT'
+            - 'FORWARD'
+            - 'OUTPUT'  when:
       - rhel7cis_firewall == "nftables"
       - rhel7cis_rule_3_5_2_4|bool
   tags:

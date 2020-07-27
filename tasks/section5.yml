@@ -794,27 +794,27 @@
   block:
       - name: "SCORED | 5.4.4 | PATCH | Ensure default user shell timeout is 900 seconds or less - /etc/bash.bashrc"
         lineinfile:
-          state: present
-          dest: /etc/bash.bashrc
-          create: true
-          regexp: '^TMOUT='
-          line: "TMOUT={{ rhel7cis_shell_timeout }}"
+            state: present
+            dest: /etc/bash.bashrc
+            create: true
+            regexp: '^TMOUT='
+            line: "TMOUT={{ rhel7cis_shell_timeout }}"
 
       - name: "SCORED | 5.4.4 | PATCH | Ensure default user shell timeout is 900 seconds or less - /etc/profile"
         lineinfile:
-          state: present
-          dest: /etc/profile
-          create: true
-          regexp: '^TMOUT='
-          line: "TMOUT={{ rhel7cis_shell_timeout }}"
+            state: present
+            dest: /etc/profile
+            create: true
+            regexp: '^TMOUT='
+            line: "TMOUT={{ rhel7cis_shell_timeout }}"
 
       - name: "SCORED | 5.4.4 | PATCH | Ensure default user shell timeout is 900 seconds or less - /etc/profile.d/99-tmout.sh"
         lineinfile:
-          state: present
-          dest: /etc/profile.d/99-tmout.sh
-          create: true
-          regexp: '^TMOUT='
-          line: "TMOUT={{ rhel7cis_shell_timeout }}"
+            state: present
+            dest: /etc/profile.d/99-tmout.sh
+            create: true
+            regexp: '^TMOUT='
+            line: "TMOUT={{ rhel7cis_shell_timeout }}"
   when:
       - rhel7cis_rule_5_4_4
   tags:
