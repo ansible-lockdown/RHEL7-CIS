@@ -3,6 +3,6 @@
 
 - name: Perform YUM package cleanup
   yum:
-    autoremove: true
+      autoremove: true
   tags:
       - skip_ansible_lint

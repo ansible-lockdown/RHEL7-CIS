@@ -659,8 +659,8 @@
       dest: "{{ item }}"
       line: "password required pam_pwhistory.so remember={{ rhel7cis_pass['history'] }}"
   with_items:
-    - /etc/pam.d/password-auth
-    - /etc/pam.d/system-auth
+      - /etc/pam.d/password-auth
+      - /etc/pam.d/system-auth
   when:
       - rhel7cis_rule_5_3_4|bool
   tags:
@@ -717,10 +717,10 @@
 
 - name: "SCORED | 5.4.1.4 | PATCH | Ensure inactive password lock is 30 days or less"
   lineinfile:
-    state: present
-    dest: /etc/default/useradd
-    regexp: '^INACTIVE'
-    line: "PASS_WARN_AGE {{ rhel7cis_pass['inactive'] }}"
+      state: present
+      dest: /etc/default/useradd
+      regexp: '^INACTIVE'
+      line: "PASS_WARN_AGE {{ rhel7cis_pass['inactive'] }}"
   when:
       - rhel7cis_rule_5_4_1_4|bool
   tags:
@@ -792,36 +792,36 @@
 
 - name: "SCORED | 5.4.4 | PATCH | Ensure default user shell timeout is 900 seconds or less"
   block:
-    - name: "SCORED | 5.4.4 | PATCH | Ensure default user shell timeout is 900 seconds or less - /etc/bash.bashrc"
-      lineinfile:
-        state: present
-        dest: /etc/bash.bashrc
-        create: true
-        regexp: '^TMOUT='
-        line: "TMOUT={{ rhel7cis_shell_timeout }}"
+      - name: "SCORED | 5.4.4 | PATCH | Ensure default user shell timeout is 900 seconds or less - /etc/bash.bashrc"
+        lineinfile:
+          state: present
+          dest: /etc/bash.bashrc
+          create: true
+          regexp: '^TMOUT='
+          line: "TMOUT={{ rhel7cis_shell_timeout }}"
 
-    - name: "SCORED | 5.4.4 | PATCH | Ensure default user shell timeout is 900 seconds or less - /etc/profile"
-      lineinfile:
-        state: present
-        dest: /etc/profile
-        create: true
-        regexp: '^TMOUT='
-        line: "TMOUT={{ rhel7cis_shell_timeout }}"
+      - name: "SCORED | 5.4.4 | PATCH | Ensure default user shell timeout is 900 seconds or less - /etc/profile"
+        lineinfile:
+          state: present
+          dest: /etc/profile
+          create: true
+          regexp: '^TMOUT='
+          line: "TMOUT={{ rhel7cis_shell_timeout }}"
 
-    - name: "SCORED | 5.4.4 | PATCH | Ensure default user shell timeout is 900 seconds or less - /etc/profile.d/99-tmout.sh"
-      lineinfile:
-        state: present
-        dest: /etc/profile.d/99-tmout.sh
-        create: true
-        regexp: '^TMOUT='
-        line: "TMOUT={{ rhel7cis_shell_timeout }}"
+      - name: "SCORED | 5.4.4 | PATCH | Ensure default user shell timeout is 900 seconds or less - /etc/profile.d/99-tmout.sh"
+        lineinfile:
+          state: present
+          dest: /etc/profile.d/99-tmout.sh
+          create: true
+          regexp: '^TMOUT='
+          line: "TMOUT={{ rhel7cis_shell_timeout }}"
   when:
-    - rhel7cis_rule_5_4_4
+      - rhel7cis_rule_5_4_4
   tags:
-    - level1
-    - patch
-    - rule_5.4.4
-    - scored
+      - level1
+      - patch
+      - rule_5.4.4
+      - scored
 
 - name: "SCORED | 5.4.5 | PATCH | Ensure default user umask is configured"
   block:

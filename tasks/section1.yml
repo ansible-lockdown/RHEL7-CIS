@@ -98,18 +98,18 @@
             line: "install {{ item }} /bin/true"
             create: yes
         loop:
-          - 'fat'
-          - 'vfat'
-          - 'msdos'
+            - 'fat'
+            - 'vfat'
+            - 'msdos'
 
       - name: "SCORED | 1.1.1.4 | PATCH | Remove FAT module"
         modprobe:
             name: "{{ item }}"
             state: absent
         loop:
-          - 'fat'
-          - 'vfat'
-          - 'msdos'
+            - 'fat'
+            - 'vfat'
+            - 'msdos'
   when:
       - rhel7cis_rule_1_1_1_4|bool
       - ansible_connection != 'docker'
@@ -474,11 +474,11 @@
 
 - name: "SCORED | 1.3.2 | PATCH | Ensure sudo commands use pty"
   lineinfile:
-    dest: /etc/sudoers
-    state: present
-    regexp: '^Defaults use_pty'
-    line: 'Defaults use_pty'
-    validate: 'visudo -cf %s'
+      dest: /etc/sudoers
+      state: present
+      regexp: '^Defaults use_pty'
+      line: 'Defaults use_pty'
+      validate: 'visudo -cf %s'
   when:
       - rhel7cis_rule_1_3_2|bool
   tags:
@@ -490,11 +490,11 @@
 
 - name: "SCORED | 1.3.3 | PATCH | Ensure sudo log file exists"
   lineinfile:
-    dest: /etc/sudoers
-    state: present
-    regexp: '^Defaults logfile.*'
-    line: 'Defaults logfile="/var/log/sudo.log"'
-    validate: 'visudo -cf %s'
+      dest: /etc/sudoers
+      state: present
+      regexp: '^Defaults logfile.*'
+      line: 'Defaults logfile="/var/log/sudo.log"'
+      validate: 'visudo -cf %s'
   when:
       - rhel7cis_rule_1_3_3
   tags:
@@ -652,12 +652,12 @@
 
 - name: "SCORED | 1.6.1 | PATCH | Ensure core dumps are restricted"
   lineinfile:
-    dest: /etc/security/limits.conf
-    line: '*                hard    core            0'
-    regexp: '(^#)?\*\s+hard\s+core\s+[0-9]+'
-    state: present
-    create: true
-    insertbefore: "# End of file"
+      dest: /etc/security/limits.conf
+      line: '*                hard    core            0'
+      regexp: '(^#)?\*\s+hard\s+core\s+[0-9]+'
+      state: present
+      create: true
+      insertbefore: "# End of file"
   when:
       - rhel7cis_rule_1_6_1|bool
   tags:

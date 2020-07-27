@@ -467,14 +467,14 @@
 
 - name: "SCORED | 4.2.2.1 | PATCH | Ensure journald is configured to send logs to rsyslog"
   lineinfile:
-    dest: /etc/systemd/journald.conf
-    regexp: "(#)?ForwardToSyslog=(yes|no)"
-    line: ForwardToSyslog=yes
+      dest: /etc/systemd/journald.conf
+      regexp: "(#)?ForwardToSyslog=(yes|no)"
+      line: ForwardToSyslog=yes
   changed_when: false
   when:
       - rhel7cis_rule_4_2_2_1
   notify:
-    - restart journald
+      - restart journald
   tags:
       - level1
       - scored
@@ -484,13 +484,13 @@
 
 - name: "SCORED | 4.2.2.2 | PATCH | Ensure journald is configured to compress large log files"
   lineinfile:
-    dest: /etc/systemd/journald.conf
-    regexp: "(#)?Compress=(yes|no)"
-    line: Compress=yes
+      dest: /etc/systemd/journald.conf
+      regexp: "(#)?Compress=(yes|no)"
+      line: Compress=yes
   when:
       - rhel7cis_rule_4_2_2_2
   notify:
-    - restart journald
+      - restart journald
   tags:
       - level1
       - scored
@@ -500,13 +500,13 @@
 
 - name: "SCORED | 4.2.2.3 | PATCH | Ensure journald is configured to write logfiles to persistent disk"
   lineinfile:
-    dest: /etc/systemd/journald.conf
-    regexp: "(#)?Storage=(auto|persistent)"
-    line: Storage=persistent
+      dest: /etc/systemd/journald.conf
+      regexp: "(#)?Storage=(auto|persistent)"
+      line: Storage=persistent
   when:
       - rhel7cis_rule_4_2_2_3
   notify:
-    - restart journald
+      - restart journald
   tags:
       - level1
       - scored
