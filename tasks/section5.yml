@@ -113,9 +113,9 @@
             state: absent
 
       - name: "SCORED | 5.1.8 | PATCH | Ensure cron is restricted to authorized users | cron.allow"
-        file:
+        template:
+            src: cron.allow.j2
             dest: /etc/cron.allow
-            state: touch
             owner: root
             group: root
             mode: 0600
@@ -135,9 +135,9 @@
             state: absent
 
       - name: "SCORED | 5.1.9 | PATCH | Ensure at is restricted to authorized users | at.allow"
-        file:
+        template:
+            src: at.allow.j2
             dest: /etc/at.allow
-            state: touch
             owner: root
             group: root
             mode: 0600
