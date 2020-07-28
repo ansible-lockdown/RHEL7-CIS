@@ -66,9 +66,9 @@
         notify:
             - sysctl flush ipv6 route table
         when:
-            - not rhel7cis_ipv6_required
+            - rhel7cis_ipv6_required|bool
   when:
-      - not rhel7cis_is_router
+      - not rhel7cis_is_router|bool
       - rhel7cis_rule_3_2_1|bool
   tags:
       - level1
@@ -91,7 +91,7 @@
   notify:
       - sysctl flush ipv4 route table
   when:
-      - not rhel7cis_is_router
+      - not rhel7cis_is_router|bool
       - rhel7cis_rule_3_2_2|bool
   tags:
       - level1
@@ -129,7 +129,7 @@
         notify:
             - sysctl flush ipv6 route table
         when:
-            - not rhel7cis_ipv6_required
+            - rhel7cis_ipv6_required|bool
   when:
       - rhel7cis_rule_3_3_1|bool
   tags:
@@ -169,7 +169,7 @@
         notify:
             - sysctl flush ipv6 route table
         when:
-            - not rhel7cis_ipv6_required
+            - rhel7cis_ipv6_required|bool
   when:
       - rhel7cis_rule_3_3_2|bool
   tags:
@@ -313,7 +313,7 @@
   notify:
       - sysctl flush ipv6 route table
   when:
-      - rhel7cis_ipv6_required | bool
+      - rhel7cis_ipv6_required|bool
       - rhel7cis_rule_3_3_9|bool
   tags:
       - level1
@@ -503,6 +503,8 @@
             - 'INPUT'
             - 'FORWARD'
             - 'OUTPUT'
+        when:
+            - rhel7cis_ipv6_required|bool
   when:
       - rhel7cis_firewall == "nftables"
       - rhel7cis_rule_3_5_2_4|bool
@@ -727,6 +729,7 @@
   when:
       - rhel7cis_firewall == "iptables"
       - rhel7cis_rule_3_5_3_3_1|bool
+      - rhel7cis_ipv6_required|bool
   tags:
       - level1
       - scored
@@ -740,6 +743,7 @@
   when:
       - rhel7cis_firewall == "iptables"
       - rhel7cis_rule_3_5_3_3_2|bool
+      - rhel7cis_ipv6_required|bool
   tags:
       - level1
       - scored
@@ -753,6 +757,7 @@
   when:
       - rhel7cis_firewall == "iptables"
       - rhel7cis_rule_3_5_3_3_3|bool
+      - rhel7cis_ipv6_required|bool
   tags:
       - level1
       - notscored
@@ -766,6 +771,7 @@
   when:
       - rhel7cis_firewall == "iptables"
       - rhel7cis_rule_3_5_3_3_4|bool
+      - rhel7cis_ipv6_required|bool
   tags:
       - level1
       - scored
@@ -779,6 +785,7 @@
   when:
       - rhel7cis_firewall == "iptables"
       - rhel7cis_rule_3_5_3_3_5|bool
+      - rhel7cis_ipv6_required|bool
   tags:
       - level1
       - scored
@@ -794,6 +801,7 @@
   when:
       - rhel7cis_firewall == "iptables"
       - rhel7cis_rule_3_5_3_3_6|bool
+      - rhel7cis_ipv6_required|bool
   tags:
       - level1
       - scored
