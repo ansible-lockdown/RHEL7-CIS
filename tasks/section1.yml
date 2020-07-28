@@ -760,8 +760,7 @@
       - name: "SCORED | 1.7.1.2 | PATCH | Ensure SELinux is enabled in the bootloader configuration"
         replace:
             dest: /etc/default/grub
-            regexp: '^(GRUB_CMDLINE_LINUX=(?!.*selinux=0)\"[^\"]*)(\".*)'
-            replace: '\1 \2'
+            regexp: '(selinux|enforcing)\s*=\s*0\s*'
             follow: true
         notify:
             - generate new grub config
@@ -769,8 +768,7 @@
       - name: "SCORED | 1.7.1.2 | PATCH | Ensure SELinux is not disabled in bootloader configuration"
         replace:
             dest: /etc/default/grub
-            regexp: '^(GRUB_CMDLINE_LINUX=(?!.*enforcing=0)\"[^\"]*)(\".*)'
-            replace: '\1 \2'
+            regexp: '(selinux|enforcing)\s*=\s*0\s*'
             follow: true
         notify:
             - generate new grub config
