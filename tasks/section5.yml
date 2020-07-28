@@ -720,12 +720,11 @@
       state: present
       dest: /etc/default/useradd
       regexp: '^INACTIVE'
-      line: "PASS_WARN_AGE {{ rhel7cis_pass['inactive'] }}"
+      line: "INACTIVE={{ rhel7cis_pass['inactive'] }}"
   when:
-      - rhel7cis_rule_5_4_1_4|bool
+      - rhel7cis_rule_5_4_1_4
   tags:
       - level1
-      - level2
       - scored
       - patch
       - rule_5.4.1.4
