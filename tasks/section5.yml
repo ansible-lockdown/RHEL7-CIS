@@ -107,12 +107,12 @@
 
 - name: "SCORED | 5.1.8 | PATCH | Ensure cron is restricted to authorized users"
   block:
-      - name: "SCORED | 5.1.8 | PATCH | Ensure cron is restricted to authorized users"
+      - name: "SCORED | 5.1.8 | PATCH | Ensure cron is restricted to authorized users | cron.deny"
         file:
             dest: /etc/cron.deny
             state: absent
 
-      - name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
+      - name: "SCORED | 5.1.8 | PATCH | Ensure cron is restricted to authorized users | cron.allow"
         file:
             dest: /etc/cron.allow
             state: touch
@@ -129,12 +129,12 @@
 
 - name: "SCORED | 5.1.9 | PATCH | Ensure at is restricted to authorized users"
   block:
-      - name: "SCORED | 5.1.9 | PATCH | Ensure at is restricted to authorized users"
+      - name: "SCORED | 5.1.9 | PATCH | Ensure at is restricted to authorized users | at.deny"
         file:
             dest: /etc/at.deny
             state: absent
 
-      - name: "SCORED | 5.1.9 | PATCH | Ensure at is restricted to authorized users"
+      - name: "SCORED | 5.1.9 | PATCH | Ensure at is restricted to authorized users | at.allow"
         file:
             dest: /etc/at.allow
             state: touch
