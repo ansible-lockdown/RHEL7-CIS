@@ -381,6 +381,7 @@
   when:
       - rhel7cis_rule_1_1_24
       - not rhel7cis_skip_for_travis
+  ignore_errors: true
   tags:
       - level1
       - scored
