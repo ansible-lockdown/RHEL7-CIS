@@ -391,6 +391,7 @@
 
 - name: "SCORED | 3.5.1.5 | PATCH | Ensure default zone is set"
   command: "firewall-cmd --set-default-zone={{ rhel7cis_firewall_default_zone }}"
+  changed_when: false
   when:
       - rhel7cis_rule_3_5_1_5|bool
       - rhel7cis_firewall == "firewalld"
