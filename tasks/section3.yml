@@ -644,22 +644,32 @@
       - patch
       - rule_3.5.3.1.3
 
-- name: "SCORED | 3.5.3.2.1 | PATCH | Ensure default deny firewall policy"
-  command: /bin/true
-  changed_when: no
-  when:
-      - rhel7cis_firewall == "iptables"
-      - rhel7cis_rule_3_5_3_2_1|bool
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.5.3.2.1
-      - notimplemented
-
 - name: "SCORED | 3.5.3.2.2 | PATCH | Ensure loopback traffic is configured"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "SCORED | 3.5.3.2.2 | PATCH | Ensure loopback traffic is configured | INPUT ACCEPT lo"
+        iptables:
+            chain: INPUT
+            jump: ACCEPT
+            in_interface: lo
+            action: append
+            ip_version: ipv4
+
+      - name: "SCORED | 3.5.3.2.2 | PATCH | Ensure loopback traffic is configured | OUTPUT ACCEPT lo"
+        iptables:
+            chain: OUTPUT
+            jump: ACCEPT
+            out_interface: lo
+            action: append
+            ip_version: ipv4
+
+      - name: "SCORED | 3.5.3.2.2 | PATCH | Ensure loopback traffic is configured | INPUT DROP 127.0.0.0/8"
+        iptables:
+            chain: INPUT
+            jump: DROP
+            source: 127.0.0.1/8
+            action: append
+            ip_version: ipv4
+
   when:
       - rhel7cis_firewall == "iptables"
       - rhel7cis_rule_3_5_3_2_2|bool
@@ -668,11 +678,68 @@
       - scored
       - patch
       - rule_3.5.3.2.2
-      - notimplemented
 
 - name: "NOTSCORED | 3.5.3.2.3 | PATCH | Ensure outbound and established connections are configured"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "SCORED | 3.5.3.2.3 | PATCH | Ensure outbound and established connections are configured | OUTPUT tcp NEW,ESTABLISHED ACCEPT"
+        iptables:
+            chain: OUTPUT
+            jump: ACCEPT
+            action: append
+            protocol: tcp
+            match: state
+            ctstate: NEW,ESTABLISHED
+            ip_version: ipv4
+
+      - name: "SCORED | 3.5.3.2.3 | PATCH | Ensure outbound and established connections are configured | OUTPUT udp NEW,ESTABLISHED ACCEPT"
+        iptables:
+            chain: OUTPUT
+            jump: ACCEPT
+            action: append
+            protocol: udp
+            match: state
+            ctstate: NEW,ESTABLISHED
+            ip_version: ipv4
+
+      - name: "SCORED | 3.5.3.2.3 | PATCH | Ensure outbound and established connections are configured | OUTPUT icmp NEW,ESTABLISHED ACCEPT"
+        iptables:
+            chain: OUTPUT
+            jump: ACCEPT
+            action: append
+            protocol: icmp
+            match: state
+            ctstate: NEW,ESTABLISHED
+            ip_version: ipv4
+
+      - name: "SCORED | 3.5.3.2.3 | PATCH | Ensure outbound and established connections are configured | INPUT tcp ESTABLISHED ACCEPT"
+        iptables:
+            chain: INPUT
+            jump: ACCEPT
+            action: append
+            protocol: tcp
+            match: state
+            ctstate: ESTABLISHED
+            ip_version: ipv4
+
+      - name: "SCORED | 3.5.3.2.3 | PATCH | Ensure outbound and established connections are configured | INPUT udp ESTABLISHED ACCEPT"
+        iptables:
+            chain: INPUT
+            jump: ACCEPT
+            action: append
+            protocol: udp
+            match: state
+            ctstate: ESTABLISHED
+            ip_version: ipv4
+
+      - name: "SCORED | 3.5.3.2.3 | PATCH | Ensure outbound and established connections are configured | INPUT icmp ESTABLISHED ACCEPT"
+        iptables:
+            chain: INPUT
+            jump: ACCEPT
+            action: append
+            protocol: icmp
+            match: state
+            ctstate: ESTABLISHED
+            ip_version: ipv4
   when:
       - rhel7cis_firewall == "iptables"
       - rhel7cis_rule_3_5_3_2_3|bool
@@ -681,11 +748,25 @@
       - notscored
       - patch
       - rule_3.5.3.2.3
-      - notimplemented
 
 - name: "SCORED | 3.5.3.2.4 | PATCH | Ensure firewall rules exist for all open ports"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "SCORED | 3.5.3.2.4 | PATCH | Ensure firewall rules exist for all open ports"
+        shell: ss -4tuln | awk 'FNR >1'
+        register: open_ports
+        changed_when: no
+
+      - name: "SCORED | 3.5.3.2.4 | PATCH | Ensure firewall rules exist for all open ports"
+        iptables:
+            chain: INPUT
+            jump: ACCEPT
+            action: append
+            protocol: "{{ item.split()[0] }}"
+            match: state
+            ctstate: NEW
+            destination_port: "{{ item.split()[4].split(':')[1] }}"
+            ip_version: ipv4
+        loop: "{{ open_ports['stdout_lines'] }}"
   when:
       - rhel7cis_firewall == "iptables"
       - rhel7cis_rule_3_5_3_2_4|bool
@@ -694,11 +775,34 @@
       - scored
       - patch
       - rule_3.5.3.2.4
-      - notimplemented
+
+- name: "SCORED | 3.5.3.2.1 | PATCH | Ensure default deny firewall policy"
+  iptables:
+      chain: "{{ item }}"
+      policy: DROP
+      ip_version: ipv4
+  loop:
+      - 'INPUT'
+      - 'FORWARD'
+      - 'OUTPUT'
+  when:
+      - rhel7cis_firewall == "iptables"
+      - rhel7cis_rule_3_5_3_2_1|bool
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.3.2.1
 
 - name: "SCORED | 3.5.3.2.5 | PATCH | Ensure iptables rules are saved"
-  command: /bin/true
-  changed_when: no
+  replace:
+      path: /etc/sysconfig/iptables-config
+      regexp: '^(#?){{ item }}=(.*)'
+      replace: '{{ item }}="yes"'
+  loop:
+      - IPTABLES_SAVE_ON_STOP
+      - IPTABLES_SAVE_ON_RESTART
+      - IPTABLES_SAVE_COUNTER
   when:
       - rhel7cis_firewall == "iptables"
       - rhel7cis_rule_3_5_3_2_5|bool
@@ -707,7 +811,6 @@
       - scored
       - patch
       - rule_3.5.3.2.5
-      - notimplemented
 
 - name: "SCORED | 3.5.3.2.6 | PATCH | Ensure iptables is enabled and running"
   service:
@@ -723,23 +826,31 @@
       - patch
       - rule_3.5.3.2.6
 
-- name: "SCORED | 3.5.3.3.1 | PATCH | Ensure IPv6 default deny firewall policy"
-  command: /bin/true
-  changed_when: no
-  when:
-      - rhel7cis_firewall == "iptables"
-      - rhel7cis_rule_3_5_3_3_1|bool
-      - rhel7cis_ipv6_required|bool
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.5.3.3.1
-      - notimplemented
-
 - name: "SCORED | 3.5.3.3.2 | PATCH | Ensure IPv6 loopback traffic is configured"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "SCORED | 3.5.3.3.2 | PATCH | Ensure IPv6 loopback traffic is configured | INPUT ACCEPT lo"
+        iptables:
+            chain: INPUT
+            jump: ACCEPT
+            in_interface: lo
+            action: append
+            ip_version: ipv6
+
+      - name: "SCORED | 3.5.3.3.2 | PATCH | Ensure IPv6 loopback traffic is configured | OUTPUT ACCEPT lo"
+        iptables:
+            chain: OUTPUT
+            jump: ACCEPT
+            out_interface: lo
+            action: append
+            ip_version: ipv6
+
+      - name: "SCORED | 3.5.3.3.2 | PATCH | Ensure IPv6 loopback traffic is configured | INPUT DROP 127.0.0.0/8"
+        iptables:
+            chain: INPUT
+            jump: DROP
+            source: '::1'
+            action: append
+            ip_version: ipv6
   when:
       - rhel7cis_firewall == "iptables"
       - rhel7cis_rule_3_5_3_3_2|bool
@@ -749,11 +860,68 @@
       - scored
       - patch
       - rule_3.5.3.3.2
-      - notimplemented
 
 - name: "NOTSCORED | 3.5.3.3.3 | PATCH | Ensure IPv6 outbound and established connections are configured"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "SCORED | 3.5.3.3.3 | PATCH | Ensure IPv6 outbound and established connections are configured | OUTPUT tcp NEW,ESTABLISHED ACCEPT"
+        iptables:
+            chain: OUTPUT
+            jump: ACCEPT
+            action: append
+            protocol: tcp
+            match: state
+            ctstate: NEW,ESTABLISHED
+            ip_version: ipv6
+
+      - name: "SCORED | 3.5.3.3.3 | PATCH | Ensure IPv6 outbound and established connections are configured | OUTPUT udp NEW,ESTABLISHED ACCEPT"
+        iptables:
+            chain: OUTPUT
+            jump: ACCEPT
+            action: append
+            protocol: udp
+            match: state
+            ctstate: NEW,ESTABLISHED
+            ip_version: ipv6
+
+      - name: "SCORED | 3.5.3.3.3 | PATCH | Ensure IPv6 outbound and established connections are configured | OUTPUT icmp NEW,ESTABLISHED ACCEPT"
+        iptables:
+            chain: OUTPUT
+            jump: ACCEPT
+            action: append
+            protocol: icmp
+            match: state
+            ctstate: NEW,ESTABLISHED
+            ip_version: ipv6
+
+      - name: "SCORED | 3.5.3.3.3 | PATCH | Ensure IPv6 outbound and established connections are configured | INPUT tcp ESTABLISHED ACCEPT"
+        iptables:
+            chain: INPUT
+            jump: ACCEPT
+            action: append
+            protocol: tcp
+            match: state
+            ctstate: ESTABLISHED
+            ip_version: ipv6
+
+      - name: "SCORED | 3.5.3.3.3 | PATCH | Ensure IPv6 outbound and established connections are configured | INPUT udp ESTABLISHED ACCEPT"
+        iptables:
+            chain: INPUT
+            jump: ACCEPT
+            action: append
+            protocol: udp
+            match: state
+            ctstate: ESTABLISHED
+            ip_version: ipv6
+
+      - name: "SCORED | 3.5.3.3.3 | PATCH | Ensure IPv6 outbound and established connections are configured | INPUT icmp ESTABLISHED ACCEPT"
+        iptables:
+            chain: INPUT
+            jump: ACCEPT
+            action: append
+            protocol: icmp
+            match: state
+            ctstate: ESTABLISHED
+            ip_version: ipv6
   when:
       - rhel7cis_firewall == "iptables"
       - rhel7cis_rule_3_5_3_3_3|bool
@@ -763,11 +931,25 @@
       - notscored
       - patch
       - rule_3.5.3.3.3
-      - notimplemented
 
 - name: "SCORED | 3.5.3.3.4 | PATCH | Ensure IPv6 firewall rules exist for all open ports"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "SCORED | 3.5.3.3.4 | PATCH | Ensure IPv6 firewall rules exist for all open ports"
+        shell: ss -6tuln | awk 'FNR >1'
+        register: open_ports
+        changed_when: no
+
+      - name: "SCORED | 3.5.3.3.4 | PATCH | Ensure IPv6 firewall rules exist for all open ports"
+        iptables:
+            chain: INPUT
+            jump: ACCEPT
+            action: append
+            protocol: "{{ item.split()[0] }}"
+            match: state
+            ctstate: NEW
+            destination_port: "{{ item.split()[4].split('[::1]:')[1] }}"
+            ip_version: ipv6
+        loop: "{{ open_ports['stdout_lines'] }}"
   when:
       - rhel7cis_firewall == "iptables"
       - rhel7cis_rule_3_5_3_3_4|bool
@@ -777,11 +959,35 @@
       - scored
       - patch
       - rule_3.5.3.3.4
-      - notimplemented
+
+- name: "SCORED | 3.5.3.3.1 | PATCH | Ensure IPv6 default deny firewall policy"
+  iptables:
+      chain: "{{ item }}"
+      policy: DROP
+      ip_version: ipv6
+  loop:
+      - 'INPUT'
+      - 'FORWARD'
+      - 'OUTPUT'
+  when:
+      - rhel7cis_firewall == "iptables"
+      - rhel7cis_rule_3_5_3_3_1|bool
+      - rhel7cis_ipv6_required|bool
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.3.3.1
 
 - name: "SCORED | 3.5.3.3.5 | PATCH | Ensure IPv6 iptables rules are saved"
-  command: /bin/true
-  changed_when: no
+  replace:
+      path: /etc/sysconfig/ip6tables-config
+      regexp: '^(#?){{ item }}=(.*)'
+      replace: '{{ item }}="yes"'
+  loop:
+      - IP6TABLES_SAVE_ON_STOP
+      - IP6TABLES_SAVE_ON_RESTART
+      - IP6TABLES_SAVE_COUNTER
   when:
       - rhel7cis_firewall == "iptables"
       - rhel7cis_rule_3_5_3_3_5|bool
@@ -791,7 +997,6 @@
       - scored
       - patch
       - rule_3.5.3.3.5
-      - notimplemented
 
 - name: "SCORED | 3.5.3.3.6 | PATCH | Ensure IPv6 iptables is enabled and running"
   service:
