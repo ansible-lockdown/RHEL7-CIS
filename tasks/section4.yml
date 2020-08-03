@@ -340,6 +340,7 @@
         shell: "grep -r logfile /etc/sudoers* | sed -e 's/.*logfile=//;s/,? .*//'"
         register: sudo_log
         notify: restart auditd
+        changed_when: false
 
       - name: "SCORED | 4.1.15 | PATCH | Ensure system administrator actions (sudolog) are collected"
         template:
