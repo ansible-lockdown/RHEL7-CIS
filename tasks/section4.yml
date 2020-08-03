@@ -335,15 +335,23 @@
       - rule_4.1.14
 
 - name: "SCORED | 4.1.15 | PATCH | Ensure system administrator actions (sudolog) are collected"
-  template:
-      src: audit/rhel7cis_rule_4_1_15.rules.j2
-      dest: /etc/audit/rules.d/rhel7cis_rule_4_1_15.rules
-      owner: root
-      group: root
-      mode: 0600
+  block:
+      - name: "SCORED | 4.1.15 | PATCH | Ensure system administrator actions (sudolog) are collected"
+        shell: "grep -r logfile /etc/sudoers* | sed -e 's/.*logfile=//;s/,? .*//'"
+        register: sudo_log
+        notify: restart auditd
+
+      - name: "SCORED | 4.1.15 | PATCH | Ensure system administrator actions (sudolog) are collected"
+        template:
+            src: audit/rhel7cis_rule_4_1_15.rules.j2
+            dest: /etc/audit/rules.d/rhel7cis_rule_4_1_15.rules
+            owner: root
+            group: root
+            mode: 0600
+        notify: restart auditd
+
   when:
       - rhel7cis_rule_4_1_15|bool
-  notify: restart auditd
   tags:
       - level2
       - scored

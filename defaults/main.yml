@@ -402,8 +402,6 @@ rhel7cis_auditd:
 
 rhel7cis_logrotate: "daily"
 
-rhel7cis_sudolog: /var/log/secure
-
 ## Section5 vars
 
 rhel7cis_sshd:
