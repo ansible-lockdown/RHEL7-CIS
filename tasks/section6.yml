@@ -71,7 +71,7 @@
       dest: /etc/passwd-
       owner: root
       group: root
-      mode: 0600
+      mode: 0644
   when:
       - rhel7cis_rule_6_1_6|bool
   tags:
