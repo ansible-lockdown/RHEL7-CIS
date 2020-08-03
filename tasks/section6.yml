@@ -431,6 +431,7 @@
       - scored
       - patch
       - rule_6.2.17
+      - notimplemented
 
 - name: "SCORED | 6.2.18 | PATCH | Ensure shadow group is empty"
   command: /bin/true
@@ -442,3 +443,4 @@
       - scored
       - patch
       - rule_6.2.18
+      - notimplemented
