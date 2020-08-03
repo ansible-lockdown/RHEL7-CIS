@@ -58,7 +58,7 @@
             - sysctl flush ipv4 route table
       - name: "SCORED | 3.2.1 | PATCH | Ensure IP forwarding is disabled | ipv6"
         sysctl:
-            name: net.ipv6.ip_forward
+            name: net.ipv6.conf.all.forwarding
             value: '0'
             state: present
             reload: yes
