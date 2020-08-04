@@ -1,27 +1,11 @@
 - name: "NOTSCORED | 3.1.1 | PATCH | Ensure IPv6 is disabled"
-  block:
-      - name: "NOTSCORED | 3.1.1 | PATCH | Ensure IPv6 is disabled | Grub"
-        replace:
-            dest: /etc/default/grub
-            regexp: '^(GRUB_CMDLINE_LINUX=(?!.*ipv6.disable)\"[^\"]*)(\".*)'
-            replace: '\1 ipv6.disable=1\2'
-            follow: true
-        notify:
-            - grub2cfg
-
-      - name: "NOTSCORED | 3.1.1 | PATCH | Ensure IPv6 is disabled | Sysctl"
-        sysctl:
-            name: '{{ item.name }}'
-            value: '{{ item.value }}'
-            sysctl_set: yes
-            state: present
-            reload: yes
-            ignoreerrors: yes
-        with_items:
-            - { name: net.ipv6.conf.all.disable_ipv6, value: 1 }
-            - { name: net.ipv6.conf.default.disable_ipv6, value: 1 }
-        notify:
-            - sysctl flush ipv6 route table
+  replace:
+      dest: /etc/default/grub
+      regexp: '^(GRUB_CMDLINE_LINUX=(?!.*ipv6.disable)\"[^\"]*)(\".*)'
+      replace: '\1 ipv6.disable=1\2'
+      follow: true
+  notify:
+      - grub2cfg
   when:
       - not rhel7cis_ipv6_required|bool
       - rhel7cis_rule_3_1_1|bool
