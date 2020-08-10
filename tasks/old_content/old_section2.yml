@@ -1,3 +1,4 @@
+---
 - name: "SCORED | 2.1.1 | AUDIT | Remove telnet-server"
   command: rpm -q telnet-server
   register: result

@@ -1,3 +1,4 @@
+---
 - name: "SCORED | 3.1.1 | PATCH | Ensure IP forwarding is disabled"
   sysctl:
       name: net.ipv4.ip_forward
@@ -194,7 +195,7 @@
       - patch
       - rule_3.2.8
 
-- name: "SCORED | 3.3.1 | PATCH | Ensure IPv6 router advertisements are not accepted"
+- name: "NOTSCORED | 3.3.1 | PATCH | Ensure IPv6 router advertisements are not accepted"
   sysctl:
       name: '{{ item.name }}'
       value: '{{ item.value }}'
@@ -216,7 +217,7 @@
       - patch
       - rule_3.3.1
 
-- name: "SCORED | 3.3.2 | PATCH | Ensure IPv6 redirects are not accepted"
+- name: "NOTSCORED | 3.3.2 | PATCH | Ensure IPv6 redirects are not accepted"
   sysctl:
       name: '{{ item.name }}'
       value: '{{ item.value }}'
@@ -304,7 +305,7 @@
       - patch
       - rule_3.4.4
 
-- name: "SCORED | 3.4.5 | PATCH | Ensure permissions on /etc/hosts.deny are 644"
+- name: "SCORED | 3.4.5 | PATCH | Ensure permissions on /etc/hosts.deny are configured"
   file:
       dest: /etc/hosts.deny
       owner: root
@@ -444,20 +445,52 @@
       - rule_3.6.2
 
 - name: "SCORED | 3.6.2 | PATCH | Ensure default deny firewall policy"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "SCORED | 3.6.2 | PATCH | Ensure default deny firewall policy | Configure ssh to be allowed"
+        iptables:
+            chain: INPUT
+            protocol: tcp
+            destination_port: "22"
+            jump: ACCEPT
+
+      - name: "SCORED | 3.6.2 | PATCH | Ensure default deny firewall policy | Set drop items"
+        iptables:
+            policy: DROP
+            chain: "{{ item }}"
+        with_items:
+            - INPUT
+            - FORWARD
+            - OUTPUT
   when:
-      - rhel7cis_firewall == "iptables"
       - rhel7cis_rule_3_6_2|bool
+      - rhel7cis_firewall == 'iptables'
   tags:
       - level1
       - patch
       - rule_3.6.2
-      - notimplemented
 
 - name: "SCORED | 3.6.3 | PATCH | Ensure loopback traffic is configured"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "SCORED | 3.6.3 | PATCH | Ensure loopback traffic is configured | INPUT Loopback ACCEPT"
+        iptables:
+            action: append
+            chain: INPUT
+            in_interface: lo
+            jump: ACCEPT
+
+      - name: "SCORED | 3.6.3 | PATCH | Ensure loopback traffic is configured | OUTPUT Loopback ACCEPT"
+        iptables:
+            action: append
+            chain: OUTPUT
+            out_interface: lo
+            jump: ACCEPT
+
+      - name: "SCORED | 3.6.3 | PATCH | Ensure loopback traffic is configured | INPUT Loopback 127.0.0.0/8"
+        iptables:
+            action: append
+            chain: INPUT
+            source: 127.0.0.0/8
+            jump: DROP
   when:
       - rhel7cis_firewall == "iptables"
       - rhel7cis_rule_3_6_3|bool
@@ -465,11 +498,22 @@
       - level1
       - patch
       - rule_3.6.3
-      - notimplemented
 
 - name: "NOTSCORED | 3.6.4 | PATCH | Ensure outbound and established connections are configured"
-  command: /bin/true
-  changed_when: no
+  iptables:
+      action: append
+      chain: '{{ item.chain }}'
+      protocol: '{{ item.protocol }}'
+      match: state
+      ctstate: '{{ item.ctstate }}'
+      jump: ACCEPT
+  with_items:
+      - { chain: OUTPUT, protocol: tcp, ctstate: 'NEW,ESTABLISHED' }
+      - { chain: OUTPUT, protocol: udp, ctstate: 'NEW,ESTABLISHED' }
+      - { chain: OUTPUT, protocol: icmp, ctstate: 'NEW,ESTABLISHED' }
+      - { chain: INPUT, protocol: tcp, ctstate: ESTABLISHED }
+      - { chain: INPUT, protocol: udp, ctstate: ESTABLISHED }
+      - { chain: INPUT, protocol: icmp, ctstate: ESTABLISHED }
   when:
       - rhel7cis_firewall == "iptables"
       - rhel7cis_rule_3_6_4|bool
@@ -477,7 +521,6 @@
       - level1
       - patch
       - rule_3.6.4
-      - notimplemented
 
 - name: "SCORED | 3.6.5 | PATCH | Ensure firewall rules exist for all open ports"
   firewalld:
@@ -498,8 +541,44 @@
       - rule_3.6.5
 
 - name: "SCORED | 3.6.5 | PATCH | Ensure firewall rules exist for all open ports"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "SCORED | 3.6.5 | AUDIT | Ensure firewall rules exist for all open ports | Get list of TCP open ports"
+        shell: netstat -ant |grep "tcp.*LISTEN" | awk '{ print $4 }'| sed 's/.*://'
+        become: yes
+        register: rhel7cis_3_6_5_otcp
+
+      - name: "SCORED | 3.6.5 | AUDIT | Ensure firewall rules exist for all open ports | Get the list of udp open ports"
+        shell: netstat -ant |grep "udp.*LISTEN" | awk '{ print $4 }'| sed 's/.*://'
+        become: yes
+        register: rhel7cis_3_6_5_oudp
+
+      - name: "SCORED | 3.6.5 | PATCH | Ensure firewall rules exist for all open ports| Adjust open tcp ports"
+        iptables:
+            action: append
+            chain: INPUT
+            protocol: tcp
+            destination_port: "{{ item }}"
+            match: state
+            ctstate: NEW
+            jump: ACCEPT
+        with_items:
+            - "{{ rhel7cis_3_6_5_otcp.stdout_lines }}"
+        when:
+            - rhel7cis_3_6_5_otcp.stdout is defined
+
+      - name: "SCORED | 3.6.5 | PATCH | Ensure firewall rules exist for all open ports | Adjust open udp ports"
+        iptables:
+            action: append
+            chain: INPUT
+            protocol: udp
+            destination_port: "{{ item }}"
+            match: state
+            ctstate: NEW
+            jump: ACCEPT
+        with_items:
+            - "{{ rhel7cis_3_6_5_oudp.stdout_lines }}"
+        when:
+            - rhel7cis_3_6_5_otcp.stdout is defined
   when:
       - rhel7cis_firewall == "iptables"
       - rhel7cis_rule_3_6_5|bool
@@ -507,13 +586,30 @@
       - level1
       - patch
       - rule_3.6.5
-      - notimplemented
 
 - name: "NOTSCORED | 3.7 | PATCH | Ensure wireless interfaces are disabled"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "NOTSCORED | 3.7 | AUDIT | Ensure wireless interfaces are disabled | Check if nmcli command is available"
+        command: rpm -q NetworkManager
+        args:
+            warn: no
+        check_mode: no
+        changed_when: no
+        register: rhel_07_nmcli_available
+        failed_when: no
+
+      - name: "NOTSCORED | 3.7 | AUDIT | Ensure wireless interfaces are disabled | Check if wifi is enabled"
+        command: nmcli radio wifi
+        register: rhel_07_wifi_enabled
+        check_mode: no
+        changed_when: rhel_07_wifi_enabled.stdout != "disabled"
+        when: rhel_07_nmcli_available.rc == 0
+
+      - name: "NOTSCORED | 3.7 | PATCH | Ensure wireless interfaces are disabled | Disable wifi if enabled"
+        command: nmcli radio wifi off
+        when: rhel_07_wifi_enabled is changed
+  when:
+      - rhel7cis_rule_3_7|bool
   tags:
       - level1
       - level2
-      - patch
-      - rule_3.7

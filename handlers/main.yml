@@ -52,24 +52,7 @@
       state: restarted
 
 - name: restart sshd
-  debug:
-      msg: "checking /etc/ssh/sshd_config first"
-  changed_when: true
-  notify:
-      - generate host keys
-      - check sshd configuration
-      - restart sshd - after config check
-
-- name: generate host keys
-  command: '/usr/bin/ssh-keygen -A'
-  register: ssh_host_keys
-
-- name: check sshd configuration
-  command: '/usr/sbin/sshd -t'
-  register: sshd_config
-  changed_when: "sshd_config.rc != 0"
-
-- name: restart sshd - after config check
+  become: yes
   service:
       name: sshd
       state: restarted
@@ -93,3 +76,25 @@
 - name: grub2cfg
   command: /sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
   ignore_errors: True
+
+- name: prereport score
+  debug:
+      msg: "Pre-run OpenSCAP score is {{ rhel7cis_prescanresults.Benchmark.TestResult.score['#text'] }}"
+  when: rhel7cis_oscap_scan
+
+- name: postreport score
+  debug:
+      msg: "Post-run OpenSCAP score is {{ rhel7cis_postscanresults.Benchmark.TestResult.score['#text'] }}"
+  when: rhel7cis_oscap_scan
+
+- name: restart rsyslog
+  become: yes
+  service:
+      name: rsyslog
+      state: restarted
+
+- name: restart syslog-ng
+  become: yes
+  service:
+      name: syslog-ng
+      state: restarted

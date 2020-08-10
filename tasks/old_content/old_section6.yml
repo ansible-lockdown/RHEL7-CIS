@@ -1,3 +1,4 @@
+---
 - name: "SCORED | 6.1.1 | AUDIT | Enable anacron Daemon"
   command: rpm -q cronie-anacron
   register: result
@@ -689,6 +690,9 @@
 
 - name: "SCORED | 6.3.1 | PATCH | Upgrade Password Hashing Algorithm to SHA-512"
   command: authconfig --passalgo=sha512 --update
+  check_mode: no
+  changed_when: no
+  ignore_errors: yes
   tags:
       - level1
       - level2

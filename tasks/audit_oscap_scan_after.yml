@@ -1,0 +1,24 @@
+---
+- name: run another report
+  shell: "oscap xccdf eval \
+      --datastream-id scap_org.open-scap_datastream_from_xccdf_ssg-rhel7-xccdf-1.2.xml \
+      --xccdf-id scap_org.open-scap_cref_ssg-rhel7-xccdf-1.2.xml \
+      --profile {{ rhel7cis_scap_profile }} \
+      --oval-results \
+      --results {{ rhel7cis_report_dir }}/{{ ansible_hostname }}-oscap-postreport.xml \
+      --report {{ rhel7cis_report_dir }}/{{ ansible_hostname }}-oscap-postreport.html \
+      --fetch-remote-resources {{ distrocontent }}"
+  ignore_errors: true
+  changed_when: false
+  failed_when: false
+
+- name: Get the second scan result from the XML
+  slurp:
+      path: "{{ rhel7cis_report_dir }}/{{ ansible_hostname }}-oscap-postreport.xml"
+  register: rhel7cis_postreport
+
+- name: let's set a dict of the second result
+  set_fact:
+      rhel7cis_postscanresults: "{{ rhel7cis_postreport['content'] | b64decode | xml2json }}"
+  changed_when: true
+  notify: postreport score

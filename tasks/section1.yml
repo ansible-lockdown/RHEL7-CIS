@@ -1,3 +1,4 @@
+---
 - name: "SCORED | 1.1.1.1 | PATCH | Ensure mounting of cramfs filesystems is disabled"
   lineinfile:
       dest: /etc/modprobe.d/CIS.conf
@@ -211,7 +212,7 @@
   when:
       - rhel7cis_rule_1_1_1_8|bool
   tags:
-      - level1
+      - level2
       - scored
       - patch
       - rule_1.1.1.8
@@ -232,12 +233,20 @@
       - vfat
 
 - name: "SCORED | 1.1.2 | PATCH | Ensure separate partition exists for /tmp | enable and start/restart tmp.mount"
-  systemd:
-      name: tmp.mount
-      daemon_reload: yes
-      enabled: yes
-      masked: no
-      state: started
+  block:
+      - name: "SCORED | 1.1.2 | PATCH | Ensure separate partition exists for /tmp | change mount options in config file for systemd"
+        lineinfile:
+            path: /etc/selinux/config
+            regexp: "^Options=mode"
+            line: "Options=mode=1777,strictatime,noexec,nodev,nosuid"
+
+      - name: "SCORED | 1.1.2 | PATCH | Ensure separate partition exists for /tmp | enforce systemd enabled service"
+        systemd:
+            name: tmp.mount
+            daemon_reload: yes
+            enabled: yes
+            masked: no
+            state: started
   when:
       - rhel7cis_rule_1_1_2|bool
   tags:
@@ -246,10 +255,11 @@
       - patch
       - rule_1.1.2
 
-- name: "SCORED | 1.1.3 | PATCH | Ensure nodev option set on /tmp partition\n
-         SCORED | 1.1.4 | PATCH | Ensure nosuid option set on /tmp partition\n
-         SCORED | 1.1.5 | PATCH | Ensure noexec option set on /tmp partition\n
-         | drop custom tmp.mount"
+- name: |
+        "SCORED | 1.1.3 | PATCH | Ensure nodev option set on /tmp partition"
+        "SCORED | 1.1.4 | PATCH | Ensure nosuid option set on /tmp partition"
+        "SCORED | 1.1.5 | PATCH | Ensure noexec option set on /tmp partition"
+        "| drop custom tmp.mount"
   copy:
       src: etc/systemd/system/tmp.mount
       dest: /etc/systemd/system/tmp.mount
@@ -299,9 +309,10 @@
       - rule_1.1.7
       - skip_ansible_lint
 
-- name: "SCORED | 1.1.8  | PATCH | Ensure nodev option set on /var/tmp partition\n
-         SCORED | 1.1.9  | PATCH | Ensure nosuid option set on /var/tmp partition\n
-         SCORED | 1.1.10 | PATCH | Ensure noexec option set on /var/tmp partition"
+- name: |
+          "SCORED | 1.1.8  | PATCH | Ensure nodev option set on /var/tmp partition |
+           SCORED | 1.1.9  | PATCH | Ensure nosuid option set on /var/tmp partition |
+           SCORED | 1.1.10 | PATCH | Ensure noexec option set on /var/tmp partition"
   mount:
       name: /var/tmp
       src: "{{ rhel7cis_vartmp['source'] }}"
@@ -376,13 +387,13 @@
   with_items: "{{ ansible_mounts }}"
   tags:
       - level1
-      - level2
       - patch
       - rule_1.1.14
 
-- name: "SCORED | 1.1.15 | PATCH | Ensure nodev option set on /dev/shm partition\n
-         SCORED | 1.1.16 | PATCH | Ensure nosuid option set on /dev/shm partition\n
-         SCORED | 1.1.17 | PATCH | Ensure noexec option set on /dev/shm partition"
+- name: |
+         "SCORED | 1.1.15 | PATCH | Ensure nodev option set on /dev/shm partition |
+          SCORED | 1.1.16 | PATCH | Ensure nosuid option set on /dev/shm partition |
+          SCORED | 1.1.17 | PATCH | Ensure noexec option set on /dev/shm partition"
   mount:
       name: /dev/shm
       src: tmpfs
@@ -438,15 +449,14 @@
       - rule_1.1.20
 
 - name: "SCORED | 1.1.21 | PATCH | Ensure sticky bit is set on all world-writable directories"
-  shell: set -o pipefail && df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d -perm -0002 2>/dev/null | xargs chmod a+t
+  shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d -perm -0002 2>/dev/null | xargs chmod a+t
   changed_when: no
   failed_when: no
-  #when: sticky_bit_on_worldwritable_dirs_audit.rc == '0'
+  # when: sticky_bit_on_worldwritable_dirs_audit.rc == '0'
   when:
       - rhel7cis_rule_1_1_21|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_1.1.21
 
@@ -460,6 +470,7 @@
       - rhel7cis_rule_1_1_22|bool
   tags:
       - level1
+      - level2
       - patch
       - rule_1.1.22
 
@@ -521,9 +532,8 @@
       - patch
       - rule_1.2.2
 
-- name: "NOTSCORED | 1.2.3 | AUDIT | Ensure GPG keys are configured"
+- name: "NOTSCORED | 1.2.3 | PATCH | Ensure GPG keys are configured"
   command: gpg --quiet --with-fingerprint /etc/pki/rpm-gpg/RPM-GPG-KEY-{{ ansible_distribution|lower }}-release
-  changed_when: no
   when:
       - rhel7cis_rule_1_2_3|bool
       - ansible_distribution == "RedHat"
@@ -584,7 +594,6 @@
   when:
       - rhel7cis_config_aide|bool
       - rhel7cis_rule_1_3_1|bool
-      - not ansible_check_mode
   tags:
       - level1
       - scored
@@ -633,8 +642,8 @@
       group: root
       mode: 0600
   when:
-      - rhel7cis_rule_1_4_1|bool
       - grub_cfg.stat.exists and grub_cfg.stat.islnk
+      - rhel7cis_rule_1_4_1|bool
   tags:
       - level1
       - scored
@@ -663,7 +672,7 @@
   notify: generate new grub config
   when:
       - rhel7cis_set_boot_pass|bool
-      - grub_pass is defined and grub_pass.passhash is defined and grub_pass.passhash
+      - grub_pass is defined and grub_pass.passhash is defined and grub_pass.passhash != ''
       - rhel7cis_rule_1_4_2|bool
   tags:
       - level1
@@ -674,7 +683,7 @@
 
 - name: "NOTSCORED | 1.4.3 | PATCH | Ensure authentication required for single user mode"
   block:
-      - name: "NOTSCORED | 1.4.3 | PATCH | Ensure authentication required for single user mode - Emergency"
+      - name: "NOTSCORED | 1.4.3 | PATCH | Ensure authentication required for single user mode | Emergency service"
         lineinfile:
             dest: /usr/lib/systemd/system/emergency.service
             regexp: '/sbin/sulogin'
@@ -684,10 +693,9 @@
             - ansible_distribution_major_version == 7
         tags:
             - level1
-            - level2
             - patch
             - rule_1.4.3
-      - name: "NOTSCORED | 1.4.3 | PATCH | Ensure authentication required for single user mode - Rescue"
+      - name: "NOTSCORED | 1.4.3 | PATCH | Ensure authentication required for single user mode | Rescue service"
         lineinfile:
             dest: /usr/lib/systemd/system/rescue.service
             regexp: '/sbin/sulogin'
@@ -697,7 +705,6 @@
             - ansible_distribution_major_version == 7
         tags:
             - level1
-            - level2
             - patch
             - rule_1.4.3
 
@@ -735,13 +742,12 @@
       - rule_1.5.1
 
 - name: "NOTSCORED | 1.5.2 | PATCH | Ensure XD/NX support is enabled"
-  shell: set -o pipefail && dmesg | grep -E "NX|XD" | grep " active"
+  shell: dmesg|grep -E "NX|XD" | grep " active"
   changed_when: no
   when:
       - rhel7cis_rule_1_5_2|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_1.5.2
 
@@ -854,6 +860,29 @@
       - scored
       - patch
       - rule_1.6.1.5
+
+- name: "SCORED | 1.6.1.6 | AUDIT | Ensure no unconfined daemons exist"
+  block:
+      - name: "SCORED | 1.6.1.6 | AUDIT | Ensure no unconfined daemons exist | Find the unconfined daemons"
+        shell: ps -eZ | egrep "initrc" | egrep -vw "tr|ps|egrep|bash|awk" | tr ':' ' ' | awk '{ print $NF }'
+        register: rhelcis_1_6_1_6_unconf_daemons
+        failed_when: no
+        changed_when: no
+      - name: "SCORED | 1.6.1.6 | AUDIT | Ensure no unconfined daemons exist | Message on no unconfined daemones"
+        debug:
+            msg: "Good News! There are no unconfined daemons found on your system"
+        when: rhelcis_1_6_1_6_unconf_daemons.stdout == ""
+
+      - name: "SCORED | 1.6.1.6 | AUDIT | Ensure no unconfined daemons exist | Message on unconfined daemones"
+        debug:
+            msg: "Warning! You have unconfined daemons: {{ rhelcis_1_6_1_6_unconf_daemons.stdout_lines }}"
+        when: rhelcis_1_6_1_6_unconf_daemons.stdout != ""
+  when:
+      - rhel7cis_rule_1_6_1_6|bool
+  tags:
+      - level2
+      - patch
+      - rule_1.6.1.6
 
 - name: "SCORED | 1.6.2 | PATCH | Ensure SELinux is installed"
   yum:
@@ -973,7 +1002,7 @@
       - patch
       - rule_1.7.2
 
-- name: "NOTSCORED | 1.8 | PATCH | Ensure updates, patches, and additional security software are installed"
+- name: "SCORED | 1.8 | PATCH | Ensure updates, patches, and additional security software are installed"
   yum:
       name: "*"
       state: latest
@@ -981,7 +1010,6 @@
       - rhel7cis_rule_1_8|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_1.8
       - skip_ansible_lint

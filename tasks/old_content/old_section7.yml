@@ -1,3 +1,4 @@
+---
 - name: "SCORED | 7.3 | AUDIT | Set Default Group for root Account"
   shell: grep "^root:" /etc/passwd | cut -f4 -d:|grep 0
   register: result
@@ -12,6 +13,9 @@
 
 - name: "SCORED | 7.3 | PATCH | Set Default Group for root Account"
   command: usermod -g 0 root
+  check_mode: no
+  changed_when: no
+  ignore_errors: yes
   tags:
       - level1
       - level2

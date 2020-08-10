@@ -1,0 +1,52 @@
+---
+- name: set distro content file for remote fetch-remote-resources
+  set_fact:
+      distrocontent: /usr/share/xml/scap/ssg/content/ssg-rhel7-ds.xml
+  when: ansible_distribution == 'RedHat'
+
+- name: set profile to use based on distro
+  set_fact:
+      rhel7cis_scap_profile: xccdf_org.ssgproject.content_profile_standard
+  when: ansible_distribution == 'RedHat'
+
+- name: set distro content file for remote fetch-remote-resources
+  set_fact:
+      distrocontent: /usr/share/xml/scap/ssg/content/ssg-centos7-ds.xml
+  when: ansible_distribution == 'CentOS'
+
+- name: set profile to use based on distro
+  set_fact:
+      rhel7cis_scap_profile: xccdf_org.ssgproject.content_profile_standard
+  when: ansible_distribution == 'CentOS'
+
+- name: install openscap-scanner
+  yum:
+      state: present
+      name:
+          - openscap-scanner
+          - openscap
+          - scap-security-guide
+
+- name: run a report
+  shell: "oscap xccdf eval \
+      --datastream-id scap_org.open-scap_datastream_from_xccdf_ssg-rhel7-xccdf-1.2.xml \
+      --xccdf-id scap_org.open-scap_cref_ssg-rhel7-xccdf-1.2.xml \
+      --profile {{ rhel7cis_scap_profile }} \
+      --oval-results \
+      --results {{ rhel7cis_report_dir }}/{{ ansible_hostname }}-oscap-prereport.xml \
+      --report {{ rhel7cis_report_dir }}/{{ ansible_hostname }}-oscap-prereport.html \
+      --fetch-remote-resources {{ distrocontent }}"
+  ignore_errors: true
+  changed_when: false
+  failed_when: false
+
+- name: Get the scan result from the XML
+  slurp:
+      path: "{{ rhel7cis_report_dir }}/{{ ansible_hostname }}-oscap-prereport.xml"
+  register: rhel7cis_prereport
+
+- name: let's set a dict of the result
+  set_fact:
+      rhel7cis_prescanresults: "{{ rhel7cis_prereport['content'] | b64decode | xml2json }}"
+  changed_when: true
+  notify: prereport score

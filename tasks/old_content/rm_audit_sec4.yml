@@ -1,3 +1,4 @@
+---
 - name: "NOTSCORED | 4.1.1.1 | AUDIT | Ensure audit log storage size is configured"
   command: grep max_log_file /etc/audit/auditd.conf
   register: audit_log_storage_size_audit
@@ -8,8 +9,6 @@
       - level2
       - audit
       - rule_4.1.1.1
-
-
 
 - name: "SCORED | 4.1.1.2 | AUDIT | Ensure system is disabled when audit logs are full"
   shell: grep admin_space_left_action /etc/audit/auditd.conf | grep -i halt
@@ -22,7 +21,6 @@
       - audit
       - rule_4.1.1.2
 
-
 - name: "SCORED | 4.1.1.3 | AUDIT | Ensure audit logs are not automatically deleted"
   shell: grep max_log_file_action /etc/audit/auditd.conf | grep -i keep_logs
   register: audit_logs_kept_audit
@@ -33,7 +31,6 @@
       - level2
       - audit
       - rule_4.1.1.3
-
 
 - name: "SCORED | 4.1.2 | AUDIT | Ensure auditd service is enabled"
   shell: "systemctl is-enabled auditd | grep enabled"
@@ -46,7 +43,6 @@
       - audit
       - rule_4.1.2
 
-
 - name: "SCORED | 4.1.3 | AUDIT | Ensure auditing for processes that start prior to auditd is enabled"
   shell: grep "^\s*linux" /boot/grub2/grub.cfg|grep audit=1
   register: audit_for_processes_prior_to_auditd_audit
@@ -57,7 +53,6 @@
       - level2
       - audit
       - rule_4.1.3
-
 
 - name: "SCORED | 4.1.4 | AUDIT | Ensure events that modify date and time information are collected"
   command: grep time-change /etc/audit/audit.rules
@@ -70,7 +65,6 @@
       - audit
       - rule_4.1.4
 
-
 - name: "SCORED | 4.1.5 | AUDIT | Ensure events that modify user/group information are collected"
   command: grep identity /etc/audit/audit.rules
   register: events_that_modify_user_group_info_audit
@@ -81,7 +75,6 @@
       - level2
       - audit
       - rule_4.1.5
-
 
 - name: "SCORED | 4.1.6 | AUDIT | Ensure events that modify the system's network environment are collected"
   command: grep system-locale /etc/audit/audit.rules
@@ -94,7 +87,6 @@
       - audit
       - rule_4.1.6
 
-
 - name: "SCORED | 4.1.7 | AUDIT | Ensure events that modify the system's Mandatory Access Controls are collected"
   command: grep MAC-policy /etc/audit/audit.rules
   register: events_modifying_system_macs_audit
@@ -105,7 +97,6 @@
       - level2
       - audit
       - rule_4.1.7
-
 
 - name: "SCORED | 4.1.8 | AUDIT | Ensure login and logout events are collected"
   command: grep logins /etc/audit/audit.rules
@@ -118,7 +109,6 @@
       - audit
       - rule_4.1.8
 
-
 - name: "SCORED | 4.1.9 | AUDIT | Ensure session initiation information is collected"
   command: grep session /etc/audit/audit.rules
   register: session_initiation_information_collected
@@ -129,7 +119,6 @@
       - level2
       - audit
       - rule_4.1.9
-
 
 - name: "SCORED | 4.1.10 | AUDIT | Ensure discretionary access control permission modification events are collected"
   command: grep perm_mod /etc/audit/audit.rules
@@ -142,7 +131,6 @@
       - audit
       - rule_4.1.10
 
-
 - name: "SCORED | 4.1.11 | AUDIT | Ensure unsuccessful unauthorized file access attempts are collected"
   command: grep access /etc/audit/audit.rules
   register: unsuccessful_unauthorized_file_access_audit
@@ -153,7 +141,6 @@
       - level2
       - audit
       - rule_4.1.11
-
 
 - name: "SCORED | 4.1.12 | AUDIT | Ensure use of privileged commands is collected"
   command: /bin/true
@@ -166,7 +153,6 @@
       - audit
       - rule_4.1.12
 
-
 - name: "SCORED | 4.1.13 | AUDIT | Ensure successful file system mounts are collected"
   command: grep mounts /etc/audit/audit.rules
   register: successful_file_system_mounts_collected_audit
@@ -177,8 +163,6 @@
       - level2
       - audit
       - rule_4.1.13
-
-
 
 - name: "SCORED | 4.1.14 | AUDIT | Ensure file deletion events by users are collected"
   command: grep delete /etc/audit/audit.rules
@@ -191,7 +175,6 @@
       - audit
       - rule_4.1.14
 
-
 - name: "SCORED | 4.1.15 | AUDIT | Ensure changes to system administration scope (sudoers) is collected"
   command: grep scope /etc/audit/audit.rules
   register: change_to_system_administration_scope_collected_audit
@@ -202,8 +185,6 @@
       - level2
       - audit
       - rule_4.1.15
-
-
 
 - name: "SCORED | 4.1.16 | AUDIT | Ensure system administrator actions (sudolog) are collected"
   command: grep actions /etc/audit/audit.rules
@@ -216,7 +197,6 @@
       - audit
       - rule_4.1.16
 
-
 - name: "SCORED | 4.1.17 | AUDIT | Ensure kernel module loading and unloading is collected"
   command: grep modules /etc/audit/audit.rules
   register: kernel_module_loading_unloading_collected_audit
@@ -228,7 +208,6 @@
       - audit
       - rule_4.1.17
 
-
 - name: "SCORED | 4.1.18 | AUDIT | Ensure the audit configuration is immutable"
   shell: grep "^\s*[^#]" /etc/audit/audit.rules | tail -1 | grep '\-e 2'
   register: audit_configuration_immutable_audit
@@ -239,7 +218,6 @@
       - level2
       - audit
       - rule_4.1.18
-
 
 - name: "SCORED | 4.2.1.1 | AUDIT | Ensure rsyslog Service is enabled"
   command: systemctl is-enabled rsyslog
@@ -253,7 +231,6 @@
       - audit
       - rule_4.2.1.1
 
-
 - name: "NOTSCORED | 4.2.1.2 | AUDIT | Ensure logging is configured"
   command: /bin/true
   register: result
@@ -265,7 +242,6 @@
       - level2
       - audit
       - rule_4.2.1.2
-
 
 - name: "SCORED | 4.2.1.3 | AUDIT | Ensure rsyslog default file permissions configured"
   command: grep ^\$FileCreateMode /etc/rsyslog.conf
@@ -279,7 +255,6 @@
       - audit
       - rule_4.2.1.3
 
-
 - name: "SCORED | 4.2.1.4 | AUDIT | Ensure rsyslog is configured to send logs to a remote log host"
   command: grep "^*.*[^I][^I]*@" /etc/rsyslog.conf
   register: rsyslog_configured_to_send_logs_to_remote_loghost_audit
@@ -291,7 +266,6 @@
       - level2
       - audit
       - rule_4.2.1.4
-
 
 - name: "NOTSCORED | 4.2.1.5 | AUDIT | Ensure remote rsyslog messages are only accepted on designated log hosts."
   shell: grep -e '$ModLoad imtcp.so' -e '$InputTCPServerRun' /etc/rsyslog.conf | grep '#'
@@ -305,8 +279,6 @@
       - audit
       - rule_4.2.1.5
 
-
-
 - name: "SCORED | 4.2.2.1 | AUDIT | Ensure syslog-ng service is enabled"
   command: systemctl is-enabled syslog-ng
   register: syslog_ng_is_enabled_audit
@@ -318,7 +290,6 @@
       - level2
       - audit
       - rule_4.2.2.1
-
 
 - name: "NOTSCORED | 4.2.2.2 | AUDIT | Ensure logging is configured"
   command: /bin/true
@@ -333,7 +304,6 @@
       - audit
       - rule_4.2.2.2
 
-
 - name: "SCORED | 4.2.2.3 | AUDIT | Ensure syslog-ng default file permissions configured"
   command: /bin/true
   when: syslog_ng_is_enabled_audit.rc == '0'
@@ -346,7 +316,6 @@
       - level2
       - audit
       - rule_4.2.2.3
-
 
 - name: "NOTSCORED | 4.2.2.4 | AUDIT | Ensure syslog-ng is configured to send logs to a remote log host"
   command: /bin/true
@@ -361,7 +330,6 @@
       - audit
       - rule_4.2.2.4
 
-
 - name: "NOTSCORED | 4.2.2.5 | AUDIT | Ensure remote syslog-ng messages are only accepted on designated log hosts"
   command: /bin/true
   when: syslog_ng_is_enabled_audit.rc == '0'
@@ -374,7 +342,6 @@
       - level2
       - audit
       - rule_4.2.2.5
-
 
 - name: "SCORED | 4.2.3 | AUDIT | Ensure rsyslog or syslog-ng is installed"
   command: rpm -q rsyslog
@@ -400,7 +367,6 @@
       - audit
       - rule_4.2.3
 
-
 - name: "SCORED | 4.2.4 | AUDIT | Ensure permissions on all logfiles are configured"
   command: find /var/log -type f -perm /o+r
   register: permissions_on_logfiles_audit
@@ -412,7 +378,6 @@
       - level2
       - audit
       - rule_4.2.4
-
 
 - name: "NOTSCORED | 4.3 | AUDIT | Ensure logrotate is configured"
   command: /bin/true

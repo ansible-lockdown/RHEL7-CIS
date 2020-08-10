@@ -1,6 +1,7 @@
+---
 - name: "SCORED | 2.1.1 | PATCH | Ensure chargen services are not enabled | chargen-dgram,chargen-stream"
   block:
-      - name: "SCORED | 2.1.1 | PATCH | Ensure chargen services are not enabled | chargen-dgram"
+      - name: "SCORED | 2.1.1 | AUDIT | Ensure chargen services are not enabled | chargen-dgram"
         stat:
             path: /etc/xinetd.d/chargen-dgram
         register: chargen_dgram_service
@@ -12,7 +13,7 @@
         tags:
             - skip_ansible_lint
 
-      - name: "SCORED | 2.1.1 | PATCH | Ensure chargen services are not enabled | chargen-stream"
+      - name: "SCORED | 2.1.1 | AUDIT | Ensure chargen services are not enabled | chargen-stream"
         stat:
             path: /etc/xinetd.d/chargen-stream
         register: chargen_stream_service
@@ -34,7 +35,7 @@
 
 - name: "SCORED | 2.1.2 | PATCH | Ensure daytime services are not enabled | daytime-dgram,daytime-stream"
   block:
-      - name: "SCORED | 2.1.2 | PATCH | Ensure daytime services are not enabled | daytime-dgram"
+      - name: "SCORED | 2.1.2 | AUDIT | Ensure daytime services are not enabled | daytime-dgram"
         stat:
             path: /etc/xinetd.d/daytime-dgram
         register: daytime_dgram_service
@@ -46,7 +47,7 @@
         tags:
             - skip_ansible_lint
 
-      - name: "SCORED | 2.1.2 | PATCH | Ensure daytime services are not enabled | daytime-stream"
+      - name: "SCORED | 2.1.2 | AUDIT | Ensure daytime services are not enabled | daytime-stream"
         stat:
             path: /etc/xinetd.d/daytime-stream
         register: daytime_stream_service
@@ -67,7 +68,7 @@
 
 - name: "SCORED | 2.1.3 | PATCH | Ensure discard services are not enabled | discard-dgram,discard-stream"
   block:
-      - name: "SCORED | 2.1.3 | PATCH | Ensure discard services are not enabled | discard-dgram"
+      - name: "SCORED | 2.1.3 | AUDIT | Ensure discard services are not enabled | discard-dgram"
         stat:
             path: /etc/xinetd.d/discard-dgram
         register: discard_dgram_service
@@ -79,7 +80,7 @@
         tags:
             - skip_ansible_lint
 
-      - name: "SCORED | 2.1.3 | PATCH | Ensure discard services are not enabled | discard-stream"
+      - name: "SCORED | 2.1.3 | AUDIT | Ensure discard services are not enabled | discard-stream"
         stat:
             path: /etc/xinetd.d/discard-stream
         register: discard_stream_service
@@ -101,7 +102,7 @@
 
 - name: "SCORED | 2.1.4 | PATCH | Ensure echo services are not enabled | echo-dgram,echo-stream"
   block:
-      - name: "SCORED | 2.1.4 | PATCH | Ensure echo services are not enabled | echo-dgram"
+      - name: "SCORED | 2.1.4 | AUDIT | Ensure echo services are not enabled | echo-dgram"
         stat:
             path: /etc/xinetd.d/echo-dgram
         register: echo_dgram_service
@@ -113,7 +114,7 @@
         tags:
             - skip_ansible_lint
 
-      - name: "SCORED | 2.1.4 | PATCH | Ensure echo services are not enabled | echo-stream"
+      - name: "SCORED | 2.1.4 | AUDIT | Ensure echo services are not enabled | echo-stream"
         stat:
             path: /etc/xinetd.d/echo-stream
         register: echo_stream_service
@@ -135,7 +136,7 @@
 
 - name: "SCORED | 2.1.5 | PATCH | Ensure time services are not enabled | time-dgram,time-stream"
   block:
-      - name: "SCORED | 2.1.5 | PATCH | Ensure time services are not enabled | time-dgram"
+      - name: "SCORED | 2.1.5 | AUDIT | Ensure time services are not enabled | time-dgram"
         stat:
             path: /etc/xinetd.d/time-dgram
         register: time_dgram_service
@@ -147,7 +148,7 @@
         tags:
             - skip_ansible_lint
 
-      - name: "SCORED | 2.1.5 | PATCH | Ensure time services are not enabled | time-stream"
+      - name: "SCORED | 2.1.5 | AUDIT | Ensure time services are not enabled | time-stream"
         stat:
             path: /etc/xinetd.d/time-stream
         register: time_stream_service
@@ -169,7 +170,7 @@
 
 - name: "SCORED | 2.1.6 | PATCH | Ensure tftp server is not enabled"
   block:
-      - name: "SCORED | 2.1.6 | PATCH | Ensure tftp server is not enabled"
+      - name: "SCORED | 2.1.6 | AUDIT | Ensure tftp server is not enabled"
         stat:
             path: /etc/xinetd.d/tftp
         register: tftp_service
@@ -211,6 +212,7 @@
       state: present
   when:
       - rhel7cis_rule_2_2_1_1|bool
+      - not rhel7cis_system_is_container
   tags:
       - level1
       - patch
@@ -223,6 +225,7 @@
       enabled: yes
   when:
       - rhel7cis_rule_2_2_1_1|bool
+      - not rhel7cis_system_is_container
   tags:
       - level1
       - patch
@@ -236,6 +239,7 @@
   when:
       - rhel7cis_time_synchronization == "chrony" and ntpd_service_status.stdout == "loaded"
       - rhel7cis_rule_2_2_1_1|bool
+      - not rhel7cis_system_is_container
   tags:
       - level1
       - patch
@@ -250,6 +254,7 @@
   when:
       - rhel7cis_time_synchronization == "ntp" and chronyd_service_status.stdout == "loaded"
       - rhel7cis_rule_2_2_1_1|bool
+      - not rhel7cis_system_is_container
   tags:
       - level1
       - patch
@@ -265,6 +270,7 @@
   when:
       - rhel7cis_time_synchronization == "ntp"
       - rhel7cis_rule_2_2_1_2|bool
+      - not rhel7cis_system_is_container
   tags:
       - level1
       - patch
@@ -278,6 +284,7 @@
   when:
       - rhel7cis_time_synchronization == "ntp"
       - rhel7cis_rule_2_2_1_2|bool
+      - not rhel7cis_system_is_container
   tags:
       - level1
       - patch
@@ -291,6 +298,7 @@
   when:
       - rhel7cis_time_synchronization == "ntp"
       - rhel7cis_rule_2_2_1_2|bool
+      - not rhel7cis_system_is_container
   tags:
       - level1
       - patch
@@ -306,6 +314,7 @@
   when:
       - rhel7cis_time_synchronization == "chrony"
       - rhel7cis_rule_2_2_1_3|bool
+      - not rhel7cis_system_is_container
   tags:
       - level1
       - patch
@@ -321,6 +330,7 @@
   when:
       - rhel7cis_time_synchronization == "chrony"
       - rhel7cis_rule_2_2_1_3|bool
+      - not rhel7cis_system_is_container
   tags:
       - level1
       - patch
@@ -370,6 +380,7 @@
       - rhel7cis_rule_2_2_4|bool
   tags:
       - level1
+      - level2
       - scored
       - cups
       - services
@@ -614,7 +625,7 @@
       - patch
       - rule_2.2.17
 
-- name: "SCORED | 2.2.18 | PATCH | Ensure telnet server is not enabled"
+- name: "SCORED | 2.2.21 | PATCH | Ensure telnet server is not enabled"
   service:
       name: telnet
       state: stopped
@@ -622,11 +633,11 @@
   when:
       - not rhel7cis_telnet_server
       - telnet_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_18|bool
+      - rhel7cis_rule_2_2_21|bool
   tags:
       - level1
       - patch
-      - rule_2.2.18
+      - rule_2.2.21
 
 - name: "SCORED | 2.2.19 | PATCH | Ensure tftp server is not enabled"
   service:
@@ -659,7 +670,7 @@
       - patch
       - rule_2.2.20
 
-- name: "SCORED | 2.2.21 | PATCH | Ensure talk server is not enabled"
+- name: "SCORED | 2.2.18 | PATCH | Ensure talk server is not enabled"
   service:
       name: ntalk
       state: stopped
@@ -667,11 +678,11 @@
   when:
       - not rhel7cis_ntalk_server
       - ntalk_service_status.stdout == "loaded"
-      - rhel7cis_rule_2_2_21|bool
+      - rhel7cis_rule_2_2_18|bool
   tags:
       - level1
       - patch
-      - rule_2.2.21
+      - rule_2.2.18
 
 - name: "SCORED | 2.3.1 | PATCH | Ensure NIS Client is not installed"
   yum:

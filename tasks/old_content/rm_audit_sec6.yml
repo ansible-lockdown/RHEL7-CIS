@@ -1,3 +1,4 @@
+---
 - name: "NOTSCORED | 6.1.1 | AUDIT | Audit system file permissions"
   command: /bin/true
   register: result

@@ -1,24 +1,12 @@
 RHEL 7 CIS STIG
 ================
 
-[![Build Status](https://travis-ci.org/MindPointGroup/RHEL7-CIS.svg?branch=devel)](https://travis-ci.org/MindPointGroup/RHEL7-CIS)
-[![Ansible Role](https://img.shields.io/ansible/role/16089.svg)](https://galaxy.ansible.com/MindPointGroup/RHEL7-CIS/)
+[![Build Status](https://gitlab.com/mindpointgroup/lockdown-enterprise/rhel-7-cis/badges/master/pipeline.svg)](https://gitlab.com/mindpointgroup/lockdown-enterprise/rhel-7-cis/commits/master)
+
 
 Configure RHEL/Centos 7 machine to be [CIS](https://www.cisecurity.org/cis-benchmarks/) compliant. Level 1 and 2 findings will be corrected by default.
 
 This role **will make changes to the system** that could break things. This is not an auditing tool but rather a remediation tool to be used after an audit has been conducted.
-
-## IMPORTANT INSTALL STEP
-
-If you want to install this via the `ansible-galaxy` command you'll need to run it like this:
-
-`ansible-galaxy install -p roles -r requirements.yml`
-
-With this in the file requirements.yml:
-
-```
-- src: https://github.com/MindPointGroup/RHEL7-CIS.git
-```
 
 Based on [CIS RedHat Enterprise Linux 7 Benchmark v2.1.1 - 01-31-2017 ](https://community.cisecurity.org/collab/public/index.php).
 
@@ -157,7 +145,7 @@ rhel7cis_firewall: iptables
 Dependencies
 ------------
 
-Ansible > 2.2
+Ansible > 2.6.5
 
 Example Playbook
 -------------------------
@@ -183,8 +171,3 @@ Some examples of using tags:
     # Audit and patch the site
     ansible-playbook site.yml --tags="patch"
 ```
-
-License
--------
-
-MIT

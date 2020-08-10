@@ -1,6 +1,10 @@
 ---
 # defaults file for RHEL7-CIS
+rhel7cis_oscap_scan: false
+rhel7cis_report_dir: /tmp
+
 rhel7cis_skip_for_travis: false
+rhel7cis_system_is_container: false
 
 rhel7cis_notauto: false
 rhel7cis_section1: true
@@ -65,6 +69,7 @@ rhel7cis_rule_1_6_1_2: true
 rhel7cis_rule_1_6_1_3: true
 rhel7cis_rule_1_6_1_4: true
 rhel7cis_rule_1_6_1_5: true
+rhel7cis_rule_1_6_1_6: true
 rhel7cis_rule_1_6_2: true
 rhel7cis_rule_1_7_1_1: true
 rhel7cis_rule_1_7_1_2: true
@@ -140,6 +145,7 @@ rhel7cis_rule_3_6_2: true
 rhel7cis_rule_3_6_3: true
 rhel7cis_rule_3_6_4: true
 rhel7cis_rule_3_6_5: true
+rhel7cis_rule_3_7: true
 
 # Section 4 rules
 rhel7cis_rule_4_1_1_1: true
@@ -174,7 +180,6 @@ rhel7cis_rule_4_2_2_3: true
 rhel7cis_rule_4_2_2_4: true
 rhel7cis_rule_4_2_2_5: true
 rhel7cis_rule_4_2_4: true
-rhel7cis_rule_4_3: true
 
 # Section 5 rules
 rhel7cis_rule_5_1_1: true
@@ -195,12 +200,11 @@ rhel7cis_rule_5_2_7: true
 rhel7cis_rule_5_2_8: true
 rhel7cis_rule_5_2_9: true
 rhel7cis_rule_5_2_10: true
-rhel7cis_rule_5_2_11: true
 rhel7cis_rule_5_2_12: true
+rhel7cis_rule_5_2_11: true
 rhel7cis_rule_5_2_13: true
 rhel7cis_rule_5_2_14: true
 rhel7cis_rule_5_2_15: true
-rhel7cis_rule_5_2_16: true
 rhel7cis_rule_5_3_1: true
 rhel7cis_rule_5_3_2: true
 rhel7cis_rule_5_3_3: true
@@ -209,9 +213,13 @@ rhel7cis_rule_5_4_1_1: true
 rhel7cis_rule_5_4_1_2: true
 rhel7cis_rule_5_4_1_3: true
 rhel7cis_rule_5_4_1_4: true
+rhel7cis_rule_5_4_1_5: true
 rhel7cis_rule_5_4_2: true
 rhel7cis_rule_5_4_3: true
 rhel7cis_rule_5_4_4: true
+rhel7cis_rule_5_4_5: true
+rhel7cis_rule_5_5: true
+rhel7cis_rule_5_6: true
 
 # Section 6 rules
 rhel7cis_rule_6_1_1: true
@@ -322,9 +330,8 @@ rhel7cis_talk_required: false
 rhel7cis_rsh_required: false
 rhel7cis_ypbind_required: false
 
-# Time Synchronization
+# Time Synchronization - Either chrony or ntp
 rhel7cis_time_synchronization: chrony
-#rhel7cis_time_synchronization: ntp
 
 rhel7cis_time_synchronization_servers:
     - 0.pool.ntp.org
@@ -341,8 +348,8 @@ rhel7cis_host_allow:
     - "172.16.0.0/255.240.0.0"
     - "192.168.0.0/255.255.0.0"
 
+# Firewall Service - either firewalld or iptables
 rhel7cis_firewall: firewalld
-#rhel7cis_firewall: iptables
 
 rhel7cis_firewall_services:
     - ssh
@@ -361,7 +368,11 @@ rhel7cis_auditd:
 
 rhel7cis_logrotate: "daily"
 
-rhel7cis_sudolog: /var/log/secure
+# RHEL-07-4.2.1.4/4.2.1.5 remote and destation log server name
+rhel7cis_remote_log_server: logagg.example.com
+
+# RHEL-07-4.2.1.5
+rhel7cis_system_is_log_server: false
 
 ## Section5 vars
 
@@ -371,27 +382,29 @@ rhel7cis_sshd:
     ciphers: "aes256-ctr,aes192-ctr,aes128-ctr"
     macs: "hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com"
     logingracetime: 60
-    # - make sure you understand the precedence when working with these values!!
-    #allowusers:
-    #allowgroups: systems dba
-    #denyusers:
-    #denygroups:
+    # WARNING: make sure you understand the precedence when working with these values!!
+    # allowusers:
+    # allowgroups: systems dba
+    # denyusers:
+    # denygroups:
+rhel7cis_pam_faillock:
+    attempts: 5
+    interval: 900
+    unlock_time: 900
+    fail_for_root: no
+    remember: 5
+    pwhash: sha512
+
+rhel7cis_inactivelock:
+    lock_days: 30
 
 rhel7cis_pass:
     max_days: 90
     min_days: 7
     warn_age: 7
-
-rhel7cis_pwquality:
-    minlen: '14'
-    dcredit: '-1'
-    ucredit: '-1'
-    ocredit: '-1'
-    lcredit: '-1'
-
-# Syslog system
+# Syslog system - either rsyslog or syslog-ng
 rhel7cis_syslog: rsyslog
-#rhel7cis_syslog: syslog-ng
+rhel7cis_rsyslog_ansibleManaged: true
 
 rhel7cis_vartmp:
     source: /tmp
@@ -400,3 +413,22 @@ rhel7cis_vartmp:
     enabled: no
 
 rhel7cis_rule_5_4_2_min_uid: 1000
+
+# RHEL-07-5.4.5
+# Session timeout setting file (TMOUT setting can be set in multiple files)
+# Timeout value is in seconds. (60 seconds * 10 = 600)
+rhel7cis_shell_session_timeout:
+    file: /etc/profile.d/tmout.sh
+    timeout: 600
+# RHEL-07-5.4.1.5 Allow ansible to expire password for account with a last changed date in the future. False will just display users in violation, true will expire those users passwords
+rhel7cis_futurepwchgdate_autofix: true
+
+## Section6 vars
+
+# RHEL-07_6.1.1 Allow ansible to adjust package descrepancies . False will just display packages with descrepancies, True will correct descrepancies
+rhelcis_rpm_descrep_autofixes: true
+
+# RHEL-07_6.1.10 Allow ansible to adjust world-writable files. False will just display world-writable files, True will remove world-writable
+rhel7cis_no_world_write_adjust: true
+rhel7cis_passwd_label: "{{ (this_item | default(item)).id }}: {{ (this_item | default(item)).dir }}"
+rhel7cis_dotperm_ansibleManaged: true

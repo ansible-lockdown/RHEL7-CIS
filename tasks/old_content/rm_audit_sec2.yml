@@ -1,3 +1,4 @@
+---
 - name: "SCORED | 2.1.1 | AUDIT | Ensure chargen services are not enabled | chargen-dgram"
   shell: "chkconfig --list | grep chargen-dgram |grep -q on"
   register: chargen1_server_enabled_audit
@@ -21,8 +22,6 @@
       - level1
       - audit
       - rule_2.1.1
-
-
 
 - name: "SCORED | 2.1.2 | AUDIT | Ensure daytime services are not enabled | daytime-dgram"
   shell: "chkconfig --list | grep daytime-dgram |grep -q on"
@@ -48,8 +47,6 @@
       - audit
       - rule_2.1.2
 
-
-
 - name: "SCORED | 2.1.3 | AUDIT | Ensure discard services are not enabled | discard-dgram"
   shell: "chkconfig --list | grep discard-dgram |grep -q on"
   register: discard1_server_enabled_audit
@@ -73,8 +70,6 @@
       - level1
       - audit
       - rule_2.1.3
-
-
 
 - name: "SCORED | 2.1.4 | AUDIT | Ensure echo services are not enabled | echo-dgram"
   shell: "chkconfig --list | grep echo-dgram |grep -q on"
@@ -100,8 +95,6 @@
       - audit
       - rule_2.1.4
 
-
-
 - name: "SCORED | 2.1.5 | AUDIT | Ensure time services are not enabled | time-dgram"
   shell: "chkconfig --list | grep time-dgram |grep -q on"
   register: time1_server_enabled_audit
@@ -126,8 +119,6 @@
       - audit
       - rule_2.1.5
 
-
-
 - name: "SCORED | 2.1.6 | AUDIT | Ensure tftp server is not enabled"
   shell: "chkconfig --list | grep tftp |grep -q on"
   register: tftp_server_enabled_audit
@@ -139,7 +130,6 @@
       - level1
       - audit
       - rule_2.1.6
-
 
 - name: "SCORED | 2.1.7 | AUDIT | Ensure xinetd is not enabled"
   command: "systemctl is-enabled xinetd"
@@ -153,7 +143,6 @@
       - audit
       - rule_2.1.7
 
-
 - name: "NOTSCORED | 2.2.1.1 | AUDIT | Ensure time synchronization is in use"
   command: "systemctl is-enabled {{ rhel7cis_time_Synchronization }}"
   register: timesync_server_enabled_audit
@@ -165,8 +154,6 @@
       - level1
       - audit
       - rule_2.2.1.1
-
-
 
 - name: "SCORED | 2.2.1.2 | AUDIT | Ensure ntp is configured"
   command: |
@@ -184,8 +171,6 @@
       - audit
       - rule_2.2.1.2
 
-
-
 - name: "SCORED | 2.2.1.3 | AUDIT | Ensure chrony is configured"
   command: grep -q "^server" /etc/chrony.conf && egrep -q "OPTIONS=\"\-u chrony\"" /etc/sysconfig/chronyd
   register: check_chrony_server_audit
@@ -199,8 +184,6 @@
       - audit
       - rule_2.2.1.3
 
-
-
 - name: "SCORED | 2.2.2 | AUDIT | Ensure X Window System is not installed"
   command: rpm -qi xorg-x11*
   register: pkgs_xwindows_installed_audit
@@ -213,7 +196,6 @@
       - xwindows
       - audit
       - rule_2.2.2
-
 
 - name: "SCORED | 2.2.3 | AUDIT | Ensure Avahi Server is not enabled"
   command: systemctl is-enabled avahi-daemon
@@ -230,7 +212,6 @@
       - audit
       - rule_2.2.3
 
-
 - name: "SCORED | 2.2.4 | AUDIT | Ensure CUPS is not enabled"
   command: systemctl is-enabled cups
   register: cups_server_enabled_audit
@@ -245,7 +226,6 @@
       - services
       - audit
       - rule_2.2.4
-
 
 - name: "SCORED | 2.2.5 | AUDIT | Ensure DHCP Server is not enabled"
   command: systemctl is-enabled dhcpd
@@ -262,7 +242,6 @@
       - audit
       - rule_2.2.5
 
-
 - name: "SCORED | 2.2.6 | AUDIT | Ensure LDAP server is not enabled"
   command: systemctl is-enabled slapd
   register: slapd_server_enabled_audit
@@ -277,7 +256,6 @@
       - services
       - audit
       - rule_2.2.6
-
 
 - name: "SCORED | 2.2.7 | AUDIT | Ensure NFS and RPC are not enabled"
   command: systemctl is-enabled nfs rpcbind |grep -q enabled
@@ -295,7 +273,6 @@
       - audit
       - rule_2.2.7
 
-
 - name: "SCORED | 2.2.8 | AUDIT | Ensure DNS Server is not enabled"
   command: systemctl is-enabled named
   register: named_server_enabled_audit
@@ -307,7 +284,6 @@
       - level1
       - audit
       - rule_2.2.8
-
 
 - name: "SCORED | 2.2.9 | AUDIT | Ensure FTP Server is not enabled"
   command: systemctl is-enabled vsftpd
@@ -321,7 +297,6 @@
       - audit
       - rule_2.2.9
 
-
 - name: "SCORED | 2.2.10 | AUDIT | Ensure HTTP server is not enabled"
   command: systemctl is-enabled httpd
   register: httpd_server_enabled_audit
@@ -333,7 +308,6 @@
       - level1
       - audit
       - rule_2.2.10
-
 
 - name: "SCORED | 2.2.11 | AUDIT | Ensure IMAP and POP3 server is not enabled"
   command: systemctl is-enabled dovecot
@@ -347,7 +321,6 @@
       - audit
       - rule_2.2.11
 
-
 - name: "SCORED | 2.2.12 | AUDIT | Ensure Samba is not enabled"
   command: systemctl is-enabled smb
   register: smb_server_enabled_audit
@@ -359,7 +332,6 @@
       - level1
       - audit
       - rule_2.2.12
-
 
 - name: "SCORED | 2.2.13 | AUDIT | Ensure HTTP Proxy Server is not enabled"
   command: systemctl is-enabled squid
@@ -373,7 +345,6 @@
       - audit
       - rule_2.2.13
 
-
 - name: "SCORED | 2.2.14 | AUDIT | Ensure SNMP Server is not enabled"
   command: systemctl is-enabled snmpd
   register: snmp_server_enabled_audit
@@ -385,7 +356,6 @@
       - level1
       - audit
       - rule_2.2.14
-
 
 - name: "SCORED | 2.2.15 | AUDIT | Ensure mail transfer agent is configured for local-only mode"
   shell: netstat -an | grep LIST | grep ":25[[:space:]]" |egrep -q '127.0.0.1:25|::1:25'
@@ -399,8 +369,6 @@
       - audit
       - rule_2.2.15
 
-
-
 - name: "SCORED | 2.2.16 | AUDIT | Ensure NIS Server is not enabled"
   command: systemctl is-enabled ypserv
   register: nis_server_enabled_audit
@@ -412,7 +380,6 @@
       - level1
       - audit
       - rule_2.2.16
-
 
 - name: "SCORED | 2.2.17 | AUDIT | Ensure rsh server is not enabled | rsh.socket"
   command: systemctl is-enabled rsh.socket
@@ -450,7 +417,6 @@
       - audit
       - rule_2.2.17
 
-
 - name: "SCORED | 2.2.18 | AUDIT | Ensure telnet server is not enabled"
   command: systemctl is-enabled telnet.socket
   register: telnet_server_enabled_audit
@@ -462,7 +428,6 @@
       - level1
       - audit
       - rule_2.2.18
-
 
 - name: "SCORED | 2.2.19 | AUDIT | Ensure tftp server is not enabled"
   command: "systemctl is-enabled telnet.socket"
@@ -479,7 +444,6 @@
       - audit
       - rule_2.2.19
 
-
 - name: "SCORED | 2.2.20 | AUDIT | Ensure rsync service is not enabled "
   command: "systemctl is-enabled rsyncd"
   register: rsyncd_server_enabled_audit
@@ -491,7 +455,6 @@
       - level1
       - audit
       - rule_2.2.20
-
 
 - name: "SCORED | 2.2.21 | AUDIT | Ensure talk server is not enabled"
   command: "systemctl is-enabled ntalk"
@@ -505,7 +468,6 @@
       - audit
       - rule_2.2.21
 
-
 - name: "SCORED | 2.3.1 | AUDIT | Ensure NIS Client is not installed"
   shell: "rpm -aq | grep -q ypbind"
   register: pkgs_ypbind_installed_audit
@@ -517,7 +479,6 @@
       - level1
       - audit
       - rule_2.3.1
-
 
 - name: "SCORED | 2.3.2 | AUDIT | Ensure rsh client is not installed"
   shell: "rpm -aq | grep -q rsh"
@@ -531,7 +492,6 @@
       - audit
       - rule_2.3.2
 
-
 - name: "SCORED | 2.3.3 | AUDIT | Ensure talk client is not installed"
   shell: "rpm -aq | grep -q talk"
   register: pkgs_talk_installed_audit
@@ -544,7 +504,6 @@
       - audit
       - rule_2.3.3
 
-
 - name: "SCORED | 2.3.4 | AUDIT | Ensure telnet client is not installed"
   shell: "rpm -aq | grep -q telnet"
   register: pkgs_telnet_installed_audit
@@ -556,7 +515,6 @@
       - level1
       - audit
       - rule_2.3.4
-
 
 - name: "SCORED | 2.3.5 | AUDIT | Ensure LDAP client is not installed"
   shell: "rpm -aq | grep -q openldap-clients"

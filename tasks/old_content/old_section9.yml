@@ -1,3 +1,4 @@
+---
 - name: "SCORED | 9.1.2 | AUDIT | Verify Permissions on /etc/passwd"
   shell: stat -L -c "%a %u %g" /etc/hosts.allow | egrep "644 0 0"
   register: result

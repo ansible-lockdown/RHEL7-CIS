@@ -1,13 +1,39 @@
+---
 - name: "NOTSCORED | 6.1.1 | PATCH | Audit system file permissions"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "NOTSCORED | 6.1.1 | AUDIT | Audit system file permissions | Register package list"
+        command: ls -a /bin/
+        register: rhel7cis_6_1_1_packages
+        failed_when: no
+        changed_when: no
+
+      - name: "NOTSCORED | 6.1.1 | AUDIT | Audit system file permissions | Audit the packages"
+        shell: rpm -Va --nomtime --nosize --nomd5 --nolinkto > /bin/{{ rhel7cis_6_1_1_packages.stdout_lines }}
+        register: rhel7cis_6_1_1_packages_rpm
+
+      - name: "NOTSCORED | 6.1.1 | AUDIT | Audit system file permissions | Message out no package descrepancies"
+        debug:
+            msg: "Good News! There are no package descrepancies"
+        when: rhel7cis_6_1_1_packages_rpm.stdout == ""
+
+      - name: "NOTSCORED | 6.1.1 | AUDIT | Audit system file permissions | Message out alert for package descrepancies"
+        debug:
+            msg: "Warning! You have some package descrepancies. These packages need review: {{ rhel7cis_6_1_1_packages_rpm.stdout_lines }}"
+        when: rhel7cis_6_1_1_packages_rpm.stdout != ""
+
+      - name: "NOTSCORED | 6.1.1 | PATCH | Audit system file permissions | Address descrepancies found (Configurable)"
+        shell: >
+                ( rpm --setugids /bin/{{ rhel7cis_6_1_1_packages_rpm.stdout_lines }}; rpm --setperms /bin/{{ rhel7cis_6_1_1_packages_rpm.stdout_lines }} )
+                2>&1 1>&2 | grep -v ': No such file or directory$'
+        when:
+            - rhel7cis_6_1_1_packages_rpm.stdout != ""
+            - rhelcis_rpm_descrep_autofixes
   when:
       - rhel7cis_rule_6_1_1|bool
   tags:
       - level2
       - patch
       - rule_6.1.1
-      - notimplemented
 
 - name: "SCORED | 6.1.2 | PATCH | Ensure permissions on /etc/passwd are configured"
   file:
@@ -19,7 +45,6 @@
       - rhel7cis_rule_6_1_2|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.1.2
 
@@ -33,7 +58,6 @@
       - rhel7cis_rule_6_1_3|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.1.3
 
@@ -47,7 +71,6 @@
       - rhel7cis_rule_6_1_4|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.1.4
 
@@ -61,7 +84,6 @@
       - rhel7cis_rule_6_1_5|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.1.5
 
@@ -75,7 +97,6 @@
       - rhel7cis_rule_6_1_6|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.1.6
 
@@ -89,7 +110,6 @@
       - rhel7cis_rule_6_1_7|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.1.7
 
@@ -103,7 +123,6 @@
       - rhel7cis_rule_6_1_8|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.1.8
 
@@ -117,69 +136,155 @@
       - rhel7cis_rule_6_1_9|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.1.9
 
 - name: "SCORED | 6.1.10 | PATCH | Ensure no world writable files exist"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "SCORED | 6.1.10 | AUDIT | Ensure no world writable files exist | Get list of world-writable files"
+        shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -0002
+        become: yes
+        failed_when: false
+        changed_when: false
+        register: rhel_07_6_1_10_perms_results
+
+      - name: "SCORED | 6.1.10 | AUDIT | Ensure no world writable files exist | Alert no world-writable files exist"
+        debug:
+            msg: "Good news! We have not found any world-writable files on your system"
+        failed_when: false
+        changed_when: false
+        when:
+            - rhel_07_6_1_10_perms_results.stdout is not defined
+
+      - name: "SCORED | 6.1.10 | PATCH | Ensure no world writable files exist | Adjust world-writable files if they exist (Configurable)"
+        file:
+            path: '{{ item }}'
+            mode: o-w
+            state: touch
+        with_items: "{{ rhel_07_6_1_10_perms_results.stdout_lines }}"
+        when:
+            - rhel_07_6_1_10_perms_results.stdout_lines is defined
+            - rhel7cis_no_world_write_adjust
   when:
       - rhel7cis_rule_6_1_10|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.1.10
-      - notimplemented
 
 - name: "SCORED | 6.1.11 | PATCH | Ensure no unowned files or directories exist"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "SCORED | 6.1.11 | AUDIT | Ensure no unowned files or directories exist | Finding all unowned files or directories"
+        command: find "{{ item.mount }}" -xdev -nouser
+        check_mode: no
+        register: rhel_07_6_1_11_audit
+        failed_when: no
+        changed_when: no
+        when: item['device'].startswith('/dev') and not 'bind' in item['options']
+        with_items: "{{ ansible_mounts }}"
+
+      - name: "SCORED | 6.1.11 | AUDIT | Ensure no unowned files or directories exist | Displaying any unowned files or directories"
+        debug:
+            msg: "Manual intervention is required -- missing owner on items in {{ item.item.mount }}: {{ item.stdout_lines | join(', ') }}"
+        when:
+            - item.stdout_lines is defined
+            - item.stdout_lines | length > 0
+        with_items: "{{ rhel_07_6_1_11_audit.results }}"
   when:
       - rhel7cis_rule_6_1_11|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.1.11
-      - notimplemented
 
 - name: "SCORED | 6.1.12 | PATCH | Ensure no ungrouped files or directories exist"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "SCORED | 6.1.12 | AUDIT | Ensure no ungrouped files or directories exist | Finding all ungrouped files or directories"
+        command: find "{{ item.mount }}" -xdev -nogroup
+        check_mode: no
+        register: rhel_07_6_1_12_audit
+        failed_when: no
+        changed_when: no
+        when: item['device'].startswith('/dev') and not 'bind' in item['options']
+        with_items: "{{ ansible_mounts }}"
+
+      - name: "SCORED | 6.1.12 | AUDIT | Ensure no ungrouped files or directories exist | Displaying all ungrouped files or directories"
+        debug:
+            msg: "Manual intervention is required -- missing group on items in {{ item.item.mount }}: {{ item.stdout_lines | join(', ') }}"
+        changed_when:
+            - rhel7stig_audit_complex
+        when:
+            - item.stdout_lines is defined
+            - item.stdout_lines | length > 0
+        with_items: "{{ rhel_07_6_1_12_audit.results }}"
   when:
       - rhel7cis_rule_6_1_12|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.1.12
-      - notimplemented
 
 - name: "NOTSCORED | 6.1.13 | PATCH | Audit SUID executables"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "NOTSCORED | 6.1.13 | AUDIT | Audit SUID executables | Find all SUID executables"
+        shell: df {{ item.mount }} -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -4000
+        become: yes
+        failed_when: false
+        changed_when: false
+        register: rhel_07_6_1_13_perms_results
+        with_items: "{{ ansible_mounts }}"
+
+      - name: "NOTSCORED | 6.1.13 | AUDIT | Audit SUID executables |  Alert no SUID executables exist"
+        debug:
+            msg: "Good news! We have not found any SUID executable files on your system"
+        failed_when: false
+        changed_when: false
+        when:
+            - rhel_07_6_1_13_perms_results.stdout is not defined
+
+      - name: "NOTSCORED | 6.1.13 | AUDIT | Audit SUID executables |  Alert SUID executables exist"
+        debug:
+            msg: "Manual intervention is required -- SUID set on items in {{ item.item.mount }}: {{ item.stout_lines | join(', ') }}"
+        with_items: "{{ rhel_07_6_1_13_perms_results.stdout_lines }}"
+        when:
+            - rhel_07_6_1_13_perms_results.stdout is defined
   when:
       - rhel7cis_rule_6_1_13|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.1.13
-      - notimplemented
 
 - name: "NOTSCORED | 6.1.14 | PATCH | Audit SGID executables"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "NOTSCORED | 6.1.14 | AUDIT | Audit SGID executables | Find all SGID executables"
+        shell: df {{ item.mount }} -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -2000
+        become: yes
+        failed_when: false
+        changed_when: false
+        register: rhel_07_6_1_14_perms_results
+        with_items: "{{ ansible_mounts }}"
+
+      - name: "NOTSCORED | 6.1.14 | AUDIT | Audit SGID executables |  Alert no SGID executables exist"
+        debug:
+            msg: "Good news! We have not found any SGID executable files on your system"
+        failed_when: false
+        changed_when: false
+        when:
+            - rhel_07_6_1_14_perms_results.stdout is not defined
+
+      - name: "NOTSCORED | 6.1.14 | AUDIT | Audit SGID executables |  Alert SGID executables exist"
+        debug:
+            msg: "Manual intervention is required -- SGID set on items in {{ item.item.mount }}: {{ item.stout_lines | join(', ') }}"
+        with_items: "{{ rhel_07_6_1_14_perms_results.stdout_lines }}"
+        when:
+            - rhel_07_6_1_14_perms_results.stdout is defined
   when:
       - rhel7cis_rule_6_1_14|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.1.14
-      - notimplemented
 
 - name: "SCORED | 6.2.1 | PATCH | Ensure password fields are not empty"
   command: passwd -l {{ item }}
@@ -191,7 +296,6 @@
       - rhel7cis_rule_6_2_1|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.2.1
 
@@ -203,10 +307,9 @@
       - rhel7cis_rule_6_2_2|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.2.2
-      - skip_ansible_lint #  ANSIBLE0006
+      - skip_ansible_lint
 
 - name: "SCORED | 6.2.3 | PATCH | Ensure no legacy '+' entries exist in /etc/shadow"
   command: sed -i '/^+/ d' /etc/shadow
@@ -216,10 +319,9 @@
       - rhel7cis_rule_6_2_3|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.2.3
-      - skip_ansible_lint #  ANSIBLE0006
+      - skip_ansible_lint
 
 - name: "SCORED | 6.2.4 | PATCH | Ensure no legacy '+' entries exist in /etc/group"
   command: sed -i '/^+/ d' /etc/group
@@ -229,10 +331,9 @@
       - rhel7cis_rule_6_2_4|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.2.4
-      - skip_ansible_lint #  ANSIBLE0006
+      - skip_ansible_lint
 
 - name: "SCORED | 6.2.5 | PATCH | Ensure root is the only UID 0 account"
   command: passwd -l {{ item }}
@@ -244,80 +345,217 @@
       - rhel7cis_rule_6_2_5|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.2.5
 
 - name: "SCORED | 6.2.6 | PATCH | Ensure root PATH Integrity"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "SCORED | 6.2.6 | AUDIT | Ensure root PATH Integrity | Determine empty value"
+        shell: 'echo $PATH | grep ::'
+        become: yes
+        register: path_colon
+        changed_when: False
+        failed_when: path_colon.rc == 0
+
+      - name: "SCORED | 6.2.6 | AUDIT | Ensure root PATH Integrity | Determin colon end"
+        shell: 'echo $PATH | grep :$'
+        become: yes
+        register: path_colon_end
+        changed_when: False
+        failed_when: path_colon_end.rc == 0
+
+      - name: "SCORED | 6.2.6 | AUDIT | Ensure root PATH Integrity | Determine dot in path"
+        shell: "/bin/bash --login -c 'env | grep ^PATH=' | sed -e 's/PATH=//' -e 's/::/:/' -e 's/:$//' -e 's/:/\\n/g'"
+        become: yes
+        register: dot_in_path
+        changed_when: False
+        failed_when: '"." in dot_in_path.stdout_lines'
+
+      - name: "SCORED | 6.2.6 | AUDIT | Ensure root PATH Integrity | Alert on empty value, colon end, and dot in path"
+        debug:
+            msg:
+                - "The following paths have an empty value: {{ path_colon.stdout_lines }}"
+                - "The following paths have colon end: {{ path_colon_end.stdout_lines }}"
+                - "The following paths have a dot in the path: {{ dot_in_path.stdout_lines }}"
+
+      - name: "SCORED | 6.2.6 | PATCH | Ensure root PATH Integrity (Scored) | Determine rights and owner"
+        file: >
+            path='{{ item }}'
+            follow=yes
+            state=directory
+            owner=root
+            mode='o-w,g-w'
+        with_items: "{{ dot_in_path.stdout_lines }}"
   when:
       - rhel7cis_rule_6_2_6|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.2.6
-      - notimplemented
 
 - name: "SCORED | 6.2.7 | PATCH | Ensure all users' home directories exist"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: capture audit task for missing homedirs
+        block: &r7s_homedir_audit
+            - name: "SCORED | 6.2.7 | AUDIT | Ensure all users' home directories exist | Find users missing home directories"
+              shell: set -o pipefail ; pwck -r | grep -P {{ ld_regex | quote }}
+              check_mode: no
+              register: rhel7cis_users_missing_home
+              changed_when: rhel_07_6_2_7_audit | length > 0
+              # failed_when: 0: success, 1: no grep match, 2: pwck found something
+              failed_when: rhel7cis_users_missing_home.rc not in [0,1,2]
+
+      ### NOTE: due to https://github.com/ansible/ansible/issues/24862 This is a shell command, and is quite frankly less than ideal.
+      - name: "SCORED | 6.2.7 | PATCH | Ensure all users' home directories exist | Creates home directories"
+        command: "mkhomedir_helper {{ item }}"
+        check_mode: "{{ rhel7cis_disruptive_check_mode }}"
+        with_items: "{{ rhelcis_07_6_2_7_audit | map(attribute='id') | list }}"
+        when:
+            - rhel7cis_users_missing_home is changed
+
+      ### NOTE: Now we need to address that SELINUX will not let mkhomedir_helper create home directories for UUID < 500, so the ftp user will still show up in a pwck. Not sure this is needed, I need to confirm if that user is removed in an earlier task.
+      ### ^ Likely doesn't matter as 6.2.7 defines "local interactive users" as those w/ uid 1000-4999
+      - name: replay audit task
+        block: *r7s_homedir_audit
+
+      # CAUTION: debug loops don't show changed since 2.4:
+      # Fix: https://github.com/ansible/ansible/pull/59958
+      - name: "SCORED | 6.2.7 | AUDIT | Ensure all users' home directories exist | Alert about correcting owner and group"
+        debug: msg="You will need to mkdir -p {{ item }} and chown properly to the correct owner and group."
+        with_items: "{{ rhel_07_6_2_7_audit | map(attribute='dir') | list }}"
+        changed_when: rhel7cis_audit_complex
+        when:
+            - rhel7cis_users_missing_home is changed
+  vars:
+      ld_regex: >-
+          ^user '(?P<user>.*)': directory '(?P<dir>.*)' does not exist$
+      ld_users: "{{ rhel7cis_users_missing_home.stdout_lines | map('regex_replace', ld_regex, '\\g<user>') | list }}"
+      rhel_07_6_2_7_audit: "{{ rhel7cis_passwd | selectattr('uid', '>=', 1000) | selectattr('id', 'in', ld_users) | list }}"
   when:
       - rhel7cis_rule_6_2_7|bool
   tags:
       - level1
-      - level2
       - patch
-      - rule_6.2.7
-      - notimplemented
+      - rhel7cis_rule_6_2_7
 
 - name: "SCORED | 6.2.8 | PATCH | Ensure users' home directories permissions are 750 or more restrictive"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "SCORED | 6.2.8 | AUDIT | Ensure users' home directories permissions are 750 or more restrictive"
+        stat:
+            path: "{{ item }}"
+        with_items: "{{ rhel7cis_passwd | selectattr('uid', '>=', 1000) | selectattr('uid', '!=', 65534) | map(attribute='dir') | list }}"
+        register: rhel_07_6_2_8_audit
+
+      - name: "SCORED | 6.2.8 | AUDIT | Ensure users' home directories permissions are 750 or more restrictive"
+        command: find -H {{ item.0 | quote }} -not -type l -perm /027
+        check_mode: no
+        register: rhel_07_6_2_8_patch_audit
+        changed_when: rhel_07_6_2_8_patch_audit.stdout != ""
+        when:
+            - ansible_check_mode
+            - item.1.exists
+        with_together:
+            - "{{ rhel_07_6_2_8_audit.results | map(attribute='item') | list }}"
+            - "{{ rhel_07_6_2_8_audit.results | map(attribute='stat') | list }}"
+        loop_control:
+            label: "{{ item.0 }}"
+
+      - name: "SCORED | 6.2.8 | AUDIT | Ensure users' home directories permissions are 750 or more restrictive"
+        file:
+            path: "{{ item.0 }}"
+            recurse: yes
+            mode: a-st,g-w,o-rwx
+        register: rhel_07_6_2_8_patch
+        when:
+            - not ansible_check_mode
+            - item.1.exists
+        with_together:
+            - "{{ rhel_07_6_2_8_audit.results | map(attribute='item') | list }}"
+            - "{{ rhel_07_6_2_8_audit.results | map(attribute='stat') | list }}"
+        loop_control:
+            label: "{{ item.0 }}"
+
+      # set default ACLs so the homedir has an effective umask of 0027
+      - name: "SCORED | 6.2.8 | PATCH | Ensure users' home directories permissions are 750 or more restrictive"
+        acl:
+            path: "{{ item.0 }}"
+            default: yes
+            state: present
+            recursive: yes
+            etype: "{{ item.1.etype }}"
+            permissions: "{{ item.1.mode }}"
+        when: not rhel7cis_system_is_container
+        with_nested:
+            - "{{ (ansible_check_mode | ternary(rhel_07_6_2_8_patch_audit, rhel_07_6_2_8_patch)).results |
+              rejectattr('skipped', 'defined') | map(attribute='item') | map('first') | list }}"
+            -
+                - etype: group
+                  mode: rx
+                - etype: other
+                  mode: '0'
   when:
       - rhel7cis_rule_6_2_8|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.2.8
-      - notimplemented
 
 - name: "SCORED | 6.2.9 | PATCH | Ensure users own their home directories"
-  command: /bin/true
-  changed_when: no
+  file:
+      path: "{{ item.dir }}"
+      owner: "{{ item.id }}"
+      state: directory
+  with_items: "{{ rhel7cis_passwd }}"
+  loop_control:
+      label: "{{ rhel7cis_passwd_label }}"
   when:
       - rhel7cis_rule_6_2_9|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.2.9
-      - notimplemented
 
-- name: "SCORED | 6.2.10 | PATCH | Ensure users' dot files are not group or world writable"
-  command: /bin/true
-  changed_when: no
+- name: "SCORED | 6.2.10 | PATCH | Ensure users' dot files are not group or world-writable"
+  block:
+      - name: "SCORED | 6.2.10 | AUDIT | Ensure users' dot files are not group or world-writable | Check for files"
+        shell: find /home/ -name "\.*" -perm /g+w,o+w
+        become: yes
+        changed_when: no
+        failed_when: no
+        register: rhel7cis_6_2_10_audit
+
+      - name: "SCORED | 6.2.10 | AUDIT | Ensure users' dot files are not group or world-writable | Alert on files found"
+        debug:
+            msg: "Good news! We have not found any group or world-writable dot files on your sytem"
+        failed_when: false
+        changed_when: false
+        when:
+            - rhel7cis_6_2_10_audit.stdout is not defined
+
+      - name: "SCORED | 6.2.10 | PATCH | Ensure users' dot files are not group or world-writable | Changes files if configured"
+        file:
+            path: '{{ item }}'
+            mode: go-w
+        with_items: "{{ rhel7cis_6_2_10_audit.stdout_lines }}"
+        when:
+            - rhel7cis_6_2_10_audit.stdout is defined
+            - rhel7cis_dotperm_ansibleManaged
   when:
       - rhel7cis_rule_6_2_10|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.2.10
-      - notimplemented
 
 - name: "SCORED | 6.2.11 | PATCH | Ensure no users have .forward files"
   file:
       state: absent
       dest: "~{{ item }}/.forward"
-  with_items: "{{ users }}"
+  with_items: "{{ users.stdout_lines }}"
   when:
       - rhel7cis_rule_6_2_11|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.2.11
 
@@ -325,94 +563,144 @@
   file:
       state: absent
       dest: "~{{ item }}/.netrc"
-  with_items: "{{ users }}"
+  with_items: "{{ users.stdout_lines }}"
   when:
       - rhel7cis_rule_6_2_12|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.2.12
-
-# - name: "SCORED | 6.2.13 | PATCH | Ensure users' .netrc Files are not group or world accessible"
-#   file:
-#       mode: 0600
-#       dest: "~{{ item }}/.netrc"
-#   with_items: "{{ users.stdout_lines }}"
-#   tags:
-#       - level1
-#       - level2
-#       - patch
-#       - rule_6.2.13
 
 - name: "SCORED | 6.2.14 | PATCH | Ensure no users have .rhosts files"
   file:
       state: absent
       dest: "~{{ item }}/.rhosts"
-  with_items: "{{ users }}"
+  with_items: "{{ users.stdout_lines }}"
   when:
       - rhel7cis_rule_6_2_14|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.2.14
 
 - name: "SCORED | 6.2.15 | PATCH | Ensure all groups in /etc/passwd exist in /etc/group"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "SCORED | 6.2.15 | AUDIT | Ensure all groups in /etc/passwd exist in /etc/group | Check /etc/passwd entries"
+        shell: pwck -r | grep 'no group' | awk '{ gsub("[:\47]",""); print $2}'
+        changed_when: no
+        failed_when: no
+        check_mode: no
+        register: passwd_gid_check
+
+      - name: "SCORED | 6.2.15 | AUDIT | Ensure all groups in /etc/passwd exist in /etc/group | Print message that all groups match between passwd and group files"
+        debug:
+            msg: "Good News! There are no users that have non-existent GUIDs (Groups)"
+        when: passwd_gid_check.stdout is not defined
+
+      - name: "SCORED | 6.2.15 | AUDIT | Ensure all groups in /etc/passwd exist in /etc/group | Print warning about users with invalid GIDs missing GID entries in /etc/group"
+        debug:
+            msg: "WARNING: The following users have non-existent GIDs (Groups): {{ passwd_gid_check.stdout_lines | join (', ') }}"
+        changed_when: no
+        when: passwd_gid_check.stdout is defined
   when:
       - rhel7cis_rule_6_2_15|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.2.15
-      - notimplemented
 
 - name: "SCORED | 6.2.16 | PATCH | Ensure no duplicate UIDs exist"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "SCORED | 6.2.16 | AUDIT | Ensure no duplicate UIDs exist | Check for duplicate UIDs"
+        shell: "pwck -r | awk -F: '{if ($3 in uid) print $1 ; else uid[$3]}' /etc/passwd"
+        changed_when: no
+        failed_when: no
+        register: user_uid_check
+
+      - name: "SCORED | 6.2.16 | AUDIT | Ensure no duplicate UIDs exist | Print message that no duplicate UIDs exist"
+        debug:
+            msg: "Good News! There are no duplicate UID's in the system"
+        when: user_uid_check.stdout is not defined
+
+      - name: "SCORED | 6.2.16 | AUDIT | Ensure no duplicate UIDs exist | Print warning about users with duplicate UIDs"
+        debug:
+            msg: "Warning: The following users have UIDs that are duplicates: {{ user_uid_check.stdout_lines }}"
+        when: user_uid_check.stdout is defined
   when:
       - rhel7cis_rule_6_2_16|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.2.16
-      - notimplemented
 
 - name: "SCORED | 6.2.17 | PATCH | Ensure no duplicate GIDs exist"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "SCORED | 6.2.17 | AUDIT | Ensure no duplicate GIDs exist | Check for duplicate GIDs"
+        shell: "pwck -r | awk -F: '{if ($3 in users) print $1 ; else users[$3]}' /etc/group"
+        changed_when: no
+        failed_when: no
+        register: user_user_check
+
+      - name: "SCORED | 6.2.17 | AUDIT | Ensure no duplicate GIDs exist | Print message that no duplicate GID's exist"
+        debug:
+            msg: "Good News! There are no duplicate GIDs in the system"
+        when: user_user_check.stdout is not defined
+
+      - name: "SCORED | 6.2.17 | AUDIT | Ensure no duplicate GIDs exist | Print warning about users with duplicate GIDs"
+        debug:
+            msg: "Warning: The following groups have duplicate GIDs: {{ user_user_check.stdout_lines }}"
+        when: user_user_check.stdout is defined
   when:
       - rhel7cis_rule_6_2_17|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.2.17
-      - notimplemented
 
 - name: "SCORED | 6.2.18 | PATCH | Ensure no duplicate user names exist"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "SCORED | 6.2.18 | AUDIT | Ensure no duplicate user names exist | Check for duplicate User Names"
+        shell: "pwck -r | awk -F: '{if ($1 in users) print $1 ; else users[$1]}' /etc/passwd"
+        changed_when: no
+        failed_when: no
+        register: user_username_check
+
+      - name: "SCORED | 6.2.18 | AUDIT | Ensure no duplicate user names exist | Print message that no duplicate user names exist"
+        debug:
+            msg: "Good News! There are no duplicate user names in the system"
+        when: user_username_check.stdout is not defined
+
+      - name: "SCORED | 6.2.18 | AUDIT | Ensure no duplicate user names exist | Print warning about users with duplicate User Names"
+        debug:
+            msg: "Warning: The following user names are duplicates: {{ user_username_check.stdout_lines }}"
+        when: user_username_check.stdout is defined
   when:
       - rhel7cis_rule_6_2_18|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.2.18
-      - notimplemented
 
 - name: "SCORED | 6.2.19 | PATCH | Ensure no duplicate group names exist"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "SCORED | 6.2.19 | AUDIT | Ensure no duplicate group names exist | Check for duplicate group names"
+        shell: 'getent passwd | cut -d: -f1 | sort -n | uniq -d'
+        changed_when: no
+        failed_when: no
+        register: group_group_check
+
+      - name: "SCORED | 6.2.19 | AUDIT | Ensure no duplicate group names exist | Print message that no duplicate groups exist"
+        debug:
+            msg: "Good News! There are no duplicate group names in the system"
+        when: group_group_check.stdout is defined
+
+      - name: "SCORED | 6.2.19 | AUDIT | Ensure no duplicate group names exist | Print warning about users with duplicate group names"
+        debug:
+            msg: "Warning: The following group names are duplicates: {{ group_group_check.stdout_lines }}"
+        when: group_group_check.stdout is not defined
   when:
       - rhel7cis_rule_6_2_19|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.2.19

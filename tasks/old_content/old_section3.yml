@@ -1,3 +1,4 @@
+---
 - name: "SCORED | 3.1 | AUDIT | Set Daemon umask"
   command: grep umask /etc/sysconfig/init
   register: result
