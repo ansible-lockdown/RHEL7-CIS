@@ -4,10 +4,8 @@ dependency:
   requirements_file: requirements.yml
 driver:
   name: docker
-lint: |
-  set -e
-  yamllint .
-  ansible-lint
+lint:
+  name: yamllint
 platforms:
   - name: CIS-centos7
     image: milcom/centos7-systemd
@@ -19,6 +17,8 @@ provisioner:
       remote_tmp: /tmp
   playbooks:
     converge: playbook.yml
+  lint:
+    name: ansible-lint
 scenario:
   name: default
   create_sequence:
