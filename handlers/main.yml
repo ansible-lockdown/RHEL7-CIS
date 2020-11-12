@@ -65,11 +65,13 @@
   register: ssh_host_keys
 
 - name: check sshd configuration
+  become: yes
   command: '/usr/sbin/sshd -t'
   register: sshd_config
   changed_when: "sshd_config.rc != 0"
 
 - name: restart sshd - after config check
+  become: yes
   service:
       name: sshd
       state: restarted
