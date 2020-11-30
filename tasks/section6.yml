@@ -505,7 +505,7 @@
       path: "{{ item.dir }}"
       owner: "{{ item.id }}"
       state: directory
-  with_items: "{{ rhel7cis_passwd }}"
+  with_items: "{{ rhel7cis_passwd | selectattr('uid', '>=', 1000) | selectattr('uid', '!=', 65534) | list }}"
   loop_control:
       label: "{{ rhel7cis_passwd_label }}"
   when:
