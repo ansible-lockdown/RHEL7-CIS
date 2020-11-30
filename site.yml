@@ -1,0 +1,11 @@
+---
+- hosts: all
+  become: true
+  vars:
+      is_container: false
+
+  roles:
+
+      - role: "{{ playbook_dir }}"
+        rhel8cis_system_is_container: "{{ is_container | default(false) }}"
+        rhel8cis_skip_for_travis: false
