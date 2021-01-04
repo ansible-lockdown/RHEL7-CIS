@@ -8,7 +8,7 @@ Configure RHEL/Centos 7 machine to be [CIS](https://www.cisecurity.org/cis-bench
 
 This role **will make changes to the system** that could break things. This is not an auditing tool but rather a remediation tool to be used after an audit has been conducted.
 
-Based on [CIS RedHat Enterprise Linux 7 Benchmark v2.1.1 - 01-31-2017 ](https://community.cisecurity.org/collab/public/index.php).
+Based on [CIS RedHat Enterprise Linux 7 Benchmark v3.0.1 - 09-21-2020 ](https://community.cisecurity.org/collab/public/index.php).
 
 This repo originated from work done by [Sam Doran](https://github.com/samdoran/ansible-role-stig)
 

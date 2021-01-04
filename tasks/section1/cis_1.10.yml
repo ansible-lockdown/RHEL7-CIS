@@ -1,0 +1,57 @@
+---
+
+- name: "SCORED | 1.10 | PATCH | Ensure GDM is removed"
+  package:
+    name: gdm
+    state: absent
+  when:
+  - not rhel7cis_gui
+  - rhel7cis_rule_1_10
+  tags:
+  - level1
+  - scored
+  - patch
+  - rule_1_10
+  - gdm
+
+- name: "SCORED | 1.10 | PATCH | Ensure GDM is removed or login is configured"
+  batch:
+  - name:  "SCORED | 1.10 | PATCH | login is configured | gdm"
+    lineinfile:
+      dest: /etc/dconf/profile/gdm
+      regexp: "{{ item.regex }}"
+      line: "{{ item.line }}"
+    loop:
+    - { regex: '^user-db:', line: 'user-db:user' }
+    - { regex: '^system-db:', line: 'system-db:gdm' }
+    - { regex: '^file-db:', line: 'file-db:/usr/share/gdm/greeter-dconf-defaults' }
+    
+  - name:  "SCORED | 1.10 | PATCH | login is configured | banner"
+    lineinfile:
+      dest: /etc/dconf/db/01-banner-message
+      regexp: "{{ item.regex }}"
+      line: "{{ item.line }}"
+    loop:
+    - { regex: '^[org/gnome/login-screen]', line: '[org/gnome/login-screen]' }
+    - { regex: '^banner-message-enable', line: 'banner-message-enable=true' }
+    - { regex: '^banner-message-text', line: 'banner-message-test={{ rhel7cis_warning_banner }}' }
+  
+  - name:  "SCORED | 1.10 | PATCH | login is configured | login"
+    lineinfile:
+      dest: /etc/dconf/db/00-login-screen
+      regexp: "{{ item.regex }}"
+      line: "{{ item.line }}"
+    loop:
+    - { regex: '^[org/gnome/login-screen]', line: '[org/gnome/login-screen]' }
+    - { regex: '^# Do not show', line: '# Do not show user list' }
+    - { regex: '^disable-user-list', line: 'disable-user-list=true' }
+  when:
+  - rhel7cis_gui
+  - rhel7cis_rule_1_10
+  tags:
+  - level1
+  - scored 
+  - patch
+  - rule_1_10
+  - gdm
+  notify: update dconf

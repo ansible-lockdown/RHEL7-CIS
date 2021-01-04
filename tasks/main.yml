@@ -11,16 +11,10 @@
 
 - name: Check ansible version
   fail:
-      msg: You must use ansible 2.1 or greater
-  when: not ansible_version.full is version_compare('2.1', '>=')
+      msg: You must use ansible 2.8 or greater
+  when: not ansible_version.full is version_compare('2.8', '>=')
   tags:
       - always
-
-- name: Install OpenSCAP and run a report
-  import_tasks: audit_oscap_scan_before.yml
-  when: rhel7cis_oscap_scan
-  tags:
-      - oscapreport
 
 - include: prelim.yml
   become: yes
@@ -62,9 +56,3 @@
   tags:
       - post_tasks
       - always
-
-- name: run the OpenSCAP reporting tool again
-  import_tasks: audit_oscap_scan_after.yml
-  when: rhel7cis_oscap_scan
-  tags:
-      - oscapreport
