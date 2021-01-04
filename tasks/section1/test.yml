@@ -1,0 +1,16 @@
+---
+- hosts: all
+  tasks:
+  - include_tasks: cis_1.1.1.x.yml
+  - include_tasks: cis_1.1.x.yml
+  - include_tasks: cis_1.2.x.yml
+  - include_tasks: cis_1.3.x.yml
+  - include_tasks: cis_1.4.x.yml
+  - include_tasks: cis_1.5.x.yml
+  - include_tasks: cis_1.6.x.yml
+  - include_tasks: cis_1.7.x.yml
+  - include_tasks: cis_1.8.x.yml
+  - include_tasks: cis_1.9.x.yml
+  - include_tasks: cis_1.10.x.yml
+
+  
