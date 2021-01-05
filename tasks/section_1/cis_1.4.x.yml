@@ -24,6 +24,8 @@
   - aide
   - patch
   - rule_1.4.1
+  vars:
+    ansible_python_interpreter: /bin/python
 
 - name: "SCORED | 1.4.2 | PATCH | Ensure filesystem integrity is regularly checked | cron"
   cron:

@@ -19,249 +19,36 @@
   changed_when: no
   check_mode: no
 
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+
+- name: "PRELIM | Section 1.7 | Ensure SELinux is installed"
+  package:
+    name: libselinux
+    state: present
+  when:
+  - not rhel7cis_selinux_disable
+  vars:
+    ansible_python_interpreter: /bin/python
+
 - name: "PRELIM | Section 4.1 | Configure System Accounting (auditd)"
-  yum:
-      name: audit
-      state: present
+  package:
+    name: audit
+    state: present
+  vars:
+    ansible_python_interpreter: /bin/python
 
 - name: "PRELIM | Section 5.1 | Configure cron"
-  yum:
-      name: cronie
-      state: present
+  package:
+    name: cronie
+    state: present
+  vars:
+    ansible_python_interpreter: /bin/python
 
-- name: "PRELIM | Check if prelink package is installed"
-  command: rpm -q prelink
-  args:
-      warn: false
-  register: prelink_installed
-  changed_when: no
-  failed_when: no
-  check_mode: no
-  tags:
-      - skip_ansible_lint
-
-- name: "PRELIM | Check if postfix package is installed"
-  command: rpm -q postfix
-  args:
-      warn: false
-  register: postfix_installed
-  changed_when: no
-  failed_when: no
-  check_mode: no
-  tags:
-      - skip_ansible_lint
-
-# Individual service checks
-- name: "PRELIM | Check for xinetd service"
-  shell: "systemctl show xinetd | grep LoadState | cut -d = -f 2"
-  register: xinetd_service_status
-  changed_when: no
-  check_mode: no
-  tags:
-      - skip_ansible_lint
-
-- name: "PRELIM | Check for ntpd service"
-  shell: "systemctl show ntpd | grep LoadState | cut -d = -f 2"
-  register: ntpd_service_status
-  changed_when: no
-  check_mode: no
-  tags:
-      - skip_ansible_lint
-
-
-- name: "PRELIM | Check for chronyd service"
-  shell: "systemctl show chronyd | grep LoadState | cut -d = -f 2"
-  register: chronyd_service_status
-  changed_when: no
-  check_mode: no
-  tags:
-      - skip_ansible_lint
-
-- name: "PRELIM | Check for avahi-daemon service"
-  shell: "systemctl show avahi-daemon | grep LoadState | cut -d = -f 2"
-  register: avahi_service_status
-  changed_when: no
-  check_mode: no
-  tags:
-      - skip_ansible_lint
-
-- name: "PRELIM | Check for cups service"
-  shell: "systemctl show cups | grep LoadState | cut -d = -f 2"
-  register: cups_service_status
-  changed_when: no
-  check_mode: no
-  tags:
-      - skip_ansible_lint
-
-- name: "PRELIM | Check for dhcpd service"
-  shell: "systemctl show dhcpd | grep LoadState | cut -d = -f 2"
-  register: dhcpd_service_status
-  changed_when: no
-  check_mode: no
-  tags:
-      - skip_ansible_lint
-
-- name: "PRELIM | Check for slapd service"
-  shell: "systemctl show slapd | grep LoadState | cut -d = -f 2"
-  register: slapd_service_status
-  changed_when: no
-  check_mode: no
-  tags:
-      - skip_ansible_lint
-
-- name: "PRELIM | Check for nfs service"
-  shell: "systemctl show nfs | grep LoadState | cut -d = -f 2"
-  register: nfs_service_status
-  changed_when: no
-  check_mode: no
-  tags:
-      - skip_ansible_lint
-
-- name: "PRELIM | Check for rpcbind service"
-  shell: "systemctl show rpcbind | grep LoadState | cut -d = -f 2"
-  register: rpcbind_service_status
-  changed_when: no
-  check_mode: no
-  tags:
-      - skip_ansible_lint
-
-- name: "PRELIM | Check for named service"
-  shell: "systemctl show named | grep LoadState | cut -d = -f 2"
-  register: named_service_status
-  changed_when: no
-  check_mode: no
-  tags:
-      - skip_ansible_lint
-
-- name: "PRELIM | Check for vsftpd service"
-  shell: "systemctl show vsftpd | grep LoadState | cut -d = -f 2"
-  register: vsftpd_service_status
-  changed_when: no
-  check_mode: no
-  tags:
-      - skip_ansible_lint
-
-- name: "PRELIM | Check for httpd service"
-  shell: "systemctl show httpd | grep LoadState | cut -d = -f 2"
-  register: httpd_service_status
-  changed_when: no
-  check_mode: no
-  tags:
-      - skip_ansible_lint
-
-- name: "PRELIM | Check for dovecot service"
-  shell: "systemctl show dovecot | grep LoadState | cut -d = -f 2"
-  register: dovecot_service_status
-  changed_when: no
-  check_mode: no
-  tags:
-      - skip_ansible_lint
-
-- name: "PRELIM | Check for smb service"
-  shell: "systemctl show smb | grep LoadState | cut -d = -f 2"
-  register: smb_service_status
-  changed_when: no
-  check_mode: no
-  tags:
-      - skip_ansible_lint
-
-- name: "PRELIM | Check for squid service"
-  shell: "systemctl show squid | grep LoadState | cut -d = -f 2"
-  register: squid_service_status
-  changed_when: no
-  check_mode: no
-  tags:
-      - skip_ansible_lint
-
-- name: "PRELIM | Check for snmpd service"
-  shell: "systemctl show snmpd | grep LoadState | cut -d = -f 2"
-  register: snmpd_service_status
-  changed_when: no
-  check_mode: no
-  tags:
-      - skip_ansible_lint
-
-- name: "PRELIM | Check for ypserv service"
-  shell: "systemctl show ypserv | grep LoadState | cut -d = -f 2"
-  register: ypserv_service_status
-  changed_when: no
-  check_mode: no
-  tags:
-      - skip_ansible_lint
-
-- name: "PRELIM | Check for rsh.socket service"
-  shell: "systemctl show rsh.socket | grep LoadState | cut -d = -f 2"
-  register: rsh_service_status
-  changed_when: no
-  check_mode: no
-  tags:
-      - skip_ansible_lint
-
-- name: "PRELIM | Check for rlogin.socket service"
-  shell: "systemctl show rlogin.socket | grep LoadState | cut -d = -f 2"
-  register: rlogin_service_status
-  changed_when: no
-  check_mode: no
-  tags:
-      - skip_ansible_lint
-
-- name: "PRELIM | Check for rexec.socket service"
-  shell: "systemctl show rexec.socket | grep LoadState | cut -d = -f 2"
-  register: rexec_service_status
-  changed_when: no
-  check_mode: no
-  tags:
-      - skip_ansible_lint
-
-- name: "PRELIM | Check for telnet service"
-  shell: "systemctl show telnet | grep LoadState | cut -d = -f 2"
-  register: telnet_service_status
-  changed_when: no
-  check_mode: no
-  tags:
-      - skip_ansible_lint
-
-- name: "PRELIM | Check for tftp service"
-  shell: "systemctl show tftp | grep LoadState | cut -d = -f 2"
-  register: tftp_service_status
-  changed_when: no
-  check_mode: no
-  tags:
-      - skip_ansible_lint
-
-- name: "PRELIM | Check for rsyncd service"
-  shell: "systemctl show rsyncd | grep LoadState | cut -d = -f 2"
-  register: rsyncd_service_status
-  changed_when: no
-  check_mode: no
-  tags:
-      - skip_ansible_lint
-
-- name: "PRELIM | Check for ntalk service"
-  shell: "systemctl show ntalk | grep LoadState | cut -d = -f 2"
-  register: ntalk_service_status
-  changed_when: no
-  check_mode: no
-  tags:
-      - skip_ansible_lint
-
-- name: "PRELIM | Check for autofs service"
-  shell: "systemctl show autofs | grep LoadState | cut -d = -f 2"
-  register: autofs_service_status
-  changed_when: no
-  check_mode: no
-  tags:
-      - skip_ansible_lint
-
-- name: "PRELIM | Check for rhnsd service"
-  shell: "systemctl show rhnsd | grep LoadState | cut -d = -f 2"
-  register: rhnsd_service_status
-  changed_when: no
-  check_mode: no
-  tags:
-      - skip_ansible_lint
-## NOTE: You will need to adjust the UID range in parenthases below.
-## ALSO NOTE: We weed out any user with a home dir not in standard locations because interactive users shouldn't have those paths as a home dir. Add or removed directory paths as needed below.
+### NOTE: You will need to adjust the UID range in parenthases below.
+### ALSO NOTE: We weed out any user with a home dir not in standard locations because interactive users shouldn't have those paths as a home dir. Add or removed directory paths as needed below.
 - name: "PRELIM | 6.2.8 | Gather local interactive user directories"
   shell: "getent passwd {1000..65535} | cut -d: -f6 | sort -u | grep -v '/var/' | grep -v '/nonexistent/*' | grep -v '/run/*'"
   register: rhel_07_6_2_8_getent
@@ -272,7 +59,7 @@
 
 - name: "PRELIM | 6.2.8 | Set fact for home directory paths for interactive users"
   set_fact:
-      rhel_07_stig_interactive_homedir_results: "{{ rhel_07_6_2_8_getent.stdout_lines }}"
+    rhel_07_stig_interactive_homedir_results: "{{ rhel_07_6_2_8_getent.stdout_lines }}"
   when: rhel_07_6_2_8_getent.stdout_lines is defined
   tags:
-      - rule_6.2.8
+  - rule_6.2.8

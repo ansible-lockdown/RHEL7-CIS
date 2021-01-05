@@ -18,6 +18,13 @@ Requirements
 You should carefully read through the tasks to make sure these changes will not break your systems before running this playbook.
 If you want to do a dry run without changing anything, set the below sections (rhel7cis_section1-6) to false. 
 
+Modules
+-------
+rpm
+yum
+dnf
+
+
 Role Variables
 --------------
 There are many role variables defined in defaults/main.yml. This list shows the most important.

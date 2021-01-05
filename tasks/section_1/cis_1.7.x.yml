@@ -11,6 +11,8 @@
   - scored
   - patch
   - rule_1.7.1.1
+  vars:
+    ansible_python_interpreter: /bin/python
 
 - name: "SCORED | 1.7.1.2 | PATCH | Ensure SELinux is not disabled in bootloader configuration"
   replace:
@@ -80,6 +82,7 @@
         register: rhelcis_1_7_1_6_unconf_daemons
         failed_when: no
         changed_when: no
+      
       - name: "SCORED | 1.7.1.6 | AUDIT | Ensure no unconfined daemons exist | Message on no unconfined daemones"
         debug:
             msg: "Good News! There are no unconfined daemons found on your system"
@@ -108,6 +111,8 @@
       - selinux
       - patch
       - rule_1.7.1.7
+  vars:
+    ansible_python_interpreter: /bin/python
 
 - name: "SCORED | 1.7.1.8 | PATCH | Ensure the MCS Translation Service (mcstrans) is not installed"
   package:
@@ -120,3 +125,5 @@
       - scored
       - patch
       - rule_1.7.1.8
+  vars:
+    ansible_python_interpreter: /bin/python

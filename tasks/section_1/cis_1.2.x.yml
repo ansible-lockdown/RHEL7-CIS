@@ -35,11 +35,10 @@
 
   - name: "SCORED | 1.2.3 | PATCH | Ensure gpgcheck is globally activated"
     replace:
-      name: "{{ item.path }}"
+      path: "{{ item.path }}"
       regexp: "^gpgcheck=0"
       replace: "gpgcheck=1"
-  with_items:
-  - "{{ yum_repos.files }}"
+    loop: "{{ yum_repos.files }}"
   when:
   - rhel7cis_rule_1_2_3
   tags:

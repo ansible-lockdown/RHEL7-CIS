@@ -47,7 +47,7 @@
       masked: no
       state: reloaded
 
-- name: remount /home
+- name: remount home
   become: yes
   command: mount -o remount /home
 
