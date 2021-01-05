@@ -20,8 +20,8 @@
          SCORED | 1.1.4 | PATCH | Ensure nodev option set on /tmp partition\n
          SCORED | 1.1.5 | PATCH | Ensure nosuid option set on /tmp partition\n
          | drop custom tmp.mount"
-  copy:
-    src: etc/systemd/system/tmp.mount
+  template:
+    src: etc/tmp_mount.j2
     dest: /etc/systemd/system/tmp.mount
     owner: root
     group: root
@@ -40,25 +40,8 @@
   - rule_1.1.4
   - rule_1.1.5
 
-
-- name: "SCORED | 1.1.2 | PATCH | Ensure /tmp is configured | via fstab option"
-  mount:
-    name: /tmp
-    src: "{{ item.device }}"
-    fstype: "{{ item.fstype }}"
-    state: present
-  loop: "{{ ansible_mounts }}"
-  when:
-  - item.mount == "/tmp"
-  - rhel7cis_tmp_svc
-  - rhel7cis_rule_1_1_2
-  tags:
-  - level2
-  - scored
-  - patch
-  - rule_1.1.2
-
-- name: "SCORED | 1.1.3 | PATCH | Ensure noexec option set on /tmp partition\n
+- name: "SCORED | 1.1.2 | PATCH | Ensure /tmp is configured\n
+         SCORED | 1.1.3 | PATCH | Ensure noexec option set on /tmp partition\n
          SCORED | 1.1.4 | PATCH | Ensure nodev option set on /tmp partition\n
          SCORED | 1.1.5 | PATCH | Ensure nosuid option set on /tmp partition\n
          | via fstab option"
@@ -67,40 +50,24 @@
     src: "{{ item.device }}"
     fstype: "{{ item.fstype }}"
     state: present
-    opts: default,noexec,nodev,nosuid
+    opts: defaults,{% if rhel7cis_rule_1_1_3 %}noexec,{% endif %}{% if rhel7cis_rule_1_1_4 %}nodev,{% endif %}{% if rhel7cis_rule_1_1_5 %}nosuid{% endif %}
   loop: "{{ ansible_mounts }}"
   when:
   - item.mount == "/tmp"
-  - rhel7cis_tmp_svc
-  - rhel7cis_rule_1_1_3
-  - rhel7cis_rule_1_1_4
-  - rhel7cis_rule_1_1_5
+  - not rhel7cis_tmp_svc
+  - rhel7cis_rule_1_1_2 or rhel7cis_rule_1_1_3 or rhel7cis_rule_1_1_4 or rhel7cis_rule_1_1_5
   tags:
-  - level1
+  - level2
   - scored
   - patch
+  - rule_1.1.2
   - rule_1.1.3
   - rule_1.1.4
   - rule_1.1.5
   notify: remount tmp
 
-- name: "SCORED | 1.1.6 | PATCH | Ensure /dev/shm is configured"
-  mount:
-    name: /dev/shm
-    src: "{{ item.device }}"
-    fstype: tmpfs
-    state: present
-  loop: "{{ ansible_mounts }}"
-  when:
-  - item.mount == "/dev/shm"
-  - rhel7cis_rule_1_1_6
-  tags:
-  - level1
-  - scored
-  - patch
-  - rule_1.1.6
-
-- name: "SCORED | 1.1.7 | PATCH | Ensure noexec option set on /dev/shm partition\n
+- name: "SCORED | 1.1.6 | PATCH | Ensure /dev/shm is configured\n
+         SCORED | 1.1.7 | PATCH | Ensure noexec option set on /dev/shm partition\n
          SCORED | 1.1.8 | PATCH | Ensure nodev option set on /dev/shm partition\n
          SCORED | 1.1.9 | PATCH | Ensure nosuid option set on /dev/shm partition\n"
   mount:
@@ -108,22 +75,20 @@
     src: "{{ item.device }}"
     fstype: tmpfs
     state: present
-    opts: defaults,noexec,nodev,nosuid,seclabel
+    opts: defaults,{% if rhel7cis_rule_1_1_7 %}noexec,{% endif %}{% if rhel7cis_rule_1_1_8 %}nodev,{% endif %}{% if rhel7cis_rule_1_1_9 %}nosuid{% endif %}
   loop: "{{ ansible_mounts }}"
   when:
   - item.mount == "/dev/shm"
-  - rhel7cis_rule_1_1_7
-  - rhel7cis_rule_1_1_8
-  - rhel7cis_rule_1_1_9
+  - rhel7cis_rule_1_1_6 or rhel7cis_rule_1_1_7 or rhel7cis_rule_1_1_8 or rhel7cis_rule_1_1_9
   tags:
   - level1
   - scored
   - patch
+  - rule_1.1.6
   - rule_1.1.7
   - rule_1.1.8
   - rule_1.1.9
   notify: remount dev_shm
-
 
 - name: "SCORED | 1.1.10 | PATCH | Ensure separate partition exists for /var"
   mount:
@@ -141,23 +106,8 @@
   - patch
   - rule_1.1.10
 
-- name: "SCORED | 1.1.11 | PATCH | Ensure /var/tmp is configured"
-  mount:
-    name: /var/tmp
-    src: "{{ item.device }}"
-    fstype: "{{ item.fstype }}"
-    state: present
-  loop: "{{ ansible_mounts }}"
-  when:
-  - item.mount == "/var/tmp"
-  - rhel7cis_rule_1_1_11
-  tags:
-  - level1
-  - scored
-  - patch
-  - rule_1.1.11
-
-- name: "SCORED | 1.1.12 | PATCH | Ensure noexec option set on /var/tmp partition\n
+- name: "SCORED | 1.1.11 | PATCH | Ensure /var/tmp is configured\n
+         SCORED | 1.1.12 | PATCH | Ensure noexec option set on /var/tmp partition\n
          SCORED | 1.1.13 | PATCH | Ensure nodev option set on /var/tmp partition\n
          SCORED | 1.1.14 | PATCH | Ensure nosuid option set on /var/tmp partition\n
          | via fstab option"
@@ -166,21 +116,21 @@
     src: "{{ item.device }}"
     fstype: "{{ item.fstype }}"
     state: present
-    opts: defaults,noexec,nodev,nosuid
+    opts: defaults,{% if rhel7cis_rule_1_1_12 %}noexec,{% endif %}{% if rhel7cis_rule_1_1_13 %}nodev,{% endif %}{% if rhel7cis_rule_1_1_14 %}nosuid{% endif %}
   loop: "{{ ansible_mounts }}"
   when:
   - item.mount == "/var/tmp"
-  - rhel7cis_rule_1_1_12
-  - rhel7cis_rule_1_1_13
-  - rhel7cis_rule_1_1_14
+  - rhel7cis_rule_1_1_11 or rhel7cis_rule_1_1_12 or rhel7cis_rule_1_1_13 or rhel7cis_rule_1_1_14
   tags:
   - level1
   - scored
   - patch
+  - rule_1.1.11
   - rule_1.1.12
   - rule_1.1.13
   - rule_1.1.14
   notify: remount var_tmp
+
 
 - name: "SCORED | 1.1.15 | PATCH | Ensure separate partition exists for /var/log"
   mount:
@@ -214,75 +164,42 @@
   - patch
   - rule_1.1.16
 
-- name: "SCORED | 1.1.17 | PATCH | Ensure separate partition exists for /home"
+- name: "SCORED | 1.1.17 | PATCH | Ensure separate partition exists for /home\n
+         SCORED | 1.1.18 | PATCH | Ensure nodev option set on /home partition"
   mount:
     name: /home
     src: "{{ item.device }}"
     fstype: "{{ item.fstype }}"
     state: present
+    opts: defaults,{% if rhel7cis_rule_1_1_18 %}nodev{% endif %}
   loop: "{{ ansible_mounts }}"
   when:
   - item.mount == "/home"
-  - rhel7cis_rule_1_1_17
+  - rhel7cis_rule_1_1_17 or rhel7cis_rule_1_1_18
   tags:
   - level2
   - scored
   - patch
   - rule_1.1.17
-
-- name: "SCORED | 1.1.18 | PATCH | Ensure nodev option set on /home partition"
-  mount:
-    name: /home
-    src: "{{ item.device }}"
-    fstype: "{{ item.fstype }}"
-    state: present
-    opts: defaults,nodev
-  loop: "{{ ansible_mounts }}"
-  when:
-  - item.mount == "/home"
-  - rhel7cis_rule_1_1_18
-  tags:
-  - level2
-  - scored
-  - patch
   - rule_1.1.18
   notify: remount home
 
-- name: "NOTSCORED | 1.1.19 | PATCH | Ensure noexec option set on removable media partitions"
+- name: "NOTSCORED | 1.1.19 | PATCH | Ensure noexec option set on removable media partitions\n
+         NOTSCORED | 1.1.20 | PATCH | Ensure nodev option set on removable media partitions\n
+         NOTSCORED | 1.1.21 | PATCH | Ensure nosuid option set on removable media partitions"
   debug:
       msg: "--> Not relevant"
   changed_when: no
   when:
-      - rhel7cis_rule_1_1_19
+  - rhel7cis_rule_1_1_19 or rhel7cis_rule_1_1_20 or rhel7cis_rule_1_1_21
   tags:
-      - level1
-      - notscored
-      - patch
-      - rule_1.1.19
+  - level1
+  - notscored
+  - patch
+  - rule_1.1.19
+  - rule_1.1.20
+  - rule_1.1.21
 
-- name: "NOTSCORED | 1.1.20 | PATCH | Ensure nodev option set on removable media partitions"
-  debug:
-      msg: "--> Not relevant"
-  changed_when: no
-  when:
-      - rhel7cis_rule_1_1_20
-  tags:
-      - level1
-      - notscored
-      - patch
-      - rule_1.1.20
-
-- name: "NOTSCORED | 1.1.21 | PATCH | Ensure nosuid option set on removable media partitions"
-  debug:
-      msg: "--> Not relevant"
-  changed_when: no
-  when:
-      - rhel7cis_rule_1_1_21
-  tags:
-      - level1
-      - notscored
-      - patch
-      - rule_1.1.21
 
 - name: "SCORED | 1.1.22 | PATCH | Ensure sticky bit is set on all world-writable directories"
   shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d -perm -0002 2>/dev/null | xargs chmod a+t
@@ -290,25 +207,25 @@
   failed_when: no
   # when: sticky_bit_on_worldwritable_dirs_audit.rc == '0'
   when:
-      - rhel7cis_rule_1_1_22
+  - rhel7cis_rule_1_1_22
   tags:
-      - level1
-      - patch
-      - rule_1.1.22
+  - level1
+  - patch
+  - rule_1.1.22
 
 - name: "SCORED | 1.1.23 | PATCH | Disable Automounting"
   service:
-      name: autofs
-      enabled: no
+    name: autofs
+    enabled: no
   when:
-      - not rhel7cis_allow_autofs
-      - "'autofs' in ansible_facts.packages"
-      - rhel7cis_rule_1_1_23
+  - not rhel7cis_allow_autofs
+  - "'autofs' in ansible_facts.packages"
+  - rhel7cis_rule_1_1_23
   tags:
-      - level1
-      - level2
-      - patch
-      - rule_1.1.23
+  - level1
+  - level2
+  - patch
+  - rule_1.1.23
 
 
 - name: "SCORED | 1.1.24 | PATCH | Disable USB Storage"
@@ -326,10 +243,10 @@
       name: usb-storage
       state: absent
   when:
-      - rhel7cis_rule_1_1_24
+  - rhel7cis_rule_1_1_24
   tags:
-      - level1
-      - scored
-      - patch
-      - rule_1.1.24
-      - usb-storage
+  - level1
+  - scored
+  - patch
+  - rule_1.1.24
+  - usb-storage
