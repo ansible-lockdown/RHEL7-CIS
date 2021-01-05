@@ -1,58 +1,14 @@
 ---
-# tasks file for RHEL7-CIS
-- name: Check OS version and family
-  fail:
-      msg: "This role can only be run against RHEL 7. {{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported."
-  when:
-      - ansible_os_family == 'RedHat'
-      - ansible_distribution_major_version is version_compare('7', '!=')
-  tags:
-      - always
 
-- name: Check ansible version
-  fail:
-      msg: You must use ansible 2.8 or greater
-  when: not ansible_version.full is version_compare('2.8', '>=')
-  tags:
-      - always
 
-- include: prelim.yml
-  become: yes
-  tags:
-      - prelim_tasks
-      - always
-- include: parse_etc_password.yml
-  become: yes
-  when: rhel7cis_section6|bool
-
-- include: section1.yml
-  become: yes
-  when: rhel7cis_section1|bool
-  tags:
-      - rhel7cis_section1
-
-- include: section2.yml
-  become: yes
-  when: rhel7cis_section2|bool
-
-- include: section3.yml
-  become: yes
-  when: rhel7cis_section3|bool
-
-- include: section4.yml
-  become: yes
-  when: rhel7cis_section4|bool
-
-- include: section5.yml
-  become: yes
-  when: rhel7cis_section5|bool
-
-- include: section6.yml
-  become: yes
-  when: rhel7cis_section6|bool
-
-- include: post.yml
-  become: yes
-  tags:
-      - post_tasks
-      - always
+- include_tasks: cis_1.1.1.x.yml
+- include_tasks: cis_1.1.x.yml
+- include_tasks: cis_1.2.x.yml
+- include_tasks: cis_1.3.x.yml
+- include_tasks: cis_1.4.x.yml
+- include_tasks: cis_1.5.x.yml
+- include_tasks: cis_1.6.x.yml
+- include_tasks: cis_1.7.x.yml
+- include_tasks: cis_1.8.x.yml
+- include_tasks: cis_1.9.x.yml
+- include_tasks: cis_1.10.x.yml

@@ -13,7 +13,7 @@
       content: "GRUB2_PASSWORD={{ grub_pass.passhash }}"
     notify: generate new grub config
   when:
-  - ansible_distribution_version >= 7.2
+  - ansible_distribution_version >= '7.2'
   - rhel7cis_set_boot_pass
   - grub_pass is defined and grub_pass.passhash is defined and grub_pass.passhash != ''
   - rhel7cis_rule_1_5_1
@@ -29,8 +29,8 @@
   - name: "SCORED | 1.5.2 | AUDIT | Ensure permissions on bootloader config are configured | Get grub config settings"
     stat:
       path: /etc/grub2.cfg
-      register: grub_cfg
-      changed_when: no
+    register: grub_cfg
+    changed_when: no
 
   - name: "SCORED | 1.5.2 | PATCH | Ensure permissions on bootloader config are configured | Update grub config settings"
     file:

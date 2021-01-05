@@ -4,6 +4,7 @@ rhel7cis_report_dir: /tmp
 
 rhel7cis_skip_for_travis: false
 rhel7cis_system_is_container: false
+system_is_ec2: false
 
 rhel7cis_notauto: false
 rhel7cis_section1: true
@@ -26,7 +27,6 @@ rhel7cis_tmp_svc: false
 # PLEASE NOTE: These work in coordination with the section # group variables and tags.
 # You must enable an entire section in order for the variables below to take effect.
 # Section 1 rules
-rhel7cis_tmp_svc
 rhel7cis_rule_1_1_1_1: true
 rhel7cis_rule_1_1_1_2: true
 rhel7cis_rule_1_1_1_3: true
@@ -86,6 +86,7 @@ rhel7cis_rule_1_8_1_4: true
 rhel7cis_rule_1_8_1_5: true
 rhel7cis_rule_1_8_1_6: true
 rhel7cis_rule_1_9: true
+rhel7cis_rule_1_10: true
 
 # Section 2 rules
 rhel7cis_rule_2_1_1: true

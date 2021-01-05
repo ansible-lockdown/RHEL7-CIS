@@ -44,7 +44,8 @@
 - name: "SCORED | 1.1.2 | PATCH | Ensure /tmp is configured | via fstab option"
   mount:
     name: /tmp
-    src: {{ item.device }}
+    src: "{{ item.device }}"
+    fstype: "{{ item.fstype }}"
     state: present
   loop: "{{ ansible_mounts }}"
   when:
@@ -63,7 +64,8 @@
          | via fstab option"
   mount:
     name: /tmp
-    src: {{ item.device }}
+    src: "{{ item.device }}"
+    fstype: "{{ item.fstype }}"
     state: present
     opts: default,noexec,nodev,nosuid
   loop: "{{ ansible_mounts }}"
@@ -85,7 +87,7 @@
 - name: "SCORED | 1.1.6 | PATCH | Ensure /dev/shm is configured"
   mount:
     name: /dev/shm
-    src: {{ item.device }}
+    src: "{{ item.device }}"
     fstype: tmpfs
     state: present
   loop: "{{ ansible_mounts }}"
@@ -103,7 +105,7 @@
          SCORED | 1.1.9 | PATCH | Ensure nosuid option set on /dev/shm partition\n"
   mount:
     name: /dev/shm
-    src: {{ item.device }}
+    src: "{{ item.device }}"
     fstype: tmpfs
     state: present
     opts: defaults,noexec,nodev,nosuid,seclabel
@@ -126,7 +128,8 @@
 - name: "SCORED | 1.1.10 | PATCH | Ensure separate partition exists for /var"
   mount:
     name: /var
-    src: {{ item.device }}
+    src: "{{ item.device }}"
+    fstype: "{{ item.fstype }}"
     state: present
   loop: "{{ ansible_mounts }}"
   when:
@@ -141,7 +144,8 @@
 - name: "SCORED | 1.1.11 | PATCH | Ensure /var/tmp is configured"
   mount:
     name: /var/tmp
-    src: {{ item.device }}
+    src: "{{ item.device }}"
+    fstype: "{{ item.fstype }}"
     state: present
   loop: "{{ ansible_mounts }}"
   when:
@@ -158,10 +162,11 @@
          SCORED | 1.1.14 | PATCH | Ensure nosuid option set on /var/tmp partition\n
          | via fstab option"
   mount:
-    name: /tmp
-    src: {{ item.device }}
+    name: /var/tmp
+    src: "{{ item.device }}"
+    fstype: "{{ item.fstype }}"
     state: present
-    opts: default,noexec,nodev,nosuid
+    opts: defaults,noexec,nodev,nosuid
   loop: "{{ ansible_mounts }}"
   when:
   - item.mount == "/var/tmp"
@@ -180,7 +185,8 @@
 - name: "SCORED | 1.1.15 | PATCH | Ensure separate partition exists for /var/log"
   mount:
     name: /var/log
-    src: {{ item.device }}
+    src: "{{ item.device }}"
+    fstype: "{{ item.fstype }}"
     state: present
   loop: "{{ ansible_mounts }}"
   when:
@@ -195,7 +201,8 @@
 - name: "SCORED | 1.1.16 | PATCH | Ensure separate partition exists for /var/log/audit"
   mount:
     name: /var/log/audit
-    src: {{ item.device }}
+    src: "{{ item.device }}"
+    fstype: "{{ item.fstype }}"
     state: present
   loop: "{{ ansible_mounts }}"
   when:
@@ -210,7 +217,8 @@
 - name: "SCORED | 1.1.17 | PATCH | Ensure separate partition exists for /home"
   mount:
     name: /home
-    src: {{ item.device }}
+    src: "{{ item.device }}"
+    fstype: "{{ item.fstype }}"
     state: present
   loop: "{{ ansible_mounts }}"
   when:
@@ -225,7 +233,8 @@
 - name: "SCORED | 1.1.18 | PATCH | Ensure nodev option set on /home partition"
   mount:
     name: /home
-    src: {{ item.device }}
+    src: "{{ item.device }}"
+    fstype: "{{ item.fstype }}"
     state: present
     opts: defaults,nodev
   loop: "{{ ansible_mounts }}"
@@ -293,7 +302,7 @@
       enabled: no
   when:
       - not rhel7cis_allow_autofs
-      - autofs_service_status.stdout == "loaded"
+      - "'autofs' in ansible_facts.packages"
       - rhel7cis_rule_1_1_23
   tags:
       - level1
@@ -309,6 +318,7 @@
       dest: /etc/modprobe.d/usb-storage.conf
       regexp: "^(#)?install usb-storage(\\s|$)"
       line: "install usb-storage /bin/true"
+      mode: 0600
       create: yes
 
   - name: "SCORED | 1.1.24 | PATCH | Remove USB Storage module"

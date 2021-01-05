@@ -67,7 +67,7 @@
   - rule_1.6.3
 
 - name: "SCORED | 1.6.4 | PATCH | Ensure prelink is disabled"
-  yum:
+  package:
     name: prelink
     state: absent
   when:
@@ -77,3 +77,5 @@
   - scored
   - patch
   - rule_1.6.4
+  vars:
+    ansible_python_interpreter: /bin/python

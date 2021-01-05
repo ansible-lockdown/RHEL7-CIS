@@ -11,6 +11,8 @@
   - sudo
   - patch
   - rule_1.3.1
+  vars:
+    ansible_python_interpreter: /bin/python
 
 - name: "SCORED | 1.3.2 | PATCH | Ensure sudo commands use pty"
   lineinfile:
