@@ -18,7 +18,7 @@ Before=local-fs.target umount.target
 What=tmpfs
 Where=/tmp
 Type=tmpfs
-Options=mode=1777,strictatime,noexec,nodev,nosuid
+Options=mode=1777,strictatime,{% if rhel7cis_rule_1_1_3 %}noexec,{% endif %}{% if rhel7cis_rule_1_1_4 %}nodev,{% endif %}{% if rhel7cis_rule_1_1_5 %}nosuid{% endif %}
 
 # Make 'systemctl enable tmp.mount' work:
 [Install]
