@@ -124,6 +124,7 @@ rhel7cis_rule_2_3_2: true
 rhel7cis_rule_2_3_3: true
 rhel7cis_rule_2_3_4: true
 rhel7cis_rule_2_3_5: true
+rhel7cis_rule_2_5: true
 
 # Section 3 rules
 rhel7cis_rule_3_1_1: true
