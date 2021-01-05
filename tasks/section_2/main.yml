@@ -1,0 +1,5 @@
+- include_tasks: cis_2.1.x.yml
+- include_tasks: cis_2.2.1.x.yml
+- include_tasks: cis_2.2.x.yml
+- include_tasks: cis_2.3.x.yml
+- include_tasks: cis_2.5.x.yml
