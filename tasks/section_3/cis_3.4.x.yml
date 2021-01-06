@@ -1,0 +1,27 @@
+---
+
+- name: "NOTSCORED | 3.4.1 | PATCH | Ensure DCCP is disabled"
+  lineinfile:
+    dest: /etc/modprobe.d/CIS.conf
+    regexp: "^(#)?install dccp(\\s|$)"
+    line: "install dccp /bin/true"
+    create: yes
+  when:
+  - rhel7cis_rule_3_4_1
+  tags:
+  - level1
+  - patch
+  - rule_3.4.1
+
+- name: "NOTSCORED | 3.4.2 | PATCH | Ensure SCTP is disabled"
+  lineinfile:
+    dest: /etc/modprobe.d/CIS.conf
+    regexp: "^(#)?install sctp(\\s|$)"
+    line: "install sctp /bin/true"
+    create: yes
+  when:
+  - rhel7cis_rule_3_4_2|bool
+  tags:
+  - level1
+  - patch
+  - rule_3.4.2
