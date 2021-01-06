@@ -4,7 +4,7 @@
   package:
     name: nftables
     state: present
-  args:
+  vars:
     ansible_python_interpreter: /bin/python
   when:
   - rhel7cis_firewall == "nftables"
@@ -18,7 +18,7 @@
   package:
     name: firewalld
     state: absent
-  args:
+  vars:
     ansible_python_interpreter: /bin/python
   when:
   - rhel7cis_firewall == "nftables"
@@ -32,7 +32,7 @@
   package:
     name: iptables-services
     state: absent
-  args:
+  vars:
     ansible_python_interpreter: /bin/python
   when:
   - rhel7cis_firewall == "nftables"
