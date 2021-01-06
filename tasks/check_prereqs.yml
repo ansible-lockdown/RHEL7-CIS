@@ -1,0 +1,24 @@
+---
+
+- name: "PREREQ | Check required packages installed | Python2"
+  yum:
+    list: "{{ item }}"
+  loop:
+  - rpm-python
+  - libselinux-python
+  when: ansible_python.version.major == 2
+  vars:
+    ansible_python_interpreter: /bin/python
+
+- name: "PREREQ | Check required packages installed | Python3"
+  yum:
+    name: "{{ item }}"
+    state: present
+  register: python3reqs_installed
+  loop:
+  - python36-rpm
+  - libselinux-python3
+  when:
+  - ( ansible_python.version.major == 3  and ansible_python.version.minor == 6 )
+  vars:
+    ansible_python_interpreter: /bin/python

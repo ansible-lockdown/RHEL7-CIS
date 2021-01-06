@@ -20,10 +20,6 @@
   check_mode: no
 
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-
 - name: "PRELIM | Section 1.7 | Ensure SELinux is installed"
   package:
     name: libselinux
@@ -52,7 +48,7 @@
 - name: "PRELIM | 6.2.8 | Gather local interactive user directories"
   shell: "getent passwd {1000..65535} | cut -d: -f6 | sort -u | grep -v '/var/' | grep -v '/nonexistent/*' | grep -v '/run/*'"
   register: rhel_07_6_2_8_getent
-  changed_when: rhel_07_6_2_8_getent.stdout_lines is defined
+  changed_when: no
   failed_when: false
   tags:
       - rule_6.2.8
