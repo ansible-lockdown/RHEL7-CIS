@@ -1,6 +1,5 @@
 ---
 
-- include: cis_1.10.x.yml
 - include: cis_1.1.1.x.yml
 - include: cis_1.1.x.yml
 - include: cis_1.2.x.yml
@@ -10,4 +9,5 @@
 - include: cis_1.6.x.yml
 - include: cis_1.7.x.yml
 - include: cis_1.8.x.yml
-- include: cis_1.9.x.ym
+- include: cis_1.9.x.yml
+- include: cis_1.10.x.yml
