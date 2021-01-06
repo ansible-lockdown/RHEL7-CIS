@@ -9,7 +9,7 @@
   when:
   - not rhel7cis_ypbind_required
   - "'ypbind' in ansible_facts.packages"
-  - rhel7cis_rule_2.3.1
+  - rhel7cis_rule_2_3_1
   tags:
   - level1
   - scored
@@ -26,7 +26,7 @@
   when:
   - not rhel7cis_rsh_required
   - "'rsh' in ansible_facts.packages"
-  - rhel7cis_rule_2.3.2
+  - rhel7cis_rule_2_3_2
   tags:
   - level1
   - scored
@@ -43,7 +43,7 @@
   when:
   - not rhel7cis_talk_required
   - "'talk' in ansible_facts.packages"
-  - rhel7cis_rule_2.3.3
+  - rhel7cis_rule_2_3_3
   tags:
   - level1
   - scored
@@ -58,9 +58,9 @@
   vars:
     ansible_python_interpreter: /bin/python
   when:
+  - "'telnet' in ansible_facts.packages"
   - not rhel7cis_telnet_required
-  - "'talk' in ansible_facts.packages"
-  - rhel7cis_rule_2.3.4
+  - rhel7cis_rule_2_3_4
   tags:
   - level1
   - scored
@@ -77,7 +77,7 @@
   when:
   - not rhel7cis_openldap_clients_required
   - "'openldap-client' in ansible_facts.packages"
-  - rhel7cis_rule_2.3.5
+  - rhel7cis_rule_2_3_5
   tags:
   - level1
   - scored

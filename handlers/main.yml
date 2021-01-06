@@ -65,20 +65,26 @@
 - name: restart firewalld
   become: yes
   service:
-      name: firewalld
-      state: restarted
+    name: firewalld
+    state: restarted
 
 - name: restart xinetd
   become: yes
   service:
-      name: xinetd
-      state: restarted
+    name: xinetd
+    state: restarted
 
 - name: restart sshd
   become: yes
   service:
-      name: sshd
-      state: restarted
+    name: sshd
+    state: restarted
+
+- name: restart postfix
+  become: yes
+  service:
+    name: postfix
+    state: restarted
 
 - name: reload dconf
   become: yes
