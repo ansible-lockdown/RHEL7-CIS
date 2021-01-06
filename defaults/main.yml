@@ -383,6 +383,7 @@ rhel7cis_host_allow:
 
 # Firewall Service - either firewalld or iptables
 rhel7cis_firewall: firewalld
+rhel7cis_default_zone: public
 
 rhel7cis_firewall_services:
     - ssh
