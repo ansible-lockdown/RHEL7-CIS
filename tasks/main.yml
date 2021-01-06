@@ -47,7 +47,7 @@
   tags:
   - rhel7cis_section2
 
-- include: section3.yml
+- include: section_3/main.yml
   when: rhel7cis_section3
   tags:
   - rhel7cis_section3

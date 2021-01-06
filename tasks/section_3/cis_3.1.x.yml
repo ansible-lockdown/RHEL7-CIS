@@ -1,0 +1,47 @@
+---
+
+- name: "Manual | 3.1.1 | PATCH | Disable IPv6 | sysctl"
+  sysctl:
+    name: "{{ item }}"
+    value: '0'
+    reload: yes
+    state: present
+  loop:
+  - net.ipv6.conf.all.disable_ipv6
+  - net.ipv6.conf.default.disable_ipv6
+  when: 
+  - not rhel7cis_ipv6_required
+  - rhel7cis_rule_3_1_1
+  notify: sysctl flush ipv6 route table
+  tags:
+  - level2
+  - rule_3.1.1
+  - patch
+
+- name: "Manual | 3.1.2 | Ensure wireless interfaces are disabled"
+  block:
+  - name: "Manual | 3.1.2 | PATCH | Ensure wireless interfaces are disabled | Check if nmcli command is available"
+    command: rpm -q NetworkManager
+    args:
+      warn: no
+    check_mode: no
+    changed_when: no
+    register: rhel_07_nmcli_available
+    failed_when: no
+
+  - name: "Manual | 3.1.2 | PATCH | Ensure wireless interfaces are disabled | Check if wifi is enabled"
+    command: nmcli radio wifi
+    register: rhel_07_wifi_enabled
+    check_mode: no
+    changed_when: rhel_07_wifi_enabled.stdout != "disabled"
+    when: rhel_07_nmcli_available.rc == 0
+
+  - name: "Manual | 3.1.2 | PATCH | Ensure wireless interfaces are disabled | Disable wifi if enabled"
+    command: nmcli radio wifi off
+    when: rhel_07_wifi_enabled is changed
+  when:
+  - rhel7cis_rule_3_1_2
+  tags:
+  - level1
+  - level2
+  - rule_3.1.2
