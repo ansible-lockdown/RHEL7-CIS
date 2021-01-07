@@ -7,7 +7,6 @@
   vars:
     ansible_python_interpreter: /bin/python
   when:
-  - rhel7cis_firewall == "firewalld"
   - rhel7cis_rule_3_5_1_1
   tags:
   - level1
@@ -21,7 +20,6 @@
   vars:
     ansible_python_interpreter: /bin/python
   when: 
-  - rhel7cis_firewall == "firewalld"
   - rhel7cis_rule_3_5_1_2
   tags:
   - level1
@@ -35,7 +33,6 @@
   vars:
     ansible_python_interpreter: /bin/python
   when: 
-  - rhel7cis_firewall == "firewalld"
   - rhel7cis_rule_3_5_1_3
   tags:
   - level1
@@ -48,7 +45,6 @@
     state: started
     enabled: true
   when: 
-  - rhel7cis_firewall == "firewalld"
   - rhel7cis_rule_3_5_1_4
   tags:
   - level1
@@ -58,7 +54,6 @@
 - name: "SCORED | 3.5.1.5 | PATCH | Ensure default zone is set"
   command: firewall-cmd --set-default-zone="{{ rhel7cis_default_zone }}"
   when:
-  - rhel7cis_firewall == "firewalld"
   - rhel7cis_rule_3_5_1_5
   tags:
   - level1
@@ -78,7 +73,6 @@
       - "The items below are the policies tied to the interfaces, please correct as needed"
       - "{{ rhel7cis_3_5_1_6_interfacepolicy.stdout_lines }}"
   when:
-  - rhel7cis_firewall == "firewalld"
   - rhel7cis_rule_3_5_1_6
   tags:
   - level1
@@ -98,10 +92,9 @@
                 - "The items below are the services and ports that are accepted, please correct as needed"
                 - "{{ rhel7cis_3_5_1_7_servicesport.stdout_lines }}"
   when:
-      - rhel7cis_firewall == "firewalld"
-      - rhel7cis_rule_3_5_1_7
+  - rhel7cis_rule_3_5_1_7
   tags:
-      - level1
-      - audit
-      - rule_3.5.1.7
+  - level1
+  - audit
+  - rule_3.5.1.7
  
