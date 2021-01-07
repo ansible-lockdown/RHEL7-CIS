@@ -1,0 +1,149 @@
+---
+
+- name: "SCORED | 5.1.1 | PATCH | Ensure cron daemon is enabledi and running"
+  service:
+    name: crond
+    enabled: yes
+    state: started
+  when:
+  - rhel7cis_rule_5_1_1
+  tags:
+  - level1
+  - patch
+  - rule_5.1.1
+
+- name: "SCORED | 5.1.2 | PATCH | Ensure permissions on /etc/crontab are configured"
+  file:
+    dest: /etc/crontab
+    owner: root
+    group: root
+    mode: 0600
+  when:
+  - rhel7cis_rule_5_1_2
+  tags:
+  - level1
+  - patch
+  - rule_5.1.2
+
+- name: "SCORED | 5.1.3 | PATCH | Ensure permissions on /etc/cron.hourly are configured"
+  file:
+    dest: /etc/cron.hourly
+    state: directory
+    owner: root
+    group: root
+    mode: 0700
+  when:
+  - rhel7cis_rule_5_1_3
+  tags:
+  - level1
+  - patch
+  - rule_5.1.3
+
+- name: "SCORED | 5.1.4 | PATCH | Ensure permissions on /etc/cron.daily are configured"
+  file:
+    dest: /etc/cron.daily
+    state: directory
+    owner: root
+    group: root
+    mode: 0700
+  when:
+  - rhel7cis_rule_5_1_4
+  tags:
+  - level1
+  - patch
+  - rule_5.1.4
+
+- name: "SCORED | 5.1.5 | PATCH | Ensure permissions on /etc/cron.weekly are configured"
+  file:
+    dest: /etc/cron.weekly
+    state: directory
+    owner: root
+    group: root
+    mode: 0700
+  when:
+  - rhel7cis_rule_5_1_5
+  tags:
+  - level1
+  - patch
+  - rule_5.1.5
+
+- name: "SCORED | 5.1.6 | PATCH | Ensure permissions on /etc/cron.monthly are configured"
+  file:
+    dest: /etc/cron.monthly
+    state: directory
+    owner: root
+    group: root
+    mode: 0700
+  when:
+  - rhel7cis_rule_5_1_6
+  tags:
+  - level1
+  - patch
+  - rule_5.1.6
+
+- name: "SCORED | 5.1.7 | PATCH | Ensure permissions on /etc/cron.d are configured"
+  file:
+      dest: /etc/cron.d
+      state: directory
+      owner: root
+      group: root
+      mode: 0700
+  when:
+      - rhel7cis_rule_5_1_7
+  tags:
+      - level1
+      - patch
+      - rule_5.1.7
+
+- name: "SCORED | 5.1.8 | PATCH | Ensure cron is restricted to authorized users"
+  block:
+
+  - name: "SCORED | 5.1.8 | PATCH | Ensure cron is restricted to authorized users | Remove cron.deny"
+    file:
+      dest: /etc/cron.deny
+      state: absent
+
+  - name: "SCORED | 5.1.8 | PATCH | Ensure cron is restricted to authorized users | Check if cron.allow exists"
+    stat:
+      path: "/etc/cron.allow"
+    register: p
+
+  - name: "SCORED | 5.1.8 | PATCH | Ensure cron is restricted to authorized users | Ensure cron.allow is restricted to authorized users"
+    file:
+      dest: /etc/cron.allow
+      state: '{{ "file" if  p.stat.exists else "touch" }}'
+      owner: root
+      group: root
+      mode: 0600
+  when:
+  - rhel7cis_rule_5_1_8
+  tags:
+  - level1
+  - patch
+  - rule_5.1.8
+
+- name: "SCORED | 5.1.9 | PATCH | Ensure at is restricted to authorized users"
+  block:
+  - name: "SCORED | 5.1.9 | PATCH | Ensure at is restricted to authorized users | Remove at.deny"
+    file:
+      dest: /etc/at.deny
+      state: absent
+
+  - name: "SCORED | 5.1.9 | AUDIT | Ensure at is restricted to authorized users | Check if at.allow exists"
+    stat:
+      path: "/etc/at.allow"
+    register: p
+
+  - name: "SCORED | 5.1.9 | PATCH | Ensure at is restricted to authorized users | Ensure at.allow is restricted to authorized users"
+    file:
+      dest: /etc/at.allow
+      state: '{{ "file" if  p.stat.exists else "touch" }}'
+      owner: root
+      group: root
+      mode: 0600
+  when:
+  - rhel7cis_rule_5_1_9
+  tags:
+  - level1
+  - patch
+  - rule_5.1.9
