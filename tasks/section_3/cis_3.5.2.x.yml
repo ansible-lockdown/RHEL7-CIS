@@ -7,7 +7,6 @@
   vars:
     ansible_python_interpreter: /bin/python
   when:
-  - rhel7cis_firewall == "nftables"
   - rhel7cis_rule_3_5_2_1
   tags:
   - level1
@@ -21,7 +20,6 @@
   vars:
     ansible_python_interpreter: /bin/python
   when:
-  - rhel7cis_firewall == "nftables"
   - rhel7cis_rule_3_5_2_2
   tags:
   - level1
@@ -35,7 +33,6 @@
   vars:
     ansible_python_interpreter: /bin/python
   when:
-  - rhel7cis_firewall == "nftables"
   - rhel7cis_rule_3_5_2_3
   tags:
   - level1
@@ -88,7 +85,6 @@
     when:
     - rhel7cis_nft_tables_autoNewTable
   when:
-  - rhel7cis_firewall == "nftables"
   - rhel7cis_rule_3_5_2_5
   tags:
   - level1
@@ -131,7 +127,6 @@
     when:
     - rhel7cis_nft_tables_autoChainCreate
   when:
-  - rhel7cis_firewall == "nftables"
   - rhel7cis_rule_3_5_2_6
   tags:
   - level1
@@ -177,7 +172,6 @@
     when:
     - '"ip6 saddr ::1 counter packets 0 bytes 0 drop" not in rhel7cis_3_5_2_7_ip6saddr.stdout'
   when:
-  - rhel7cis_firewall == "nftables"
   - rhel7cis_rule_3.5.2.7
   tags:
   - level1
@@ -236,7 +230,6 @@
     when:
     - '"ip protocol icmp ct state established,related,new accept" not in rhel7cis_3_5_2_8_outconnectionrule.stdout'
   when:
-  - rhel7cis_firewall == "nftables"
   - rhel7cis_rule_3_5_2_8
   tags:
   - level1
@@ -297,7 +290,6 @@
     when:
     - '"type filter hook output priority 0; policy drop;" not in rhel7cis_3_5_2_9_outputpolicy.stdout'
   when:
-  - rhel7cis_firewall == "nftables"
   - rhel7cis_rule_3_5_2_9
   tags:
   - level1
@@ -310,7 +302,6 @@
     enabled: yes
   become: true
   when:
-  - rhel7cis_firewall == "nftables"
   - rhel7cis_rule_3_5_2_10
   tags:
   - level1
@@ -325,7 +316,6 @@
     line: include "/etc/nftables/inet-{{ rhel7cis_nft_tables_tableName }}"
   become: true
   when:
-  - rhel7cis_firewall == "nftables"
   - rhel7cis_rule_3_5_2_11
   tags:
   - level1
