@@ -15,10 +15,23 @@
   - rule_5.2.1
 
 - name: "SCORED | 5.2.2 | PATCH | Ensure permissions on SSH private host key files are configured"
-  command: "{{ item }}"
-  with_items:
-  - find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chown root:root {} \;
-  - find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chmod 0600 {} \;
+  block:
+  - name: "SCORED | 5.2.2 | AUDIT | Ensure permissions on SSH private host key files are configured"
+    find:
+      paths:
+      - /etc/ssh
+      patterns: 'ssh_host_*_key'
+      recurse: true
+      file_type: any
+    register: rhel_07_5_2_2_priv_results
+
+  - name: "SCORED | 5.2.2 | AUDIT | Ensure permissions on SSH private host key files are configured"
+    file:
+      path: "{{ item.path }}"
+      owner: root
+      group: root
+      mode: 0600
+    loop: "{{ rhel_07_5_2_2_priv_results.files }}"
   when:
   - rhel7cis_rule_5_2_2
   tags:
@@ -27,10 +40,23 @@
   - rule_5.2.2
 
 - name: "SCORED | 5.2.3 | PATCH | Ensure permissions on SSH public host key files are configured"
-  command: "{{ item }}"
-  with_items:
-  - find /etc/ssh -xdev -type f -name 'ssh_host_*_key.pub' -exec chmod 0644 {} \;
-  - find /etc/ssh -xdev -type f -name 'ssh_host_*_key.pub' -exec chown root:root {} \;
+  block:
+  - name: "SCORED | 5.2.3 | AUDIT | Ensure permissions on SSH public host key files are configured"
+    find:
+      paths:
+      - /etc/ssh
+      patterns: 'ssh_host_*_key'
+      recurse: true
+      file_type: any
+    register: rhel_07_5_2_3_pub_results
+
+  - name: "SCORED | 5.2.3 | AUDIT | Ensure permissions on SSH public host key files are configured"
+    file:
+      path: "{{ item.path }}"
+      owner: root
+      group: root
+      mode: 0600
+    loop: "{{ rhel_07_5_2_3_pub_results.files }}"
   when:
   - rhel7cis_rule_5_2_3
   tags:
