@@ -75,7 +75,7 @@
     lineinfile:
       dest: /etc/pam.d/{{ item }}
       state: present
-      line: "password    sufficient    pam_unix.so remember={{ rhel7cis_pam_faillock.remember }}"
+      line: "password    required    pam_pwhistory.so remember={{ rhel7cis_pam_faillock.remember }}"
       insertafter: '^#?password ?'
     loop:
     - "system-auth"
