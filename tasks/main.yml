@@ -35,7 +35,9 @@
 
 - include: parse_etc_password.yml
   become: yes
-  when: rhel7cis_section6
+  when: 
+  - rhel7cis_section5
+  - rhel7cis_section6
 
 - include: section_1/main.yml
   when: rhel7cis_section1
@@ -52,20 +54,20 @@
   tags:
   - rhel7cis_section3
 
-- include: section4.yml
-  when: rhel7cis_section4
-  tags:
-  - rhel7cis_section4
+#- include: section4.yml
+#  when: rhel7cis_section4
+#  tags:
+#  - rhel7cis_section4
 
 - include: section_5/main.yml
   when: rhel7cis_section5
   tags:
   - rhel7cis_section5
 
-- include: section6.yml
-  when: rhel7cis_section6
-  tags:
-  - rhel7cis_section6
+#- include: section6.yml
+#  when: rhel7cis_section6
+#  tags:
+#  - rhel7cis_section6
 
 - include: post.yml
   tags:
