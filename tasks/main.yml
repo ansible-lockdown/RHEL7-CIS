@@ -54,10 +54,10 @@
   tags:
   - rhel7cis_section3
 
-#- include: section4.yml
-#  when: rhel7cis_section4
-#  tags:
-#  - rhel7cis_section4
+- include: section_4/main.yml
+  when: rhel7cis_section4
+  tags:
+  - rhel7cis_section4
 
 - include: section_5/main.yml
   when: rhel7cis_section5

@@ -180,7 +180,10 @@ rhel7cis_rule_3_5_3_3_6: true
 rhel7cis_rule_4_1_1_1: true
 rhel7cis_rule_4_1_1_2: true
 rhel7cis_rule_4_1_1_3: true
-rhel7cis_rule_4_1_2: true
+rhel7cis_rule_4_1_2_1: true
+rhel7cis_rule_4_1_2_2: true
+rhel7cis_rule_4_1_2_3: true
+rhel7cis_rule_4_1_2_4: true
 rhel7cis_rule_4_1_3: true
 rhel7cis_rule_4_1_4: true
 rhel7cis_rule_4_1_5: true
@@ -196,18 +199,16 @@ rhel7cis_rule_4_1_14: true
 rhel7cis_rule_4_1_15: true
 rhel7cis_rule_4_1_16: true
 rhel7cis_rule_4_1_17: true
-rhel7cis_rule_4_1_18: true
-rhel7cis_rule_4_2_3: true
 rhel7cis_rule_4_2_1_1: true
 rhel7cis_rule_4_2_1_2: true
 rhel7cis_rule_4_2_1_3: true
 rhel7cis_rule_4_2_1_4: true
 rhel7cis_rule_4_2_1_5: true
+rhel7cis_rule_4_2_1_6: true
 rhel7cis_rule_4_2_2_1: true
 rhel7cis_rule_4_2_2_2: true
 rhel7cis_rule_4_2_2_3: true
-rhel7cis_rule_4_2_2_4: true
-rhel7cis_rule_4_2_2_5: true
+rhel7cis_rule_4_2_3: true
 rhel7cis_rule_4_2_4: true
 
 # Section 5 rules
@@ -285,12 +286,13 @@ rhel7cis_rule_6_2_9: true
 rhel7cis_rule_6_2_10: true
 rhel7cis_rule_6_2_11: true
 rhel7cis_rule_6_2_12: true
+rhel7cis_rule_6_2_13: true
 rhel7cis_rule_6_2_14: true
 rhel7cis_rule_6_2_15: true
 rhel7cis_rule_6_2_16: true
 rhel7cis_rule_6_2_17: true
 rhel7cis_rule_6_2_18: true
-rhel7cis_rule_6_2_19: true
+
 
 # Service configuration booleans set true to keep service
 rhel7cis_avahi_server: false
@@ -405,10 +407,16 @@ rhel7cis_warning_banner: |
 ## Section4 vars
 
 rhel7cis_auditd:
+    space_left_action: email
+    action_mail_acct: root
     admin_space_left_action: halt
     max_log_file_action: keep_logs
 
 rhel7cis_logrotate: "daily"
+
+# RHEL-07-4.1.2.4
+# rhel7cis_audit_backlog_limit value needs to be 8192 or larger to conform to CIS standards
+rhel7cis_audit_backlog_limit: 8192
 
 # RHEL-07-4.2.1.4/4.2.1.5 remote and destation log server name
 rhel7cis_remote_log_server: logagg.example.com
@@ -479,3 +487,6 @@ rhelcis_rpm_descrep_autofixes: true
 rhel7cis_no_world_write_adjust: true
 rhel7cis_passwd_label: "{{ (this_item | default(item)).id }}: {{ (this_item | default(item)).dir }}"
 rhel7cis_dotperm_ansibleManaged: true
+
+# RHEL-07-6.2.18 Clear users from shadow group 
+rhel7cis_remove_shadow_grp_usrs: true 

@@ -1,0 +1,15 @@
+---
+
+- name: "SECTION | 4.1| Configure System Accounting (auditd)
+        | SECTION | 4.1.1.| Ensure auditing is enabled"
+  include_tasks: cis_4.1.1.x.yml
+
+  - name: "SECTION | 4.1.2.x| Configure Data Retention"
+  include_tasks: cis_4.1.2.x.yml
+
+  - name: "SECTION | 4.2.x| Configure Logging
+          | SECTION | 4.2.1. | Configure rsyslog"
+  include_tasks: cis_4.2.1.x.yml
+
+  - name: "SECTION | 4.2.2.x| Configure journald"
+  include_tasks: cis_4.2.2.x.yml
