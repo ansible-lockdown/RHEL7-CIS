@@ -1,6 +1,6 @@
 ---
 
-- name: "SCORED | 2.2.2 | PATCH | Ensure X Window System is not installed"
+- name: "AUTOMATED | 2.2.2 | PATCH | Ensure X Window System is not installed"
   package:
     state: absent
     name:
@@ -18,7 +18,7 @@
   - patch
   - rule_2.2.2
 
-- name: "SCORED | 2.2.3 | PATCH | Ensure Avahi Server is not installed | disabled"
+- name: "AUTOMATED | 2.2.3 | PATCH | Ensure Avahi Server is not installed | disabled"
   service:
     name: avahi-daemon
     state: stopped
@@ -35,7 +35,7 @@
       - patch
       - rule_2.2.3
 
-- name: "SCORED | 2.2.4 | PATCH | Ensure CUPS is not installed"
+- name: "AUTOMATED | 2.2.4 | PATCH | Ensure CUPS is not installed"
   package:
     name: cups
     state: absent
@@ -53,7 +53,7 @@
   - patch
   - rule_2.2.4
 
-- name: "SCORED | 2.2.5 | PATCH | Ensure DHCP Server is not enabled"
+- name: "AUTOMATED | 2.2.5 | PATCH | Ensure DHCP Server is not enabled"
   package:
     name: dhcpd
     state: absent
@@ -71,7 +71,7 @@
   - patch
   - rule_2.2.5
 
-- name: "SCORED | 2.2.6 | PATCH | Ensure LDAP server is not installed"
+- name: "AUTOMATED | 2.2.6 | PATCH | Ensure LDAP server is not installed"
   package:
     name: openldap-servers
     state: absent
@@ -89,9 +89,9 @@
   - patch
   - rule_2.2.6
 
-- name: "SCORED | 2.2.7 | PATCH | Ensure nfs-utils is not installed or the nfs-server service is masked"
+- name: "AUTOMATED | 2.2.7 | PATCH | Ensure nfs-utils is not installed or the nfs-server service is masked"
   block:
-  - name: "SCORED | 2.2.7 | PATCH | Ensure nfs-utils is not installed or the nfs-server service is masked | nfs-utils "
+  - name: "AUTOMATED | 2.2.7 | PATCH | Ensure nfs-utils is not installed or the nfs-server service is masked | nfs-utils "
     package:
       name: nfs-utils
       state: absent
@@ -100,7 +100,7 @@
     when:
     - not rhel7cis_nfs_rpc_server and not rhel7cis_nfs_server
   
-  - name: "SCORED | 2.2.7 | PATCH | Ensure nfs-utils is not installed or the nfs-server service is masked | nfs-server "
+  - name: "AUTOMATED | 2.2.7 | PATCH | Ensure nfs-utils is not installed or the nfs-server service is masked | nfs-server "
     systemd:
       name: nfs-server
       masked: true
@@ -117,9 +117,9 @@
   - patch
   - rule_2.2.7
 
-- name: "SCORED | 2.2.8 | PATCH | Ensure rpcbind is not installed or the irpcbind services are masked"
+- name: "AUTOMATED | 2.2.8 | PATCH | Ensure rpcbind is not installed or the irpcbind services are masked"
   block:
-  - name: "SCORED | 2.2.8 | PATCH | Ensure rpcbind is not installed or the rpcbind services are masked | rpcbind"
+  - name: "AUTOMATED | 2.2.8 | PATCH | Ensure rpcbind is not installed or the rpcbind services are masked | rpcbind"
     package:
       name: rpcbind 
       state: absent
@@ -128,7 +128,7 @@
     when:
     - not rhel7cis_nfs_rpc_server and not rhel7cis_rpc_server
   
-  - name: "SCORED | 2.2.8 | PATCH | Ensure rpcbind is not installed or the rpcbind services are masked | rpcbind-server"
+  - name: "AUTOMATED | 2.2.8 | PATCH | Ensure rpcbind is not installed or the rpcbind services are masked | rpcbind-server"
     systemd:
       name: rpcbind
       masked: true
@@ -145,7 +145,7 @@
   - patch
   - rule_2.2.8
 
-- name: "SCORED | 2.2.9 | PATCH | Ensure dns server is not installed"
+- name: "AUTOMATED | 2.2.9 | PATCH | Ensure dns server is not installed"
   package:
     name: named
     state: absent
@@ -163,7 +163,7 @@
   - patch
   - rule_2.2.9
 
-- name: "SCORED | 2.2.10 | PATCH | Ensure FTP server is not installed"
+- name: "AUTOMATED | 2.2.10 | PATCH | Ensure FTP server is not installed"
   package:
     name: vsftpd
     state: absent
@@ -181,7 +181,7 @@
   - patch
   - rule_2.2.10
 
-- name: "SCORED | 2.2.11 | PATCH | Ensure HTTP server is not installed"
+- name: "AUTOMATED | 2.2.11 | PATCH | Ensure HTTP server is not installed"
   package:
     name: httpd
     state: absent
@@ -199,7 +199,7 @@
   - patch
   - rule_2.2.11
 
-- name: "SCORED | 2.2.12 | PATCH | Ensure IMAP and POP3 server is not installed"
+- name: "AUTOMATED | 2.2.12 | PATCH | Ensure IMAP and POP3 server is not installed"
   package:
     name: dovecot
     state: absent
@@ -217,7 +217,7 @@
   - patch
   - rule_2.2.12
 
-- name: "SCORED | 2.2.13 | PATCH | Ensure Samba server is not installed"
+- name: "AUTOMATED | 2.2.13 | PATCH | Ensure Samba server is not installed"
   package:
     name: samba
     state: absent
@@ -235,7 +235,7 @@
   - patch
   - rule_2.2.13
 
-- name: "SCORED | 2.2.14 | PATCH | Ensure HTTP Proxy server is not installed"
+- name: "AUTOMATED | 2.2.14 | PATCH | Ensure HTTP Proxy server is not installed"
   package:
     name: squid
     state: absent
@@ -253,7 +253,7 @@
   - patch
   - rule_2.2.14
 
-- name: "SCORED | 2.2.15 | PATCH | Ensure net-snmp is not installed"
+- name: "AUTOMATED | 2.2.15 | PATCH | Ensure net-snmp is not installed"
   package:
     name: net-snmp
     state: absent
@@ -271,7 +271,7 @@
   - patch
   - rule_2.2.15
 
-- name: "SCORED | 2.2.16 | PATCH | Ensure mail transfer agent is configured for local-only mode"
+- name: "AUTOMATED | 2.2.16 | PATCH | Ensure mail transfer agent is configured for local-only mode"
   lineinfile:
       dest: /etc/postfix/main.cf
       regexp: "^(#)?inet_interfaces"
@@ -286,13 +286,13 @@
   - patch
   - rule_2.2.16
 
-- name: "SCORED | 2.2.17 | PATCH | Ensure rsync is not installed or the rsyncd services are masked"
+- name: "AUTOMATED | 2.2.17 | PATCH | Ensure rsync is not installed or the rsyncd services are masked"
   block:  
-  - name: "SCORED | 2.2.17 | PATCH | Ensure rsync is not installed or the rsyncd services are masked | rsync"
+  - name: "AUTOMATED | 2.2.17 | PATCH | Ensure rsync is not installed or the rsyncd services are masked | rsync"
     debug:
       msg: "<----- not removing due to ansible"
 
-  - name: "SCORED | 2.2.17 | PATCH | Ensure rsync is not installed or the rsyncd services are masked | rsync"
+  - name: "AUTOMATED | 2.2.17 | PATCH | Ensure rsync is not installed or the rsyncd services are masked | rsync"
     systemd:
       name: rsync
       masked: true
@@ -309,7 +309,7 @@
   - patch
   - rule_2.2.17
 
-- name: "SCORED | 2.2.18 | PATCH | Ensure nis server is not installed"
+- name: "AUTOMATED | 2.2.18 | PATCH | Ensure nis server is not installed"
   package:
     name: ypserv
     state: absent
@@ -327,7 +327,7 @@
   - patch
   - rule_2.2.18
 
-- name: "SCORED | 2.2.19 | PATCH | Ensure telnet server is not installed"
+- name: "AUTOMATED | 2.2.19 | PATCH | Ensure telnet server is not installed"
   package:
     name: telnet-server
     state: absent

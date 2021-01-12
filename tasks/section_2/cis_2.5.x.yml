@@ -1,6 +1,6 @@
 ---
 
-- name: "NOT SCORED | 2.5 | Ensure nonessential services are removed or masked (Manual)"
+- name: "MANUAL | 2.5 | Ensure nonessential services are removed or masked (Manual)"
   debug:
     msg: "<----- not required"
   when:

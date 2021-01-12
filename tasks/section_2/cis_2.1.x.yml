@@ -1,6 +1,6 @@
 ---
 
-- name: "SCORED | 2.1.2 | PATCH | Ensure xinetd is not installed"
+- name: "AUTOMATED | 2.1.2 | PATCH | Ensure xinetd is not installed"
   package:
     name: xinetd
     state: absent
@@ -12,5 +12,5 @@
   tags:
   - level1
   - patch
-  - scored
+  - AUTOMATED
   - rule_2.1.2
