@@ -1,8 +1,10 @@
 ---
 - name: "AUTOMATED | 4.1.1.1 | PATCH | Ensure audit log storage size is configured"
-  yum:
+  package:
       name: ['audit', 'audit-libs']
       state: present
+  vars:
+      ansible_pythin_interpreter: /bin/python
   when:
       - rhel7cis_rule_4_1_1_1
   notify: restart auditd
