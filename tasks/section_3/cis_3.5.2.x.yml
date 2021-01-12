@@ -75,9 +75,9 @@
       msg:
       - "Warning! You currently have no nft tables, please review your setup"
       - 'Use the command "nft create table inet <table name>" to create a new table'
-  when:
-  - rhel7cis_3_5_2_5_nft_tables.stdout == ""
-  - not rhel7cis_nft_tables_autoNewTable
+    when:
+    - rhel7cis_3_5_2_5_nft_tables.stdout == ""
+    - not rhel7cis_nft_tables_autoNewTable
 
   - name: "AUTOMATED | 3.5.2.5 | PATCH | Ensure a table exists | Create table if needed"
     command: nft create table inet "{{ rhel7cis_nft_tables_tableName }}"
