@@ -1,6 +1,6 @@
 ---
 
-- name: "SCORED | 1.8.1.1 | PATCH | Ensure message of the day is configured properly"
+- name: "AUTOMATED | 1.8.1.1 | PATCH | Ensure message of the day is configured properly"
   template:
     src: etc/motd.j2
     dest: /etc/motd
@@ -12,7 +12,7 @@
   - patch
   - rule_1.8.1.1
 
-- name: "SCORED | 1.8.1.2 | PATCH | Ensure local login warning banner is configured properly"
+- name: "AUTOMATED | 1.8.1.2 | PATCH | Ensure local login warning banner is configured properly"
   template:
     src: etc/issue.j2
     dest: /etc/issue
@@ -23,7 +23,7 @@
   - patch
   - rule_1.8.1.2
 
-- name: "SCORED | 1.8.1.3 | PATCH | Ensure remote login warning banner is configured properly"
+- name: "AUTOMATED | 1.8.1.3 | PATCH | Ensure remote login warning banner is configured properly"
   template:
     src: etc/issue.net.j2
     dest: /etc/issue.net
@@ -35,7 +35,7 @@
   - patch
   - rule_1.8.1.3
 
-- name: "SCORED | 1.8.1.4 | PATCH | Ensure permissions on /etc/motd are configured"
+- name: "AUTOMATED | 1.8.1.4 | PATCH | Ensure permissions on /etc/motd are configured"
   file:
     dest: /etc/motd
     state: file
@@ -50,7 +50,7 @@
   - patch
   - rule_1.8.1.4
 
-- name: "SCORED | 1.8.1.5 | PATCH | Ensure permissions on /etc/issue are configured"
+- name: "AUTOMATED | 1.8.1.5 | PATCH | Ensure permissions on /etc/issue are configured"
   file:
     dest: /etc/issue
     state: file
@@ -65,7 +65,7 @@
   - patch
   - rule_1.8.1.5
 
-- name: "NOTSCORED | 1.8.1.6 | PATCH | Ensure permissions on /etc/issue.net are configured"
+- name: "NOTAUTOMATED | 1.8.1.6 | PATCH | Ensure permissions on /etc/issue.net are configured"
   file:
     dest: /etc/issue.net
     state: file

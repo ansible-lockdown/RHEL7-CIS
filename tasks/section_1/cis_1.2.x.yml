@@ -1,17 +1,17 @@
 ---
 
-- name: "NOTSCORED | 1.2.1 | PATCH | Ensure GPG keys are configured"
+- name: "MANUAL| 1.2.1 | PATCH | Ensure GPG keys are configured"
   command: gpg --quiet --with-fingerprint /etc/pki/rpm-gpg/RPM-GPG-KEY-{{ ansible_distribution|lower }}-release
   when:
   - rhel7cis_rule_1_2_1
   - ansible_distribution == "RedHat"
   tags:
   - level1
-  - notscored
+  - notAUTOMATED
   - patch
   - rule_1.2.1
 
-- name: "NOTSCORED | 1.2.2 | Ensure package manager repositories are configured"
+- name: "MANUAL| 1.2.2 | Ensure package manager repositories are configured"
   command: yum repolist
   changed_when: no
   when:
@@ -19,21 +19,21 @@
   - ansible_distribution == "RedHat"
   tags:
   - level1
-  - notscored
+  - notAUTOMATED
   - patch
   - rule_1.2.2
   - skip_ansible_lint
 
-- name: "SCORED | 1.2.3 | PATCH | Ensure gpgcheck is globally activated"
+- name: "AUTOMATED | 1.2.3 | PATCH | Ensure gpgcheck is globally activated"
   block:
-  - name: "SCORED | 1.2.3 | PATCH | Ensure gpgcheck is globally activated"
+  - name: "AUTOMATED | 1.2.3 | PATCH | Ensure gpgcheck is globally activated"
     find:
       paths: /etc/yum.repos.d
       patterns: "*.repo"
     register: yum_repos
     changed_when: no
 
-  - name: "SCORED | 1.2.3 | PATCH | Ensure gpgcheck is globally activated"
+  - name: "AUTOMATED | 1.2.3 | PATCH | Ensure gpgcheck is globally activated"
     replace:
       path: "{{ item.path }}"
       regexp: "^gpgcheck=0"
@@ -43,12 +43,12 @@
   - rhel7cis_rule_1_2_3
   tags:
   - level1
-  - scored
+  - AUTOMATED
   - patch
   - rule_1.2.3
 
 
-- name: "NOTSCORED | 1.2.4 | PATCH | Ensure Red Hat Network or Subscription Manager connection is configured"
+- name: "MANUAL| 1.2.4 | PATCH | Ensure Red Hat Network or Subscription Manager connection is configured"
   command: subscription-manager identity
   changed_when: no
   failed_when: no
@@ -57,12 +57,12 @@
   - rhel7cis_rule_1_2_4
   tags:
   - level1
-  - notscored
+  - notAUTOMATED
   - patch
   - rule_1.2.4
   - skip_ansible_list
 
-- name: "NOTSCORED | 1.2.5 | PATCH | Disable the rhnsd Daemon"
+- name: "MANUAL | 1.2.5 | PATCH | Disable the rhnsd Daemon"
   service:
     name: rhnsd
     state: stopped
@@ -72,6 +72,6 @@
   - rhel7cis_rule_1_2_5
   tags:
   - level2
-  - notscored
+  - notAUTOMATED
   - patch
   - rule_1.2.5
