@@ -1,6 +1,6 @@
 ---
 
-- name: "Manual | 3.1.1 | PATCH | Disable IPv6 | sysctl"
+- name: "MANUAL | 3.1.1 | PATCH | Disable IPv6 | sysctl"
   sysctl:
     name: "{{ item }}"
     value: '0'
@@ -18,9 +18,9 @@
   - rule_3.1.1
   - patch
 
-- name: "Manual | 3.1.2 | Ensure wireless interfaces are disabled"
+- name: "MANUAL | 3.1.2 | Ensure wireless interfaces are disabled"
   block:
-  - name: "Manual | 3.1.2 | PATCH | Ensure wireless interfaces are disabled | Check if nmcli command is available"
+  - name: "MANUAL | 3.1.2 | PATCH | Ensure wireless interfaces are disabled | Check if nmcli command is available"
     command: rpm -q NetworkManager
     args:
       warn: no
@@ -29,14 +29,14 @@
     register: rhel_07_nmcli_available
     failed_when: no
 
-  - name: "Manual | 3.1.2 | PATCH | Ensure wireless interfaces are disabled | Check if wifi is enabled"
+  - name: "MANUAL | 3.1.2 | PATCH | Ensure wireless interfaces are disabled | Check if wifi is enabled"
     command: nmcli radio wifi
     register: rhel_07_wifi_enabled
     check_mode: no
     changed_when: rhel_07_wifi_enabled.stdout != "disabled"
     when: rhel_07_nmcli_available.rc == 0
 
-  - name: "Manual | 3.1.2 | PATCH | Ensure wireless interfaces are disabled | Disable wifi if enabled"
+  - name: "MANUAL | 3.1.2 | PATCH | Ensure wireless interfaces are disabled | Disable wifi if enabled"
     command: nmcli radio wifi off
     when: rhel_07_wifi_enabled is changed
   when:

@@ -1,6 +1,6 @@
 ---
 
-- name: "SCORED | 3.2.1 | PATCH | Ensure IP forwarding is disabled"
+- name: "AUTOMATED | 3.2.1 | PATCH | Ensure IP forwarding is disabled"
   sysctl:
     name: net.ipv4.ip_forward
     value: '0'
@@ -18,7 +18,7 @@
   - patch
   - rule_3.2.1
 
-- name: "SCORED | 3.2.2 | PATCH | Ensure packet redirect sending is disabled"
+- name: "AUTOMATED | 3.2.2 | PATCH | Ensure packet redirect sending is disabled"
   sysctl:
     name: '{{ item.name }}'
     value: '{{ item.value }}'
