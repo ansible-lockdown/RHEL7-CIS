@@ -18,7 +18,7 @@
   - rhel7cis_firewall == "firewalld"
 
 - name: "SECTION | 3.5.2 | Configure nftables"
-  include cis_3.5.2.x.yml
+  include: cis_3.5.2.x.yml
   when:
   - rhel7cis_firewall == "nftables"
 
