@@ -1,0 +1,7 @@
+---
+
+- name: "SECTION | 6.1 | System File Permissions"
+  include: cis_6.1.x.yml
+
+- name: "SECTION | 6.2 | User and Group Settings"
+  include: cis_6.2.x.yml

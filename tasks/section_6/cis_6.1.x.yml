@@ -1,0 +1,183 @@
+---
+- name: "NOTSCORED | 6.1.1 | PATCH | Audit system file permissions"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_1_1|bool
+  tags:
+      - level2
+      - patch
+      - rule_6.1.1
+      - notimplemented
+
+- name: "SCORED | 6.1.2 | PATCH | Ensure permissions on /etc/passwd are configured"
+  file:
+      dest: /etc/passwd
+      owner: root
+      group: root
+      mode: 0644
+  when:
+      - rhel7cis_rule_6_1_2|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.2
+
+- name: "SCORED | 6.1.3 | PATCH | Ensure permissions on /etc/shadow are configured"
+  file:
+      dest: /etc/shadow
+      owner: root
+      group: root
+      mode: 0000
+  when:
+      - rhel7cis_rule_6_1_3|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.3
+
+- name: "SCORED | 6.1.4 | PATCH | Ensure permissions on /etc/group are configured"
+  file:
+      dest: /etc/group
+      owner: root
+      group: root
+      mode: 0644
+  when:
+      - rhel7cis_rule_6_1_4|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.4
+
+- name: "SCORED | 6.1.5 | PATCH | Ensure permissions on /etc/gshadow are configured"
+  file:
+      dest: /etc/gshadow
+      owner: root
+      group: root
+      mode: 0000
+  when:
+      - rhel7cis_rule_6_1_5|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.5
+
+- name: "SCORED | 6.1.6 | PATCH | Ensure permissions on /etc/passwd- are configured"
+  file:
+      dest: /etc/passwd-
+      owner: root
+      group: root
+      mode: 0600
+  when:
+      - rhel7cis_rule_6_1_6|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.6
+
+- name: "SCORED | 6.1.7 | PATCH | Ensure permissions on /etc/shadow- are configured"
+  file:
+      dest: /etc/shadow-
+      owner: root
+      group: root
+      mode: 0000
+  when:
+      - rhel7cis_rule_6_1_7|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.7
+
+- name: "SCORED | 6.1.8 | PATCH | Ensure permissions on /etc/group- are configured"
+  file:
+      dest: /etc/group-
+      owner: root
+      group: root
+      mode: 0600
+  when:
+      - rhel7cis_rule_6_1_8|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.8
+
+- name: "SCORED | 6.1.9 | PATCH | Ensure permissions on /etc/gshadow- are configured"
+  file:
+      dest: /etc/gshadow-
+      owner: root
+      group: root
+      mode: 0600
+  when:
+      - rhel7cis_rule_6_1_9|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.9
+
+- name: "SCORED | 6.1.10 | PATCH | Ensure no world writable files exist"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_1_10|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.10
+      - notimplemented
+
+- name: "SCORED | 6.1.11 | PATCH | Ensure no unowned files or directories exist"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_1_11|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.11
+      - notimplemented
+
+- name: "SCORED | 6.1.12 | PATCH | Ensure no ungrouped files or directories exist"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_1_12|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.12
+      - notimplemented
+
+- name: "NOTSCORED | 6.1.13 | PATCH | Audit SUID executables"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_1_13|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.13
+      - notimplemented
+
+- name: "NOTSCORED | 6.1.14 | PATCH | Audit SGID executables"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_1_14|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.14
+      - notimplemented
