@@ -292,7 +292,7 @@ rhel7cis_rule_6_2_15: true
 rhel7cis_rule_6_2_16: true
 rhel7cis_rule_6_2_17: true
 rhel7cis_rule_6_2_18: true
-
+rhel7cis_rule_6_2_19: true
 
 # Service configuration booleans set true to keep service
 rhel7cis_avahi_server: false
