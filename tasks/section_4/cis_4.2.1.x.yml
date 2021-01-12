@@ -64,7 +64,8 @@
             state: present
             regexp: "{{ item.regexp }}"
             line: "{{ item.line}}"
-            insertafter: "{{ item.insertafter }}"
+            insertafter: '^[# ]*{{ item.insertafter }}\s*=\s*'
+            #insertafter: "{{ item.insertafter }}"
         with_items:
             - { regexp: '^mail\.\*(.*)$', line: 'mail.*                                                  -/var/log/mail', insertafter: '# Log all the mail messages in one place.' }
             - { regexp: '^mail.info(.*)$', line: 'mail.info                                               -/var/log/mail.info', insertafter: '# Log all the mail messages in one place.' }
