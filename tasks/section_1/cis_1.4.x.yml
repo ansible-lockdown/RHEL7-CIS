@@ -1,13 +1,13 @@
 ---
 
-- name: "SCORED | 1.4.1 | PATCH | Ensure AIDE is installed"
+- name: "AUTOMATED | 1.4.1 | PATCH | Ensure AIDE is installed"
   block:
-  - name: "SCORED | 1.4.1 | PATCH | Ensure AIDE is installed | Install"
+  - name: "AUTOMATED | 1.4.1 | PATCH | Ensure AIDE is installed | Install"
     package:
       name: aide
       state: installed
    
-  - name: "SCORED | 1.4.1 | PATCH | Ensure AIDE is installed | started"
+  - name: "AUTOMATED | 1.4.1 | PATCH | Ensure AIDE is installed | started"
     command: /usr/sbin/aide --init -B 'database_out=file:/var/lib/aide/aide.db.gz'
     args:
       creates: /var/lib/aide/aide.db.gz
@@ -20,14 +20,14 @@
   - rhel7cis_rule_1_4_1
   tags:
   - level1
-  - scored
+  - AUTOMATED
   - aide
   - patch
   - rule_1.4.1
   vars:
     ansible_python_interpreter: /bin/python
 
-- name: "SCORED | 1.4.2 | PATCH | Ensure filesystem integrity is regularly checked | cron"
+- name: "AUTOMATED | 1.4.2 | PATCH | Ensure filesystem integrity is regularly checked | cron"
   cron:
     name: Run AIDE integrity check
     minute: "{{ rhel7cis_aide_cron['aide_minute'] | default('0') }}"
@@ -40,7 +40,7 @@
   - rhel7cis_rule_1_4_2
   tags:
   - level1
-  - scored
+  - AUTOMATED
   - aide
   - file_integrity
   - patch

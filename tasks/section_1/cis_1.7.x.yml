@@ -1,6 +1,6 @@
 ---
 
-- name: "SCORED | 1.7.1.1 | PATCH | Ensure SELinux is installed"
+- name: "AUTOMATED | 1.7.1.1 | PATCH | Ensure SELinux is installed"
   package:
     name: libselinux
     state: present
@@ -9,13 +9,13 @@
   - rhel7cis_rule_1_7_1_1
   tags:
   - level1
-  - scored
+  - AUTOMATED
   - patch
   - rule_1.7.1.1
   vars:
     ansible_python_interpreter: /bin/python
 
-- name: "SCORED | 1.7.1.2 | PATCH | Ensure SELinux is not disabled in bootloader configuration"
+- name: "AUTOMATED | 1.7.1.2 | PATCH | Ensure SELinux is not disabled in bootloader configuration"
   replace:
     dest: /etc/default/grub
     regexp: '(selinux|enforcing)\s*=\s*0\s*'
@@ -28,11 +28,11 @@
   - rhel7cis_rule_1_7_1_2
   tags:
   - level1
-  - scored
+  - AUTOMATED
   - patch
   - rule_1.7.1.2
 
-- name: "SCORED | 1.7.1.3 | PATCH | Ensure SELinux policy is configured"
+- name: "AUTOMATED | 1.7.1.3 | PATCH | Ensure SELinux policy is configured"
   selinux:
     conf: /etc/selinux/config
     policy: "{{ rhel7cis_selinux_pol }}"
@@ -42,12 +42,12 @@
   - rhel7cis_rule_1_7_1_3
   tags:
   - level1
-  - scored
+  - AUTOMATED
   - selinux
   - patch
   - rule_1.7.1.3
 
-- name: "SCORED | 1.7.1.4 | PATCH | Ensure the SELinux state is enforcing or permissive"
+- name: "AUTOMATED | 1.7.1.4 | PATCH | Ensure the SELinux state is enforcing or permissive"
   selinux:
     conf: /etc/selinux/config
     policy: "{{ rhel7cis_selinux_pol }}"
@@ -57,12 +57,12 @@
   - rhel7cis_rule_1_7_1_4
   tags:
   - level1
-  - scored
+  - AUTOMATED
   - selinux
   - patch
   - rule_1.7.1.4
 
-- name: "SCORED | 1.7.1.5 | PATCH | Ensure the SELinux state is enforcing"
+- name: "AUTOMATED | 1.7.1.5 | PATCH | Ensure the SELinux state is enforcing"
   selinux:
     conf: /etc/selinux/config
     policy: "{{ rhel7cis_selinux_pol }}"
@@ -72,25 +72,25 @@
   - rhel7cis_rule_1_7_1_5
   tags:
   - level2
-  - scored
+  - AUTOMATED
   - selinux
   - patch
   - rule_1.7.1.5
 
-- name: "SCORED | 1.7.1.6 | AUDIT | Ensure no unconfined daemons exist"
+- name: "AUTOMATED | 1.7.1.6 | AUDIT | Ensure no unconfined daemons exist"
   block:
-  - name: "SCORED | 1.7.1.6 | AUDIT | Ensure no unconfined daemons exist | Find the unconfined daemons"
+  - name: "AUTOMATED | 1.7.1.6 | AUDIT | Ensure no unconfined daemons exist | Find the unconfined daemons"
     shell: ps -eZ | egrep "initrc" | egrep -vw "tr|ps|egrep|bash|awk" | tr ':' ' ' | awk '{ print $NF }'
     register: rhelcis_1_7_1_6_unconf_daemons
     failed_when: no
     changed_when: no
       
-  - name: "SCORED | 1.7.1.6 | AUDIT | Ensure no unconfined daemons exist | Message on no unconfined daemones"
+  - name: "AUTOMATED | 1.7.1.6 | AUDIT | Ensure no unconfined daemons exist | Message on no unconfined daemones"
     debug:
       msg: "Good News! There are no unconfined daemons found on your system"
     when: rhelcis_1_7_1_6_unconf_daemons.stdout == ""
 
-  - name: "SCORED | 1.7.1.6 | AUDIT | Ensure no unconfined daemons exist | Message on unconfined daemones"
+  - name: "AUTOMATED | 1.7.1.6 | AUDIT | Ensure no unconfined daemons exist | Message on unconfined daemones"
     debug:
       msg: "Warning! You have unconfined daemons: {{ rhelcis_1_7_1_5_unconf_daemons.stdout_lines }}"
     when: rhelcis_1_7_1_6_unconf_daemons.stdout != ""
@@ -101,7 +101,7 @@
   - audit
   - rule_1.7.1.6
 
-- name: "SCORED | 1.7.1.7 | PATCH | Ensure SETroubleshoot is not installed"
+- name: "AUTOMATED | 1.7.1.7 | PATCH | Ensure SETroubleshoot is not installed"
   package:
     name: setroubleshoot
     state: absent
@@ -109,14 +109,14 @@
   - rhel7cis_rule_1_7_1_7
   tags:
   - level1
-  - scored
+  - AUTOMATED
   - selinux
   - patch
   - rule_1.7.1.7
   vars:
     ansible_python_interpreter: /bin/python
 
-- name: "SCORED | 1.7.1.8 | PATCH | Ensure the MCS Translation Service (mcstrans) is not installed"
+- name: "AUTOMATED | 1.7.1.8 | PATCH | Ensure the MCS Translation Service (mcstrans) is not installed"
   package:
     name: mcstrans
     state: absent
@@ -124,7 +124,7 @@
   - rhel7cis_rule_1_7_1_8
   tags:
   - level1
-  - scored
+  - AUTOMATED
   - patch
   - rule_1.7.1.8
   vars:
