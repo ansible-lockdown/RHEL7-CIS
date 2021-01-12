@@ -1,0 +1,236 @@
+---
+- name: "SCORED | 6.2.1 | PATCH | Ensure password fields are not empty"
+  command: passwd -l {{ item }}
+  changed_when: no
+  failed_when: no
+  with_items: "{{ empty_password_accounts.stdout_lines }}"
+  when:
+      - empty_password_accounts.rc
+      - rhel7cis_rule_6_2_1|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.1
+
+- name: "SCORED | 6.2.2 | PATCH | Ensure no legacy '+' entries exist in /etc/passwd"
+  command: sed -i '/^+/ d' /etc/passwd
+  changed_when: no
+  failed_when: no
+  when:
+      - rhel7cis_rule_6_2_2|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.2
+      - skip_ansible_lint #  ANSIBLE0006
+
+- name: "SCORED | 6.2.3 | PATCH | Ensure no legacy '+' entries exist in /etc/shadow"
+  command: sed -i '/^+/ d' /etc/shadow
+  changed_when: no
+  failed_when: no
+  when:
+      - rhel7cis_rule_6_2_3|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.3
+      - skip_ansible_lint #  ANSIBLE0006
+
+- name: "SCORED | 6.2.4 | PATCH | Ensure no legacy '+' entries exist in /etc/group"
+  command: sed -i '/^+/ d' /etc/group
+  changed_when: no
+  failed_when: no
+  when:
+      - rhel7cis_rule_6_2_4|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.4
+      - skip_ansible_lint #  ANSIBLE0006
+
+- name: "SCORED | 6.2.5 | PATCH | Ensure root is the only UID 0 account"
+  command: passwd -l {{ item }}
+  changed_when: no
+  failed_when: no
+  with_items: "{{ uid_zero_accounts_except_root.stdout_lines }}"
+  when:
+      - uid_zero_accounts_except_root.rc
+      - rhel7cis_rule_6_2_5|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.5
+
+- name: "SCORED | 6.2.6 | PATCH | Ensure root PATH Integrity"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_2_6|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.6
+      - notimplemented
+
+- name: "SCORED | 6.2.7 | PATCH | Ensure all users' home directories exist"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_2_7|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.7
+      - notimplemented
+
+- name: "SCORED | 6.2.8 | PATCH | Ensure users' home directories permissions are 750 or more restrictive"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_2_8|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.8
+      - notimplemented
+
+- name: "SCORED | 6.2.9 | PATCH | Ensure users own their home directories"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_2_9|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.9
+      - notimplemented
+
+- name: "SCORED | 6.2.10 | PATCH | Ensure users' dot files are not group or world writable"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_2_10|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.10
+      - notimplemented
+
+- name: "SCORED | 6.2.11 | PATCH | Ensure no users have .forward files"
+  file:
+      state: absent
+      dest: "~{{ item }}/.forward"
+  with_items: "{{ users }}"
+  when:
+      - rhel7cis_rule_6_2_11|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.11
+
+- name: "SCORED | 6.2.12 | PATCH | Ensure no users have .netrc files"
+  file:
+      state: absent
+      dest: "~{{ item }}/.netrc"
+  with_items: "{{ users }}"
+  when:
+      - rhel7cis_rule_6_2_12|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.12
+
+# - name: "SCORED | 6.2.13 | PATCH | Ensure users' .netrc Files are not group or world accessible"
+#   file:
+#       mode: 0600
+#       dest: "~{{ item }}/.netrc"
+#   with_items: "{{ users.stdout_lines }}"
+#   tags:
+#       - level1
+#       - level2
+#       - patch
+#       - rule_6.2.13
+
+- name: "SCORED | 6.2.14 | PATCH | Ensure no users have .rhosts files"
+  file:
+      state: absent
+      dest: "~{{ item }}/.rhosts"
+  with_items: "{{ users }}"
+  when:
+      - rhel7cis_rule_6_2_14|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.14
+
+- name: "SCORED | 6.2.15 | PATCH | Ensure all groups in /etc/passwd exist in /etc/group"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_2_15|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.15
+      - notimplemented
+
+- name: "SCORED | 6.2.16 | PATCH | Ensure no duplicate UIDs exist"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_2_16|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.16
+      - notimplemented
+
+- name: "SCORED | 6.2.17 | PATCH | Ensure no duplicate GIDs exist"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_2_17|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.17
+      - notimplemented
+
+- name: "SCORED | 6.2.18 | PATCH | Ensure no duplicate user names exist"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_2_18|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.18
+      - notimplemented
+
+- name: "SCORED | 6.2.19 | PATCH | Ensure no duplicate group names exist"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_2_19|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.19
