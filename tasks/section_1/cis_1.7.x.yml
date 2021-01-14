@@ -54,6 +54,7 @@
     state: permissive
   when:
   - not rhel7cis_selinux_disable
+  - not rhel7cis_rule_1_7_1_5
   - rhel7cis_rule_1_7_1_4
   tags:
   - level1
