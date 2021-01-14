@@ -120,7 +120,7 @@
 
 - name: "AUTOMATED | 4.1.5 | PATCH | Ensure events that modify the system's network environment are collected"
   template:
-      src: audit/rhel7system_local.rules.j2
+      src: audit/system_local.rules.j2
       dest: /etc/audit/rules.d/system_local.rules
       owner: root
       group: root
