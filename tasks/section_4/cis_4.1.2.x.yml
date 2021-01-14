@@ -196,7 +196,7 @@
 
 - name: "AUTOMATED | 4.1.9 | PATCH | Ensure discretionary access control permission modification events are collected"
   template:
-      src: audit/perm_modrules.j2
+      src: audit/perm_mod.rules.j2
       dest: /etc/audit/rules.d/perm_mod.rules
       owner: root
       group: root
