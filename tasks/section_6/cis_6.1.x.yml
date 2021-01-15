@@ -1,14 +1,39 @@
 ---
 - name: "NOTSCORED | 6.1.1 | PATCH | Audit system file permissions"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "NOTSCORED | 6.1.1 | AUDIT | Audit system file permissions | Register package list"
+        command: ls -a /bin/
+        register: rhel7cis_6_1_1_packages
+        failed_when: no
+        changed_when: no
+
+      - name: "NOTSCORED | 6.1.1 | AUDIT | Audit system file permissions | Audit the packages"
+        shell: rpm -Va --nomtime --nosize --nomd5 --nolinkto > /bin/{{ rhel7cis_6_1_1_packages.stdout_lines }}
+        register: rhel7cis_6_1_1_packages_rpm
+
+      - name: "NOTSCORED | 6.1.1 | AUDIT | Audit system file permissions | Message out no package descrepancies"
+        debug:
+            msg: "Good News! There are no package descrepancies"
+        when: rhel7cis_6_1_1_packages_rpm.stdout == ""
+
+      - name: "NOTSCORED | 6.1.1 | AUDIT | Audit system file permissions | Message out alert for package descrepancies"
+        debug:
+            msg: "Warning! You have some package descrepancies. These packages need review: {{ rhel7cis_6_1_1_packages_rpm.stdout_lines }}"
+        when: rhel7cis_6_1_1_packages_rpm.stdout != ""
+
+      - name: "NOTSCORED | 6.1.1 | PATCH | Audit system file permissions | Address descrepancies found (Configurable)"
+        shell: >
+                ( rpm --setugids /bin/{{ rhel7cis_6_1_1_packages_rpm.stdout_lines }}; rpm --setperms /bin/{{ rhel7cis_6_1_1_packages_rpm.stdout_lines }} )
+                2>&1 1>&2 | grep -v ': No such file or directory$'
+        when:
+            - rhel7cis_6_1_1_packages_rpm.stdout != ""
+            - rhelcis_rpm_descrep_autofixes
   when:
       - rhel7cis_rule_6_1_1|bool
   tags:
       - level2
       - patch
       - rule_6.1.1
-      - notimplemented
 
 - name: "SCORED | 6.1.2 | PATCH | Ensure permissions on /etc/passwd are configured"
   file:
@@ -20,7 +45,6 @@
       - rhel7cis_rule_6_1_2|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.1.2
 
@@ -34,7 +58,6 @@
       - rhel7cis_rule_6_1_3|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.1.3
 
@@ -48,7 +71,6 @@
       - rhel7cis_rule_6_1_4|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.1.4
 
@@ -62,7 +84,6 @@
       - rhel7cis_rule_6_1_5|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.1.5
 
@@ -76,7 +97,6 @@
       - rhel7cis_rule_6_1_6|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.1.6
 
@@ -90,7 +110,6 @@
       - rhel7cis_rule_6_1_7|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.1.7
 
@@ -104,7 +123,6 @@
       - rhel7cis_rule_6_1_8|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.1.8
 
@@ -118,66 +136,152 @@
       - rhel7cis_rule_6_1_9|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.1.9
 
 - name: "SCORED | 6.1.10 | PATCH | Ensure no world writable files exist"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "SCORED | 6.1.10 | AUDIT | Ensure no world writable files exist | Get list of world-writable files"
+        shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -0002
+        become: yes
+        failed_when: false
+        changed_when: false
+        register: rhel_07_6_1_10_perms_results
+
+      - name: "SCORED | 6.1.10 | AUDIT | Ensure no world writable files exist | Alert no world-writable files exist"
+        debug:
+            msg: "Good news! We have not found any world-writable files on your system"
+        failed_when: false
+        changed_when: false
+        when:
+            - rhel_07_6_1_10_perms_results.stdout is not defined
+
+      - name: "SCORED | 6.1.10 | PATCH | Ensure no world writable files exist | Adjust world-writable files if they exist (Configurable)"
+        file:
+            path: '{{ item }}'
+            mode: o-w
+            state: touch
+        with_items: "{{ rhel_07_6_1_10_perms_results.stdout_lines }}"
+        when:
+            - rhel_07_6_1_10_perms_results.stdout_lines is defined
+            - rhel7cis_no_world_write_adjust
   when:
       - rhel7cis_rule_6_1_10|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.1.10
-      - notimplemented
 
 - name: "SCORED | 6.1.11 | PATCH | Ensure no unowned files or directories exist"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "SCORED | 6.1.11 | AUDIT | Ensure no unowned files or directories exist | Finding all unowned files or directories"
+        command: find "{{ item.mount }}" -xdev -nouser
+        check_mode: no
+        register: rhel_07_6_1_11_audit
+        failed_when: no
+        changed_when: no
+        when: item['device'].startswith('/dev') and not 'bind' in item['options']
+        with_items: "{{ ansible_mounts }}"
+
+      - name: "SCORED | 6.1.11 | AUDIT | Ensure no unowned files or directories exist | Displaying any unowned files or directories"
+        debug:
+            msg: "Manual intervention is required -- missing owner on items in {{ item.item.mount }}: {{ item.stdout_lines | join(', ') }}"
+        when:
+            - item.stdout_lines is defined
+            - item.stdout_lines | length > 0
+        with_items: "{{ rhel_07_6_1_11_audit.results }}"
   when:
       - rhel7cis_rule_6_1_11|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.1.11
-      - notimplemented
 
 - name: "SCORED | 6.1.12 | PATCH | Ensure no ungrouped files or directories exist"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "SCORED | 6.1.12 | AUDIT | Ensure no ungrouped files or directories exist | Finding all ungrouped files or directories"
+        command: find "{{ item.mount }}" -xdev -nogroup
+        check_mode: no
+        register: rhel_07_6_1_12_audit
+        failed_when: no
+        changed_when: no
+        when: item['device'].startswith('/dev') and not 'bind' in item['options']
+        with_items: "{{ ansible_mounts }}"
+
+      - name: "SCORED | 6.1.12 | AUDIT | Ensure no ungrouped files or directories exist | Displaying all ungrouped files or directories"
+        debug:
+            msg: "Manual intervention is required -- missing group on items in {{ item.item.mount }}: {{ item.stdout_lines | join(', ') }}"
+        changed_when:
+            - rhel7stig_audit_complex
+        when:
+            - item.stdout_lines is defined
+            - item.stdout_lines | length > 0
+        with_items: "{{ rhel_07_6_1_12_audit.results }}"
   when:
       - rhel7cis_rule_6_1_12|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.1.12
-      - notimplemented
 
 - name: "NOTSCORED | 6.1.13 | PATCH | Audit SUID executables"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "NOTSCORED | 6.1.13 | AUDIT | Audit SUID executables | Find all SUID executables"
+        shell: df {{ item.mount }} -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -4000
+        become: yes
+        failed_when: false
+        changed_when: false
+        register: rhel_07_6_1_13_perms_results
+        with_items: "{{ ansible_mounts }}"
+
+      - name: "NOTSCORED | 6.1.13 | AUDIT | Audit SUID executables |  Alert no SUID executables exist"
+        debug:
+            msg: "Good news! We have not found any SUID executable files on your system"
+        failed_when: false
+        changed_when: false
+        when:
+            - rhel_07_6_1_13_perms_results.stdout is not defined
+
+      - name: "NOTSCORED | 6.1.13 | AUDIT | Audit SUID executables |  Alert SUID executables exist"
+        debug:
+            msg: "Manual intervention is required -- SUID set on items in {{ item.item.mount }}: {{ item.stout_lines | join(', ') }}"
+        with_items: "{{ rhel_07_6_1_13_perms_results.stdout_lines }}"
+        when:
+            - rhel_07_6_1_13_perms_results.stdout is defined
   when:
       - rhel7cis_rule_6_1_13|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.1.13
-      - notimplemented
 
 - name: "NOTSCORED | 6.1.14 | PATCH | Audit SGID executables"
-  command: /bin/true
-  changed_when: no
+  block:
+      - name: "NOTSCORED | 6.1.14 | AUDIT | Audit SGID executables | Find all SGID executables"
+        shell: df {{ item.mount }} -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -2000
+        become: yes
+        failed_when: false
+        changed_when: false
+        register: rhel_07_6_1_14_perms_results
+        with_items: "{{ ansible_mounts }}"
+
+      - name: "NOTSCORED | 6.1.14 | AUDIT | Audit SGID executables |  Alert no SGID executables exist"
+        debug:
+            msg: "Good news! We have not found any SGID executable files on your system"
+        failed_when: false
+        changed_when: false
+        when:
+            - rhel_07_6_1_14_perms_results.stdout is not defined
+
+      - name: "NOTSCORED | 6.1.14 | AUDIT | Audit SGID executables |  Alert SGID executables exist"
+        debug:
+            msg: "Manual intervention is required -- SGID set on items in {{ item.item.mount }}: {{ item.stout_lines | join(', ') }}"
+        with_items: "{{ rhel_07_6_1_14_perms_results.stdout_lines }}"
+        when:
+            - rhel_07_6_1_14_perms_results.stdout is defined
   when:
       - rhel7cis_rule_6_1_14|bool
   tags:
       - level1
-      - level2
       - patch
       - rule_6.1.14
-      - notimplemented
