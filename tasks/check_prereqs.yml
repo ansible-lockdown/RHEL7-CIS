@@ -1,8 +1,9 @@
 ---
 
 - name: "PREREQ | Check required packages installed | Python2"
-  yum:
+  package:
     list: "{{ item }}"
+    state: present
   loop:
   - rpm-python
   - libselinux-python
@@ -11,7 +12,7 @@
     ansible_python_interpreter: /bin/python
 
 - name: "PREREQ | Check required packages installed | Python3"
-  yum:
+  package:
     name: "{{ item }}"
     state: present
   register: python3reqs_installed
