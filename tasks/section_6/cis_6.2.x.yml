@@ -1,418 +1,419 @@
-- name: "SCORED | 6.2.1 | PATCH | Ensure password fields are not empty"
+---
+
+- name: "AUTOMATED | 6.2.1 | PATCH | Ensure accounts in /etc/passwd use shadow passwords"
+  command: "sed -e 's/^\([a-zA-Z0-9_]*\):[^:]*:/\1:x:/' -i /etc/passwd"
+  changed_when: no
+  failed_when: no
+  when:
+  - rhel7cis_rule_6_2_1
+  tags:
+  - level1
+  - patch
+  - rule_6.2.1
+
+- name: "AUTOMATED | 6.2.2 | PATCH |  Ensure /etc/shadow password fields are not empty"
   command: passwd -l {{ item }}
   changed_when: no
   failed_when: no
-  with_items: "{{ empty_password_accounts.stdout_lines }}"
+  loop: "{{ empty_password_accounts.stdout_lines }}"
   when:
-      - empty_password_accounts.rc
-      - rhel7cis_rule_6_2_1|bool
+  - empty_password_accounts.rc
+  - rhel7cis_rule_6_2_2|bool
   tags:
-      - level1
-      - patch
-      - rule_6.2.1
+  - level1
+  - patch
+  - rule_6.2.2
 
-- name: "SCORED | 6.2.2 | PATCH | Ensure no legacy '+' entries exist in /etc/passwd"
-  command: sed -i '/^+/ d' /etc/passwd
-  changed_when: no
-  failed_when: no
-  when:
-      - rhel7cis_rule_6_2_2|bool
-  tags:
-      - level1
-      - patch
-      - rule_6.2.2
-      - skip_ansible_lint
-
-- name: "SCORED | 6.2.3 | PATCH | Ensure no legacy '+' entries exist in /etc/shadow"
-  command: sed -i '/^+/ d' /etc/shadow
-  changed_when: no
-  failed_when: no
-  when:
-      - rhel7cis_rule_6_2_3|bool
-  tags:
-      - level1
-      - patch
-      - rule_6.2.3
-      - skip_ansible_lint
-
-- name: "SCORED | 6.2.4 | PATCH | Ensure no legacy '+' entries exist in /etc/group"
-  command: sed -i '/^+/ d' /etc/group
-  changed_when: no
-  failed_when: no
-  when:
-      - rhel7cis_rule_6_2_4|bool
-  tags:
-      - level1
-      - patch
-      - rule_6.2.4
-      - skip_ansible_lint
-
-- name: "SCORED | 6.2.5 | PATCH | Ensure root is the only UID 0 account"
+- name: "AUTOMATED | 6.2.3 | PATCH | Ensure root is the only UID 0 account"
   command: passwd -l {{ item }}
   changed_when: no
   failed_when: no
-  with_items: "{{ uid_zero_accounts_except_root.stdout_lines }}"
+  loop: "{{ uid_zero_accounts_except_root.stdout_lines }}"
   when:
-      - uid_zero_accounts_except_root.rc
-      - rhel7cis_rule_6_2_5|bool
+  - uid_zero_accounts_except_root.rc
+  - rhel7cis_rule_6_2_3
   tags:
-      - level1
-      - patch
-      - rule_6.2.5
+  - level1
+  - patch
+  - rule_6.2.3
 
-- name: "SCORED | 6.2.6 | PATCH | Ensure root PATH Integrity"
+- name: "AUTOMATED | 6.2.4 | PATCH | Ensure root PATH Integrity"
   block:
-      - name: "SCORED | 6.2.6 | AUDIT | Ensure root PATH Integrity | Determine empty value"
-        shell: 'echo $PATH | grep ::'
-        become: yes
-        register: path_colon
-        changed_when: False
-        failed_when: path_colon.rc == 0
+  - name: "AUTOMATED | 6.2.4 | AUDIT | Ensure root PATH Integrity | Determine empty value"
+    shell: 'echo $PATH | grep ::'
+    become: yes
+    register: path_colon
+    changed_when: False
+    failed_when: path_colon.rc == 0
 
-      - name: "SCORED | 6.2.6 | AUDIT | Ensure root PATH Integrity | Determin colon end"
-        shell: 'echo $PATH | grep :$'
-        become: yes
-        register: path_colon_end
-        changed_when: False
-        failed_when: path_colon_end.rc == 0
+  - name: "AUTOMATED | 6.2.4 | AUDIT | Ensure root PATH Integrity | Determin colon end"
+    shell: 'echo $PATH | grep :$'
+    become: yes
+    register: path_colon_end
+    changed_when: False
+    failed_when: path_colon_end.rc == 0
 
-      - name: "SCORED | 6.2.6 | AUDIT | Ensure root PATH Integrity | Determine dot in path"
-        shell: "/bin/bash --login -c 'env | grep ^PATH=' | sed -e 's/PATH=//' -e 's/::/:/' -e 's/:$//' -e 's/:/\\n/g'"
-        become: yes
-        register: dot_in_path
-        changed_when: False
-        failed_when: '"." in dot_in_path.stdout_lines'
+  - name: "AUTOMATED | 6.2.4 | AUDIT | Ensure root PATH Integrity | Determine dot in path"
+    shell: "/bin/bash --login -c 'env | grep ^PATH=' | sed -e 's/PATH=//' -e 's/::/:/' -e 's/:$//' -e 's/:/\\n/g'"
+    become: yes
+    register: dot_in_path
+    changed_when: False
+    failed_when: '"." in dot_in_path.stdout_lines'
 
-      - name: "SCORED | 6.2.6 | AUDIT | Ensure root PATH Integrity | Alert on empty value, colon end, and dot in path"
-        debug:
-            msg:
-                - "The following paths have an empty value: {{ path_colon.stdout_lines }}"
-                - "The following paths have colon end: {{ path_colon_end.stdout_lines }}"
-                - "The following paths have a dot in the path: {{ dot_in_path.stdout_lines }}"
+  - name: "AUTOMATED | 6.2.4 | AUDIT | Ensure root PATH Integrity | Alert on empty value, colon end, and dot in path"
+    debug:
+      msg:
+      - "The following paths have an empty value: {{ path_colon.stdout_lines }}"
+      - "The following paths have colon end: {{ path_colon_end.stdout_lines }}"
+      - "The following paths have a dot in the path: {{ dot_in_path.stdout_lines }}"
 
-      - name: "SCORED | 6.2.6 | PATCH | Ensure root PATH Integrity (Scored) | Determine rights and owner"
-        file: >
-            path='{{ item }}'
-            follow=yes
-            state=directory
-            owner=root
-            mode='o-w,g-w'
-        with_items: "{{ dot_in_path.stdout_lines }}"
+  - name: "AUTOMATED | 6.2.4 | PATCH | Ensure root PATH Integrity (AUTOMATED) | Determine rights and owner"
+    file: >
+        path='{{ item }}'
+        follow=yes
+        state=directory
+        owner=root
+        mode='o-w,g-w'
+    loop: "{{ dot_in_path.stdout_lines }}"
   when:
-      - rhel7cis_rule_6_2_6|bool
+  - rhel7cis_rule_6_2_4
   tags:
-      - level1
-      - patch
-      - rule_6.2.6
+  - level1
+  - patch
+  - rule_6.2.4
 
-- name: "SCORED | 6.2.7 | PATCH | Ensure all users' home directories exist"
+- name: "AUTOMATED | 6.2.5 | PATCH | Ensure all users' home directories exist"
   block:
-      - name: capture audit task for missing homedirs
-        block: &r7s_homedir_audit
-            - name: "SCORED | 6.2.7 | AUDIT | Ensure all users' home directories exist | Find users missing home directories"
-              shell: set -o pipefail ; pwck -r | grep -P {{ ld_regex | quote }}
-              check_mode: no
-              register: rhel7cis_users_missing_home
-              changed_when: rhel_07_6_2_7_audit | length > 0
-              # failed_when: 0: success, 1: no grep match, 2: pwck found something
-              failed_when: rhel7cis_users_missing_home.rc not in [0,1,2]
+  - name: capture audit task for missing homedirs
+    block: &r7s_homedir_audit
+    - name: "AUTOMATED | 6.2.7 | AUDIT | Ensure all users' home directories exist | Find users missing home directories"
+      shell: set -o pipefail ; pwck -r | grep -P {{ ld_regex | quote }}
+      check_mode: no
+      register: rhel7cis_users_missing_home
+      changed_when: rhel_07_6_2_5_audit | length > 0
+      # failed_when: 0: success, 1: no grep match, 2: pwck found something
+      failed_when: rhel7cis_users_missing_home.rc not in [0,1,2]
 
-      ### NOTE: due to https://github.com/ansible/ansible/issues/24862 This is a shell command, and is quite frankly less than ideal.
-      - name: "SCORED | 6.2.7 | PATCH | Ensure all users' home directories exist | Creates home directories"
-        command: "mkhomedir_helper {{ item }}"
-        check_mode: "{{ rhel7cis_disruptive_check_mode }}"
-        with_items: "{{ rhelcis_07_6_2_7_audit | map(attribute='id') | list }}"
-        when:
-            - rhel7cis_users_missing_home is changed
+    ### NOTE: due to https://github.com/ansible/ansible/issues/24862 This is a shell command, and is quite frankly less than ideal.
+    - name: "AUTOMATED | 6.2.5 | PATCH | Ensure all users' home directories exist | Creates home directories"
+      command: "mkhomedir_helper {{ item }}"
+      check_mode: "{{ rhel7cis_disruptive_check_mode }}"
+      with_items: "{{ rhelcis_07_6_2_5_audit | map(attribute='id') | list }}"
+      when:
+      - rhel7cis_users_missing_home is changed
 
-      ### NOTE: Now we need to address that SELINUX will not let mkhomedir_helper create home directories for UUID < 500, so the ftp user will still show up in a pwck. Not sure this is needed, I need to confirm if that user is removed in an earlier task.
-      ### ^ Likely doesn't matter as 6.2.7 defines "local interactive users" as those w/ uid 1000-4999
-      - name: replay audit task
-        block: *r7s_homedir_audit
+    ### NOTE: Now we need to address that SELINUX will not let mkhomedir_helper create home directories for UUID < 500, so the ftp user will still show up in a pwck. Not sure this is needed, I need to confirm if that user is removed in an earlier task.
+    ### ^ Likely doesn't matter as 6.2.7 defines "local interactive users" as those w/ uid 1000-4999
+    - name: replay audit task
+      block: *r7s_homedir_audit
 
-      # CAUTION: debug loops don't show changed since 2.4:
-      # Fix: https://github.com/ansible/ansible/pull/59958
-      - name: "SCORED | 6.2.7 | AUDIT | Ensure all users' home directories exist | Alert about correcting owner and group"
-        debug: msg="You will need to mkdir -p {{ item }} and chown properly to the correct owner and group."
-        with_items: "{{ rhel_07_6_2_7_audit | map(attribute='dir') | list }}"
-        changed_when: rhel7cis_audit_complex
-        when:
-            - rhel7cis_users_missing_home is changed
+    # CAUTION: debug loops don't show changed since 2.4:
+    # Fix: https://github.com/ansible/ansible/pull/59958
+    - name: "AUTOMATED | 6.2.5 | AUDIT | Ensure all users' home directories exist | Alert about correcting owner and group"
+      debug: msg="You will need to mkdir -p {{ item }} and chown properly to the correct owner and group."
+      with_items: "{{ rhel_07_6_2_5_audit | map(attribute='dir') | list }}"
+      changed_when: rhel7cis_audit_complex
+      when:
+      - rhel7cis_users_missing_home is changed
   vars:
-      ld_regex: >-
-          ^user '(?P<user>.*)': directory '(?P<dir>.*)' does not exist$
-      ld_users: "{{ rhel7cis_users_missing_home.stdout_lines | map('regex_replace', ld_regex, '\\g<user>') | list }}"
-      rhel_07_6_2_7_audit: "{{ rhel7cis_passwd | selectattr('uid', '>=', 1000) | selectattr('id', 'in', ld_users) | list }}"
+    ld_regex: >-
+        ^user '(?P<user>.*)': directory '(?P<dir>.*)' does not exist$
+    ld_users: "{{ rhel7cis_users_missing_home.stdout_lines | map('regex_replace', ld_regex, '\\g<user>') | list }}"
+    rhel_07_6_2_7_audit: "{{ rhel7cis_passwd | selectattr('uid', '>=', 1000) | selectattr('id', 'in', ld_users) | list }}"
   when:
-      - rhel7cis_rule_6_2_7|bool
+  - rhel7cis_rule_6_2_5
   tags:
-      - level1
-      - patch
-      - rhel7cis_rule_6_2_7
+  - level1
+  - patch
+  - rhel7cis_rule_6_2_5
 
-- name: "SCORED | 6.2.8 | PATCH | Ensure users' home directories permissions are 750 or more restrictive"
+- name: "AUTOMATED | 6.2.6 | PATCH | Ensure users' home directories permissions are 750 or more restrictive"
   block:
-      - name: "SCORED | 6.2.8 | AUDIT | Ensure users' home directories permissions are 750 or more restrictive"
-        stat:
-            path: "{{ item }}"
-        with_items: "{{ rhel7cis_passwd | selectattr('uid', '>=', 1000) | selectattr('uid', '!=', 65534) | map(attribute='dir') | list }}"
-        register: rhel_07_6_2_8_audit
+  - name: "AUTOMATED | 6.2.6 | AUDIT | Ensure users' home directories permissions are 750 or more restrictive"
+    stat:
+      path: "{{ item }}"
+    with_items: "{{ rhel7cis_passwd | selectattr('uid', '>=', 1000) | selectattr('uid', '!=', 65534) | map(attribute='dir') | list }}"
+    register: rhel_07_6_2_6_audit
 
-      - name: "SCORED | 6.2.8 | AUDIT | Ensure users' home directories permissions are 750 or more restrictive"
-        command: find -H {{ item.0 | quote }} -not -type l -perm /027
-        check_mode: no
-        register: rhel_07_6_2_8_patch_audit
-        changed_when: rhel_07_6_2_8_patch_audit.stdout != ""
-        when:
-            - ansible_check_mode
-            - item.1.exists
-        with_together:
-            - "{{ rhel_07_6_2_8_audit.results | map(attribute='item') | list }}"
-            - "{{ rhel_07_6_2_8_audit.results | map(attribute='stat') | list }}"
-        loop_control:
-            label: "{{ item.0 }}"
+  - name: "AUTOMATED | 6.2.6 | AUDIT | Ensure users' home directories permissions are 750 or more restrictive"
+    command: find -H {{ item.0 | quote }} -not -type l -perm /027
+    check_mode: no
+    register: rhel_07_6_2_6_patch_audit
+    changed_when: rhel_07_6_2_6_patch_audit.stdout != ""
+    when:
+    - ansible_check_mode
+    - item.1.exists
+    with_together:
+    - "{{ rhel_07_6_2_6_audit.results | map(attribute='item') | list }}"
+    - "{{ rhel_07_6_2_6_audit.results | map(attribute='stat') | list }}"
+    loop_control:
+        label: "{{ item.0 }}"
 
-      - name: "SCORED | 6.2.8 | AUDIT | Ensure users' home directories permissions are 750 or more restrictive"
-        file:
-            path: "{{ item.0 }}"
-            recurse: yes
-            mode: a-st,g-w,o-rwx
-        register: rhel_07_6_2_8_patch
-        when:
-            - not ansible_check_mode
-            - item.1.exists
-        with_together:
-            - "{{ rhel_07_6_2_8_audit.results | map(attribute='item') | list }}"
-            - "{{ rhel_07_6_2_8_audit.results | map(attribute='stat') | list }}"
-        loop_control:
-            label: "{{ item.0 }}"
+  - name: "AUTOMATED | 6.2.6 | AUDIT | Ensure users' home directories permissions are 750 or more restrictive"
+    file:
+      path: "{{ item.0 }}"
+        recurse: yes
+        mode: a-st,g-w,o-rwx
+    register: rhel_07_6_2_6_patch
+    when:
+    - not ansible_check_mode
+    - item.1.exists
+    with_together:
+    - "{{ rhel_07_6_2_6_audit.results | map(attribute='item') | list }}"
+    - "{{ rhel_07_6_2_6_audit.results | map(attribute='stat') | list }}"
+    loop_control:
+        label: "{{ item.0 }}"
 
-      # set default ACLs so the homedir has an effective umask of 0027
-      - name: "SCORED | 6.2.8 | PATCH | Ensure users' home directories permissions are 750 or more restrictive"
-        acl:
-            path: "{{ item.0 }}"
-            default: yes
-            state: present
-            recursive: yes
-            etype: "{{ item.1.etype }}"
-            permissions: "{{ item.1.mode }}"
-        when: not rhel7cis_system_is_container
-        with_nested:
-            - "{{ (ansible_check_mode | ternary(rhel_07_6_2_8_patch_audit, rhel_07_6_2_8_patch)).results |
-              rejectattr('skipped', 'defined') | map(attribute='item') | map('first') | list }}"
-            -
-                - etype: group
-                  mode: rx
-                - etype: other
-                  mode: '0'
+    # set default ACLs so the homedir has an effective umask of 0027
+    - name: "AUTOMATED | 6.2.6 | PATCH | Ensure users' home directories permissions are 750 or more restrictive"
+      acl:
+        path: "{{ item.0 }}"
+        default: yes
+        state: present
+        recursive: yes
+        etype: "{{ item.1.etype }}"
+        permissions: "{{ item.1.mode }}"
+    when: not rhel7cis_system_is_container
+    with_nested:
+    - "{{ (ansible_check_mode | ternary(rhel_07_6_2_6_patch_audit, rhel_07_6_2_8_patch)).results |
+      rejectattr('skipped', 'defined') | map(attribute='item') | map('first') | list }}"
+    -
+        - etype: group
+          mode: rx
+        - etype: other
+          mode: '0'
   when:
-      - rhel7cis_rule_6_2_8|bool
+  - rhel7cis_rule_6_2_6
   tags:
-      - level1
-      - patch
-      - rule_6.2.8
+  - level1
+  - patch
+  - rule_6.2.6
 
-- name: "SCORED | 6.2.9 | PATCH | Ensure users own their home directories"
+- name: "AUTOMATED | 6.2.7 | PATCH | Ensure users own their home directories"
   file:
-      path: "{{ item.dir }}"
-      owner: "{{ item.id }}"
-      state: directory
+    path: "{{ item.dir }}"
+    owner: "{{ item.id }}"
+    state: directory
   with_items: "{{ rhel7cis_passwd | selectattr('uid', '>=', 1000) | selectattr('uid', '!=', 65534) | list }}"
   loop_control:
-      label: "{{ rhel7cis_passwd_label }}"
+    label: "{{ rhel7cis_passwd_label }}"
   when:
-      - rhel7cis_rule_6_2_9|bool
+  - rhel7cis_rule_6_2_7
   tags:
-      - level1
-      - patch
-      - rule_6.2.9
+  - level1
+  - patch
+  - rule_6.2.7
 
-- name: "SCORED | 6.2.10 | PATCH | Ensure users' dot files are not group or world-writable"
+- name: "AUTOMATED | 6.2.8 | PATCH | Ensure users' dot files are not group or world-writable"
   block:
-      - name: "SCORED | 6.2.10 | AUDIT | Ensure users' dot files are not group or world-writable | Check for files"
-        shell: find /home/ -name "\.*" -perm /g+w,o+w
-        become: yes
-        changed_when: no
-        failed_when: no
-        register: rhel7cis_6_2_10_audit
+  - name: "AUTOMATED | 6.2.8 | AUDIT | Ensure users' dot files are not group or world-writable | Check for files"
+    shell: find /home/ -name "\.*" -perm /g+w,o+w
+    become: yes
+    changed_when: no
+    failed_when: no
+    register: rhel7cis_6_2_8_audit
 
-      - name: "SCORED | 6.2.10 | AUDIT | Ensure users' dot files are not group or world-writable | Alert on files found"
-        debug:
-            msg: "Good news! We have not found any group or world-writable dot files on your sytem"
-        failed_when: false
-        changed_when: false
-        when:
-            - rhel7cis_6_2_10_audit.stdout is not defined
+  - name: "AUTOMATED | 6.2.8 | AUDIT | Ensure users' dot files are not group or world-writable | Alert on files found"
+    debug:
+      msg: "Good news! We have not found any group or world-writable dot files on your sytem"
+    failed_when: false
+    changed_when: false
+    when:
+    - rhel7cis_6_2_8_audit.stdout is not defined
 
-      - name: "SCORED | 6.2.10 | PATCH | Ensure users' dot files are not group or world-writable | Changes files if configured"
-        file:
-            path: '{{ item }}'
-            mode: go-w
-        with_items: "{{ rhel7cis_6_2_10_audit.stdout_lines }}"
-        when:
-            - rhel7cis_6_2_10_audit.stdout is defined
-            - rhel7cis_dotperm_ansibleManaged
+  - name: "AUTOMATED | 6.2.8 | PATCH | Ensure users' dot files are not group or world-writable | Changes files if configured"
+    file:
+      path: '{{ item }}'
+      mode: go-w
+    with_items: "{{ rhel7cis_6_2_8_audit.stdout_lines }}"
+    when:
+    - rhel7cis_6_2_8_audit.stdout is defined
+    - rhel7cis_dotperm_ansibleManaged
   when:
-      - rhel7cis_rule_6_2_10|bool
+  - rhel7cis_rule_6_2_8
   tags:
-      - level1
-      - patch
-      - rule_6.2.10
+  - level1
+  - patch
+  - rule_6.2.8
 
-- name: "SCORED | 6.2.11 | PATCH | Ensure no users have .forward files"
+- name: "AUTOMATED | 6.2.9 | PATCH | Ensure no users have .forward files"
   file:
-      state: absent
-      dest: "~{{ item }}/.forward"
+    state: absent
+    dest: "~{{ item }}/.forward"
+  loop: "{{ users.stdout_lines }}"
+  when:
+  - rhel7cis_rule_6_2_9
+  tags:
+  - level1
+  - patch
+  - rule_6.2.9
+
+- name: "AUTOMATED | 6.2.10 | PATCH | Ensure no users have .netrc files"
+  file:
+    state: absent
+    dest: "~{{ item }}/.netrc"
   with_items: "{{ users.stdout_lines }}"
   when:
-      - rhel7cis_rule_6_2_11|bool
+  - rhel7cis_rule_6_2_10
   tags:
-      - level1
-      - patch
-      - rule_6.2.11
+  - level1
+  - patch
+  - rule_6.2.10
 
-- name: "SCORED | 6.2.12 | PATCH | Ensure no users have .netrc files"
+- name: "AUTOMATED | 6.2.12 | PATCH | Ensure no users have .rhosts files"
   file:
-      state: absent
-      dest: "~{{ item }}/.netrc"
+    state: absent
+    dest: "~{{ item }}/.rhosts"
   with_items: "{{ users.stdout_lines }}"
   when:
-      - rhel7cis_rule_6_2_12|bool
+  - rhel7cis_rule_6_2_12
   tags:
-      - level1
-      - patch
-      - rule_6.2.12
+  - level1
+  - patch
+  - rule_6.2.12
 
-- name: "SCORED | 6.2.14 | PATCH | Ensure no users have .rhosts files"
-  file:
-      state: absent
-      dest: "~{{ item }}/.rhosts"
-  with_items: "{{ users.stdout_lines }}"
-  when:
-      - rhel7cis_rule_6_2_14|bool
-  tags:
-      - level1
-      - patch
-      - rule_6.2.14
-
-- name: "SCORED | 6.2.15 | PATCH | Ensure all groups in /etc/passwd exist in /etc/group"
+- name: "AUTOMATED | 6.2.13 | PATCH | Ensure all groups in /etc/passwd exist in /etc/group"
   block:
-      - name: "SCORED | 6.2.15 | AUDIT | Ensure all groups in /etc/passwd exist in /etc/group | Check /etc/passwd entries"
-        shell: pwck -r | grep 'no group' | awk '{ gsub("[:\47]",""); print $2}'
-        changed_when: no
-        failed_when: no
-        check_mode: no
-        register: passwd_gid_check
+  - name: "AUTOMATED | 6.2.13 | AUDIT | Ensure all groups in /etc/passwd exist in /etc/group | Check /etc/passwd entries"
+    shell: pwck -r | grep 'no group' | awk '{ gsub("[:\47]",""); print $2}'
+    changed_when: no
+    failed_when: no
+    check_mode: no
+    register: passwd_gid_check
 
-      - name: "SCORED | 6.2.15 | AUDIT | Ensure all groups in /etc/passwd exist in /etc/group | Print message that all groups match between passwd and group files"
-        debug:
-            msg: "Good News! There are no users that have non-existent GUIDs (Groups)"
-        when: passwd_gid_check.stdout is not defined
+  - name: "AUTOMATED | 6.2.13 | AUDIT | Ensure all groups in /etc/passwd exist in /etc/group | Print message that all groups match between passwd and group files"
+    debug:
+      msg: "Good News! There are no users that have non-existent GUIDs (Groups)"
+    when: passwd_gid_check.stdout is not defined
 
-      - name: "SCORED | 6.2.15 | AUDIT | Ensure all groups in /etc/passwd exist in /etc/group | Print warning about users with invalid GIDs missing GID entries in /etc/group"
-        debug:
-            msg: "WARNING: The following users have non-existent GIDs (Groups): {{ passwd_gid_check.stdout_lines | join (', ') }}"
-        changed_when: no
-        when: passwd_gid_check.stdout is defined
+  - name: "AUTOMATED | 6.2.13 | AUDIT | Ensure all groups in /etc/passwd exist in /etc/group | Print warning about users with invalid GIDs missing GID entries in /etc/group"
+    debug:
+      msg: "WARNING: The following users have non-existent GIDs (Groups): {{ passwd_gid_check.stdout_lines | join (', ') }}"
+    changed_when: no
+    when: passwd_gid_check.stdout is defined
   when:
-      - rhel7cis_rule_6_2_15|bool
+  - rhel7cis_rule_6_2_13
   tags:
-      - level1
-      - patch
-      - rule_6.2.15
+  - level1
+  - patch
+  - rule_6.2.13
 
-- name: "SCORED | 6.2.16 | PATCH | Ensure no duplicate UIDs exist"
+- name: "AUTOMATED | 6.2.14 | PATCH | Ensure no duplicate UIDs exist"
   block:
-      - name: "SCORED | 6.2.16 | AUDIT | Ensure no duplicate UIDs exist | Check for duplicate UIDs"
-        shell: "pwck -r | awk -F: '{if ($3 in uid) print $1 ; else uid[$3]}' /etc/passwd"
-        changed_when: no
-        failed_when: no
-        register: user_uid_check
+  - name: "AUTOMATED | 6.2.14 | AUDIT | Ensure no duplicate UIDs exist | Check for duplicate UIDs"
+    shell: "pwck -r | awk -F: '{if ($3 in uid) print $1 ; else uid[$3]}' /etc/passwd"
+    changed_when: no
+    failed_when: no
+    register: user_uid_check
 
-      - name: "SCORED | 6.2.16 | AUDIT | Ensure no duplicate UIDs exist | Print message that no duplicate UIDs exist"
-        debug:
-            msg: "Good News! There are no duplicate UID's in the system"
-        when: user_uid_check.stdout is not defined
+  - name: "AUTOMATED | 6.2.14 | AUDIT | Ensure no duplicate UIDs exist | Print message that no duplicate UIDs exist"
+    debug:
+      msg: "Good News! There are no duplicate UID's in the system"
+    when: user_uid_check.stdout is not defined
 
-      - name: "SCORED | 6.2.16 | AUDIT | Ensure no duplicate UIDs exist | Print warning about users with duplicate UIDs"
-        debug:
-            msg: "Warning: The following users have UIDs that are duplicates: {{ user_uid_check.stdout_lines }}"
-        when: user_uid_check.stdout is defined
+  - name: "AUTOMATED | 6.2.14 | AUDIT | Ensure no duplicate UIDs exist | Print warning about users with duplicate UIDs"
+    debug:
+      msg: "Warning: The following users have UIDs that are duplicates: {{ user_uid_check.stdout_lines }}"
+    when: user_uid_check.stdout is defined
   when:
-      - rhel7cis_rule_6_2_16|bool
+  - rhel7cis_rule_6_2_14
   tags:
-      - level1
-      - patch
-      - rule_6.2.16
+  - level1
+  - patch
+  - rule_6.2.14
 
-- name: "SCORED | 6.2.17 | PATCH | Ensure no duplicate GIDs exist"
+- name: "AUTOMATED | 6.2.15 | PATCH | Ensure no duplicate GIDs exist"
   block:
-      - name: "SCORED | 6.2.17 | AUDIT | Ensure no duplicate GIDs exist | Check for duplicate GIDs"
-        shell: "pwck -r | awk -F: '{if ($3 in users) print $1 ; else users[$3]}' /etc/group"
-        changed_when: no
-        failed_when: no
-        register: user_user_check
+  - name: "AUTOMATED | 6.2.15 | AUDIT | Ensure no duplicate GIDs exist | Check for duplicate GIDs"
+    shell: "pwck -r | awk -F: '{if ($3 in users) print $1 ; else users[$3]}' /etc/group"
+    changed_when: no
+    failed_when: no
+    register: user_user_check
 
-      - name: "SCORED | 6.2.17 | AUDIT | Ensure no duplicate GIDs exist | Print message that no duplicate GID's exist"
-        debug:
-            msg: "Good News! There are no duplicate GIDs in the system"
-        when: user_user_check.stdout is not defined
+  - name: "AUTOMATED | 6.2.15 | AUDIT | Ensure no duplicate GIDs exist | Print message that no duplicate GID's exist"
+    debug:
+      msg: "Good News! There are no duplicate GIDs in the system"
+    when: user_user_check.stdout is not defined
 
-      - name: "SCORED | 6.2.17 | AUDIT | Ensure no duplicate GIDs exist | Print warning about users with duplicate GIDs"
-        debug:
-            msg: "Warning: The following groups have duplicate GIDs: {{ user_user_check.stdout_lines }}"
-        when: user_user_check.stdout is defined
+  - name: "AUTOMATED | 6.2.15 | AUDIT | Ensure no duplicate GIDs exist | Print warning about users with duplicate GIDs"
+    debug:
+      msg: "Warning: The following groups have duplicate GIDs: {{ user_user_check.stdout_lines }}"
+    when: user_user_check.stdout is defined
   when:
-      - rhel7cis_rule_6_2_17|bool
+  - rhel7cis_rule_6_2_15
   tags:
-      - level1
-      - patch
-      - rule_6.2.17
+  - level1
+  - patch
+  - rule_6.2.15
 
-- name: "SCORED | 6.2.18 | PATCH | Ensure no duplicate user names exist"
+- name: "AUTOMATED | 6.2.16 | PATCH | Ensure no duplicate user names exist"
   block:
-      - name: "SCORED | 6.2.18 | AUDIT | Ensure no duplicate user names exist | Check for duplicate User Names"
-        shell: "pwck -r | awk -F: '{if ($1 in users) print $1 ; else users[$1]}' /etc/passwd"
-        changed_when: no
-        failed_when: no
-        register: user_username_check
+  - name: "AUTOMATED | 6.2.16 | AUDIT | Ensure no duplicate user names exist | Check for duplicate User Names"
+    shell: "pwck -r | awk -F: '{if ($1 in users) print $1 ; else users[$1]}' /etc/passwd"
+    changed_when: no
+    failed_when: no
+    register: user_username_check
 
-      - name: "SCORED | 6.2.18 | AUDIT | Ensure no duplicate user names exist | Print message that no duplicate user names exist"
-        debug:
-            msg: "Good News! There are no duplicate user names in the system"
-        when: user_username_check.stdout is not defined
+  - name: "AUTOMATED | 6.2.16 | AUDIT | Ensure no duplicate user names exist | Print message that no duplicate user names exist"
+    debug:
+      msg: "Good News! There are no duplicate user names in the system"
+    when: user_username_check.stdout is not defined
 
-      - name: "SCORED | 6.2.18 | AUDIT | Ensure no duplicate user names exist | Print warning about users with duplicate User Names"
-        debug:
-            msg: "Warning: The following user names are duplicates: {{ user_username_check.stdout_lines }}"
-        when: user_username_check.stdout is defined
+  - name: "AUTOMATED | 6.2.16 | AUDIT | Ensure no duplicate user names exist | Print warning about users with duplicate User Names"
+    debug:
+      msg: "Warning: The following user names are duplicates: {{ user_username_check.stdout_lines }}"
+    when: user_username_check.stdout is defined
   when:
-      - rhel7cis_rule_6_2_18|bool
+  - rhel7cis_rule_6_2_16
+  tags:
+  - level1
+  - patch
+  - rule_6.2.16
+
+- name: "AUTOMATED | 6.2.17 | PATCH | Ensure no duplicate group names exist"
+  block:
+  - name: "AUTOMATED | 6.2.17 | AUDIT | Ensure no duplicate group names exist | Check for duplicate group names"
+    shell: 'getent passwd | cut -d: -f1 | sort -n | uniq -d'
+    changed_when: no
+    failed_when: no
+    register: group_group_check
+
+  - name: "AUTOMATED | 6.2.17 | AUDIT | Ensure no duplicate group names exist | Print message that no duplicate groups exist"
+    debug:
+      msg: "Good News! There are no duplicate group names in the system"
+    when: group_group_check.stdout is defined
+
+  - name: "AUTOMATED | 6.2.17 | AUDIT | Ensure no duplicate group names exist | Print warning about users with duplicate group names"
+    debug:
+      msg: "Warning: The following group names are duplicates: {{ group_group_check.stdout_lines }}"
+    when: group_group_check.stdout is not defined
+  when:
+  - rhel7cis_rule_6_2_17
+  tags:
+  - level1
+  - patch
+  - rule_6.2.17
+
+- name: "AUTOMATED | 6.2.18 | AUDIT | Ensure shadow group is empty"
+  block:
+  - name: "AUTOMATED | 6.2.18 | AUDIT | Ensure shadow group is empty"
+    shell: "grep ^shadow:[^:]*:[^:]*:[^:]+ /etc/group"
+    changed_when: no
+    failed_when: no
+    register: users_in_shadow_group
+  
+  - name: "AUTOMATED | 6.2.18 | AUDIT | Ensure shadow group is empty | Print no user in shadow group"
+    debug:
+      msg: "Good News! There are no users in the shadow group"
+    when: users_is_shadow_group.stdout is undefined
+
+  - name: "AUTOMATED | 6.2.18 | AUDIT | Ensure shadow group is empty | Print no user in shadow group"
+    debug:
+      msg: "Warning: The following users are in the shadow group: {{ users_is_shadow_group.stdout_lines }}"
+    when: users_is_shadow_group.stdout is defined
+  when:
+      - rhel7cis_rule_6_2_18
   tags:
       - level1
       - patch
       - rule_6.2.18
-
-- name: "SCORED | 6.2.19 | PATCH | Ensure no duplicate group names exist"
-  block:
-      - name: "SCORED | 6.2.19 | AUDIT | Ensure no duplicate group names exist | Check for duplicate group names"
-        shell: 'getent passwd | cut -d: -f1 | sort -n | uniq -d'
-        changed_when: no
-        failed_when: no
-        register: group_group_check
-
-      - name: "SCORED | 6.2.19 | AUDIT | Ensure no duplicate group names exist | Print message that no duplicate groups exist"
-        debug:
-            msg: "Good News! There are no duplicate group names in the system"
-        when: group_group_check.stdout is defined
-
-      - name: "SCORED | 6.2.19 | AUDIT | Ensure no duplicate group names exist | Print warning about users with duplicate group names"
-        debug:
-            msg: "Warning: The following group names are duplicates: {{ group_group_check.stdout_lines }}"
-        when: group_group_check.stdout is not defined
-  when:
-      - rhel7cis_rule_6_2_19|bool
-  tags:
-      - level1
-      - patch
-      - rule_6.2.19
