@@ -1,9 +1,27 @@
 ---
 
 - name: "AUTOMATED | 6.2.1 | PATCH | Ensure accounts in /etc/passwd use shadow passwords"
-  command: "sed -e 's/^\([a-zA-Z0-9_]*\):[^:]*:/\1:x:/' -i /etc/passwd"
-  changed_when: no
-  failed_when: no
+  block:
+  - name: "AUTOMATED | 6.2.1 | PATCH | Ensure accounts in /etc/passwd use shadow passwords | Good news"
+    debug:
+      msg: "Good news! We have not found any accounts not using shadowed passwords on your sytem"
+    changed_when: no
+    failed_when: no
+    loop: "{{ rhel7cis_passwd }}"
+    loop_control:
+      label: "{{ rhel7cis_passwd_label }}"
+    when:
+    - item.password == 'x'
+  - name: "AUTOMATED | 6.2.1 | PATCH | Ensure accounts in /etc/passwd use shadow passwords | Good news"
+    debug:
+      msg: " Warning!!: We have found the following accounts not using shadowed passwords: {{ item.id.stdout_lines }} "
+    changed_when: no
+    failed_when: no
+    loop: "{{ rhel7cis_passwd }}"
+    loop_control:
+      label: "{{ rhel7cis_passwd_label }}"
+    when:
+    - item.password != 'x'
   when:
   - rhel7cis_rule_6_2_1
   tags:
@@ -18,7 +36,7 @@
   loop: "{{ empty_password_accounts.stdout_lines }}"
   when:
   - empty_password_accounts.rc
-  - rhel7cis_rule_6_2_2|bool
+  - rhel7cis_rule_6_2_2
   tags:
   - level1
   - patch
@@ -84,17 +102,17 @@
 
 - name: "AUTOMATED | 6.2.5 | PATCH | Ensure all users' home directories exist"
   block:
-  - name: capture audit task for missing homedirs
-    block: &r7s_homedir_audit
-    - name: "AUTOMATED | 6.2.7 | AUDIT | Ensure all users' home directories exist | Find users missing home directories"
-      shell: set -o pipefail ; pwck -r | grep -P {{ ld_regex | quote }}
-      check_mode: no
-      register: rhel7cis_users_missing_home
-      changed_when: rhel_07_6_2_5_audit | length > 0
-      # failed_when: 0: success, 1: no grep match, 2: pwck found something
-      failed_when: rhel7cis_users_missing_home.rc not in [0,1,2]
+    - name: capture audit task for missing homedirs
+      block: &r7s_homedir_audit
+        - name: "AUTOMATED | 6.2.5 | AUDIT | Ensure all users' home directories exist | Find users missing home directories"
+          shell: set -o pipefail ; pwck -r | grep -P {{ ld_regex | quote }}
+          check_mode: no
+          register: rhel7cis_users_missing_home
+          changed_when: rhel_07_6_2_5_audit | length > 0
+          # failed_when: 0: success, 1: no grep match, 2: pwck found something
+          failed_when: rhel7cis_users_missing_home.rc not in [0,1,2]
 
-    ### NOTE: due to https://github.com/ansible/ansible/issues/24862 This is a shell command, and is quite frankly less than ideal.
+        ### NOTE: due to https://github.com/ansible/ansible/issues/24862 This is a shell command, and is quite frankly less than ideal.
     - name: "AUTOMATED | 6.2.5 | PATCH | Ensure all users' home directories exist | Creates home directories"
       command: "mkhomedir_helper {{ item }}"
       check_mode: "{{ rhel7cis_disruptive_check_mode }}"
@@ -102,24 +120,26 @@
       when:
       - rhel7cis_users_missing_home is changed
 
-    ### NOTE: Now we need to address that SELINUX will not let mkhomedir_helper create home directories for UUID < 500, so the ftp user will still show up in a pwck. Not sure this is needed, I need to confirm if that user is removed in an earlier task.
-    ### ^ Likely doesn't matter as 6.2.7 defines "local interactive users" as those w/ uid 1000-4999
+        ### NOTE: Now we need to address that SELINUX will not let mkhomedir_helper create home directories for UUID < 500, so the ftp user will still show up in a pwck. Not sure this is needed, I need to confirm if that user is removed in an earl
+ier task.
+        ### ^ Likely doesn't matter as 6.2.5 defines "local interactive users" as those w/ uid 1000-4999
     - name: replay audit task
       block: *r7s_homedir_audit
 
-    # CAUTION: debug loops don't show changed since 2.4:
-    # Fix: https://github.com/ansible/ansible/pull/59958
+        # CAUTION: debug loops don't show changed since 2.4:
+      # Fix: https://github.com/ansible/ansible/pull/59958
     - name: "AUTOMATED | 6.2.5 | AUDIT | Ensure all users' home directories exist | Alert about correcting owner and group"
-      debug: msg="You will need to mkdir -p {{ item }} and chown properly to the correct owner and group."
+      debug: 
+        msg: "You will need to mkdir -p {{ item }} and chown properly to the correct owner and group."
       with_items: "{{ rhel_07_6_2_5_audit | map(attribute='dir') | list }}"
       changed_when: rhel7cis_audit_complex
       when:
       - rhel7cis_users_missing_home is changed
   vars:
     ld_regex: >-
-        ^user '(?P<user>.*)': directory '(?P<dir>.*)' does not exist$
+      ^user '(?P<user>.*)': directory '(?P<dir>.*)' does not exist$
     ld_users: "{{ rhel7cis_users_missing_home.stdout_lines | map('regex_replace', ld_regex, '\\g<user>') | list }}"
-    rhel_07_6_2_7_audit: "{{ rhel7cis_passwd | selectattr('uid', '>=', 1000) | selectattr('id', 'in', ld_users) | list }}"
+    rhel_07_6_2_5_audit: "{{ rhel7cis_passwd | selectattr('uid', '>=', 1000) | selectattr('id', 'in', ld_users) | list }}"
   when:
   - rhel7cis_rule_6_2_5
   tags:
@@ -147,13 +167,13 @@
     - "{{ rhel_07_6_2_6_audit.results | map(attribute='item') | list }}"
     - "{{ rhel_07_6_2_6_audit.results | map(attribute='stat') | list }}"
     loop_control:
-        label: "{{ item.0 }}"
+      label: "{{ item.0 }}"
 
   - name: "AUTOMATED | 6.2.6 | AUDIT | Ensure users' home directories permissions are 750 or more restrictive"
     file:
       path: "{{ item.0 }}"
-        recurse: yes
-        mode: a-st,g-w,o-rwx
+      recurse: yes
+      mode: a-st,g-w,o-rwx
     register: rhel_07_6_2_6_patch
     when:
     - not ansible_check_mode
@@ -162,26 +182,26 @@
     - "{{ rhel_07_6_2_6_audit.results | map(attribute='item') | list }}"
     - "{{ rhel_07_6_2_6_audit.results | map(attribute='stat') | list }}"
     loop_control:
-        label: "{{ item.0 }}"
+      label: "{{ item.0 }}"
 
     # set default ACLs so the homedir has an effective umask of 0027
-    - name: "AUTOMATED | 6.2.6 | PATCH | Ensure users' home directories permissions are 750 or more restrictive"
-      acl:
-        path: "{{ item.0 }}"
-        default: yes
-        state: present
-        recursive: yes
-        etype: "{{ item.1.etype }}"
-        permissions: "{{ item.1.mode }}"
+  - name: "AUTOMATED | 6.2.6 | PATCH | Ensure users' home directories permissions are 750 or more restrictive"
+    acl:
+      path: "{{ item.0 }}"
+      default: yes
+      state: present
+      recursive: yes
+      etype: "{{ item.1.etype }}"
+      permissions: "{{ item.1.mode }}"
     when: not rhel7cis_system_is_container
     with_nested:
-    - "{{ (ansible_check_mode | ternary(rhel_07_6_2_6_patch_audit, rhel_07_6_2_8_patch)).results |
+    - "{{ (ansible_check_mode | ternary(rhel_07_6_2_6_patch_audit, rhel_07_6_2_6_patch)).results |
       rejectattr('skipped', 'defined') | map(attribute='item') | map('first') | list }}"
     -
-        - etype: group
-          mode: rx
-        - etype: other
-          mode: '0'
+      - etype: group
+        mode: rx
+      - etype: other
+        mode: '0'
   when:
   - rhel7cis_rule_6_2_6
   tags:
