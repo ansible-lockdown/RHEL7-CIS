@@ -20,7 +20,7 @@ To use release version please point to main branch
 Coming from a previous release
 ------------------------------
 
-CIS release always contains changes, it is highly recommended to create a review the new references and available variables.
+CIS release always contains changes, it is highly recommended to review the new references and available variables. This have changed significantly since ansible-lockdown initial release.
 
 Documentation
 -------------
