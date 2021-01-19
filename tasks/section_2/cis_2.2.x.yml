@@ -287,18 +287,13 @@
   - rule_2.2.16
 
 - name: "AUTOMATED | 2.2.17 | PATCH | Ensure rsync is not installed or the rsyncd services are masked"
-  block:  
-  - name: "AUTOMATED | 2.2.17 | PATCH | Ensure rsync is not installed or the rsyncd services are masked | rsync"
-    debug:
-      msg: "<----- not removing due to ansible"
-
-  - name: "AUTOMATED | 2.2.17 | PATCH | Ensure rsync is not installed or the rsyncd services are masked | rsync"
-    systemd:
-      name: rsync
-      masked: true
-    when:
-    - not rhel7cis_rsyncd_server
+  package:
+    name: rsync
+    state: absent
+  vars:
+    ansible_python_interpreter: /bin/python
   when:
+  - not rhel7cis_rsyncd_server
   - "'rsync' in ansible_facts.packages"
   - rhel7cis_rule_2_2_17
   tags:
