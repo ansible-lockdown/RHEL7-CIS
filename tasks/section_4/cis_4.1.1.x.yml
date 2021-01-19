@@ -35,7 +35,6 @@
       dest: /etc/default/grub
       regexp: '(^GRUB_CMDLINE_LINUX\s*\=\s*)(?:")(.+)(?<!audit=1)(?:")'
       replace: '\1"\2 audit=1"'
-      follow: yes
   ignore_errors: yes
   notify: generate new grub config
   when:
