@@ -2,26 +2,21 @@
 
 - name: "AUTOMATED | 6.2.1 | PATCH | Ensure accounts in /etc/passwd use shadow passwords"
   block:
-  - name: "AUTOMATED | 6.2.1 | PATCH | Ensure accounts in /etc/passwd use shadow passwords | Good news"
-    debug:
-      msg: "Good news! We have not found any accounts not using shadowed passwords on your sytem"
-    changed_when: no
-    failed_when: no
-    loop: "{{ rhel7cis_passwd }}"
-    loop_control:
-      label: "{{ rhel7cis_passwd_label }}"
+
+  - name: "AUTOMATED | 6.2.1 | PATCH | Ensure accounts in /etc/passwd use shadow passwords"
+    shell: sed -e 's/^\([a-zA-Z0-9_]*\):[^:]*:/\1:x:/' -i /etc/passwd
+    loop: "{{ rhel7cis_passwd | selectattr('password', '!=', 'x') | list }}"
+    args:
+      warn: false
+    register: rhel7_6_2_1_shadow
     when:
-    - item.password == 'x'
-  - name: "AUTOMATED | 6.2.1 | PATCH | Ensure accounts in /etc/passwd use shadow passwords | Good news"
+    - rhel7cis_passwd | selectattr('password', '!=', 'x')
+
+  - name: "AUTOMATED | 6.2.1 | PATCH | Ensure accounts in /etc/passwd use shadow passwords | Good News"
     debug:
-      msg: " Warning!!: We have found the following accounts not using shadowed passwords: {{ item.id.stdout_lines }} "
-    changed_when: no
-    failed_when: no
-    loop: "{{ rhel7cis_passwd }}"
-    loop_control:
-      label: "{{ rhel7cis_passwd_label }}"
-    when:
-    - item.password != 'x'
+      msg: "Good News!!  No Unshadowed passwords have been found"
+    when: rhel7_6_2_1_shadow is not changed
+
   when:
   - rhel7cis_rule_6_2_1
   tags:
