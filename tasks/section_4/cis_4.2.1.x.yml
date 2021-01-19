@@ -81,7 +81,6 @@
         blockinfile:
             path: /etc/rsyslog.conf
             state: present
-            regexp: '^news\.\notice(.*)$'
             marker: "# {mark} MISC. LOG SETTINGS (ANSIBLE MANAGED)"
             block: |
                 # misc. logging additions to meet CIS standards
@@ -97,7 +96,6 @@
         blockinfile:
             path: /etc/rsyslog.conf
             state: present
-            regexp: '^news\.\notice(.*)$'
             marker: "#{mark} LOCAL LOG SETTINGS (ANSIBLE MANAGED)"
             block: |
                 # local log settings
