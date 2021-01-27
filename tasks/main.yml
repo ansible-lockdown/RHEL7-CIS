@@ -8,6 +8,7 @@
       - ansible_distribution_major_version is version_compare('7', '!=')
   tags:
       - always
+  when: rhel7cis_check_for_rhel7_os|bool
 
 - name: Check ansible version
   fail:

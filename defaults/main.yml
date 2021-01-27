@@ -12,6 +12,8 @@ rhel7cis_section6: true
 
 rhel7cis_selinux_disable: false
 
+rhel7cis_check_for_rhel7_os: true
+
 # These variables correspond with the CIS rule IDs or paragraph numbers defined in
 # the CIS benchmark documents.
 # PLEASE NOTE: These work in coordination with the section # group variables and tags.
