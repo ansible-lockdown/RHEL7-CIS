@@ -6,6 +6,9 @@ rhel7cis_skip_for_travis: false
 rhel7cis_system_is_container: false
 system_is_ec2: false
 
+## Benchmark name used by audting control role
+benchmark: RHEL7-CIS
+
 rhel7cis_notauto: false
 rhel7cis_section1: true
 rhel7cis_section2: true
