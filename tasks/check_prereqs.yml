@@ -40,6 +40,7 @@
   
   - name: Disable Epel repo if installed earlier
     command: yum-config-manager disable epel
+    when: epel_installed.changed
   when:
   - ( ansible_python.version.major == 3  and ansible_python.version.minor == 6 )
   vars:

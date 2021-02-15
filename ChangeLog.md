@@ -4,7 +4,7 @@
 
 - New auditing tool all controlled via defaults main. run on host using [goss](https://github.com/aelsabbahy/goss)
 - reorder of rules inline with CIS changes
-- Python3 enabled adds the epel repo to install python-rpm and then disables the repo after installing
+- If Python3 discovered adds the epel repo to install python-rpm and then disables the repo after installing
 - Adding of the goss module to the library path
 
 ## High level changes within tasks
