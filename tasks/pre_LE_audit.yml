@@ -1,0 +1,67 @@
+---
+
+- name: Setup and run the LE audit
+  block:
+  - name: Setup the LE audit
+    include_tasks: LE_audit_setup.yml
+    when:
+    - rhel7stig_setup_audit
+    tags:
+    - setup_audit
+    
+  - name: retrieve audit content files from git
+    git:
+      repo: "{{ rhel7stig_audit_file_git }}"
+      dest: "{{ rhel7stig_audit_files }}"
+      version: main
+    when:
+    - rhel7stig_audit_content == 'git'
+
+  - name: copy to audit content files to server
+    copy:
+      src: "{{ rhel7stig_audit_local_copy}}"
+      dest: "{{ rhel7stig_audit_files }}"
+    when:
+    - rhel7stig_audit_content == 'copy'
+
+  - name: get audit content from url
+    get_url:
+      url: "{{ rhel7_audit_files_url }}"
+      dest: "{{ rhel7stig_audit_files }}"
+    when:
+    - rhel7stig_audit_content == 'get_url'
+
+- name: Check Goss is available
+  block:
+  - name: Check for goss file
+    stat:
+      path: "{{ goss_bin }}"
+    register: goss_available
+  
+  - name: If audit ensure goss is available
+    assert:
+      msg: "Audit has been selected: unable to find goss binary at {{ goss_bin }}"
+    when: 
+    - not goss_available.stat.exists
+  when:
+  - rhel7stig_run_audit
+
+- name: "Run pre_remediation {{ benchmark }} audit"
+  goss:
+    goss_path: "{{ goss_bin }}"
+    path: "{{ goss_file }}"
+    vars_path: "{{ goss_vars_path }}"
+    format: "{{ goss_format | default('json') }}"
+    output_file: "{{ pre_audit_outfile }}"
+  failed_when: false
+
+- name: "capture data  {{ pre_audit_outfile }}"
+  command: "cat {{ pre_audit_outfile }}"
+  register: pre_audit
+  changed_when: false 
+    
+- name: Capture pre-audit result
+  set_fact: 
+    pre_audit_summary: "{{ pre_audit.stdout | from_json |json_query(summary) }}"
+  vars:
+    summary: 'summary."summary-line"'

@@ -1,13 +1,4 @@
 ---
-# defaults file for RHEL7-CIS
-rhel7cis_report_dir: /tmp
-
-rhel7cis_skip_for_travis: false
-rhel7cis_system_is_container: false
-system_is_ec2: false
-
-## Benchmark name used by audting control role
-benchmark: RHEL7-CIS
 
 rhel7cis_notauto: false
 rhel7cis_section1: true
@@ -17,7 +8,31 @@ rhel7cis_section4: true
 rhel7cis_section5: true
 rhel7cis_section6: true
 
+
+## Python Binary
+## This is used for python3 Installations where python2 OS modules are used in ansible
+python2_bin: /bin/python2.7
+
+
+## Benchmark name used by audting control role
+# audit variable found at the base
+benchmark: RHEL7-CIS
+
+# Enable goss binary download
+rhel7stig_setup_audit: false
+# options are downoad from github or copy from pre downloaded location
+# copy or download
+get_goss_file: download
+
+# enable audits to run
+rhel7stig_run_audit: false
+
+
 rhel7cis_selinux_disable: false
+
+rhel7cis_skip_for_travis: false
+rhel7cis_system_is_container: false
+system_is_ec2: false
 
 # change to false if using EFI boot changes 1.1.1.4 to stop vfat
 rhel7cis_legacy_boot: true
@@ -493,3 +508,27 @@ rhel7cis_dotperm_ansibleManaged: true
 
 # RHEL-07-6.2.18 Clear users from shadow group 
 rhel7cis_remove_shadow_grp_usrs: true 
+
+## audit controls ##
+goss_version:
+  release: v0.3.16
+  checksum: 'sha256:827e354b48f93bce933f5efcd1f00dc82569c42a179cf2d384b040d8a80bfbfb'
+
+### Audit Settings ###
+#goss_checksum: "checksum_{{ goss_version }}"
+goss_path: /usr/local/bin/
+goss_bin: "{{ goss_path }}goss"
+goss_url: "https://github.com/aelsabbahy/goss/releases/download/{{ goss_version.release }}/goss-linux-amd64"
+
+## Goss tests information
+goss_audit_dir: "/vagrant/{{ benchmark }}-Audit/"
+goss_file: "{{ goss_audit_dir }}goss.yml"
+goss_vars_path: "{{ goss_audit_dir }}/vars/stig.yml"
+goss_out_dir: '/var/tmp'
+pre_audit_outfile: "{{ goss_out_dir }}/pre_remediation_scan"
+post_audit_outfile: "{{ goss_out_dir }}/post_remediation_scan"
+
+Audit_results: |
+      The pre remediation results are: {{ pre_audit_summary }}.
+      The post remediation results are: {{ post_audit_summary }}.
+      Full breakdown can be found in {{ goss_out_dir }}
