@@ -115,8 +115,7 @@
       when:
       - rhel7cis_users_missing_home is changed
 
-        ### NOTE: Now we need to address that SELINUX will not let mkhomedir_helper create home directories for UUID < 500, so the ftp user will still show up in a pwck. Not sure this is needed, I need to confirm if that user is removed in an earl
-ier task.
+        ### NOTE: Now we need to address that SELINUX will not let mkhomedir_helper create home directories for UUID < 500, so the ftp user will still show up in a pwck. Not sure this is needed, I need to confirm if that user is removed in an earlier task.
         ### ^ Likely doesn't matter as 6.2.5 defines "local interactive users" as those w/ uid 1000-4999
     - name: replay audit task
       block: *r7s_homedir_audit

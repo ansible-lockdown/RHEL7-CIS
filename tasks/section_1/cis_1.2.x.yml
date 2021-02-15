@@ -68,10 +68,9 @@
     state: stopped
     enabled: no
   when:
-  - ansible_distribution == "RedHat" and rhnsd_service_status.stdout == "loaded" and not rhel7cis_rhnsd_required
+  - ansible_distribution == "RedHat" and not rhel7cis_rhnsd_required
   - rhel7cis_rule_1_2_5
   tags:
   - level2
-  - notAUTOMATED
   - patch
   - rule_1.2.5

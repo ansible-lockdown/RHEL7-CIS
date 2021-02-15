@@ -16,6 +16,19 @@
   tags:
   - always
 
+- name: Check rhel7cis_bootloader_password_hash variable has been changed
+  assert:
+    that: rhel7cis_bootloader_password_hash != 'grub.pbkdf2.sha512.changethispassword'
+    msg: "This role will not be able to run single user password commands as rhel7stig_bootloader_password_hash variable has not been set"
+  when:
+  - ansible_distribution_version >= '7.2'
+  - rhel7cis_set_boot_pass
+  - rhel7cis_rule_1_5_1
+
+- import_tasks: pre_LE_audit.yml
+  when:
+  - rhel7cis_run_audit|bool
+
 - include: check_prereqs.yml
   tags:
   - always
@@ -73,3 +86,16 @@
   tags:
   - post_tasks
   - always
+
+- name: flush handlers
+  meta: flush_handlers
+
+- import_tasks: post_LE_audit.yml
+  when:
+  - rhel7cis_run_audit
+
+- name: Show Audit Summary
+  debug:
+    msg: "{{ Audit_results.split('\n') }}"
+  when:
+  - rhel7cis_run_audit|bool
