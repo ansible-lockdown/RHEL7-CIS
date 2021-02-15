@@ -5,31 +5,31 @@
   - name: Setup the LE audit
     include_tasks: LE_audit_setup.yml
     when:
-    - rhel7stig_setup_audit
+    - rhel7cis_setup_audit|bool
     tags:
     - setup_audit
     
   - name: retrieve audit content files from git
     git:
-      repo: "{{ rhel7stig_audit_file_git }}"
-      dest: "{{ rhel7stig_audit_files }}"
+      repo: "{{ rhel7cis_audit_file_git }}"
+      dest: "{{ rhel7cis_audit_files }}"
       version: main
     when:
-    - rhel7stig_audit_content == 'git'
+    - rhel7cis_audit_content == 'git'
 
   - name: copy to audit content files to server
     copy:
-      src: "{{ rhel7stig_audit_local_copy}}"
-      dest: "{{ rhel7stig_audit_files }}"
+      src: "{{ rhel7cis_audit_local_copy}}"
+      dest: "{{ rhel7cis_audit_files }}"
     when:
-    - rhel7stig_audit_content == 'copy'
+    - rhel7cis_audit_content == 'copy'
 
   - name: get audit content from url
     get_url:
-      url: "{{ rhel7_audit_files_url }}"
-      dest: "{{ rhel7stig_audit_files }}"
+      url: "{{ rhel7cis_audit_files_url }}"
+      dest: "{{ rhel7cis_audit_files }}"
     when:
-    - rhel7stig_audit_content == 'get_url'
+    - rhel7cis_audit_content == 'get_url'
 
 - name: Check Goss is available
   block:
@@ -44,7 +44,7 @@
     when: 
     - not goss_available.stat.exists
   when:
-  - rhel7stig_run_audit
+  - rhel7cis_run_audit|bool
 
 - name: "Run pre_remediation {{ benchmark }} audit"
   goss:

@@ -19,13 +19,13 @@ python2_bin: /bin/python2.7
 benchmark: RHEL7-CIS
 
 # Enable goss binary download
-rhel7stig_setup_audit: false
+rhel7cis_setup_audit: false
 # options are downoad from github or copy from pre downloaded location
 # copy or download
 get_goss_file: download
 
 # enable audits to run
-rhel7stig_run_audit: false
+rhel7cis_run_audit: false
 
 
 rhel7cis_selinux_disable: false
@@ -354,8 +354,8 @@ rhel7cis_xinetd_required: false
 rhel7cis_rhnsd_required: false
 
 # 1.4.2 Bootloader password
-rhel7cis_bootloader_password: random
 rhel7cis_set_boot_pass: false
+rhel7cis_bootloader_password_hash: 'grub.pbkdf2.sha512.changethispassword'
 
 # System network parameters (host only OR host and router)
 rhel7cis_is_router: false
@@ -509,6 +509,23 @@ rhel7cis_dotperm_ansibleManaged: true
 # RHEL-07-6.2.18 Clear users from shadow group 
 rhel7cis_remove_shadow_grp_usrs: true 
 
+
+
+# how to get audit files onto host options
+# options are git/copy/get_url
+rhel7cis_audit_content: git
+rhel7cis_audit_file_git: "git@github.com:uk-bolly/{{ benchmark }}-AUDIT.git"
+
+# copy:
+#rhel7stig_audit_content: copy
+#rhel7stig_audit_local_copy: "/goss/audit/{{ benchmark }}-AUDIT"
+
+# get_url:
+#rhel7stig_audit_content: get_url
+#rhel7stig_audit_files_url: "/goss/audit/{{ benchmark }}-AUDIT"
+
+rhel7cis_audit_files: "/vagrant/{{ benchmark }}-Audit/"
+
 ## audit controls ##
 goss_version:
   release: v0.3.16
@@ -523,7 +540,7 @@ goss_url: "https://github.com/aelsabbahy/goss/releases/download/{{ goss_version.
 ## Goss tests information
 goss_audit_dir: "/vagrant/{{ benchmark }}-Audit/"
 goss_file: "{{ goss_audit_dir }}goss.yml"
-goss_vars_path: "{{ goss_audit_dir }}/vars/stig.yml"
+goss_vars_path: "{{ goss_audit_dir }}/vars/cis.yml"
 goss_out_dir: '/var/tmp'
 pre_audit_outfile: "{{ goss_out_dir }}/pre_remediation_scan"
 post_audit_outfile: "{{ goss_out_dir }}/post_remediation_scan"
