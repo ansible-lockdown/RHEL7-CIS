@@ -92,7 +92,7 @@
 
 - import_tasks: post_LE_audit.yml
   when:
-  - rhel7cis_run_audit
+  - rhel7cis_run_audit|bool
 
 - name: Show Audit Summary
   debug:
