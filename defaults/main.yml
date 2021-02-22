@@ -509,8 +509,6 @@ rhel7cis_dotperm_ansibleManaged: true
 # RHEL-07-6.2.18 Clear users from shadow group 
 rhel7cis_remove_shadow_grp_usrs: true 
 
-
-
 # how to get audit files onto host options
 # options are git/copy/get_url
 rhel7cis_audit_content: git
@@ -524,7 +522,6 @@ rhel7cis_audit_file_git: "git@github.com:uk-bolly/{{ benchmark }}-AUDIT.git"
 #rhel7stig_audit_content: get_url
 #rhel7stig_audit_files_url: "/goss/audit/{{ benchmark }}-AUDIT"
 
-rhel7cis_audit_files: "/vagrant/{{ benchmark }}-Audit/"
 
 ## audit controls ##
 goss_version:
@@ -535,12 +532,13 @@ goss_version:
 #goss_checksum: "checksum_{{ goss_version }}"
 goss_path: /usr/local/bin/
 goss_bin: "{{ goss_path }}goss"
+goss_format: json
 goss_url: "https://github.com/aelsabbahy/goss/releases/download/{{ goss_version.release }}/goss-linux-amd64"
 
 ## Goss tests information
 goss_audit_dir: "/vagrant/{{ benchmark }}-Audit/"
 goss_file: "{{ goss_audit_dir }}goss.yml"
-goss_vars_path: "{{ goss_audit_dir }}/vars/cis.yml"
+goss_vars_path: "{{ goss_audit_dir }}/vars/{{ ansible_hostname }}.yml"
 goss_out_dir: '/var/tmp'
 pre_audit_outfile: "{{ goss_out_dir }}/pre_remediation_scan"
 post_audit_outfile: "{{ goss_out_dir }}/post_remediation_scan"
@@ -549,3 +547,5 @@ Audit_results: |
       The pre remediation results are: {{ pre_audit_summary }}.
       The post remediation results are: {{ post_audit_summary }}.
       Full breakdown can be found in {{ goss_out_dir }}
+
+      rhel7stig_audit_files: "/vagrant/{{ benchmark }}-Audit/"

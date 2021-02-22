@@ -5,7 +5,7 @@
     goss_path: "{{ goss_bin }}"
     path: "{{ goss_file }}"
     vars_path: "{{ goss_vars_path }}"
-    format: "{{ goss_format | default('json') }}"
+    format: "{{ goss_format }}"
     output_file: "{{ post_audit_outfile }}"
   failed_when: false
 
