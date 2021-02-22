@@ -28,10 +28,6 @@ rhel7cis_rule_1_1_1_1: {{ rhel7cis_rule_1_1_1_1 }}
 rhel7cis_rule_1_1_1_2: {{ rhel7cis_rule_1_1_1_2 }}
 rhel7cis_rule_1_1_1_3: {{ rhel7cis_rule_1_1_1_3 }}
 rhel7cis_rule_1_1_1_4: {{ rhel7cis_rule_1_1_1_4 }}
-rhel7cis_rule_1_1_1_5: {{ rhel7cis_rule_1_1_1_5 }}
-rhel7cis_rule_1_1_1_6: {{ rhel7cis_rule_1_1_1_6 }}
-rhel7cis_rule_1_1_1_7: {{ rhel7cis_rule_1_1_1_7 }}
-rhel7cis_rule_1_1_1_8: {{ rhel7cis_rule_1_1_1_8 }}
 rhel7cis_rule_1_1_2: {{ rhel7cis_rule_1_1_2 }}
 rhel7cis_rule_1_1_3: {{ rhel7cis_rule_1_1_3 }}
 rhel7cis_rule_1_1_4: {{ rhel7cis_rule_1_1_4 }}
@@ -65,7 +61,6 @@ rhel7cis_rule_1_3_2: {{ rhel7cis_rule_1_3_2 }}
 rhel7cis_rule_1_3_3: {{ rhel7cis_rule_1_3_3 }}
 rhel7cis_rule_1_4_1: {{ rhel7cis_rule_1_4_1 }}
 rhel7cis_rule_1_4_2: {{ rhel7cis_rule_1_4_2 }}
-rhel7cis_rule_1_4_3: {{ rhel7cis_rule_1_4_3 }}
 rhel7cis_rule_1_5_1: {{ rhel7cis_rule_1_5_1 }}
 rhel7cis_rule_1_5_2: {{ rhel7cis_rule_1_5_2 }}
 rhel7cis_rule_1_5_3: {{ rhel7cis_rule_1_5_2 }}
@@ -133,12 +128,6 @@ rhel7cis_rule_3_1_1: {{ rhel7cis_rule_3_1_1 }}
 rhel7cis_rule_3_1_2: {{ rhel7cis_rule_3_1_2 }}
 rhel7cis_rule_3_2_1: {{ rhel7cis_rule_3_2_1 }}
 rhel7cis_rule_3_2_2: {{ rhel7cis_rule_3_2_2 }}
-rhel7cis_rule_3_2_3: {{ rhel7cis_rule_3_2_3 }}
-rhel7cis_rule_3_2_4: {{ rhel7cis_rule_3_2_4 }}
-rhel7cis_rule_3_2_5: {{ rhel7cis_rule_3_2_5 }}
-rhel7cis_rule_3_2_6: {{ rhel7cis_rule_3_2_6 }}
-rhel7cis_rule_3_2_7: {{ rhel7cis_rule_3_2_7 }}
-rhel7cis_rule_3_2_8: {{ rhel7cis_rule_3_2_8 }}
 rhel7cis_rule_3_3_1: {{ rhel7cis_rule_3_3_1 }}
 rhel7cis_rule_3_3_2: {{ rhel7cis_rule_3_3_2 }}
 rhel7cis_rule_3_3_3: {{ rhel7cis_rule_3_3_3 }}
@@ -150,9 +139,6 @@ rhel7cis_rule_3_3_8: {{ rhel7cis_rule_3_3_8 }}
 rhel7cis_rule_3_3_9: {{ rhel7cis_rule_3_3_9 }}
 rhel7cis_rule_3_4_1: {{ rhel7cis_rule_3_4_1 }}
 rhel7cis_rule_3_4_2: {{ rhel7cis_rule_3_4_2 }}
-rhel7cis_rule_3_4_3: {{ rhel7cis_rule_3_4_3 }}
-rhel7cis_rule_3_4_4: {{ rhel7cis_rule_3_4_4 }}
-rhel7cis_rule_3_4_5: {{ rhel7cis_rule_3_4_5 }}
 rhel7cis_rule_3_5_1_1: {{ rhel7cis_rule_3_5_1_1 }}
 rhel7cis_rule_3_5_1_2: {{ rhel7cis_rule_3_5_1_2 }}
 rhel7cis_rule_3_5_1_3: {{ rhel7cis_rule_3_5_1_3 }}
@@ -171,9 +157,9 @@ rhel7cis_rule_3_5_2_8: {{ rhel7cis_rule_3_5_2_8 }}
 rhel7cis_rule_3_5_2_9: {{ rhel7cis_rule_3_5_2_9 }}
 rhel7cis_rule_3_5_2_10: {{ rhel7cis_rule_3_5_2_10 }}
 rhel7cis_rule_3_5_2_11: {{ rhel7cis_rule_3_5_2_11 }}
-rhel7cis_rule_3_5_3_1: {{ rhel7cis_rule_3_5_3_1 }}
-rhel7cis_rule_3_5_3_2: {{ rhel7cis_rule_3_5_3_2 }}
-rhel7cis_rule_3_5_3_3: {{ rhel7cis_rule_3_5_3_3 }}
+rhel7cis_rule_3_5_3_1_1: {{ rhel7cis_rule_3_5_3_1_1 }}
+rhel7cis_rule_3_5_3_1_2: {{ rhel7cis_rule_3_5_3_1_2 }}
+rhel7cis_rule_3_5_3_1_3: {{ rhel7cis_rule_3_5_3_1_3 }}
 
 # Section 4 rules
 rhel7cis_rule_4_1_1_1: {{ rhel7cis_rule_4_1_1_1 }}
@@ -319,7 +305,7 @@ rhel7cis_httpd: {{ rhel7cis_httpd }}
 rhel7cis_dovecot: {{ rhel7cis_dovecot }}
 rhel7cis_samba: {{ rhel7cis_samba }}
 rhel7cis_squid: {{ rhel7cis_squid }}
-rhel7cis_net_snmp: {{ rhel7cis_net_snmp_server }}
+rhel7cis_net_snmp: {{ rhel7cis_net_snmp}}
 rhel7cis_allow_autofs: {{ rhel7cis_allow_autofs }}
 
 # client services
@@ -385,7 +371,7 @@ rhel7cis_firewall_services: {{ rhel7cis_firewall_services }}
 ## auditd settings
 rhel7cis_auditd:
   space_left_action: {{ rhel7cis_auditd.space_left_action}}
-  action_mail_acct: {{ rhel7cis_auditd.action_mail_account }}
+  action_mail_acct: {{ rhel7cis_auditd.action_mail_acct }}
   admin_space_left_action: {{ rhel7cis_auditd.admin_space_left_action }}
   max_log_file_action: {{ rhel7cis_auditd.max_log_file_action }}
   auditd_backlog_limit: {{ rhel7cis_audit_backlog_limit }}

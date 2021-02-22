@@ -64,6 +64,7 @@
   template:
     src: ansible_vars_goss.yml
     dest: "{{ goss_vars_path }}"
+    mode: '0600'
   when:
   - rhel7cis_run_audit|bool
   tags:
