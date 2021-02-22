@@ -25,6 +25,18 @@ This is now compatible with python3 if it is found to be the default interpreter
 
 Further details can be seen in the [Changelog](./ChangeLog.MD)
 
+Auditing (new)
+--------------
+
+This can be turned on or off within the defaults/main.yml file with the variable rhel7cis_run_audit. The value is false by default, please refer to the wiki for more details. The defaults file also populates the goss checks to check only the controls that have been enabled in the ansible role.
+
+This is a much quicker, very lightweight, checking (where possible) config compliance and live/running settings.
+
+A new form of auditing has been developed, by using a small (12MB) go binary called [goss](https://github.com/aelsabbahy/goss) along with the relevant configurations to check. Without the need for infrastructure or other tooling.
+This audit will not only check the config has the correct setting but aims to capture if it is running with that configuration also trying to remove [false positives](https://www.mindpointgroup.com/blog/is-compliance-scanning-still-relevant/) in the process.
+
+Refer to [RHEL7-CIS-Audit](https://github.com/ansible-lockdown/RHEL7-CIS-Audit).
+
 Documentation
 
 -------------
