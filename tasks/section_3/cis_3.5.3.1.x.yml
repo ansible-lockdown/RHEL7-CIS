@@ -11,7 +11,7 @@
   vars:
     ansible_python_interpreter: /bin/python
   when:
-  - rhel7cis_rule_3_5_3_1
+  - rhel7cis_rule_3_5_3_1_1
   tags:
   - level1
   - patch
@@ -24,7 +24,7 @@
   vars:
     ansible_python_interpreter: /bin/python
   when:
-  - rhel7cis_rule_3_5_3_2
+  - rhel7cis_rule_3_5_3_1_2
   tags:
   - level1
   - patch
@@ -37,7 +37,7 @@
   vars:
     ansible_python_interpreter: /bin/python
   when:
-  - rhel7cis_rule_3_5_3_3
+  - rhel7cis_rule_3_5_3_1_3
   tags:
   - level1
   - patch
