@@ -12,7 +12,7 @@
   - name: retrieve audit content files from git
     git:
       repo: "{{ rhel7cis_audit_file_git }}"
-      dest: "{{ rhel7cis_audit_files }}"
+      dest: "{{ rhel7cis_audit_dir }}"
       version: main
     when:
     - rhel7cis_audit_content == 'git'
@@ -20,14 +20,14 @@
   - name: copy to audit content files to server
     copy:
       src: "{{ rhel7cis_audit_local_copy}}"
-      dest: "{{ rhel7cis_audit_files }}"
+      dest: "{{ rhel7cis_audit_dir }}"
     when:
     - rhel7cis_audit_content == 'copy'
 
   - name: get audit content from url
     get_url:
-      url: "{{ rhel7cis_audit_files_url }}"
-      dest: "{{ rhel7cis_audit_files }}"
+      url: "{{ rhel7_audit_files_url }}"
+      dest: "{{ rhel7cis_audit_dir }}"
     when:
     - rhel7cis_audit_content == 'get_url'
 
@@ -46,12 +46,35 @@
   when:
   - rhel7cis_run_audit|bool
 
+- name: "Check whether machine is UEFI-based"
+  stat:
+    path: /sys/firmware/efi
+  register: rhel_07_efi_boot
+  tags:
+  - goss_template
+
+- name: set fact for legacy or uefi boot
+  set_fact:
+    rhel7cis_legacy_boot: 'true'
+  when: not rhel_07_efi_boot.stat.exists
+  tags:
+  - goss_template
+
+- name: Copy ansible default vars values to test audit
+  template:
+    src: ansible_vars_goss.yml
+    dest: "{{ goss_vars_path }}"
+  when:
+  - rhel7cis_run_audit|bool
+  tags:
+  - goss_template
+  
 - name: "Run pre_remediation {{ benchmark }} audit"
   goss:
     goss_path: "{{ goss_bin }}"
     path: "{{ goss_file }}"
     vars_path: "{{ goss_vars_path }}"
-    format: "{{ goss_format | default('json') }}"
+    format: "{{ goss_format }}"
     output_file: "{{ pre_audit_outfile }}"
   failed_when: false
 
