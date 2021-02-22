@@ -91,8 +91,32 @@ Below is an example of the tag section from a control within this role. Using th
       - rule_2.2.4
 ```
 
+Example Audit Summary
+---------------------
+
+This is based on a vagrant image with selections enabled. e.g. No Gui or firewall.
+Note: More tests are run during audit as we check config and running state.
+
+```sh
+TASK [/vagrant/RHEL7-CIS : Show Audit Summary] ******************************************************************************************************************************************************************************
+******
+ok: [localhost] => {
+    "msg": [
+        "The pre remediation results are: Count: 377, Failed: 127, Duration: 12.417s.",
+        "The post remediation results are: Count: 377, Failed: 20, Duration: 14.133s.",
+        "Full breakdown can be found in /var/tmp",
+        ""
+    ]
+}
+
+PLAY RECAP ******************************************************************************************************************************************************************************************************************
+******
+localhost                  : ok=270  changed=140  unreachable=0    failed=0    skipped=129  rescued=0    ignored=0 
+
+```
+
 Branches
--------
+--------
 
 **devel** - This is the default branch and the working development branch. Community pull requests will pull into this branch
 **main** - This is the release branch
