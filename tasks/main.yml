@@ -38,7 +38,7 @@
 
 - import_tasks: pre_LE_audit.yml
   when:
-  - rhel7cis_run_audit|bool
+  - rhel7cis_run_audit
 
 - name: Gather the package facts
   package_facts:
@@ -92,10 +92,10 @@
 
 - import_tasks: post_LE_audit.yml
   when:
-  - rhel7cis_run_audit|bool
+  - rhel7cis_run_audit
 
 - name: Show Audit Summary
   debug:
     msg: "{{ Audit_results.split('\n') }}"
   when:
-  - rhel7cis_run_audit|bool
+  - rhel7cis_run_audit

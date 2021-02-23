@@ -512,15 +512,16 @@ rhel7cis_remove_shadow_grp_usrs: true
 # how to get audit files onto host options
 # options are git/copy/get_url
 rhel7cis_audit_content: git
-rhel7cis_audit_file_git: "git@github.com:uk-bolly/{{ benchmark }}-AUDIT.git"
+
+# git
+rhel7cis_audit_file_git: "https://github.com/ansible-lockdown/{{ benchmark }}-Audit.git"
+rhel7cis_audit_git_version: stig_jan_21
 
 # copy:
-#rhel7stig_audit_content: copy
-#rhel7stig_audit_local_copy: "/goss/audit/{{ benchmark }}-AUDIT"
+#rhel7cis_audit_local_copy: "some path to copy from"
 
 # get_url:
-#rhel7stig_audit_content: get_url
-#rhel7stig_audit_files_url: "/goss/audit/{{ benchmark }}-AUDIT"
+#rhel7cis_audit_files_url: "some url maybe s3?"
 
 
 ## audit controls ##
