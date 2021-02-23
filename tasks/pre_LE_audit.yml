@@ -25,7 +25,7 @@
   - name: retrieve audit content files from git
     git:
       repo: "{{ rhel7cis_audit_file_git }}"
-      dest: "{{ rhel7cis_audit_files }}"
+      dest: "{{ goss_audit_dir  }}"
       version: "{{ rhel7cis_audit_git_version }}"
   when:
   - rhel7cis_audit_content == 'git'
@@ -33,14 +33,14 @@
 - name: copy to audit content files to server
   copy:
     src: "{{ rhel7cis_audit_local_copy}}"
-    dest: "{{ rhel7cis_audit_files }}"
+    dest: "{{ goss_audit_dir  }}"
   when:
   - rhel7cis_audit_content == 'copy'
 
 - name: get audit content from url
   get_url:
     url: "{{ rhel7cis_audit_files_url }}"
-    dest: "{{ rhel7cis_audit_files }}"
+    dest: "{{ goss_audit_dir  }}"
   when:
   - rhel7cis_audit_content == 'get_url'
 
@@ -77,7 +77,7 @@
   template:
     src: ansible_vars_goss.yml
     dest: "{{ goss_vars_path }}"
-    mode: '0600'
+    mode: 0600
   when:
   - rhel7cis_run_audit
   tags:
