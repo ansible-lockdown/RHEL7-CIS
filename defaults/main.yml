@@ -537,7 +537,7 @@ goss_format: json
 goss_url: "https://github.com/aelsabbahy/goss/releases/download/{{ goss_version.release }}/goss-linux-amd64"
 
 ## Goss tests information
-goss_audit_dir: "/vagrant/{{ benchmark }}-Audit/"
+goss_audit_dir: "/var/tmp/{{ benchmark }}-Audit/"
 goss_file: "{{ goss_audit_dir }}goss.yml"
 goss_vars_path: "{{ goss_audit_dir }}/vars/{{ ansible_hostname }}.yml"
 goss_out_dir: '/var/tmp'

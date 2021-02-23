@@ -7,6 +7,12 @@
   tags:
   - setup_audit
 
+- name: "Ensure {{ goss_audit_dir }} exists"
+  file:
+    path: "{{ goss_audit_dir }}"
+    state: directory
+    mode: '0755'
+
 - name: If using git for content set up
   block:
   - name: Install git
