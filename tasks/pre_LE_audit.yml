@@ -92,13 +92,30 @@
     output_file: "{{ pre_audit_outfile }}"
   failed_when: false
 
-- name: "capture data  {{ pre_audit_outfile }}"
-  command: "cat {{ pre_audit_outfile }}"
-  register: pre_audit
-  changed_when: false 
+- name: Capture audit data if json format
+  block:
+  - name: "capture data {{ pre_audit_outfile }}"
+    command: "cat {{ pre_audit_outfile }}"
+    register: pre_audit
+    changed_when: false 
     
-- name: Capture pre-audit result
-  set_fact: 
-    pre_audit_summary: "{{ pre_audit.stdout | from_json |json_query(summary) }}"
-  vars:
-    summary: 'summary."summary-line"'
+  - name: Capture pre-audit result
+    set_fact: 
+      pre_audit_summary: "{{ pre_audit.stdout | from_json |json_query(summary) }}"
+    vars:
+      summary: 'summary."summary-line"'
+  when:
+  - goss_format == "json"
+
+- name: Capture audit data if documentation format
+  block:
+  - name: "capture data {{ pre_audit_outfile }}"
+    command: "tail -2 {{ pre_audit_outfile }}"
+    register: pre_audit
+    changed_when: false
+
+  - name: Capture pre-audit result
+    set_fact:
+      pre_audit_summary: "{{ pre_audit.stdout_lines }}"
+  when:
+  - goss_format == "documentation"

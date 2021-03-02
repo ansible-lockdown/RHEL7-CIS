@@ -515,7 +515,7 @@ rhel7cis_audit_content: git
 
 # git
 rhel7cis_audit_file_git: "https://github.com/ansible-lockdown/{{ benchmark }}-Audit.git"
-rhel7cis_audit_git_version: stig_jan_21
+rhel7cis_audit_git_version: main
 
 # copy:
 #rhel7cis_audit_local_copy: "some path to copy from"
@@ -533,7 +533,7 @@ goss_version:
 #goss_checksum: "checksum_{{ goss_version }}"
 goss_path: /usr/local/bin/
 goss_bin: "{{ goss_path }}goss"
-goss_format: json
+goss_format: documentation
 goss_url: "https://github.com/aelsabbahy/goss/releases/download/{{ goss_version.release }}/goss-linux-amd64"
 
 ## Goss tests information
