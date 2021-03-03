@@ -1,9 +1,0 @@
----
-# Post tasks
-
-- name: Perform YUM package cleanup
-  command: yum -y autoremove
-  changed_when: no
-  ignore_errors: yes
-  tags:
-      - skip_ansible_lint

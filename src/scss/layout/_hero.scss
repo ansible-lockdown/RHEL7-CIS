@@ -1,0 +1,94 @@
+.hero {
+    position: relative;
+    text-align: center;
+    padding-top: 40px;
+
+    &::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        height: 230px;
+        width: 80%;
+        background: mix(color(primary, 1), color(primary, 2));
+        background: linear-gradient(to top right, color(primary, 1) 0, color(primary, 2) 100%);
+    }
+}
+
+.hero-inner {
+    position: relative; /* To display all elements above the background color */
+}
+
+.hero-title {
+    @include font-weight(bold);
+}
+
+.hero-paragraph {
+    margin-bottom: 32px;
+}
+
+.hero-illustration {
+    margin-top: 40px;
+    padding-bottom: 40px;
+
+	img,
+    svg {
+        width: 100%;
+        max-width: 320px;
+        height: auto;
+        margin: 0 auto;
+        overflow: visible;
+    }
+}
+
+@include media( '>medium' ) {
+
+    .hero {
+        text-align: left;
+        padding-top: 92px;
+        padding-bottom: 80px;
+
+        &::before {
+            left: 620px;
+            height: 800px;
+            width: 100%;
+        }
+    }
+
+    .hero-inner {
+        /* Split hero in two half */
+        display: flex;
+    }
+
+    .hero-copy {
+        padding-right: 48px;
+        min-width: 512px;
+    }
+
+    .hero-illustration {
+        margin-top: -68px;
+        padding-bottom: 0;
+
+		img,
+        svg {
+            max-width: none;
+            width: 528px;
+        }
+    }
+}
+
+@include media( '>large' ) {
+
+    .hero {
+
+        &::before {
+            left: auto;
+            width: 43%;
+        }
+    }
+
+    .hero-copy {
+        padding-right: 88px;
+        min-width: 552px;
+    }
+}

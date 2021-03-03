@@ -1,0 +1,122 @@
+.pricing {
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: calc(100% - 200px);
+        left: 0;
+        width: 100%;
+        height: 200px;
+        background: color(typography, 1);
+        overflow: hidden;
+    }
+
+    .section-title {
+        margin-bottom: 48px;
+    }
+}
+
+.pricing-tables-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-right: -12px;
+    margin-left: -12px;
+
+    &:first-child {
+        margin-top: -12px;
+    }
+
+    &:last-child {
+        margin-bottom: -12px;
+    }
+}
+
+.pricing-table {
+    padding: 12px;
+    width: 344px;
+    max-width: 344px;
+    flex-grow: 1;
+}
+
+.pricing-table-inner {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    background: color(bg, 1);
+    padding: 24px;
+    height: 100%;
+
+    > * {
+		position: relative; /* To display all elements above the box with shadow */
+        width: 100%;
+    }
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        @include shadow;
+        mix-blend-mode: multiply;
+    }
+}
+
+.pricing-table-header {
+    @include divider(after);
+}
+
+.pricing-table-title {
+    @if ( get-font-family(heading) != get-font-family(base) ) {
+        @include font-family(heading);
+    }
+    color: color(typography, 1);
+}
+
+.pricing-table-price-currency {
+    color: color(typography, 2);
+}
+
+.pricing-table-features {
+    color: color(typography, 3);
+
+    li {
+        display: flex;
+        align-items: center;
+        margin-bottom: 14px;
+
+        .list-icon {
+            display: inline-flex;
+            width: 16px;
+            height: 12px;
+            margin-right: 12px;
+        }
+    }
+}
+
+.pricing-table-cta {
+    align-self: flex-end;
+}
+
+@include media( '>medium' ) {
+
+    .pricing {
+
+        .section-square {
+            position: absolute;
+            top: calc(100% - 440px);
+            right: 0;
+            height: 240px;
+            width: 44%;
+            background: color(bg, 2);
+        }
+
+        .section-title {
+            margin-bottom: 64px;
+        }
+    }
+}
