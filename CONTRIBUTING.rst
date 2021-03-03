@@ -1,6 +1,19 @@
 Contributing to MindPoint Group Projects
 ========================================
 
+Rules
+-----
+1) All commits must be GPG signed (details in Signing section)
+2) All commits must have Signed-off-by (Signed-off-by: Joan Doe <joan.doe@email.com>) in the commit message (details in Signing section)
+3) All work is done in your own branch
+4) All pull requests go into the devel branch. There are automated checks for signed commits, signoff in commit message, and functional testing)
+5) Be open and nice to eachother
+
+Workflow
+--------
+- Your work is done in your own individual branch. Make sure to to Signed-off and GPG sign all commits you intend to merge
+- All community Pull Requests are into the devel branch. There are automated checks for GPG signed, Signed-off in commits, and functional tests before being approved. If your pull request comes in from outside of our repo, the pull request will go into a staging branch. There is info needed from our repo for our CI/CD testing.
+- Once your changes are merged and a more detailed review is complete, an authorized member will merge your changes into the main branch for a new release
 Signing your contribution
 -------------------------
 
