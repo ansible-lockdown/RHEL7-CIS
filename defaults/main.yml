@@ -1,6 +1,8 @@
 ---
-
+# rhel7cis_notauto will auto install intrusive items
 rhel7cis_notauto: false
+
+# Disable/Enable whole sections (Default is for all)
 rhel7cis_section1: true
 rhel7cis_section2: true
 rhel7cis_section3: true
@@ -15,29 +17,30 @@ python2_bin: /bin/python2.7
 
 
 ## Benchmark name used by audting control role
-# audit variable found at the base
+# The audit variable found at the base
 benchmark: RHEL7-CIS
 
 # Enable goss binary download
 rhel7cis_setup_audit: false
-# options are downoad from github or copy from pre downloaded location
+# Options are downoad from github or copy from pre downloaded location
 # copy or download
 get_goss_file: download
 
-# enable audits to run
+# Enable audits to run
 rhel7cis_run_audit: false
 
-
+# Enable/Disable SELinux
 rhel7cis_selinux_disable: false
 
+# Misc. environment variables
 rhel7cis_skip_for_travis: false
 rhel7cis_system_is_container: false
 system_is_ec2: false
 
-# change to false if using EFI boot changes 1.1.1.4 to stop vfat
+# Change to false if using EFI boot changes 1.1.1.4 to stop vfat
 rhel7cis_legacy_boot: true
 
-# if set true uses the tmp.mount service else using fstab configuration
+# If set true uses the tmp.mount service else using fstab configuration
 rhel7cis_tmp_svc: false
 
 # These variables correspond with the CIS rule IDs or paragraph numbers defined in
@@ -45,6 +48,7 @@ rhel7cis_tmp_svc: false
 # PLEASE NOTE: These work in coordination with the section # group variables and tags.
 # You must enable an entire section in order for the variables below to take effect.
 # Section 1 rules
+# Section 1 is Initial Setup (Filesystem Configuration, Configure Software Updates, Configure Sudo, Filesystem Integrity Checking, Secure Boot Settings, Additional Process Hardening, Mandatory Access Control, and Warning Banners)
 rhel7cis_rule_1_1_1_1: true
 rhel7cis_rule_1_1_1_2: true
 rhel7cis_rule_1_1_1_3: true
@@ -107,6 +111,7 @@ rhel7cis_rule_1_9: true
 rhel7cis_rule_1_10: true
 
 # Section 2 rules
+# Section 2 is Services (inetd Services, Special Purpose Services, and Service Clients)
 rhel7cis_rule_2_1_1: true
 rhel7cis_rule_2_1_2: true
 rhel7cis_rule_2_1_3: true
@@ -145,6 +150,7 @@ rhel7cis_rule_2_3_5: true
 rhel7cis_rule_2_5: true
 
 # Section 3 rules
+# Section 3 is Network Configuration (Disable unused network protocols, Network parameters (host), Network parameters (Host and Router), Uncommon Network Protocols, Firewall Configuration, and Configure iptables)
 rhel7cis_rule_3_1_1: true
 rhel7cis_rule_3_1_2: true
 rhel7cis_rule_3_2_1: true
@@ -195,6 +201,7 @@ rhel7cis_rule_3_5_3_3_5: true
 rhel7cis_rule_3_5_3_3_6: true
 
 # Section 4 rules
+# Section 4 is Logging and Auditing (Configure System Accounting (auditd) and Configure Logging)
 rhel7cis_rule_4_1_1_1: true
 rhel7cis_rule_4_1_1_2: true
 rhel7cis_rule_4_1_1_3: true
@@ -230,6 +237,7 @@ rhel7cis_rule_4_2_3: true
 rhel7cis_rule_4_2_4: true
 
 # Section 5 rules
+# Section 5 is Access, Authentication, and Authorization (Configure time-based job schedulers, Configure SSH Server, Configure PAM, and User Accounts and Environment)
 rhel7cis_rule_5_1_1: true
 rhel7cis_rule_5_1_2: true
 rhel7cis_rule_5_1_3: true
@@ -278,6 +286,7 @@ rhel7cis_rule_5_5: true
 rhel7cis_rule_5_6: true
 
 # Section 6 rules
+# Section 6 is System Maintenance (System File Permissions and User and Group Settings)
 rhel7cis_rule_6_1_1: true
 rhel7cis_rule_6_1_2: true
 rhel7cis_rule_6_1_3: true
@@ -424,6 +433,7 @@ rhel7cis_warning_banner: |
 
 ## Section4 vars
 
+# auditd settings
 rhel7cis_auditd:
     space_left_action: email
     action_mail_acct: root
@@ -443,6 +453,8 @@ rhel7cis_remote_log_server: logagg.example.com
 rhel7cis_system_is_log_server: false
 
 ## Section5 vars
+
+# SSH variables
 rhel7cis_ssh_loglevel: INFO
 rhel7cis_ssh_maxsessions: 10
 rhel7cis_sshd:
@@ -457,6 +469,8 @@ rhel7cis_sshd:
     # allowgroups: systems dba
     # denyusers:
     # denygroups:
+
+# pam variables
 rhel7cis_pam_faillock:
     attempts: 5
     interval: 900
@@ -464,10 +478,8 @@ rhel7cis_pam_faillock:
     fail_for_root: no
     remember: 5
     pwhash: sha512
-
 rhel7cis_inactivelock:
     lock_days: 30
-
 rhel7cis_pass:
     max_days: 90
     min_days: 7
@@ -476,12 +488,14 @@ rhel7cis_pass:
 rhel7cis_syslog: rsyslog
 rhel7cis_rsyslog_ansibleManaged: true
 
+# Var/tmp settings
 rhel7cis_vartmp:
     source: /tmp
     fstype: none
     opts: "defaults,nodev,nosuid,noexec,bind"
     enabled: no
 
+# Interactive user UID starting point 
 rhel7cis_rule_5_4_2_min_uid: 1000
 
 # RHEL-07-5.4.5
@@ -509,6 +523,7 @@ rhel7cis_dotperm_ansibleManaged: true
 # RHEL-07-6.2.18 Clear users from shadow group 
 rhel7cis_remove_shadow_grp_usrs: true 
 
+# Goss Audit Variables
 # how to get audit files onto host options
 # options are git/copy/get_url
 rhel7cis_audit_content: git
