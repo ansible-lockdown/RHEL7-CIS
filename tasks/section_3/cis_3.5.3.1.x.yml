@@ -1,6 +1,5 @@
 ---
 
-
 - name: "AUTOMATED | 3.5.3.1.1 | PATCH | Ensure iptables is installed"
   package:
     name: "{{ item }}"

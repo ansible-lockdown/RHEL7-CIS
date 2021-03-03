@@ -14,4 +14,3 @@
 
 - name: "SECTION | 2.5 | Nonessential Services"
   include: cis_2.5.x.yml
-

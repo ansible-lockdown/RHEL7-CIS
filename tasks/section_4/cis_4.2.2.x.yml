@@ -1,4 +1,5 @@
 ---
+
 - name: "AUTOMATED | 4.2.2.1 | PATCH | Ensure journald is configured to send logs to rsyslog"
   lineinfile:
       path: /etc/systemd/journald.conf
@@ -62,4 +63,3 @@
       - audit
       - manual
       - rule_4.2.4
-

@@ -2,7 +2,6 @@
 
 - name: "AUTOMATED | 6.2.1 | PATCH | Ensure accounts in /etc/passwd use shadow passwords"
   block:
-
   - name: "AUTOMATED | 6.2.1 | PATCH | Ensure accounts in /etc/passwd use shadow passwords"
     shell: sed -e 's/^\([a-zA-Z0-9_]*\):[^:]*:/\1:x:/' -i /etc/passwd
     loop: "{{ rhel7cis_passwd | selectattr('password', '!=', 'x') | list }}"
@@ -16,7 +15,6 @@
     debug:
       msg: "Good News!!  No Unshadowed passwords have been found"
     when: rhel7_6_2_1_shadow is not changed
-
   when:
   - rhel7cis_rule_6_2_1
   tags:
