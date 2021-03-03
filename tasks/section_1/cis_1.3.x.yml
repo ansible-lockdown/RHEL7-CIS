@@ -14,8 +14,6 @@
   vars:
     ansible_python_interpreter: /bin/python
 
-
-
 - name: "AUTOMATED | 1.3.2 | AUDIT | Ensure sudo commands use pty"
   lineinfile:
     dest: /etc/sudoers

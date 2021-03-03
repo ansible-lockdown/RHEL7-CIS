@@ -1,4 +1,5 @@
 ---
+
 - name: "AUTOMATED | 4.2.1.1 | PATCH | Ensure rsyslog or syslog-ng is installed"
   package:
       name: "{{ rhel7cis_syslog }}"

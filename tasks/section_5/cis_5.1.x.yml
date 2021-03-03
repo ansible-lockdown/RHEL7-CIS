@@ -97,7 +97,6 @@
 
 - name: "SCORED | 5.1.8 | PATCH | Ensure cron is restricted to authorized users"
   block:
-
   - name: "SCORED | 5.1.8 | PATCH | Ensure cron is restricted to authorized users | Remove cron.deny"
     file:
       dest: /etc/cron.deny
