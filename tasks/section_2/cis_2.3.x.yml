@@ -1,0 +1,86 @@
+---
+
+- name: "AUTOMATED | 2.3.1 | PATCH | Ensure nis client is not installed"
+  package:
+    name: ypbind
+    state: absent
+  vars:
+    ansible_python_interpreter: /bin/python
+  when:
+  - not rhel7cis_ypbind_required
+  - "'ypbind' in ansible_facts.packages"
+  - rhel7cis_rule_2_3_1
+  tags:
+  - level1
+  - scored
+  - nis
+  - patch
+  - rule_2.3.1
+
+- name: "AUTOMATED | 2.3.2 | PATCH | Ensure rsh client is not installed"
+  package:
+    name: rsh
+    state: absent
+  vars:
+    ansible_python_interpreter: /bin/python
+  when:
+  - not rhel7cis_rsh_required
+  - "'rsh' in ansible_facts.packages"
+  - rhel7cis_rule_2_3_2
+  tags:
+  - level1
+  - scored
+  - rsh
+  - patch
+  - rule_2.3.2
+
+- name: "AUTOMATED | 2.3.3 | PATCH | Ensure talk client is not installed"
+  package:
+    name: talk
+    state: absent
+  vars:
+    ansible_python_interpreter: /bin/python
+  when:
+  - not rhel7cis_talk_required
+  - "'talk' in ansible_facts.packages"
+  - rhel7cis_rule_2_3_3
+  tags:
+  - level1
+  - scored
+  - talk
+  - patch
+  - rule_2.3.3
+
+- name: "AUTOMATED | 2.3.4 | PATCH | Ensure telnet client is not installed"
+  package:
+    name: telnet
+    state: absent
+  vars:
+    ansible_python_interpreter: /bin/python
+  when:
+  - "'telnet' in ansible_facts.packages"
+  - not rhel7cis_telnet_required
+  - rhel7cis_rule_2_3_4
+  tags:
+  - level1
+  - scored
+  - telnet
+  - patch
+  - rule_2.3.4
+
+- name: "AUTOMATED | 2.3.5 | PATCH | Ensure LDAP client is not installed"
+  package:
+    name: openldap-client
+    state: absent
+  vars:
+    ansible_python_interpreter: /bin/python
+  when:
+  - not rhel7cis_openldap_clients_required
+  - "'openldap-client' in ansible_facts.packages"
+  - rhel7cis_rule_2_3_5
+  tags:
+  - level1
+  - scored
+  - ldap_client
+  - patch
+  - rule_2.3.5

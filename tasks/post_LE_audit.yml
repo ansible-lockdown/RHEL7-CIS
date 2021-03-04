@@ -1,0 +1,38 @@
+---
+
+- name: "Run post_remediation {{ benchmark }} audit"
+  goss:
+    goss_path: "{{ goss_bin }}"
+    path: "{{ goss_file }}"
+    vars_path: "{{ goss_vars_path }}"
+    format: "{{ goss_format }}"
+    output_file: "{{ post_audit_outfile }}"
+  failed_when: false
+
+- name: Capture audit data if json format
+  block:
+  - name: "capture data {{ post_audit_outfile }}"
+    command: "cat {{ post_audit_outfile }}"
+    register: post_audit
+    changed_when: false
+
+  - name: Capture post-audit result
+    set_fact:
+      post_audit_summary: "{{ post_audit.stdout | from_json |json_query(summary) }}"
+    vars:
+      summary: 'summary."summary-line"'
+  when:
+  - goss_format == "json"
+
+- name: Capture audit data if documentation format
+  block:
+  - name: "capture data {{ post_audit_outfile }}"
+    command: "tail -2 {{ post_audit_outfile }}"
+    register: post_audit
+    changed_when: false
+
+  - name: Capture post-audit result
+    set_fact:
+      post_audit_summary: "{{ post_audit.stdout_lines }}"
+  when:
+  - goss_format == "documentation"

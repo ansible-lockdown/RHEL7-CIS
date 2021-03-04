@@ -1,0 +1,35 @@
+---
+
+- name: "SECTION | 1.1 | FileSystem Configurations\n
+         SECTION | 1.1.1.x | Disable unused filesystems"
+  include: cis_1.1.1.x.yml
+- include: cis_1.1.x.yml
+
+- name: "SECTION | 1.2 | Configure Software Updates"
+  include: cis_1.2.x.yml
+
+- name: "SECTION | 1.3 | Configure sudo"
+  include: cis_1.3.x.yml
+
+- name: "SECTION | 1.4 | Filesystem Integrity"
+  include: cis_1.4.x.yml
+  when: rhel7cis_config_aide
+
+- name: "SECTION | 1.5 | Secure Boot Settings"
+  include: cis_1.5.x.yml
+
+- name: "SECTION | 1.6 | Additional Process Hardening"
+  include: cis_1.6.x.yml
+
+- name: "SECTION | 1.7 | Mandatory Access Control"
+  include: cis_1.7.x.yml
+  when: not rhel7cis_selinux_disable
+
+- name: "SECTION | 1.8 | Warning Banners"
+  include: cis_1.8.x.yml
+
+- name: "SECTION | 1.9 | Updated and Patches"
+  include: cis_1.9.x.yml
+
+- name: "SECTION | 1.10 | GDM Login"
+  include: cis_1.10.x.yml

@@ -1,190 +1,141 @@
-RHEL 7 CIS STIG
+RHEL 7 CIS
 ================
 
-[![Build Status](https://travis-ci.org/MindPointGroup/RHEL7-CIS.svg?branch=devel)](https://travis-ci.org/MindPointGroup/RHEL7-CIS)
-[![Ansible Role](https://img.shields.io/ansible/role/16089.svg)](https://galaxy.ansible.com/MindPointGroup/RHEL7-CIS/)
+![Build Status](https://img.shields.io/github/workflow/status/ansible-lockdown/RHEL7-CIS/CommunityToDevel?label=Devel%20Build%20Status&style=plastic)
+![Release](https://img.shields.io/github/v/release/ansible-lockdown/RHEL7-CIS?style=plastic)
 
-Configure RHEL/Centos 7 machine to be [CIS](https://www.cisecurity.org/cis-benchmarks/) compliant. Level 1 and 2 findings will be corrected by default.
+Configure RHEL/Centos 7 machine to be [CIS](https://www.cisecurity.org/cis-benchmarks/) compliant
+Untested on OEL
 
-This role **will make changes to the system** that could break things. This is not an auditing tool but rather a remediation tool to be used after an audit has been conducted.
+Based on [CIS RedHat Enterprise Linux 7 Benchmark v3.0.1 - 09-21-2020 ](https://www.cisecurity.org/cis-benchmarks/)
 
-## IMPORTANT INSTALL STEP
+Caution(s)
+-------
 
-If you want to install this via the `ansible-galaxy` command you'll need to run it like this:
+This role **will make changes to the system** which may have unintended consequences. This is not an auditing tool but rather a remediation tool to be used after an audit has been conducted.
 
-`ansible-galaxy install -p roles -r requirements.yml`
+This role was developed against a clean install of the Operating System. If you are implimenting to an existing system please review this role for any site specific changes that are needed.
 
-With this in the file requirements.yml:
+To use release version please point to main branch.
 
-```
-- src: https://github.com/MindPointGroup/RHEL7-CIS.git
-```
+Coming from a previous release
+------------------------------
 
-Based on [CIS RedHat Enterprise Linux 7 Benchmark v2.1.1 - 01-31-2017 ](https://community.cisecurity.org/collab/public/index.php).
+CIS release always contains changes, it is highly recommended to review the new references and available variables. This have changed significantly since ansible-lockdown initial release.
+This is now compatible with python3 if it is found to be the default interpreter. This does come with pre-requisites which it configures the system accordingly.
 
-This repo originated from work done by [Sam Doran](https://github.com/samdoran/ansible-role-stig)
+Further details can be seen in the [Changelog](./ChangeLog.MD)
+
+Auditing (new)
+--------------
+
+This can be turned on or off within the defaults/main.yml file with the variable rhel7cis_run_audit. The value is false by default, please refer to the wiki for more details. The defaults file also populates the goss checks to check only the controls that have been enabled in the ansible role.
+
+This is a much quicker, very lightweight, checking (where possible) config compliance and live/running settings.
+
+A new form of auditing has been developed, by using a small (12MB) go binary called [goss](https://github.com/aelsabbahy/goss) along with the relevant configurations to check. Without the need for infrastructure or other tooling.
+This audit will not only check the config has the correct setting but aims to capture if it is running with that configuration also trying to remove [false positives](https://www.mindpointgroup.com/blog/is-compliance-scanning-still-relevant/) in the process.
+
+Refer to [RHEL7-CIS-Audit](https://github.com/ansible-lockdown/RHEL7-CIS-Audit).
+
+Documentation
+-------------
+
+- [Getting Started](https://www.lockdownenterprise.com/docs/getting-started-with-lockdown)
+- [Customizing Roles](https://www.lockdownenterprise.com/docs/customizing-lockdown-enterprise)
+- [Per-Host Configuration](https://www.lockdownenterprise.com/docs/per-host-lockdown-enterprise-configuration)
+- [Getting the Most Out of the Role](https://www.lockdownenterprise.com/docs/get-the-most-out-of-lockdown-enterprise)
+- [Wiki](https://github.com/ansible-lockdown/RHEL7-CIS/wiki)
+- [Repo GitHub Page](https://ansible-lockdown.github.io/RHEL7-CIS/)
 
 Requirements
 ------------
 
-You should carefully read through the tasks to make sure these changes will not break your systems before running this playbook.
-If you want to do a dry run without changing anything, set the below sections (rhel7cis_section1-6) to false. 
+**General:**
+
+- Basic knowledge of Ansible, below are some links to the Ansible documentation to help get started if you are unfamiliar with Ansible
+
+  - [Main Ansible documentation page](https://docs.ansible.com)
+  - [Ansible Getting Started](https://docs.ansible.com/ansible/latest/user_guide/intro_getting_started.html)
+  - [Tower User Guide](https://docs.ansible.com/ansible-tower/latest/html/userguide/index.html)
+  - [Ansible Community Info](https://docs.ansible.com/ansible/latest/community/index.html)
+- Functioning Ansible and/or Tower Installed, configured, and running. This includes all of the base Ansible/Tower configurations, needed packages installed, and infrastructure setup.
+- Please read through the tasks in this role to gain an understanding of what each control is doing. Some of the tasks are disruptive and can have unintended consiquences in a live production system. Also familiarize yourself with the variables in the defaults/main.yml file or the [Main Variables Wiki Page](https://github.com/ansible-lockdown/RHEL7-CIS/wiki/Main-Variables).
+
+**Technical Dependencies:**
+
+- Running Ansible/Tower setup (this role is tested against Ansible version 2.9.1 and newer)
+- Python3 Ansible run environment
+- python-def (should be included in RHEL/CentOS 7) - First task sets up the prerequisites (Tag pre-reqs)for python3 and python2 (where required)
+  - libselinux-python
+  - python3-rpm (package used by py3 to use the rpm pkg)
 
 Role Variables
 --------------
-There are many role variables defined in defaults/main.yml. This list shows the most important.
 
-**rhel7cis_notauto**: Run CIS checks that we typically do NOT want to automate due to the high probability of breaking the system (Default: false)
-
-**rhel7cis_section1**: CIS - General Settings (Section 1) (Default: true)
-
-**rhel7cis_section2**: CIS - Services settings (Section 2) (Default: true)
-
-**rhel7cis_section3**: CIS - Network settings (Section 3) (Default: true)
-
-**rhel7cis_section4**: CIS - Logging and Auditing settings (Section 4) (Default: true)
-
-**rhel7cis_section5**: CIS - Access, Authentication and Authorization settings (Section 5) (Default: true)
-
-**rhel7cis_section6**: CIS - System Maintenance settings (Section 6) (Default: true)  
-
-##### Disable all selinux functions
-`rhel7cis_selinux_disable: false`
-
-##### Service variables:
-###### These control whether a server should or should not be allowed to continue to run these services
-
-```
-rhel7cis_avahi_server: false  
-rhel7cis_cups_server: false  
-rhel7cis_dhcp_server: false  
-rhel7cis_ldap_server: false  
-rhel7cis_telnet_server: false  
-rhel7cis_nfs_server: false  
-rhel7cis_rpc_server: false  
-rhel7cis_ntalk_server: false  
-rhel7cis_rsyncd_server: false  
-rhel7cis_tftp_server: false  
-rhel7cis_rsh_server: false  
-rhel7cis_nis_server: false  
-rhel7cis_snmp_server: false  
-rhel7cis_squid_server: false  
-rhel7cis_smb_server: false  
-rhel7cis_dovecot_server: false  
-rhel7cis_httpd_server: false  
-rhel7cis_vsftpd_server: false  
-rhel7cis_named_server: false  
-rhel7cis_bind: false  
-rhel7cis_vsftpd: false  
-rhel7cis_httpd: false  
-rhel7cis_dovecot: false  
-rhel7cis_samba: false  
-rhel7cis_squid: false  
-rhel7cis_net_snmp: false  
-```  
-
-##### Designate server as a Mail server
-`rhel7cis_is_mail_server: false`
-
-
-##### System network parameters (host only OR host and router)
-`rhel7cis_is_router: false`  
-
-
-##### IPv6 required
-`rhel7cis_ipv6_required: true`  
-
-
-##### AIDE
-`rhel7cis_config_aide: true`
-
-###### AIDE cron settings
-```
-rhel7cis_aide_cron:
-  cron_user: root
-  cron_file: /etc/crontab
-  aide_job: '/usr/sbin/aide --check'
-  aide_minute: 0
-  aide_hour: 5
-  aide_day: '*'
-  aide_month: '*'
-  aide_weekday: '*'  
-```
-
-##### SELinux policy
-`rhel7cis_selinux_pol: targeted` 
-
-
-##### Set to 'true' if X Windows is needed in your environment
-`rhel7cis_xwindows_required: no` 
-
-
-##### Client application requirements
-```
-rhel7cis_openldap_clients_required: false 
-rhel7cis_telnet_required: false 
-rhel7cis_talk_required: false  
-rhel7cis_rsh_required: false 
-rhel7cis_ypbind_required: false 
-```
-
-##### Time Synchronization
-```
-rhel7cis_time_synchronization: chrony
-rhel7cis_time_Synchronization: ntp
-
-rhel7cis_time_synchronization_servers:
-    - 0.pool.ntp.org
-    - 1.pool.ntp.org
-    - 2.pool.ntp.org
-    - 3.pool.ntp.org  
-```  
-  
-##### 3.4.2 | PATCH | Ensure /etc/hosts.allow is configured
-```
-rhel7cis_host_allow:
-  - "10.0.0.0/255.0.0.0"  
-  - "172.16.0.0/255.240.0.0"  
-  - "192.168.0.0/255.255.0.0"    
-```  
-
-```
-rhel7cis_firewall: firewalld
-rhel7cis_firewall: iptables
-``` 
-  
-
-Dependencies
-------------
-
-Ansible > 2.2
-
-Example Playbook
--------------------------
-
-This sample playbook should be run in a folder that is above the main RHEL7-CIS / RHEL7-CIS-devel folder.
-
-```
-- name: Harden Server
-  hosts: servers
-  become: yes
-
-  roles:
-    - RHEL7-CIS
-```
+This role is designed that the end user should not have to edit the tasks themselves. All customizing should be done via the defaults/main.yml file or with extra vars within the project, job, workflow, etc. These variables can be found [here](https://github.com/ansible-lockdown/RHEL7-CIS/wiki/Main-Variables) in the Main Variables Wiki page. All variables are listed there along with descriptions.
 
 Tags
 ----
-Many tags are available for precise control of what is and is not changed.
 
-Some examples of using tags:
+There are many tags available for added control precision. Each control has it's own set of tags noting what level, if it's scored/notscored, what OS element it relates to, if it's a patch or audit, and the rule number.
+
+Below is an example of the tag section from a control within this role. Using this example if you set your run to skip all controls with the tag services, this task will be skipped. The opposite can also happen where you run only controls tagged with services.
+
+```sh
+      tags:
+      - level1
+      - scored
+      - avahi
+      - services
+      - patch
+      - rule_2.2.4
+```
+
+Example Audit Summary
+---------------------
+
+This is based on a vagrant image with selections enabled. e.g. No Gui or firewall.
+Note: More tests are run during audit as we check config and running state.
+
+```sh
+TASK [/vagrant/RHEL7-CIS : Show Audit Summary] ******************************************************************************************************************************************************************************
+******
+ok: [localhost] => {
+    "msg": [
+        "The pre remediation results are: Count: 377, Failed: 127, Duration: 12.417s.",
+        "The post remediation results are: Count: 377, Failed: 20, Duration: 14.133s.",
+        "Full breakdown can be found in /var/tmp",
+        ""
+    ]
+}
+
+PLAY RECAP ******************************************************************************************************************************************************************************************************************
+******
+localhost                  : ok=270  changed=140  unreachable=0    failed=0    skipped=129  rescued=0    ignored=0 
 
 ```
-    # Audit and patch the site
-    ansible-playbook site.yml --tags="patch"
-```
 
-License
+Branches
+--------
+
+- **devel** - This is the default branch and the working development branch. Community pull requests will pull into this branch
+- **main** - This is the release branch
+- **reports** - This is a protected branch for our scoring reports, no code should ever go here
+- **gh-pages** - This is the github pages branch
+- **all other branches** - Individual community member branches
+
+Community Contribution
+----------------------
+
+We encourage you (the community) to contribute to this role. Please read the rules below.
+
+- Your work is done in your own individual branch. Make sure to Signed-off and GPG sign all commits you intend to merge.
+- All community Pull Requests are pulled into the devel branch
+- Pull Requests into devel will confirm your commits have a GPG signature, Signed-off, and a functional test before being approved
+- Once your changes are merged and a more detailed review is complete, an authorized member will merge your changes into the main branch for a new release
+
+Credits
 -------
 
-MIT
+This repo originated from work done by [Sam Doran](https://github.com/samdoran/ansible-role-stig)

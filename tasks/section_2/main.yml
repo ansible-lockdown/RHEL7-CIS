@@ -1,0 +1,16 @@
+---
+
+- name: "SECTION | 2.1 | inetd Services"
+  include: cis_2.1.x.yml
+
+- name: "SECTION | 2.2.1 | Time Synchronization"
+  include: cis_2.2.1.x.yml
+
+- name: "SECTION | 2.2 | Special Purpose Services"
+  include: cis_2.2.x.yml
+
+- name: "SECTION | 2.3 | Service Clients"
+  include: cis_2.3.x.yml
+
+- name: "SECTION | 2.5 | Nonessential Services"
+  include: cis_2.5.x.yml

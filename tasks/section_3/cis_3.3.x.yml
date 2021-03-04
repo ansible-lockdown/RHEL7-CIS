@@ -1,0 +1,179 @@
+---
+
+- name: "AUTOMATED | 3.3.1 | PATCH | Ensure source routed packets are not accepted"
+  sysctl:
+    name: '{{ item.name }}'
+    value: '{{ item.value }}'
+    sysctl_set: yes
+    state: present
+    reload: yes
+    ignoreerrors: yes
+  with_items:
+  - { name: net.ipv4.conf.all.accept_source_route, value: 0 }
+  - { name: net.ipv4.conf.default.accept_source_route, value: 0 }
+  notify:
+  - sysctl flush ipv4 route table
+  when:
+  - rhel7cis_rule_3_3_1
+  tags:
+  - level1
+  - sysctl
+  - patch
+  - rule_3.3.1
+
+- name: "AUTOMATED | 3.3.2 | PATCH | Ensure ICMP redirects are not accepted"
+  sysctl:
+    name: '{{ item.name }}'
+    value: '{{ item.value }}'
+    sysctl_set: yes
+    state: present
+    reload: yes
+    ignoreerrors: yes
+  with_items:
+  - { name: net.ipv4.conf.all.accept_redirects, value: 0 }
+  - { name: net.ipv4.conf.default.accept_redirects, value: 0 }
+  notify:
+  - sysctl flush ipv4 route table
+  when:
+  - rhel7cis_rule_3_3_2
+  tags:
+  - level1
+  - sysctl
+  - patch
+  - rule_3.3.2
+
+- name: "AUTOMATED | 3.3.3 | PATCH | Ensure secure ICMP redirects are not accepted"
+  sysctl:
+    name: '{{ item.name }}'
+    value: '{{ item.value }}'
+    sysctl_set: yes
+    state: present
+    reload: yes
+    ignoreerrors: yes
+  with_items:
+  - { name: net.ipv4.conf.all.secure_redirects, value: 0 }
+  - { name: net.ipv4.conf.default.secure_redirects, value: 0 }
+  notify:
+  - sysctl flush ipv4 route table
+  when:
+  - rhel7cis_rule_3_3_3
+  tags:
+  - level1
+  - sysctl
+  - patch
+  - rule_3.3.3
+
+- name: "AUTOMATED | 3.3.4 | PATCH | Ensure suspicious packets are logged"
+  sysctl:
+    name: '{{ item.name }}'
+    value: '{{ item.value }}'
+    sysctl_set: yes
+    state: present
+    reload: yes
+    ignoreerrors: yes
+  with_items:
+  - { name: net.ipv4.conf.all.log_martians, value: 1 }
+  - { name: net.ipv4.conf.default.log_martians, value: 1 }
+  notify:
+  - sysctl flush ipv4 route table
+  when:
+  - rhel7cis_rule_3_3_4
+  tags:
+  - level1
+  - sysctl
+  - patch
+  - rule_3.3.4
+
+- name: "AUTOMATED | 3.3.5 | PATCH | Ensure broadcast ICMP requests are ignored"
+  sysctl:
+    name: net.ipv4.icmp_echo_ignore_broadcasts
+    value: '1'
+    state: present
+    reload: yes
+    ignoreerrors: yes
+  notify:
+  - sysctl flush ipv4 route table
+  when:
+  - rhel7cis_rule_3_3_5
+  tags:
+  - level1
+  - sysctl
+  - patch
+  - rule_3.3.5
+
+- name: "AUTOMATED | 3.3.6 | PATCH | Ensure bogus ICMP responses are ignored"
+  sysctl:
+    name: net.ipv4.icmp_ignore_bogus_error_responses
+    value: '1'
+    state: present
+    reload: yes
+    ignoreerrors: yes
+  notify:
+  - sysctl flush ipv4 route table
+  when:
+  - rhel7cis_rule_3_3_6
+  tags:
+  - level1
+  - sysctl
+  - patch
+  - rule_3.3.6
+
+- name: "AUTOMATED | 3.3.7 | PATCH | Ensure Reverse Path Filtering is enabled"
+  sysctl:
+    name: '{{ item.name }}'
+    value: '{{ item.value }}'
+    sysctl_set: yes
+    state: present
+    reload: yes
+    ignoreerrors: yes
+  with_items:
+  - { name: net.ipv4.conf.all.rp_filter, value: 1 }
+  - { name: net.ipv4.conf.default.rp_filter, value: 1 }
+  notify:
+  - sysctl flush ipv4 route table
+  when:
+  - rhel7cis_rule_3_3_7
+  tags:
+  - level1
+  - sysctl
+  - patch
+  - rule_3.3.7
+
+- name: "AUTOMATED | 3.3.8 | PATCH | Ensure TCP SYN Cookies is enabled"
+  sysctl:
+    name: net.ipv4.tcp_syncookies
+    value: '1'
+    state: present
+    reload: yes
+    ignoreerrors: yes
+  notify:
+  - sysctl flush ipv4 route table
+  when:
+  - rhel7cis_rule_3_3_8
+  tags:
+  - level1
+  - sysctl
+  - patch
+  - rule_3.3.8
+
+- name: "NOTSCORED | 3.3.9 | PATCH | Ensure IPv6 router advertisements are not accepted"
+  sysctl:
+    name: '{{ item.name }}'
+    value: '{{ item.value }}'
+    sysctl_set: yes
+    state: present
+    reload: yes
+    ignoreerrors: yes
+  with_items:
+  - { name: net.ipv6.conf.all.accept_ra, value: 0 }
+  - { name: net.ipv6.conf.default.accept_ra, value: 0 }
+  notify:
+  - sysctl flush ipv6 route table
+  when:
+  - rhel7cis_ipv6_required
+  - rhel7cis_rule_3_3_9
+  tags:
+  - level1
+  - sysctl
+  - patch
+  - rule_3.3.9
