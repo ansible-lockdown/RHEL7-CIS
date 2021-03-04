@@ -31,7 +31,7 @@ jobs:
           # Project ID
           project_id: 5f47f0c4a13c7b18373e5556
           # Job ID
-          job_id: 5f90ad90f9c74e6d1e606e33
+          job_id: 6040fe0cf7b21a22e11cf3b8
           # Variables
           variables: '{ "gitrepo": "https://github.com/ansible-lockdown/RHEL7-CIS.git", "image": "ami-07d8d14365439bc6e", "username": "ec2-user" }'
           # Refactr API base URL
