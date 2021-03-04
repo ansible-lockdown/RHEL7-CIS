@@ -39,3 +39,7 @@ travis.env
 benchparse/
 *xccdf.xml
 *.retry
+test_inv
+
+# ignore refactr pipeline test conf
+.github/workflows
