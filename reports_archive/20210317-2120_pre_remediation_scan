@@ -1,0 +1,1473 @@
+Title: 1.7.1.3 Ensure SELinux policy is configured (Automated)_sestatus
+Command: selinux_sestatus: exit-status: matches expectation: [0]
+Command: selinux_sestatus: stdout: matches expectation: [Loaded policy name:             targeted]
+Title: 6.1.7 Ensure permissions on /etc/shadow- are configured
+Command: shadow-_perms: exit-status: matches expectation: [0]
+Command: shadow-_perms: stdout: matches expectation: [/0 root root/]
+Title: 4.1.14 Ensure changes to system administration scope (sudoers) is collected | cnf
+Command: auditd_admin_scope_cnf: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_admin_scope_cnf: stdout: patterns not found: [-w /etc/sudoers -p wa -k scope, -w /etc/sudoers.d/ -p wa -k scope]
+Title: 4.1.8 Ensure session initiation information is collected
+Command: auditd_sessions_cnf: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_sessions_cnf: stdout: patterns not found: [-w /var/run/utmp -p wa -k session, -w /var/log/wtmp -p wa -k logins, -w /var/log/btmp -p wa -k logins]
+Title: 4.1.15 Ensure system administrator actions (sudolog) are collected (Automated)
+Command: auditd_sudolog_cnf: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_sudolog_cnf: stdout: patterns not found: [-w /var/log/sudo.log -p wa -k actions]
+Title: 6.2.4 Ensure root PATH Integrity
+Command: root_path_check: exit-status: matches expectation: [0]
+Command: root_path_check: stdout: matches expectation: [!/\\./]
+Title: 6.2.8  Ensure users dot files are not group or world writable
+Command: dot_file_perms: exit-status: matches expectation: [0]
+Command: dot_file_perms: stdout: matches expectation: [!/./]
+Title: 3.5.1.5 Ensure default zone is set (Automated)
+Command: default_zone: exit-status:
+Expected
+    <int>: 127
+to equal
+    <int>: 0
+Command: default_zone: stdout: patterns not found: [public]
+Title: 6.1.4 Ensure permissions on /etc/group are configured
+Command: group_perms: exit-status: matches expectation: [0]
+Command: group_perms: stdout: matches expectation: [/6[0,4][0,4] root root/]
+Title: 4.1.6 Ensure events that modify the system's Mandatory Access Controls are collected | Live
+Command: auditd_MAC_live: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_MAC_live: stdout: patterns not found: [-w /etc/selinux -p wa -k MAC-policy, -w /usr/share/selinux -p wa -k MAC-policy]
+Title: 4.1.9 Ensure discretionary access control permission modification events are collected | live
+Command: auditd_perms_live: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_perms_live: stdout: patterns not found: [-a always,exit -F arch=b64 -S chmod,fchmod,fchmodat -F auid>=1000 -F auid!=-1 -F key=perm_mod, -a always,exit -F arch=b32 -S chmod,fchmod,fchmodat -F auid>=1000 -F auid!=-1 -F key=perm_mod, -a always,exit -F arch=b64 -S chown,fchown,lchown,fchownat -F auid>=1000 -F auid!=-1 -F key=perm_mod, -a always,exit -F arch=b32 -S lchown,fchown,chown,fchownat -F auid>=1000 -F auid!=-1 -F key=perm_mod, -a always,exit -F arch=b64 -S setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr -F auid>=1000 -F auid!=-1 -F key=perm_mod, -a always,exit -F arch=b32 -S setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr -F auid>=1000 -F auid!=-1 -F key=perm_mod]
+Title: 2.2.17 Ensure rsync is not installed or the rsyncd service is masked (Automated)_masked
+Command: rsync_masked: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: rsync_masked: stdout: patterns not found: [masked]
+Title: 6.2.10  Ensure no users have .netrc files
+Command: dot_netrc_files: exit-status: matches expectation: [0]
+Command: dot_netrc_files: stdout: matches expectation: [!/./]
+Title: 5.4.1.5 Ensure all users last password change date is in the past
+Command: passwd_chg_past: exit-status: matches expectation: [1]
+Command: passwd_chg_past: stdout: matches expectation: [!Failed]
+Title: 1.1.19 Check for removeable media noexec
+Command: cdrom_noexec: exit-status: matches expectation: [0]
+Command: cdrom_noexec: stdout: matches expectation: [Passed_Check]
+Title: 4.1.5 Ensure events that modify the system's network environment are collected | Config
+Command: auditd_locale_cnf: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_locale_cnf: stdout: patterns not found: [-a always,exit -F arch=b64 -S sethostname -S setdomainname -k system-locale, -a always,exit -F arch=b32 -S sethostname -S setdomainname -k system-locale, -w /etc/issue -p wa -k system-locale, -w /etc/issue.net -p wa -k system-locale, -w /etc/hosts -p wa -k system-locale, -w /etc/sysconfig/network -p wa -k system-locale]
+Command: secure_system_LK: exit-status: matches expectation: [1]
+Command: secure_system_LK: stdout: matches expectation: [0]
+Title: 1.7.1.3 Ensure SELinux policy is configured (Automated)_config
+Command: selinux_policy: exit-status: matches expectation: [0]
+Command: selinux_policy: stdout: matches expectation: [SELINUXTYPE=targeted]
+Title: 4.1.8 Ensure session initiation information is collected
+Command: auditd_session_live: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_session_live: stdout: patterns not found: [-w /var/run/utmp -p wa -k session, -w /var/log/wtmp -p wa -k logins, -w /var/log/btmp -p wa -k logins]
+Title: 5.2.3 Ensure permissions on SSH private host key files are configured_group
+Command: /etc/ssh/ssh_host_key_group: exit-status: matches expectation: [0]
+Command: /etc/ssh/ssh_host_key_group: stdout: matches expectation: [!/./]
+Title: (L2) 4.1.1.3 Ensure auditing for processes that start prior to auditd is enabled (Automated)
+Command: auditd_grub: exit-status: matches expectation: [0]
+Command: auditd_grub: stdout: patterns not found: [!/./]
+Title: 6.1.3 Ensure permissions on /etc/shadow are configured
+Command: shadow_perms: exit-status: matches expectation: [0]
+Command: shadow_perms: stdout: matches expectation: [/0 root root/]
+Title: 4.1.6 Ensure events that modify the system's Mandatory Access Controls are collected | Config
+Command: auditd_MAC_cnf: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_MAC_cnf: stdout: patterns not found: [-w /etc/selinux/ -p wa -k MAC-policy, -w /usr/share/selinux/ -p wa -k MAC-policy]
+Title: 4.1.15 Ensure system administrator actions (sudolog) are collected (Automated)
+Command: auditd_sudolog_live: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_sudolog_live: stdout: patterns not found: [-w /var/log/sudo.log -p wa -k actions]
+Title: 1.6.1 Ensure core dumps are restricted (Automated)_sysctl
+Command: suid_dumpable_2: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: suid_dumpable_2: stdout: patterns not found: [fs.suid_dumpable=0]
+Title: 4.1.7 Ensure login and logout events are collected
+Command: auditd_logins_live: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_logins_live: stdout: patterns not found: [-w /var/log/faillog -p wa -k logins, -w /var/log/lastlog -p wa -k logins, -w /var/run/faillock -p wa -k logins]
+Title: 5.2.3 Ensure permissions on SSH pub host key files are configured_user
+Command: /etc/ssh/ssh_host_key_user: exit-status: matches expectation: [0]
+Command: /etc/ssh/ssh_host_key_user: stdout: matches expectation: [!/./]
+Title: 4.1.17 Ensure the audit configuration is immutable (Automated)
+Command: auditd_immutable: exit-status: matches expectation: [0]
+Command: auditd_immutable: stdout: patterns not found: [-e 2]
+Title: 4.1.3 Ensure events that modify date and time information are collected
+Command: auditd_time_live: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_time_live: stdout: patterns not found: [-a always,exit -F arch=b32 -S stime,settimeofday,adjtimex -F key=time-change, -a always,exit -F arch=b32 -S clock_settime -F key=time-change, -a always,exit -F arch=b64 -S adjtimex,settimeofday -F key=time-change, -a always,exit -F arch=b64 -S clock_settime -F key=time-change, -w /etc/localtime -p wa -k time-change]
+Title: 1.2.1 Ensure GPG keys are configured
+Command: gpg_keys: exit-status: matches expectation: [0]
+Title: 1.1.21 Check for removeable media nosuid
+Command: cdrom_nosuid: exit-status: matches expectation: [0]
+Command: cdrom_nosuid: stdout: matches expectation: [Passed_Check]
+Title: 1.2.3 Ensure gpgcheck is globally active | yum.conf.d
+Command: gpg_check_repo: exit-status: matches expectation: [0]
+Title: 3.5.1.6 Ensure network interfaces are assigned to appropriate zone
+Command: nic_assigned: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: nic_assigned: stdout: patterns not found: [ens192]
+Title: 3.4.2 Ensure SCTP is disabled (Automated)
+Command: modprobe_sctp: exit-status: matches expectation: [0]
+Command: modprobe_sctp: stdout: patterns not found: [install /bin/true]
+Title: 6.2.17 Ensure no duplicate group names exist
+Command: no_dup_groupname: exit-status: matches expectation: [0]
+Command: no_dup_groupname: stdout: matches expectation: [!/./]
+Title: 4.1.12 Ensure successful file system mounts are collected (Automated)
+Command: auditd_mounts_cnf: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_mounts_cnf: stdout: patterns not found: [/-a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=4294967295 -k mounts/, /-a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=4294967295 -k mounts/]
+Title: 4.1.16 Ensure kernel module loading and unloading is collected
+Command: auditd_admin_module_live: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_admin_module_live: stdout: patterns not found: [-w /sbin/insmod -p x -k modules, -w /sbin/rmmod -p x -k modules, -w /sbin/modprobe -p x -k modules, -a always,exit -F arch=b64 -S init_module,delete_module -F key=modules]
+Title: 1.2.3 Ensure gpgcheck is globally active | yum.conf
+Command: gpg_check_global: exit-status: matches expectation: [0]
+Title: 5.4.2 Ensure system accounts are secured (Automated)
+Command: secure_system_accts: exit-status: matches expectation: [1]
+Command: secure_system_accts: stdout: matches expectation: [!/./]
+Title: 6.2.6 Ensure all users' home directories permissions are 750 or more restrictive
+Command: home_dirs_exist: exit-status: matches expectation: [0]
+Command: home_dirs_exist: stdout: matches expectation: [/7[0,5]0\s/]
+Title: 1.1.20 Check for removeable media nodev
+Command: floppy_nodev: exit-status: matches expectation: [0]
+Command: floppy_nodev: stdout: matches expectation: [Passed_Check]
+Title: (L2) 1.7.1.5 Ensure the SELinux mode is enforcing (Automated)_config
+Command: selinux_config_enforcing: exit-status: matches expectation: [0]
+Command: selinux_config_enforcing: stdout: matches expectation: [SELINUX=enforcing]
+Title: 4.1.13 Ensure use of privileged commands is collected (Automated)
+Command: auditd_priv_cmds_cnf: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Title: 5.2.3 Ensure permissions on SSH private host key files are configured_user
+Command: /etc/ssh/ssh_host_key_perms: exit-status: matches expectation: [0]
+Command: /etc/ssh/ssh_host_key_perms: stdout: matches expectation: [!/./]
+Title: 4.1.3 Ensure events that modify date and time information are collected
+Command: auditd_time_cnf: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_time_cnf: stdout: patterns not found: [-a always,exit -F arch=b64 -S adjtimex -S settimeofday -k time-change, -a always,exit -F arch=b32 -S adjtimex -S settimeofday -S stime -k time-change, -a always,exit -F arch=b64 -S clock_settime -k time-change, -a always,exit -F arch=b32 -S clock_settime -k time-change, -w /etc/localtime -p wa -k time-change]
+Title: 4.1.4 Ensure events that modify user/group information are collected
+Command: auditd_identity_cnf: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_identity_cnf: stdout: patterns not found: [-w /etc/group -p wa -k identity, -w /etc/passwd -p wa -k identity, -w /etc/gshadow -p wa -k identity, -w /etc/shadow -p wa -k identity, -w /etc/security/opasswd -p wa -k identity]
+Title: 6.2.7  Ensure users own their home directories
+Command: home_dirs_owned: exit-status: matches expectation: [0]
+Command: home_dirs_owned: stdout: matches expectation: [!/./]
+Title: 1.7.1.2 Ensure SELinux is not disabled in bootloader configuration (Automated)
+Command: selinux_disabled_boot: exit-status: matches expectation: [1]
+Command: selinux_disabled_boot: stdout: matches expectation: [!/./]
+Title: 6.2.3 Ensure root is the only UID 0 account
+Command: uid_0_check: exit-status: matches expectation: [0]
+Command: uid_0_check: stdout: matches expectation: [root]
+Title: 4.1.13 Ensure file deletion events by users are collected (Automated)
+Command: auditd_delete_live: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_delete_live: stdout: patterns not found: [-a always,exit -F arch=b64 -S rename,unlink,unlinkat,renameat -F auid>=1000 -F auid!=-1 -F key=delete, -a always,exit -F arch=b32 -S unlink,rename,unlinkat,renameat -F auid>=1000 -F auid!=-1 -F key=delete]
+Title: 4.1.10 Ensure unsuccessful unauthorized file access attempts are collected | cnf
+Command: auditd_access_cnf: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_access_cnf: stdout: patterns not found: [/-a always,exit -F arch=b32 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access/, /-a always,exit -F arch=b32 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access/, /-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access/, /-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access/]
+Title: 5.4.1.4 Ensure inactive password lock is 30 days or less | password
+Command: inactive_passwd: exit-status: matches expectation: [0]
+Command: inactive_passwd: stdout: patterns not found: [/^INACTIVE=[1-30]/]
+Title: 1.7.1.6 Ensure no unconfined services exist (Automated)
+Command: selinux_unconfined: exit-status: matches expectation: [1]
+Command: selinux_unconfined: stdout: matches expectation: [!/./]
+Title: 6.2.12  Ensure no users have .rhosts files
+Command: dot_rhosts_files: exit-status: matches expectation: [0]
+Command: dot_rhosts_files: stdout: matches expectation: [!/./]
+Title: 1.6.2 Ensure XD/NX support is enabled (Automated)
+Command: kernel_nx: exit-status: matches expectation: [0]
+Command: kernel_nx: stdout: matches expectation: [kernel: NX (Execute Disable) protection: active]
+Title: 6.1.2 Ensure permissions on /etc/passwd are configured
+Command: passwd_perms: exit-status: matches expectation: [0]
+Command: passwd_perms: stdout: matches expectation: [/6[0,4][0,4] root root/]
+Title: 1.6.3 Ensure address space layout randomization (ASLR) is enabled (Automated)
+Command: aslr_enabled_2: exit-status: matches expectation: [0]
+Command: aslr_enabled_2: stdout: patterns not found: [/^kernel.randomize_va_space=2/]
+Title: 1.2.4 Ensure Redhat Subscription Manager connection configured
+Command: subscription: exit-status: matches expectation: [{"or":[0,127]}]
+Command: subscription: stderr: patterns not found: [command not found]
+Title: 6.2.14 Ensure no duplicate UIDs exist
+Command: no_dup_uid: exit-status: matches expectation: [0]
+Command: no_dup_uid: stdout: matches expectation: [!/./]
+Title: 4.1.7 Ensure login and logout events are collected
+Command: auditd_logins_cnf: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_logins_cnf: stdout: patterns not found: [/-w /var/log/faillog -p wa -k logins/, /-w /var/log/lastlog -p wa -k logins/, /-w /var/run/faillock/ -p wa -k logins/]
+Title: 2.2.8 Ensure rpcbind is not installed or the rpcbind services are masked (Automated)_socket
+Command: rpcbind_socket: exit-status: matches expectation: [1]
+Command: rpcbind_socket: stdout: patterns not found: [masked]
+Title: 1.1.22 Ensure sticky bit is set on all world-writable directories
+Command: sticky_bit: exit-status: matches expectation: [0]
+Command: sticky_bit: stdout: matches expectation: [!/./]
+Title: 6.1.8 Ensure permissions on /etc/group- are configured
+Command: group-_perms: exit-status: matches expectation: [0]
+Command: group-_perms: stdout: matches expectation: [/6[0,4][0,4] root root/]
+Title: 6.2.16 Ensure no duplicate user names exist
+Command: no_dup_username: exit-status: matches expectation: [0]
+Command: no_dup_username: stdout: matches expectation: [!/./]
+Title: 4.2.1.5 Ensure rsyslog is configured to send logs to a remote host
+Command: remote_syslog: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: remote_syslog: stdout: patterns not found: [/\*\.\* @@*./]
+Title: 1.1.20 Check for removeable media nodev
+Command: cdrom_nodev: exit-status: matches expectation: [0]
+Command: cdrom_nodev: stdout: matches expectation: [Passed_Check]
+Title: 6.1.14 Audit SGID executables
+Command: sgid_executables: exit-status: matches expectation: [0]
+Command: sgid_executables: stdout: patterns not found: [!/./]
+Title: 1.1.1.1 Ensure mounting of cramfs filesystems is disabled (Automated)
+Command: cramfs: exit-status: matches expectation: [0]
+Command: cramfs: stdout: patterns not found: [install /bin/true]
+Title: 6.1.11 Ensure no unowned files or directories exist
+Command: unowned: exit-status: matches expectation: [0]
+Command: unowned: stdout: matches expectation: [!/./]
+Title: 6.1.5 Ensure permissions on /etc/gshadow are configured
+Command: gshadow_perms: exit-status: matches expectation: [0]
+Command: gshadow_perms: stdout: matches expectation: [/0 root root/]
+Title: 1.7.1.4 Ensure the SELinux mode is enforcing or permissive (Automated)_config
+Command: selinux_config_mode: exit-status: matches expectation: [0]
+Title: (L2) 1.7.1.5 Ensure the SELinux mode is enforcing (Automated)_running
+Command: selinux_run_enforcing: exit-status: matches expectation: [0]
+Command: selinux_run_enforcing: stdout: matches expectation: [Enforcing]
+Title: 6.1.5 Ensure permissions on /etc/gshadow- are configured
+Command: gshadow-_perms: exit-status: matches expectation: [0]
+Command: gshadow-_perms: stdout: matches expectation: [/0 root root/]
+Title: 6.2.15 Ensure no duplicate GIDs exist
+Command: no_dup_gid: exit-status: matches expectation: [0]
+Command: no_dup_gid: stdout: matches expectation: [!/./]
+Title: 6.2.13 Ensure all groups in /etc/passwd exist in /etc/group
+Command: passwd_group_exist: exit-status: matches expectation: [0]
+Command: passwd_group_exist: stdout: matches expectation: [!/./]
+Title: 1.1.21 Check for removeable media nosuid
+Command: floppy_nosuid: exit-status: matches expectation: [0]
+Command: floppy_nosuid: stdout: matches expectation: [Passed_Check]
+Title: 1.1.1.3 Ensure mounting of udf filesystems is disabled (Automated)
+Command: udf: exit-status: matches expectation: [0]
+Command: udf: stdout: patterns not found: [install /bin/true]
+Title: 4.1.9 Ensure discretionary access control permission modification events are collected | config
+Command: auditd_perms_cnf: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_perms_cnf: stdout: patterns not found: [/-a always,exit -F arch=b64 -S chmod -S fchmod -S fchmodat -F auid>=1000 -F auid!=4294967295 -k perm_mod/, /-a always,exit -F arch=b32 -S chmod -S fchmod -S fchmodat -F auid>=1000 -F auid!=4294967295 -k perm_mod/, /-a always,exit -F arch=b64 -S chown -S fchown -S fchownat -S lchown -F auid>=1000 -F auid!=4294967295 -k perm_mod/, /-a always,exit -F arch=b32 -S chown -S fchown -S fchownat -S lchown -F auid>=1000 -F auid!=4294967295 -k perm_mod/, /-a always,exit -F arch=b64 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=1000 -F auid!=4294967295 -k perm_mod/, /-a always,exit -F arch=b32 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=1000 -F auid!=4294967295 -k perm_mod/]
+Title: 4.2.3 Ensure permissions on all logfiles are configured
+Command: logfile_configured: exit-status: matches expectation: [0]
+Command: logfile_configured: stdout: patterns not found: [!/./]
+Title: 6.1.10 Ensure no world writable files exist
+Command: world_writable: exit-status: matches expectation: [0]
+Command: world_writable: stdout: matches expectation: [!/./]
+Title: 5.4.1.4 Ensure inactive password lock is 30 days or less | users
+Command: inactive_users: exit-status: matches expectation: [0]
+Command: inactive_users: stdout: matches expectation: [!/./]
+Title: 4.1.14 Ensure changes to system administration scope (sudoers) is collected | live
+Command: auditd_admin_scope_live: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_admin_scope_live: stdout: patterns not found: [-w /etc/sudoers -p wa -k scope, -w /etc/sudoers.d -p wa -k scope]
+Title: 4.1.4 Ensure events that modify user/group information are collected
+Command: auditd_identity_live: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_identity_live: stdout: patterns not found: [-w /etc/group -p wa -k identity, -w /etc/passwd -p wa -k identity, -w /etc/gshadow -p wa -k identity, -w /etc/shadow -p wa -k identity, -w /etc/security/opasswd -p wa -k identity]
+Title: 3.1.2 Ensure wireless interfaces are disabled (Manual)
+Command: iwconfig: exit-status: matches expectation: [127]
+Title: 1.1.19 Check for removeable media noexec
+Command: floppy_noexec: exit-status: matches expectation: [0]
+Command: floppy_noexec: stdout: matches expectation: [Passed_Check]
+Title: 1.3.2 Ensure sudo commands use pty (Automated)
+Command: pty_sudoers_d: exit-status: matches expectation: [0]
+Command: pty_sudoers_d: stdout: matches expectation: [/[0-99]/]
+Title: 1.5.3 Ensure authentication required for single user mode (Automated)
+Command: single_user_1: exit-status: matches expectation: [0]
+Command: single_user_1: stdout: matches expectation: [/^ExecStart=-/bin/sh -c "/usr/sbin/sulogin/]
+Title: 6.1.6 Ensure permissions on /etc/passwd- are configured
+Command: passwd-_perms: exit-status: matches expectation: [0]
+Command: passwd-_perms: stdout: matches expectation: [/6[0,4][0,4] root root/]
+Title: 1.5.3 Ensure authentication required for single user mode (Automated)
+Command: single_user_2: exit-status: matches expectation: [0]
+Command: single_user_2: stdout: matches expectation: [/^ExecStart=-/bin/sh -c "/usr/sbin/sulogin/]
+Title: 2.2.16 Ensure mail transfer agent is configured for local-only mode (Automated)
+Command: mta_installed: exit-status: matches expectation: [1]
+Command: mta_installed: stdout: matches expectation: [!/./]
+Title: 1.6.1 Ensure core dumps are restricted (Automated)_security_limits
+Command: core_dumps_limits: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: core_dumps_limits: stdout: patterns not found: [/^\/*.*\shard.*core.*0/]
+Title: 6.1.13 Audit SUID executables (Manual)
+Command: suid_executables: exit-status: matches expectation: [0]
+Command: suid_executables: stdout: patterns not found: [!/./]
+Title: 1.4.2 Ensure filesystem integrity is regularly checked (Automated)
+Command: aide_cron: exit-status:
+Expected
+    <int>: 2
+to equal
+    <int>: 0
+Command: aide_cron: stdout: matches expectation: [!#]
+Title: 6.1.12 Ensure no ungrouped files or directories exist
+Command: ungrouped: exit-status: matches expectation: [0]
+Command: ungrouped: stdout: matches expectation: [!/./]
+Title: 1.7.1.4 Ensure the SELinux mode is enforcing or permissive (Automated)_running
+Command: selinux_running_mode: exit-status: matches expectation: [0]
+Command: selinux_running_mode: stdout: matches expectation: [![Dd]isabled]
+Title: 4.1.5 Ensure events that modify the system's network environment are collected | Live
+Command: auditd_locale_live: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_locale_live: stdout: patterns not found: [-a always,exit -F arch=b64 -S sethostname,setdomainname -F key=system-locale, -a always,exit -F arch=b32 -S sethostname,setdomainname -F key=system-locale, -w /etc/issue -p wa -k system-locale, -w /etc/issue.net -p wa -k system-locale, -w /etc/hosts -p wa -k system-locale, -w /etc/sysconfig/network -p wa -k system-locale]
+Title: 6.2.9  Ensure no users have .forward files
+Command: dot_forward_files: exit-status: matches expectation: [0]
+Command: dot_forward_files: stdout: matches expectation: [!/./]
+Title: 4.1.12 Ensure successful file system mounts are collected (Automated)
+Command: auditd_mounts_live: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_mounts_live: stdout: patterns not found: [-a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=-1 -F key=mounts, -a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=-1 -F key=mounts]
+Title: 2.2.8 Ensure rpcbind is not installed or the rpcbind services are masked (Automated)_masked
+Command: rpcbind_masked: exit-status: matches expectation: [1]
+Command: rpcbind_masked: stdout: patterns not found: [masked]
+Title: 4.1.13 Ensure file deletion events by users are collected (Automated)
+Command: auditd_delete_cnf: exit-status: matches expectation: [0]
+Command: auditd_delete_cnf: stdout: patterns not found: [/-a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid>=1000 -F auid!=4294967295 -k delete|-a always,exit -F arch=b64 -S rmdir,unlink,unlinkat,rename -S renameat -F auid>=1000 -F auid!=4294967295 -F key=delete/, /-a always,exit -F arch=b32 -S unlink -S unlinkat -S rename -S renameat -F auid>=1000 -F auid!=4294967295 -k delete|-a always,exit -F arch=b32 -S rmdir,unlink,unlinkat,rename -S renameat -F auid>=1000 -F auid!=4294967295 -F key=delete/]
+Title: 4.1.16 Ensure kernel module loading and unloading is collected
+Command: auditd_module_cnf: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_module_cnf: stdout: patterns not found: [/-w /sbin/insmod -p x -k modules/, /-w /sbin/rmmod -p x -k modules/, /-w /sbin/modprobe -p x -k modules/, /-a always,exit -F arch=b64 -S init_module -S delete_module -k modules/]
+Title: 3.4.1 Ensure DCCP is disabled (Automated)
+Command: modprobe_dccp: exit-status: matches expectation: [0]
+Command: modprobe_dccp: stdout: patterns not found: [install /bin/true]
+Title: 6.2.11  Ensure users .netrc files are not group or word accessible
+Command: dot_netrc_perms: exit-status: matches expectation: [0]
+Command: dot_netrc_perms: stdout: matches expectation: [!/./]
+Title: 2.2.7 Ensure nfs-utils is not installed or the nfs-server service is masked (Automated)_masked
+Command: nfs_server_masked: exit-status: matches expectation: [1]
+Command: nfs_server_masked: stdout: patterns not found: [masked]
+Title: 4.1.10 Ensure unsuccessful unauthorized file access attempts are collected | live
+Command: auditd_access_live: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_access_live: stdout: patterns not found: [-a always,exit -F arch=b64 -S open,truncate,ftruncate,creat,openat -F exit=-EACCES -F auid>=1000 -F auid!=-1 -F key=access, -a always,exit -F arch=b32 -S open,creat,truncate,ftruncate,openat -F exit=-EACCES -F auid>=1000 -F auid!=-1 -F key=access, -a always,exit -F arch=b64 -S open,truncate,ftruncate,creat,openat -F exit=-EPERM -F auid>=1000 -F auid!=-1 -F key=access, -a always,exit -F arch=b32 -S open,creat,truncate,ftruncate,openat -F exit=-EPERM -F auid>=1000 -F auid!=-1 -F key=access]
+Title: 1.3.3 Ensure sudo log file exists (Automated)_sudoers.d
+Command: log_sudoers_d: exit-status: matches expectation: [{"lt":3}]
+Command: log_sudoers_d: stdout: matches expectation: [/[1:99]/]
+Title: 1.1.1.2 Ensure mounting of squashfs filesystems is disabled (Automated)
+Command: squashfs: exit-status: matches expectation: [0]
+Command: squashfs: stdout: patterns not found: [install /bin/true]
+Title: 2.2.4 Ensure CUPS is not installed (Automated)
+Package: cups: installed: matches expectation: [false]
+Title: 2.3.3 Ensure talk client is not installed (Automated)
+Package: talk: installed: matches expectation: [false]
+Title: 1.7.1.8 Ensure the MCS Translation Service (mcstrans) is not installed
+Package: mcstrans: installed: matches expectation: [false]
+Title: 2.2.9 Ensure DNS Server is not installed (Automated)
+Package: bind: installed: matches expectation: [false]
+Title: 2.2.12 Ensure IMAP and POP3 Server is not installed (Automated)
+Package: dovecot: installed: matches expectation: [false]
+Title: 2.3.1 Ensure NIS Client is not installed (Automated)
+Package: ypbind: installed: matches expectation: [false]
+Title: 2.2.15 Ensure net-snmp is not installed (Automated)
+Package: net-snmp: installed: matches expectation: [false]
+Title: 2.2.17 Ensure rsync is not installed or the rsyncd service is masked (Automated)_installed
+Package: rsync: installed:
+Expected
+    <bool>: true
+to equal
+    <bool>: false
+Title: 1.7.1.1 Ensure SELinux is installed (Automated)
+Package: libselinux: installed: matches expectation: [true]
+Title: 2.2.1 Ensure xinetd is not installed (Automated)
+Package: xinetd: installed: matches expectation: [false]
+Title: 2.2.7 Ensure nfs-utils is not installed or the nfs-server service is masked (Automated)_installed
+Package: nfs-utils: installed: matches expectation: [false]
+Title: 1.7.1.7 Ensure SETroubleshoot is not installed (Automated)
+Package: setroubleshoot: installed: matches expectation: [false]
+Title: 2.3.5 Ensure LDAP client is not installed (Automated)
+Package: openldap-clients: installed: matches expectation: [false]
+Title: 5.1.1 Ensure cron daemon is enabled and running (Automated)| cronie
+Package: cronie: installed: matches expectation: [true]
+Title: 2.2.11 Ensure HTTP Server is not installed (Automated)
+Package: httpd: installed: matches expectation: [false]
+Title: 2.2.3 Ensure Avahi Server is not installed (Automated)
+Package: avahi: installed: matches expectation: [false]
+Title: 2.2.2 Ensure X11 Server components are not installed (Automated)
+Package: xorgs-x11-servers: installed: matches expectation: [false]
+Title: 2.3.4 Ensure telnet client is not installed (Automated)
+Package: telnet: installed: matches expectation: [false]
+Title: 4.2.1.1 Ensure rsyslog is installed (Automated)
+Package: rsyslog: installed: matches expectation: [true]
+Title: 2.2.5 Ensure DHCP Server is not installed (Automated)
+Package: dhcp: installed: matches expectation: [false]
+Title: 2.2.14 Ensure http proxy Server is not installed (Automated)
+Package: squid: installed: matches expectation: [false]
+Title: 2.2.8 Ensure rpcbind is not installed or the rpcbind services are masked (Automated)_installed
+Package: rpcbind: installed: matches expectation: [false]
+Title: 2.3.2 Ensure rsh client is not installed (Automated)
+Package: rsh: installed: matches expectation: [false]
+Title: 6.1.1 Audit system file permissions
+Command: rpm_filecheck: exit-status: matches expectation: [1]
+Command: rpm_filecheck: stdout: patterns not found: [0]
+Title: 1.6.4 Ensure prelink is disabled (Automated)
+Package: prelink: installed: matches expectation: [false]
+Title: 2.2.18 Ensure NIS server is not installed (Automated)
+Package: ypserver: installed: matches expectation: [false]
+Title: 1.3.1 Ensure sudo is installed (Automated)
+Package: sudo: installed: matches expectation: [true]
+Title: 2.2.19 Ensure telnet-server is not installed (Automated)
+Package: telnet-server: installed: matches expectation: [false]
+Title: 2.2.1.1 Ensure time synchronization is in use (Manual)_chrony
+Package: chrony: installed: matches expectation: [true]
+Title: 2.2.6 Ensure LDAP server is not installed (Automated)
+Package: openldap-servers: installed: matches expectation: [false]
+Title: 2.2.13 Ensure Samba is not installed (Automated)
+Package: samba: installed: matches expectation: [false]
+Title: 2.2.10 Ensure FTP Server is not installed (Automated)
+Package: vsftpd: installed: matches expectation: [false]
+Title: 3.5.1.1 Ensure FirewallD is installed (Automated)
+Package: firewalld: installed:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+Title: 1.4.1 Ensure AIDE is installed (Automatic)
+Package: aide: installed:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+Title: 3.5.1.4 Ensure firewalld service is enabled and running (Automated)
+Service: firewalld: enabled:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+Service: firewalld: running:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+Title: 3.5.1.1 Ensure FirewallD is installed (Automated)
+Package: iptables: installed: matches expectation: [true]
+Title: (L2) 4.1.1.2 Ensure auditd service is enabled and running (Automated)
+Service: auditd: enabled: matches expectation: [true]
+Service: auditd: running: matches expectation: [true]
+Title: 4.2.1.2 Ensure rsyslog Service is enabled and running (Automated)
+Service: rsyslog: enabled: matches expectation: [true]
+Service: rsyslog: running: matches expectation: [true]
+Title: 5.1.1 Ensure cron daemon is enabled and running (Automated)| crond
+Service: crond: enabled: matches expectation: [true]
+Service: crond: running: matches expectation: [true]
+Title: 1.1.23 Disable Automounting
+Service: autofs: enabled: matches expectation: [false]
+Service: autofs: running: matches expectation: [false]
+Title: 6.2.2 Ensure /etc/shadow password fields are not empty
+File: /etc/passwd: exists: matches expectation: [true]
+File: /etc/passwd: contains: matches expectation: [!/^.*:\!\!:.*/]
+Title: 5.3.4 Ensure password reuse is limited
+File: /etc/pam.d/system-auth: exists: matches expectation: [true]
+File: /etc/pam.d/system-auth: contains: patterns not found: [/^password.*required.*pam_pwhistory.so.*remember=\b(?:[1-5]\d+|5)\b/]
+Title: 1.5.1 Ensure bootloader password is set (Automated) and permissions
+File: /boot/grub2/user.cfg: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+File: /boot/grub2/user.cfg: mode: skipped
+File: /boot/grub2/user.cfg: owner: skipped
+File: /boot/grub2/user.cfg: group: skipped
+Title: 5.4.5 Ensure default user umask is configured (Automated)
+File: /etc/profile: exists: matches expectation: [true]
+File: /etc/profile: contains: matches expectation: [/^\s+umask\s0(2|7)(2|7)/ !/^\s+umask\s[1-7][0-7][0-7]/]
+Title: (L2) 4.1.2.3 Ensure system is disabled when audit logs are full (Automated)
+File: /etc/audit/auditd.conf: exists: matches expectation: [true]
+File: /etc/audit/auditd.conf: contains: patterns not found: [space_left_action = email, /^admin_space_left_action = halt/]
+Title: 5.1.8 Ensure cron is restricted to authorized users
+File: /etc/cron.deny: exists:
+Expected
+    <bool>: true
+to equal
+    <bool>: false
+Title: 1.8.1.1 & 4 Ensure message of the day is configured properly (Automated)
+File: /etc/motd: exists: matches expectation: [true]
+File: /etc/motd: mode: matches expectation: ["0644"]
+File: /etc/motd: owner: matches expectation: ["root"]
+File: /etc/motd: group: matches expectation: ["root"]
+File: /etc/motd: contains: matches expectation: [![Cc]ent[Oo][Ss] ![Rr]hel ![Rr]ed[Hh]at !x86_64 ![Ll]inux]
+Title: 1.2.5 Disable the rhnsd Daemon (Manual)
+Service: rhnsd: enabled:
+Expected
+    <bool>: true
+to equal
+    <bool>: false
+Service: rhnsd: running:
+Expected
+    <bool>: true
+to equal
+    <bool>: false
+Title: 5.4.1.3 Ensure password expiration warning days is 7 or more
+File: /etc/login.defs: exists: matches expectation: [true]
+File: /etc/login.defs: contains: matches expectation: [/^PASS_WARN_AGE\s*7/ !/^PASS_WARN_AGE\s*[1-6]/]
+Title: 4.2.2.3 Ensure journald is configured to write logfiles to persistent disk
+File: /etc/systemd/journald.conf: exists: matches expectation: [true]
+File: /etc/systemd/journald.conf: contains: patterns not found: [Storage=persistent]
+Title: 5.1.8 Ensure cron is restricted to authorized users
+File: /etc/cron.allow: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+File: /etc/cron.allow: mode: skipped
+File: /etc/cron.allow: owner: skipped
+File: /etc/cron.allow: group: skipped
+Title: 1.3.3 Ensure sudo log file exists (Automated)
+File: /etc/sudoers: exists: matches expectation: [true]
+File: /etc/sudoers: contains: patterns not found: [/^Defaults\s+logfile="/var/log/sudo.log"/]
+Title: 5.6 Ensure access to the su command is restricted (Automated) | etc/group
+File: /etc/group: exists: matches expectation: [true]
+File: /etc/group: contains: patterns not found: [/^wheel:x:10:vagrant,root$/]
+Title: 5.3.1 Ensure password creation requirements are configured
+File: /etc/security/pwquality.conf: exists: matches expectation: [true]
+File: /etc/security/pwquality.conf: contains: patterns not found: [minclass = 4]
+Title: 5.1.7 Ensure permissions on /etc/cron.d are configured
+File: /etc/cron.d: exists: matches expectation: [true]
+File: /etc/cron.d: mode:
+Expected
+    <string>: 0755
+to equal
+    <string>: 0700
+File: /etc/cron.d: owner: matches expectation: ["root"]
+File: /etc/cron.d: group: matches expectation: ["root"]
+Title: 5.1.2 Ensure permissions on /etc/crontab are configured
+File: /etc/crontab: exists: matches expectation: [true]
+File: /etc/crontab: mode:
+Expected
+    <string>: 0644
+to equal
+    <string>: 0600
+File: /etc/crontab: owner: matches expectation: ["root"]
+File: /etc/crontab: group: matches expectation: ["root"]
+Title: 1.8.1.3 & 6 Ensure remote login warning banner is configured properly (Automated)
+File: /etc/issue.net: exists: matches expectation: [true]
+File: /etc/issue.net: mode: matches expectation: ["0644"]
+File: /etc/issue.net: owner: matches expectation: ["root"]
+File: /etc/issue.net: group: matches expectation: ["root"]
+File: /etc/issue.net: contains: matches expectation: [![Cc]ent[Oo][Ss] ![Rr]hel ![Rr]ed[Hh]at !x86_64 ![Ll]inux]
+Title: 5.6 Ensure access to the su command is restricted (Automated) | pam.d/su
+File: /etc/pam.d/su: exists: matches expectation: [true]
+File: /etc/pam.d/su: contains: patterns not found: [/^auth.*required.*pam_wheel.so\suse_uid$/]
+Title: 1.6.1 Ensure core dumps are restricted | coredump service
+Service: coredump: enabled: matches expectation: [false]
+Service: coredump: running: matches expectation: [false]
+Title: 4.2.1.3 Ensure rsyslog default file permissions configured
+File: /etc/rsyslog.conf: exists: matches expectation: [true]
+File: /etc/rsyslog.conf: contains: patterns not found: [/\$FileCreateMode 0[0,6][0,4]0/]
+Title: 5.4.4 Ensure default user shell timeout is configured (Automated) | profile.d
+File: /etc/profile.d/tmout.sh: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+File: /etc/profile.d/tmout.sh: contains: skipped
+Title: 1.5.2 Ensure permissions on bootloader config are configured
+File: /boot/grub2/grub.cfg: exists: matches expectation: [true]
+File: /boot/grub2/grub.cfg: mode:
+Expected
+    <string>: 0644
+to equal
+    <string>: 0600
+File: /boot/grub2/grub.cfg: owner: matches expectation: ["root"]
+File: /boot/grub2/grub.cfg: group: matches expectation: ["root"]
+Title: 2.2.1.2 Ensure chrony is configured (Automated)_conf
+File: /etc/chrony.conf: exists: matches expectation: [true]
+File: /etc/chrony.conf: contains: matches expectation: [server]
+Title: (L2) 4.1.2.4  Ensure audit_backlog_limit is sufficient (Automated)
+File: /etc/default/grub: exists: matches expectation: [true]
+File: /etc/default/grub: contains: patterns not found: [/GRUB_CMDLINE_LINUX=".*audit_backlog_limit=8192/]
+Title: 1.6.1 Ensure core dumps are restricted | coredump.conf
+File: /etc/systemd/coredump.conf: exists: matches expectation: [true]
+File: /etc/systemd/coredump.conf: contains: patterns not found: [/^Storage=none/, /^ProcessSizeMax=0/]
+Title: 5.3.4 Ensure password reuse is limited
+File: /etc/pam.d/password-auth: exists: matches expectation: [true]
+File: /etc/pam.d/password-auth: contains: patterns not found: [/^password.*required.*pam_pwhistory.so.*remember=\b(?:[1-5]\d+|5)\b/]
+Title: 5.2.9 Ensure SSH HostbasedAuthentication is disabled
+File: /etc/ssh/sshd_config: exists: matches expectation: [true]
+File: /etc/ssh/sshd_config: contains: matches expectation: [HostbasedAuthentication no !/^HostbasedAuthentication yes/]
+Title: 5.1.9 Ensure at is restricted to authorized users
+File: /etc/at.deny: exists: matches expectation: [false]
+Title: 5.1.9 Ensure at is restricted to authorized users
+File: /etc/at.allow: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+File: /etc/at.allow: mode: skipped
+File: /etc/at.allow: owner: skipped
+File: /etc/at.allow: group: skipped
+Title: 5.4.3 Ensure default group for the root account is GID 0 (Automated)
+User: root: exists: matches expectation: [true]
+User: root: uid: matches expectation: [0]
+User: root: gid: matches expectation: [0]
+Title: 6.2.18 Ensure shadow group is empty (Automated)
+Group: shadow: exists: matches expectation: [false]
+Title: 3.3.8 Ensure TCP SYN Cookies is enabled (Automated)
+KernelParam: net.ipv4.tcp_syncookies: value: matches expectation: ["1"]
+Title: 3.3.3 Ensure secure ICMP redirects are not accepted (Automated)_all
+KernelParam: net.ipv4.conf.all.secure_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+Title: 1.6.1 Ensure core dumps are restricted (Automated)_sysctl
+KernelParam: fs.suid_dumpable: value: matches expectation: ["0"]
+Title: 3.3.2 Ensure ICMP redirects are not accepted (Automated)_ipv6
+KernelParam: net.ipv6.conf.all.accept_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+Title: 3.3.4 Ensure suspicious packets are logged (Automated)_all
+KernelParam: net.ipv4.conf.all.log_martians: value:
+Expected
+    <string>: 0
+to equal
+    <string>: 1
+Title: 3.3.9 Ensure IPv6 router advertisements are not accepted (Automated)
+KernelParam: net.ipv6.conf.default.accept_ra: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+Title: 3.3.6 Ensure bogus ICMP responses are ignored (Automated)
+KernelParam: net.ipv4.icmp_ignore_bogus_error_responses: value: matches expectation: ["1"]
+Title: 3.3.4 Ensure suspicious packets are logged (Automated)_def
+KernelParam: net.ipv4.conf.default.log_martians: value:
+Expected
+    <string>: 0
+to equal
+    <string>: 1
+Title: 3.3.7 Ensure Reverse Path Filtering is enabled (Automated)_def
+KernelParam: net.ipv4.conf.all.rp_filter: value: matches expectation: ["1"]
+Title: 3.3.1 Ensure source routed packets are not accepted (Automated)_ipv6_all
+KernelParam: net.ipv6.conf.all.accept_source_route: value: matches expectation: ["0"]
+Title: 3.3.1 Ensure source routed packets are not accepted (Automated)_ipv4_default
+KernelParam: net.ipv4.conf.default.accept_source_route: value: matches expectation: ["0"]
+Title: 3.3.9 Ensure IPv6 router advertisements are not accepted (Automated)
+KernelParam: net.ipv6.conf.all.accept_ra: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+Title: 3.3.3 Ensure secure ICMP redirects are not accepted (Automated)_def
+KernelParam: net.ipv4.conf.default.secure_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+Title: 3.3.2 Ensure ICMP redirects are not accepted (Automated)_ipv6_def
+KernelParam: net.ipv6.conf.default.accept_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+Title: 3.3.2 Ensure ICMP redirects are not accepted (Automated)_ipv4
+KernelParam: net.ipv4.conf.all.accept_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+Title: 3.3.1 Ensure source routed packets are not accepted (Automated)_ipv6_default
+KernelParam: net.ipv6.conf.default.accept_source_route: value: matches expectation: ["0"]
+Title: 1.6.3 Ensure address space layout randomization (ASLR) is enabled (Automated)
+KernelParam: kernel.randomize_va_space: value: matches expectation: ["2"]
+Title: 3.2.2 Ensure packet redirect sending is disabled (Automated)_default
+KernelParam: net.ipv4.conf.default.send_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+Title: 3.3.2 Ensure ICMP redirects are not accepted (Automated)_ipv4_def
+KernelParam: net.ipv4.conf.default.accept_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+Title: 3.2.1 Ensure IP forwarding is disabled (Automated)_ipv6
+KernelParam: net.ipv6.conf.all.forwarding: value: matches expectation: ["0"]
+Title: 3.3.1 Ensure source routed packets are not accepted (Automated)_ipv4_all
+KernelParam: net.ipv4.conf.all.accept_source_route: value: matches expectation: ["0"]
+Title: 3.3.5 Ensure broadcast ICMP requests are ignored (Automated)
+KernelParam: net.ipv4.icmp_echo_ignore_broadcasts: value: matches expectation: ["1"]
+Title: 3.2.1 Ensure IP forwarding is disabled (Automated)_ipv4
+KernelParam: net.ipv4.ip_forward: value: matches expectation: ["0"]
+Title: 3.2.2 Ensure packet redirect sending is disabled (Automated)_all
+KernelParam: net.ipv4.conf.all.send_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+Title: 1.1.11_14 Ensure separate partition exists for /var/tmp with mount options (Automated)
+Mount: /var/tmp: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+Mount: /var/tmp: opts: skipped
+Title: (L2) 1.1.10 Ensure separate partition exists for /var (Automated)
+Mount: /var: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+Title: (L2) 1.1.15 Ensure separate partition exists for /var/log (Automated)
+Mount: /var/log: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+Title: (L2) 1.1.16  Ensure separate partition exists for /var/log/audit (Automated)
+Mount: /var/log/audit: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+Title: (L2) 1.1.17 Ensure separate partition exists for /home with mount options (Automated)
+Mount: /home: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+Mount: /home: opts: skipped
+Title: 1.1.2_5 Ensure /tmp is configured (Automated) with mount options
+Mount: /tmp: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+Mount: /tmp: opts: skipped
+Title: 1.1.6_9 Ensure /dev/shm is configured
+Mount: /dev/shm: exists: matches expectation: [true]
+Mount: /dev/shm: opts:
+Expected
+    <[]string | len:3, cap:3>: ["rw", "nosuid", "nodev"]
+to contain element matching
+    <string>: noexec
+Title: 2.2.1.2 Ensure chrony is configured (Automated)_sysconf
+File: /etc/sysconfig/chronyd: exists: matches expectation: [true]
+File: /etc/sysconfig/chronyd: contains: patterns not found: [OPTIONS="-u chrony"]
+Title: 1.8.1.2 & 5 Ensure local login warning banner is configured properly (Automated)
+File: /etc/issue: exists: matches expectation: [true]
+File: /etc/issue: mode: matches expectation: ["0644"]
+File: /etc/issue: owner: matches expectation: ["root"]
+File: /etc/issue: group: matches expectation: ["root"]
+File: /etc/issue: contains: matches expectation: [![Cc]ent[Oo][Ss] ![Rr]hel ![Rr]ed[Hh]at !x86_64 ![Ll]inux]
+Title: 1.9 Ensure updates, patches, and additional security software are installed (Automated)
+Command: security-updates: exit-status:
+Expected
+    <int>: 100
+to equal
+    <int>: 0
+Command: security-updates: stdout: matches expectation: [![0-9].* packages available]
+Title: 1.2.2 Ensure Package manager repositories are configured
+Command: repos_configured: exit-status: matches expectation: [0]
+
+
+Failures/Skipped:
+
+Title: 4.1.14 Ensure changes to system administration scope (sudoers) is collected | cnf
+Command: auditd_admin_scope_cnf: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_admin_scope_cnf: stdout: patterns not found: [-w /etc/sudoers -p wa -k scope, -w /etc/sudoers.d/ -p wa -k scope]
+
+Title: 4.1.8 Ensure session initiation information is collected
+Command: auditd_sessions_cnf: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_sessions_cnf: stdout: patterns not found: [-w /var/run/utmp -p wa -k session, -w /var/log/wtmp -p wa -k logins, -w /var/log/btmp -p wa -k logins]
+
+Title: 4.1.15 Ensure system administrator actions (sudolog) are collected (Automated)
+Command: auditd_sudolog_cnf: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_sudolog_cnf: stdout: patterns not found: [-w /var/log/sudo.log -p wa -k actions]
+
+Title: 3.5.1.5 Ensure default zone is set (Automated)
+Command: default_zone: exit-status:
+Expected
+    <int>: 127
+to equal
+    <int>: 0
+Command: default_zone: stdout: patterns not found: [public]
+
+Title: 4.1.6 Ensure events that modify the system's Mandatory Access Controls are collected | Live
+Command: auditd_MAC_live: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_MAC_live: stdout: patterns not found: [-w /etc/selinux -p wa -k MAC-policy, -w /usr/share/selinux -p wa -k MAC-policy]
+
+Title: 4.1.9 Ensure discretionary access control permission modification events are collected | live
+Command: auditd_perms_live: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_perms_live: stdout: patterns not found: [-a always,exit -F arch=b64 -S chmod,fchmod,fchmodat -F auid>=1000 -F auid!=-1 -F key=perm_mod, -a always,exit -F arch=b32 -S chmod,fchmod,fchmodat -F auid>=1000 -F auid!=-1 -F key=perm_mod, -a always,exit -F arch=b64 -S chown,fchown,lchown,fchownat -F auid>=1000 -F auid!=-1 -F key=perm_mod, -a always,exit -F arch=b32 -S lchown,fchown,chown,fchownat -F auid>=1000 -F auid!=-1 -F key=perm_mod, -a always,exit -F arch=b64 -S setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr -F auid>=1000 -F auid!=-1 -F key=perm_mod, -a always,exit -F arch=b32 -S setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr -F auid>=1000 -F auid!=-1 -F key=perm_mod]
+
+Title: 2.2.17 Ensure rsync is not installed or the rsyncd service is masked (Automated)_masked
+Command: rsync_masked: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: rsync_masked: stdout: patterns not found: [masked]
+
+Title: 4.1.5 Ensure events that modify the system's network environment are collected | Config
+Command: auditd_locale_cnf: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_locale_cnf: stdout: patterns not found: [-a always,exit -F arch=b64 -S sethostname -S setdomainname -k system-locale, -a always,exit -F arch=b32 -S sethostname -S setdomainname -k system-locale, -w /etc/issue -p wa -k system-locale, -w /etc/issue.net -p wa -k system-locale, -w /etc/hosts -p wa -k system-locale, -w /etc/sysconfig/network -p wa -k system-locale]
+
+Title: 4.1.8 Ensure session initiation information is collected
+Command: auditd_session_live: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_session_live: stdout: patterns not found: [-w /var/run/utmp -p wa -k session, -w /var/log/wtmp -p wa -k logins, -w /var/log/btmp -p wa -k logins]
+
+Title: (L2) 4.1.1.3 Ensure auditing for processes that start prior to auditd is enabled (Automated)
+Command: auditd_grub: stdout: patterns not found: [!/./]
+
+Title: 4.1.6 Ensure events that modify the system's Mandatory Access Controls are collected | Config
+Command: auditd_MAC_cnf: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_MAC_cnf: stdout: patterns not found: [-w /etc/selinux/ -p wa -k MAC-policy, -w /usr/share/selinux/ -p wa -k MAC-policy]
+
+Title: 4.1.15 Ensure system administrator actions (sudolog) are collected (Automated)
+Command: auditd_sudolog_live: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_sudolog_live: stdout: patterns not found: [-w /var/log/sudo.log -p wa -k actions]
+
+Title: 1.6.1 Ensure core dumps are restricted (Automated)_sysctl
+Command: suid_dumpable_2: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: suid_dumpable_2: stdout: patterns not found: [fs.suid_dumpable=0]
+
+Title: 4.1.7 Ensure login and logout events are collected
+Command: auditd_logins_live: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_logins_live: stdout: patterns not found: [-w /var/log/faillog -p wa -k logins, -w /var/log/lastlog -p wa -k logins, -w /var/run/faillock -p wa -k logins]
+
+Title: 4.1.17 Ensure the audit configuration is immutable (Automated)
+Command: auditd_immutable: stdout: patterns not found: [-e 2]
+
+Title: 4.1.3 Ensure events that modify date and time information are collected
+Command: auditd_time_live: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_time_live: stdout: patterns not found: [-a always,exit -F arch=b32 -S stime,settimeofday,adjtimex -F key=time-change, -a always,exit -F arch=b32 -S clock_settime -F key=time-change, -a always,exit -F arch=b64 -S adjtimex,settimeofday -F key=time-change, -a always,exit -F arch=b64 -S clock_settime -F key=time-change, -w /etc/localtime -p wa -k time-change]
+
+Title: 3.5.1.6 Ensure network interfaces are assigned to appropriate zone
+Command: nic_assigned: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: nic_assigned: stdout: patterns not found: [ens192]
+
+Title: 3.4.2 Ensure SCTP is disabled (Automated)
+Command: modprobe_sctp: stdout: patterns not found: [install /bin/true]
+
+Title: 4.1.12 Ensure successful file system mounts are collected (Automated)
+Command: auditd_mounts_cnf: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_mounts_cnf: stdout: patterns not found: [/-a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=4294967295 -k mounts/, /-a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=4294967295 -k mounts/]
+
+Title: 4.1.16 Ensure kernel module loading and unloading is collected
+Command: auditd_admin_module_live: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_admin_module_live: stdout: patterns not found: [-w /sbin/insmod -p x -k modules, -w /sbin/rmmod -p x -k modules, -w /sbin/modprobe -p x -k modules, -a always,exit -F arch=b64 -S init_module,delete_module -F key=modules]
+
+Title: 4.1.13 Ensure use of privileged commands is collected (Automated)
+Command: auditd_priv_cmds_cnf: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+
+Title: 4.1.3 Ensure events that modify date and time information are collected
+Command: auditd_time_cnf: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_time_cnf: stdout: patterns not found: [-a always,exit -F arch=b64 -S adjtimex -S settimeofday -k time-change, -a always,exit -F arch=b32 -S adjtimex -S settimeofday -S stime -k time-change, -a always,exit -F arch=b64 -S clock_settime -k time-change, -a always,exit -F arch=b32 -S clock_settime -k time-change, -w /etc/localtime -p wa -k time-change]
+
+Title: 4.1.4 Ensure events that modify user/group information are collected
+Command: auditd_identity_cnf: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_identity_cnf: stdout: patterns not found: [-w /etc/group -p wa -k identity, -w /etc/passwd -p wa -k identity, -w /etc/gshadow -p wa -k identity, -w /etc/shadow -p wa -k identity, -w /etc/security/opasswd -p wa -k identity]
+
+Title: 4.1.13 Ensure file deletion events by users are collected (Automated)
+Command: auditd_delete_live: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_delete_live: stdout: patterns not found: [-a always,exit -F arch=b64 -S rename,unlink,unlinkat,renameat -F auid>=1000 -F auid!=-1 -F key=delete, -a always,exit -F arch=b32 -S unlink,rename,unlinkat,renameat -F auid>=1000 -F auid!=-1 -F key=delete]
+
+Title: 4.1.10 Ensure unsuccessful unauthorized file access attempts are collected | cnf
+Command: auditd_access_cnf: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_access_cnf: stdout: patterns not found: [/-a always,exit -F arch=b32 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access/, /-a always,exit -F arch=b32 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access/, /-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access/, /-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access/]
+
+Title: 5.4.1.4 Ensure inactive password lock is 30 days or less | password
+Command: inactive_passwd: stdout: patterns not found: [/^INACTIVE=[1-30]/]
+
+Title: 1.6.3 Ensure address space layout randomization (ASLR) is enabled (Automated)
+Command: aslr_enabled_2: stdout: patterns not found: [/^kernel.randomize_va_space=2/]
+
+Title: 1.2.4 Ensure Redhat Subscription Manager connection configured
+Command: subscription: stderr: patterns not found: [command not found]
+
+Title: 4.1.7 Ensure login and logout events are collected
+Command: auditd_logins_cnf: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_logins_cnf: stdout: patterns not found: [/-w /var/log/faillog -p wa -k logins/, /-w /var/log/lastlog -p wa -k logins/, /-w /var/run/faillock/ -p wa -k logins/]
+
+Title: 2.2.8 Ensure rpcbind is not installed or the rpcbind services are masked (Automated)_socket
+Command: rpcbind_socket: stdout: patterns not found: [masked]
+
+Title: 4.2.1.5 Ensure rsyslog is configured to send logs to a remote host
+Command: remote_syslog: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: remote_syslog: stdout: patterns not found: [/\*\.\* @@*./]
+
+Title: 6.1.14 Audit SGID executables
+Command: sgid_executables: stdout: patterns not found: [!/./]
+
+Title: 1.1.1.1 Ensure mounting of cramfs filesystems is disabled (Automated)
+Command: cramfs: stdout: patterns not found: [install /bin/true]
+
+Title: 1.1.1.3 Ensure mounting of udf filesystems is disabled (Automated)
+Command: udf: stdout: patterns not found: [install /bin/true]
+
+Title: 4.1.9 Ensure discretionary access control permission modification events are collected | config
+Command: auditd_perms_cnf: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_perms_cnf: stdout: patterns not found: [/-a always,exit -F arch=b64 -S chmod -S fchmod -S fchmodat -F auid>=1000 -F auid!=4294967295 -k perm_mod/, /-a always,exit -F arch=b32 -S chmod -S fchmod -S fchmodat -F auid>=1000 -F auid!=4294967295 -k perm_mod/, /-a always,exit -F arch=b64 -S chown -S fchown -S fchownat -S lchown -F auid>=1000 -F auid!=4294967295 -k perm_mod/, /-a always,exit -F arch=b32 -S chown -S fchown -S fchownat -S lchown -F auid>=1000 -F auid!=4294967295 -k perm_mod/, /-a always,exit -F arch=b64 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=1000 -F auid!=4294967295 -k perm_mod/, /-a always,exit -F arch=b32 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=1000 -F auid!=4294967295 -k perm_mod/]
+
+Title: 4.2.3 Ensure permissions on all logfiles are configured
+Command: logfile_configured: stdout: patterns not found: [!/./]
+
+Title: 4.1.14 Ensure changes to system administration scope (sudoers) is collected | live
+Command: auditd_admin_scope_live: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_admin_scope_live: stdout: patterns not found: [-w /etc/sudoers -p wa -k scope, -w /etc/sudoers.d -p wa -k scope]
+
+Title: 4.1.4 Ensure events that modify user/group information are collected
+Command: auditd_identity_live: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_identity_live: stdout: patterns not found: [-w /etc/group -p wa -k identity, -w /etc/passwd -p wa -k identity, -w /etc/gshadow -p wa -k identity, -w /etc/shadow -p wa -k identity, -w /etc/security/opasswd -p wa -k identity]
+
+Title: 1.6.1 Ensure core dumps are restricted (Automated)_security_limits
+Command: core_dumps_limits: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: core_dumps_limits: stdout: patterns not found: [/^\/*.*\shard.*core.*0/]
+
+Title: 6.1.13 Audit SUID executables (Manual)
+Command: suid_executables: stdout: patterns not found: [!/./]
+
+Title: 1.4.2 Ensure filesystem integrity is regularly checked (Automated)
+Command: aide_cron: exit-status:
+Expected
+    <int>: 2
+to equal
+    <int>: 0
+
+Title: 4.1.5 Ensure events that modify the system's network environment are collected | Live
+Command: auditd_locale_live: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_locale_live: stdout: patterns not found: [-a always,exit -F arch=b64 -S sethostname,setdomainname -F key=system-locale, -a always,exit -F arch=b32 -S sethostname,setdomainname -F key=system-locale, -w /etc/issue -p wa -k system-locale, -w /etc/issue.net -p wa -k system-locale, -w /etc/hosts -p wa -k system-locale, -w /etc/sysconfig/network -p wa -k system-locale]
+
+Title: 4.1.12 Ensure successful file system mounts are collected (Automated)
+Command: auditd_mounts_live: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_mounts_live: stdout: patterns not found: [-a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=-1 -F key=mounts, -a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=-1 -F key=mounts]
+
+Title: 2.2.8 Ensure rpcbind is not installed or the rpcbind services are masked (Automated)_masked
+Command: rpcbind_masked: stdout: patterns not found: [masked]
+
+Title: 4.1.13 Ensure file deletion events by users are collected (Automated)
+Command: auditd_delete_cnf: stdout: patterns not found: [/-a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid>=1000 -F auid!=4294967295 -k delete|-a always,exit -F arch=b64 -S rmdir,unlink,unlinkat,rename -S renameat -F auid>=1000 -F auid!=4294967295 -F key=delete/, /-a always,exit -F arch=b32 -S unlink -S unlinkat -S rename -S renameat -F auid>=1000 -F auid!=4294967295 -k delete|-a always,exit -F arch=b32 -S rmdir,unlink,unlinkat,rename -S renameat -F auid>=1000 -F auid!=4294967295 -F key=delete/]
+
+Title: 4.1.16 Ensure kernel module loading and unloading is collected
+Command: auditd_module_cnf: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_module_cnf: stdout: patterns not found: [/-w /sbin/insmod -p x -k modules/, /-w /sbin/rmmod -p x -k modules/, /-w /sbin/modprobe -p x -k modules/, /-a always,exit -F arch=b64 -S init_module -S delete_module -k modules/]
+
+Title: 3.4.1 Ensure DCCP is disabled (Automated)
+Command: modprobe_dccp: stdout: patterns not found: [install /bin/true]
+
+Title: 2.2.7 Ensure nfs-utils is not installed or the nfs-server service is masked (Automated)_masked
+Command: nfs_server_masked: stdout: patterns not found: [masked]
+
+Title: 4.1.10 Ensure unsuccessful unauthorized file access attempts are collected | live
+Command: auditd_access_live: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_access_live: stdout: patterns not found: [-a always,exit -F arch=b64 -S open,truncate,ftruncate,creat,openat -F exit=-EACCES -F auid>=1000 -F auid!=-1 -F key=access, -a always,exit -F arch=b32 -S open,creat,truncate,ftruncate,openat -F exit=-EACCES -F auid>=1000 -F auid!=-1 -F key=access, -a always,exit -F arch=b64 -S open,truncate,ftruncate,creat,openat -F exit=-EPERM -F auid>=1000 -F auid!=-1 -F key=access, -a always,exit -F arch=b32 -S open,creat,truncate,ftruncate,openat -F exit=-EPERM -F auid>=1000 -F auid!=-1 -F key=access]
+
+Title: 1.1.1.2 Ensure mounting of squashfs filesystems is disabled (Automated)
+Command: squashfs: stdout: patterns not found: [install /bin/true]
+
+Title: 2.2.17 Ensure rsync is not installed or the rsyncd service is masked (Automated)_installed
+Package: rsync: installed:
+Expected
+    <bool>: true
+to equal
+    <bool>: false
+
+Title: 6.1.1 Audit system file permissions
+Command: rpm_filecheck: stdout: patterns not found: [0]
+
+Title: 3.5.1.1 Ensure FirewallD is installed (Automated)
+Package: firewalld: installed:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+
+Title: 1.4.1 Ensure AIDE is installed (Automatic)
+Package: aide: installed:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+
+Title: 3.5.1.4 Ensure firewalld service is enabled and running (Automated)
+Service: firewalld: enabled:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+Service: firewalld: running:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+
+Title: 5.3.4 Ensure password reuse is limited
+File: /etc/pam.d/system-auth: contains: patterns not found: [/^password.*required.*pam_pwhistory.so.*remember=\b(?:[1-5]\d+|5)\b/]
+
+Title: 1.5.1 Ensure bootloader password is set (Automated) and permissions
+File: /boot/grub2/user.cfg: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+File: /boot/grub2/user.cfg: mode: skipped
+File: /boot/grub2/user.cfg: owner: skipped
+File: /boot/grub2/user.cfg: group: skipped
+
+Title: (L2) 4.1.2.3 Ensure system is disabled when audit logs are full (Automated)
+File: /etc/audit/auditd.conf: contains: patterns not found: [space_left_action = email, /^admin_space_left_action = halt/]
+
+Title: 5.1.8 Ensure cron is restricted to authorized users
+File: /etc/cron.deny: exists:
+Expected
+    <bool>: true
+to equal
+    <bool>: false
+
+Title: 1.2.5 Disable the rhnsd Daemon (Manual)
+Service: rhnsd: enabled:
+Expected
+    <bool>: true
+to equal
+    <bool>: false
+Service: rhnsd: running:
+Expected
+    <bool>: true
+to equal
+    <bool>: false
+
+Title: 4.2.2.3 Ensure journald is configured to write logfiles to persistent disk
+File: /etc/systemd/journald.conf: contains: patterns not found: [Storage=persistent]
+
+Title: 5.1.8 Ensure cron is restricted to authorized users
+File: /etc/cron.allow: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+File: /etc/cron.allow: mode: skipped
+File: /etc/cron.allow: owner: skipped
+File: /etc/cron.allow: group: skipped
+
+Title: 1.3.3 Ensure sudo log file exists (Automated)
+File: /etc/sudoers: contains: patterns not found: [/^Defaults\s+logfile="/var/log/sudo.log"/]
+
+Title: 5.6 Ensure access to the su command is restricted (Automated) | etc/group
+File: /etc/group: contains: patterns not found: [/^wheel:x:10:vagrant,root$/]
+
+Title: 5.3.1 Ensure password creation requirements are configured
+File: /etc/security/pwquality.conf: contains: patterns not found: [minclass = 4]
+
+Title: 5.1.7 Ensure permissions on /etc/cron.d are configured
+File: /etc/cron.d: mode:
+Expected
+    <string>: 0755
+to equal
+    <string>: 0700
+
+Title: 5.1.2 Ensure permissions on /etc/crontab are configured
+File: /etc/crontab: mode:
+Expected
+    <string>: 0644
+to equal
+    <string>: 0600
+
+Title: 5.6 Ensure access to the su command is restricted (Automated) | pam.d/su
+File: /etc/pam.d/su: contains: patterns not found: [/^auth.*required.*pam_wheel.so\suse_uid$/]
+
+Title: 4.2.1.3 Ensure rsyslog default file permissions configured
+File: /etc/rsyslog.conf: contains: patterns not found: [/\$FileCreateMode 0[0,6][0,4]0/]
+
+Title: 5.4.4 Ensure default user shell timeout is configured (Automated) | profile.d
+File: /etc/profile.d/tmout.sh: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+File: /etc/profile.d/tmout.sh: contains: skipped
+
+Title: 1.5.2 Ensure permissions on bootloader config are configured
+File: /boot/grub2/grub.cfg: mode:
+Expected
+    <string>: 0644
+to equal
+    <string>: 0600
+
+Title: (L2) 4.1.2.4  Ensure audit_backlog_limit is sufficient (Automated)
+File: /etc/default/grub: contains: patterns not found: [/GRUB_CMDLINE_LINUX=".*audit_backlog_limit=8192/]
+
+Title: 1.6.1 Ensure core dumps are restricted | coredump.conf
+File: /etc/systemd/coredump.conf: contains: patterns not found: [/^Storage=none/, /^ProcessSizeMax=0/]
+
+Title: 5.3.4 Ensure password reuse is limited
+File: /etc/pam.d/password-auth: contains: patterns not found: [/^password.*required.*pam_pwhistory.so.*remember=\b(?:[1-5]\d+|5)\b/]
+
+Title: 5.1.9 Ensure at is restricted to authorized users
+File: /etc/at.allow: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+File: /etc/at.allow: mode: skipped
+File: /etc/at.allow: owner: skipped
+File: /etc/at.allow: group: skipped
+
+Title: 3.3.3 Ensure secure ICMP redirects are not accepted (Automated)_all
+KernelParam: net.ipv4.conf.all.secure_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+
+Title: 3.3.2 Ensure ICMP redirects are not accepted (Automated)_ipv6
+KernelParam: net.ipv6.conf.all.accept_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+
+Title: 3.3.4 Ensure suspicious packets are logged (Automated)_all
+KernelParam: net.ipv4.conf.all.log_martians: value:
+Expected
+    <string>: 0
+to equal
+    <string>: 1
+
+Title: 3.3.9 Ensure IPv6 router advertisements are not accepted (Automated)
+KernelParam: net.ipv6.conf.default.accept_ra: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+
+Title: 3.3.4 Ensure suspicious packets are logged (Automated)_def
+KernelParam: net.ipv4.conf.default.log_martians: value:
+Expected
+    <string>: 0
+to equal
+    <string>: 1
+
+Title: 3.3.9 Ensure IPv6 router advertisements are not accepted (Automated)
+KernelParam: net.ipv6.conf.all.accept_ra: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+
+Title: 3.3.3 Ensure secure ICMP redirects are not accepted (Automated)_def
+KernelParam: net.ipv4.conf.default.secure_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+
+Title: 3.3.2 Ensure ICMP redirects are not accepted (Automated)_ipv6_def
+KernelParam: net.ipv6.conf.default.accept_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+
+Title: 3.3.2 Ensure ICMP redirects are not accepted (Automated)_ipv4
+KernelParam: net.ipv4.conf.all.accept_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+
+Title: 3.2.2 Ensure packet redirect sending is disabled (Automated)_default
+KernelParam: net.ipv4.conf.default.send_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+
+Title: 3.3.2 Ensure ICMP redirects are not accepted (Automated)_ipv4_def
+KernelParam: net.ipv4.conf.default.accept_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+
+Title: 3.2.2 Ensure packet redirect sending is disabled (Automated)_all
+KernelParam: net.ipv4.conf.all.send_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+
+Title: 1.1.11_14 Ensure separate partition exists for /var/tmp with mount options (Automated)
+Mount: /var/tmp: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+Mount: /var/tmp: opts: skipped
+
+Title: (L2) 1.1.10 Ensure separate partition exists for /var (Automated)
+Mount: /var: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+
+Title: (L2) 1.1.15 Ensure separate partition exists for /var/log (Automated)
+Mount: /var/log: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+
+Title: (L2) 1.1.16  Ensure separate partition exists for /var/log/audit (Automated)
+Mount: /var/log/audit: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+
+Title: (L2) 1.1.17 Ensure separate partition exists for /home with mount options (Automated)
+Mount: /home: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+Mount: /home: opts: skipped
+
+Title: 1.1.2_5 Ensure /tmp is configured (Automated) with mount options
+Mount: /tmp: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+Mount: /tmp: opts: skipped
+
+Title: 1.1.6_9 Ensure /dev/shm is configured
+Mount: /dev/shm: opts:
+Expected
+    <[]string | len:3, cap:3>: ["rw", "nosuid", "nodev"]
+to contain element matching
+    <string>: noexec
+
+Title: 2.2.1.2 Ensure chrony is configured (Automated)_sysconf
+File: /etc/sysconfig/chronyd: contains: patterns not found: [OPTIONS="-u chrony"]
+
+Title: 1.9 Ensure updates, patches, and additional security software are installed (Automated)
+Command: security-updates: exit-status:
+Expected
+    <int>: 100
+to equal
+    <int>: 0
+
+Total Duration: 17.932s
+Count: 377, Failed: 129, Skipped: 13
