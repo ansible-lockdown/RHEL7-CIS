@@ -1,0 +1,11 @@
+---
+
+- name: "MANUAL | 2.5 | Ensure nonessential services are removed or masked (Manual)"
+  debug:
+    msg: "<----- not required"
+  when:
+  - rhel7cis_rule_2_5
+  tags:
+  - level1
+  - notscored
+  - rule_2.5

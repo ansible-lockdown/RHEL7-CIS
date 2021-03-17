@@ -1,0 +1,356 @@
+---
+
+- name: "AUTOMATED | 4.1.2.1 | PATCH | Ensure audit log storage size is configured"
+  lineinfile:
+      dest: /etc/audit/auditd.conf
+      regexp: "^max_log_file( |=)"
+      line: "max_log_file = 10"
+      state: present
+  when:
+      - rhel7cis_rule_4_1_2_1
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - automated
+      - rule_4.1.2.1
+
+- name: "AUTOMATED | 4.1.2.2 | PATCH | Ensure audit logs are not automatically deleted"
+  lineinfile:
+      dest: /etc/audit/auditd.conf
+      regexp: "^max_log_file_action"
+      line: "max_log_file_action = {{ rhel7cis_auditd['max_log_file_action'] }}"
+      state: present
+  when:
+      - rhel7cis_rule_4_1_2_2
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - automated
+      - rule_4.1.2.2
+
+- name: "AUTOMATED | 4.1.2.3 | PATCH | Ensure system is disabled when audit logs are full"
+  lineinfile:
+      dest: /etc/audit/auditd.conf
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+      state: present
+  with_items:
+      - { regexp: '^space_left_action', line: "space_left_action = {{ rhel7cis_auditd['space_left_action'] }}" }
+      - { regexp: '^action_mail_acct', line: "action_mail_acct = {{ rhel7cis_auditd['action_mail_acct'] }}" }
+      - { regexp: '^admin_space_left_action', line: "admin_space_left_action = {{ rhel7cis_auditd['admin_space_left_action'] }}" }
+  when:
+      - rhel7cis_rule_4_1_2_3
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - automated
+      - rule_4.1.2.3
+
+- name: "AUTOMATED | 4.1.2.4 | PATCH | Ensure audit_backlog_limit is sufficient"
+  block:
+      - name: "AUTOMATED | 4.1.2.4 | AUDIT | Ensure audit_backlog_limit is sufficient | Grep GRUB_CMDLINE_LINUX parameter"
+        shell: grep GRUB_CMDLINE_LINUX /etc/default/grub | cut -f2 -d'"'
+        changed_when: false
+        failed_when: false
+        register: rhel7cis_4_1_2_4_grub_cmdline_linux_settings
+
+      - name: "AUTOMATED | 4.1.2.4 | PATCH | Ensure audit_backlog_limit is sufficient | Set audit_backlog_limit if not configured"
+        lineinfile:
+            dest: /etc/default/grub
+            regexp: '^GRUB_CMDLINE_LINUX='
+            line: 'GRUB_CMDLINE_LINUX="{{ rhel7cis_4_1_2_4_grub_cmdline_linux_settings.stdout }} audit_backlog_limit={{ rhel7cis_audit_backlog_limit }}"'
+        notify: grub2cfg
+        when: '"audit_backlog_limit" not in rhel7cis_4_1_2_4_grub_cmdline_linux_settings.stdout'
+
+      - name: "AUTOMATED | 4.1.2.4 | PATCH | Ensure audit_backlog_limit is sufficient | Adjust audit_backlog_limit if exists"
+        replace:
+            dest: /etc/default/grub
+            regexp: 'audit_backlog_limit=([^\D]+)'
+            replace: 'audit_backlog_limit={{ rhel7cis_audit_backlog_limit }}'
+        notify: grub2cfg
+        when: '"audit_backlog_limit" in rhel7cis_4_1_2_4_grub_cmdline_linux_settings.stdout'
+  when:
+      - rhel7cis_rule_4_1_2_4
+  tags:
+      - level2
+      - grub
+      - patch
+      - automated
+      - rule_4.1.2.4
+      
+- name: "AUTOMATED | 4.1.3 | PATCH | Ensure events that modify date and time information are collected"
+  template:
+      src: audit/time_change.rules.j2
+      dest: /etc/audit/rules.d/time_change.rules
+      owner: root
+      group: root
+      mode: 0600
+  when:
+      - rhel7cis_rule_4_1_3
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - automated
+      - rule_4.1.3
+
+- name: "AUTOMATED | 4.1.4 | PATCH | Ensure events that modify user/group information are collected"
+  template:
+      src: audit/identity.rules.j2
+      dest: /etc/audit/rules.d/identity.rules
+      owner: root
+      group: root
+      mode: 0600
+  when:
+      - rhel7cis_rule_4_1_4
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - automated
+      - rule_4.1.4
+
+- name: "AUTOMATED | 4.1.5 | PATCH | Ensure events that modify the system's network environment are collected"
+  template:
+      src: audit/system_local.rules.j2
+      dest: /etc/audit/rules.d/system_local.rules
+      owner: root
+      group: root
+      mode: 0600
+  when:
+      - rhel7cis_rule_4_1_5
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - automated
+      - rule_4.1.5
+
+- name: "AUTOMATED | 4.1.6 | PATCH | Ensure events that modify the system's Mandatory Access Controls are collected"
+  template:
+      src: audit/MAC_policy.rules.j2
+      dest: /etc/audit/rules.d/MAC_policy.rules
+      owner: root
+      group: root
+      mode: 0600
+  when:
+      - rhel7cis_rule_4_1_6
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - automated
+      - rule_4.1.6
+
+- name: "AUTOMATED | 4.1.7 | PATCH | Ensure login and logout events are collected"
+  block:
+      - name: "AUTOMATED | 4.1.7 | AUDIT | Ensure login and logout events are collected | Check for pam_fallock or pam_tally2"
+        shell: grep pam_tally2.so /etc/pam.d/system-auth /etc/pam.d/password-auth
+        changed_when: false
+        failed_when: false
+        register: rhel7cis_4_1_7_tally2_check
+
+      - name: "AUTOMATED | 4.1.7 | PATCH | Ensure login and logout events are collected | Set login and logout events"
+        template:
+            src: audit/logins.rules.j2
+            dest: /etc/audit/rules.d/logins.rules
+            owner: root
+            group: root
+            mode: 0600
+        notify: restart auditd
+  when:
+      - rhel7cis_rule_4_1_7
+  tags:
+      - level2
+      - auditd
+      - patch
+      - automated
+      - rule_4.1.7
+
+- name: "AUTOMATED | 4.1.8 | PATCH | Ensure session initiation information is collected"
+  template:
+      src: audit/session.rules.j2
+      dest: /etc/audit/rules.d/session.rules
+      owner: root
+      group: root
+      mode: 0600
+  when:
+      - rhel7cis_rule_4_1_8
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - automated
+      - rule_4.1.8
+
+- name: "AUTOMATED | 4.1.9 | PATCH | Ensure discretionary access control permission modification events are collected"
+  template:
+      src: audit/perm_mod.rules.j2
+      dest: /etc/audit/rules.d/perm_mod.rules
+      owner: root
+      group: root
+      mode: 0600
+  when:
+      - rhel7cis_rule_4_1_9
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - automated
+      - rule_4.1.9
+
+- name: "AUTOMATED | 4.1.10 | PATCH | Ensure unsuccessful unauthorized file access attempts are collected"
+  template:
+      src: audit/access.rules.j2
+      dest: /etc/audit/rules.d/access.rules
+      owner: root
+      group: root
+      mode: 0600
+  when:
+      - rhel7cis_rule_4_1_10
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - automated
+      - rule_4.1.10
+
+- name: "AUTOMATED | 4.1.11 | PATCH | Ensure use of privileged commands is collected"
+  block:
+      - name: "AUTOMATED | 4.1.11 | AUDIT | Ensure use of privileged commands is collected"
+        shell: for i in  $(df | grep '^/dev' | awk '{ print $NF }'); do find $i -xdev -type f -perm -4000 -o -type f -perm -2000 2>/dev/null; done
+        register: priv_procs
+        changed_when: no
+        check_mode: no
+
+      - name: "AUTOMATED | 4.1.11 | PATCH | Ensure use of privileged commands is collected"
+        template:
+            src: audit/priv_commands.rules.j2
+            dest: /etc/audit/rules.d/priv_commands.rules
+            owner: root
+            group: root
+            mode: 0600
+        notify: restart auditd
+  when:
+      - rhel7cis_rule_4_1_11
+  tags:
+      - level2
+      - auditd
+      - patch
+      - automated
+      - rule_4.1.11
+
+- name: "AUTOMATED | 4.1.12 | PATCH | Ensure successful file system mounts are collected"
+  template:
+      src: audit/mounts.rules.j2
+      dest: /etc/audit/rules.d/mounts.rules
+      owner: root
+      group: root
+      mode: 0600
+  when:
+      - rhel7cis_rule_4_1_12
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - automated
+      - rule_4.1.12
+
+- name: "AUTOMATED | 4.1.13 | PATCH | Ensure file deletion events by users are collected"
+  template:
+      src: audit/deletion.rules.j2
+      dest: /etc/audit/rules.d/deletion.rules
+      owner: root
+      group: root
+      mode: 0600
+  when:
+      - rhel7cis_rule_4_1_13
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - automated
+      - rule_4.1.13
+
+- name: "AUTOMATED | 4.1.14 | PATCH | Ensure changes to system administration scope (sudoers) is collected"
+  template:
+      src: audit/scope.rules.j2
+      dest: /etc/audit/rules.d/scope.rules
+      owner: root
+      group: root
+      mode: 0600
+  when:
+      - rhel7cis_rule_4_1_14
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - automated
+      - rule_4.1.14
+
+- name: "AUTOMATED | 4.1.15 | PATCH | Ensure system administrator actions (sudolog) are collected"
+  template:
+      src: audit/actions.rules.j2
+      dest: /etc/audit/rules.d/actions.rules
+      owner: root
+      group: root
+      mode: 0600
+  when:
+      - rhel7cis_rule_4_1_15
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - automated
+      - rule_4.1.15
+
+- name: "AUTOMATED | 4.1.16 | PATCH | Ensure kernel module loading and unloading is collected"
+  template:
+      src: audit/modules.rules.j2
+      dest: /etc/audit/rules.d/modules.rules
+      owner: root
+      group: root
+      mode: 0600
+  when:
+      - rhel7cis_rule_4_1_16
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - automated
+      - rule_4.1.16
+
+- name: "AUTOMATED | 4.1.17 | PATCH | Ensure the audit configuration is immutable"
+  template:
+      src: audit/99_finalize.rules.j2
+      dest: /etc/audit/rules.d/99_finalize.rules
+      owner: root
+      group: root
+      mode: 0600
+  when:
+      - rhel7cis_rule_4_1_17
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - automated
+      - rule_4.1.17

@@ -1,0 +1,16 @@
+---
+
+- name: "AUTOMATED | 1.9 | PATCH | Ensure updates, patches, and additional security software are installed"
+  package:
+    name: "*"
+    state: latest
+  when:
+  - rhel7cis_rule_1_9
+  - not system_is_ec2
+  tags:
+  - level1
+  - patch
+  - rule_1.9
+  - skip_ansible_lint
+  vars:
+    ansible_python_interpreter: /bin/python

@@ -1,0 +1,94 @@
+---
+
+- name: "SCORED | 5.4.2 | PATCH | Ensure system accounts are secured"
+  block:
+  - name: "SCORED | 5.4.2 | PATCH | Ensure system accounts are secured | Set nologin"
+    user:
+      name: "{{ item.id }}"
+      shell: /usr/sbin/nologin
+    loop: "{{ rhel7cis_passwd }}"
+    become: true
+    when:
+    - item.id != "root"
+    - item.id != "sync"
+    - item.id != "shutdown"
+    - item.id != "halt"
+    - item.gid < rhel7cis_int_gid
+    - item.shell != "      /bin/false"
+    - item.shell != "      /usr/sbin/nologin"
+
+  - name: "SCORED | 5.4.2 | PATCH | Ensure system accounts are secured | Lock accounts"
+    user:
+      name: "{{ item.id }}"
+      password_lock: true
+    loop: "{{ rhel7cis_passwd }}"
+    become: true
+    when:
+    - item.id != "halt"
+    - item.id != "shutdown"
+    - item.id != "sync"
+    - item.id != "root"
+    - item.gid < rhel7cis_int_gid
+    - item.shell != "      /bin/false"
+    - item.shell != "      /usr/sbin/nologin"
+  when:
+  - rhel7cis_rule_5_4_2
+  tags:
+  - level1
+  - patch
+  - rule_5.4.2
+
+- name: "SCORED | 5.4.3 | PATCH | Ensure default group for the root account is GID 0"
+  command: usermod -g 0 root
+  changed_when: no
+  failed_when: no
+  when:
+  - rhel7cis_rule_5_4_3
+  tags:
+  - level1
+  - patch
+  - rule_5.4.3
+
+- name: "SCORED | 5.4.4 | PATCH | Ensure default user shell timeout is configured"
+  blockinfile:
+    create: yes
+    mode: 0644
+    dest: "{{ item.dest }}"
+    state: "{{ item.state }}"
+    marker: "# {mark} ANSIBLE MANAGED"
+    block: |
+      # Set session timeout - CIS ID RHEL-07-5.4.4
+      TMOUT={{ rhel7cis_shell_session_timeout.timeout }}
+      readonly TMOUT
+      export TMOUT
+  loop:
+  - dest: "{{ rhel7cis_shell_session_timeout.file }}"
+    state: present
+  - dest: /etc/profile
+    state: "{{ (rhel7cis_shell_session_timeout.file == '/etc/profile') | ternary('present', 'absent') }}"
+  when:
+  - rhel7cis_rule_5_4_4
+  tags:
+  - level2
+  - patch
+  - rule_5.4.4
+
+- name: "SCORED | 5.4.5 | PATCH | Ensure default user umask is 027 or more restrictive"
+  block:
+  - name: "SCORED | 5.4.5 | PATCH | Ensure default user umask is 027 or more restrictive | Set umask for /etc/bashrc"
+    replace:
+      path: /etc/bashrc
+      regexp: '(^\s+umask) 002'
+      replace: '\1 027'
+
+  - name: "SCORED | 5.4.5 | PATCH | Ensure default user umask is 027 or more restrictive | Set umask for /etc/profile"
+    replace:
+      path: /etc/profile
+      regexp: '(^\s+umask) 002'
+      replace: '\1 027'
+  when:
+  - rhel7cis_rule_5_4_5
+  tags:
+  - level1
+  - patch
+  - rule_5.4.5

@@ -1,0 +1,47 @@
+---
+
+- name: "AUTOMATED | 1.4.1 | PATCH | Ensure AIDE is installed"
+  block:
+  - name: "AUTOMATED | 1.4.1 | PATCH | Ensure AIDE is installed | Install"
+    package:
+      name: aide
+      state: installed
+   
+  - name: "AUTOMATED | 1.4.1 | PATCH | Ensure AIDE is installed | started"
+    command: /usr/sbin/aide --init -B 'database_out=file:/var/lib/aide/aide.db.gz'
+    args:
+      creates: /var/lib/aide/aide.db.gz
+    changed_when: no
+    failed_when: no
+    async: 45
+    poll: 0
+  when:
+  - rhel7cis_config_aide
+  - rhel7cis_rule_1_4_1
+  tags:
+  - level1
+  - AUTOMATED
+  - aide
+  - patch
+  - rule_1.4.1
+  vars:
+    ansible_python_interpreter: /bin/python
+
+- name: "AUTOMATED | 1.4.2 | PATCH | Ensure filesystem integrity is regularly checked | cron"
+  cron:
+    name: Run AIDE integrity check
+    minute: "{{ rhel7cis_aide_cron['aide_minute'] | default('0') }}"
+    hour: "{{ rhel7cis_aide_cron['aide_hour'] | default('5') }}"
+    day: "{{ rhel7cis_aide_cron['aide_day'] | default('*') }}"
+    month: "{{ rhel7cis_aide_cron['aide_month'] | default('*') }}"
+    weekday: "{{ rhel7cis_aide_cron['aide_weekday'] | default('*') }}"
+    job: "{{ rhel7cis_aide_cron['aide_job'] }}"
+  when:
+  - rhel7cis_rule_1_4_2
+  tags:
+  - level1
+  - AUTOMATED
+  - aide
+  - file_integrity
+  - patch
+  - rule_1.4.2
