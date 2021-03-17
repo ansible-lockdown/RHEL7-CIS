@@ -1,0 +1,28 @@
+---
+
+- name: "SECTION | 3.1 | Disable unused network protocols and devices"
+  include: cis_3.1.x.yml
+
+- name: "SECTION | 3.2 | Network Parameters (Host Only)"
+  include: cis_3.2.x.yml
+
+- name: "SECTION | 3.3 | Network Parameters (Host and Router)"
+  include: cis_3.3.x.yml
+
+- name: "SECTION | 3.4 | Uncommon Network Protocols"
+  include: cis_3.4.x.yml
+
+- name: "SECTION | 3.5.1 | Configure firewalld"
+  include: cis_3.5.1.x.yml
+  when:
+  - rhel7cis_firewall == "firewalld"
+
+- name: "SECTION | 3.5.2 | Configure nftables"
+  include: cis_3.5.2.x.yml
+  when:
+  - rhel7cis_firewall == "nftables"
+
+- name: "SECTION | 3.5.3.1.x | Configure iptables"
+  include: cis_3.5.3.1.x.yml
+  when:
+  - rhel7cis_firewall == "iptables"

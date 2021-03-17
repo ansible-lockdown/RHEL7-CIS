@@ -1,0 +1,121 @@
+---
+
+- name: Setup the LE audit
+  include_tasks: LE_audit_setup.yml
+  when:
+  - rhel7cis_setup_audit
+  tags:
+  - setup_audit
+
+- name: "Ensure {{ goss_audit_dir }} exists"
+  file:
+    path: "{{ goss_audit_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: If using git for content set up
+  block:
+  - name: Install git
+    package:
+      name: git
+      state: present
+    vars:
+      ansible_python_interpreter: "{{ python2_bin }}"
+
+  - name: retrieve audit content files from git
+    git:
+      repo: "{{ rhel7cis_audit_file_git }}"
+      dest: "{{ goss_audit_dir  }}"
+      version: "{{ rhel7cis_audit_git_version }}"
+  when:
+  - rhel7cis_audit_content == 'git'
+
+- name: copy to audit content files to server
+  copy:
+    src: "{{ rhel7cis_audit_local_copy}}"
+    dest: "{{ goss_audit_dir  }}"
+  when:
+  - rhel7cis_audit_content == 'copy'
+
+- name: get audit content from url
+  get_url:
+    url: "{{ rhel7cis_audit_files_url }}"
+    dest: "{{ goss_audit_dir  }}"
+  when:
+  - rhel7cis_audit_content == 'get_url'
+
+- name: Check Goss is available
+  block:
+  - name: Check for goss file
+    stat:
+      path: "{{ goss_bin }}"
+    register: goss_available
+  
+  - name: If audit ensure goss is available
+    assert:
+      msg: "Audit has been selected: unable to find goss binary at {{ goss_bin }}"
+    when: 
+    - not goss_available.stat.exists
+  when:
+  - rhel7cis_run_audit
+
+- name: "Check whether machine is UEFI-based"
+  stat:
+    path: /sys/firmware/efi
+  register: rhel_07_efi_boot
+  tags:
+  - goss_template
+
+- name: set fact for legacy or uefi boot
+  set_fact:
+    rhel7cis_legacy_boot: 'true'
+  when: not rhel_07_efi_boot.stat.exists
+  tags:
+  - goss_template
+
+- name: Copy ansible default vars values to test audit
+  template:
+    src: ansible_vars_goss.yml
+    dest: "{{ goss_vars_path }}"
+    mode: 0600
+  when:
+  - rhel7cis_run_audit
+  tags:
+  - goss_template
+  
+- name: "Run pre_remediation {{ benchmark }} audit"
+  goss:
+    goss_path: "{{ goss_bin }}"
+    path: "{{ goss_file }}"
+    vars_path: "{{ goss_vars_path }}"
+    format: "{{ goss_format }}"
+    output_file: "{{ pre_audit_outfile }}"
+  failed_when: false
+
+- name: Capture audit data if json format
+  block:
+  - name: "capture data {{ pre_audit_outfile }}"
+    command: "cat {{ pre_audit_outfile }}"
+    register: pre_audit
+    changed_when: false 
+    
+  - name: Capture pre-audit result
+    set_fact: 
+      pre_audit_summary: "{{ pre_audit.stdout | from_json |json_query(summary) }}"
+    vars:
+      summary: 'summary."summary-line"'
+  when:
+  - goss_format == "json"
+
+- name: Capture audit data if documentation format
+  block:
+  - name: "capture data {{ pre_audit_outfile }}"
+    command: "tail -2 {{ pre_audit_outfile }}"
+    register: pre_audit
+    changed_when: false
+
+  - name: Capture pre-audit result
+    set_fact:
+      pre_audit_summary: "{{ pre_audit.stdout_lines }}"
+  when:
+  - goss_format == "documentation"

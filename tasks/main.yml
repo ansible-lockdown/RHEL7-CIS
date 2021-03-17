@@ -2,69 +2,100 @@
 # tasks file for RHEL7-CIS
 - name: Check OS version and family
   fail:
-      msg: "This role can only be run against RHEL 7. {{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported."
+    msg: "This role can only be run against RHEL 7. {{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported."
   when:
-      - ansible_os_family == 'RedHat'
-      - ansible_distribution_major_version is version_compare('7', '!=')
+  - ansible_os_family == 'RedHat'
+  - ansible_distribution_major_version is version_compare('7', '!=')
   tags:
-      - always
+  - always
 
 - name: Check ansible version
   fail:
-      msg: You must use ansible 2.1 or greater
-  when: not ansible_version.full is version_compare('2.1', '>=')
+    msg: You must use ansible 2.9 or greater
+  when: not ansible_version.full is version_compare('2.9', '>=')
   tags:
-      - always
+  - always
 
-- name: Install OpenSCAP and run a report
-  import_tasks: audit_oscap_scan_before.yml
-  when: rhel7cis_oscap_scan
+- name: Check rhel7cis_bootloader_password_hash variable has been changed
+  assert:
+    that: rhel7cis_bootloader_password_hash != 'grub.pbkdf2.sha512.changethispassword'
+    msg: "This role will not be able to run single user password commands as rhel7stig_bootloader_password_hash variable has not been set"
+  when:
+  - ansible_distribution_version >= '7.2'
+  - rhel7cis_set_boot_pass
+  - rhel7cis_rule_1_5_1
+
+- include: check_prereqs.yml
   tags:
-      - oscapreport
+  - always
+  - prereqs
 
 - include: prelim.yml
   become: yes
   tags:
-      - prelim_tasks
-      - always
+  - prelim_tasks
+  - always
+
+- import_tasks: pre_LE_audit.yml
+  when:
+  - rhel7cis_run_audit
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - always
+
 - include: parse_etc_password.yml
   become: yes
-  when: rhel7cis_section6|bool
+  when: 
+  - rhel7cis_section5
+  - rhel7cis_section6
 
-- include: section1.yml
-  become: yes
-  when: rhel7cis_section1|bool
+- include: section_1/main.yml
+  when: rhel7cis_section1
   tags:
-      - rhel7cis_section1
+  - rhel7cis_section1
 
-- include: section2.yml
-  become: yes
-  when: rhel7cis_section2|bool
+- include: section_2/main.yml
+  when: rhel7cis_section2
+  tags:
+  - rhel7cis_section2
 
-- include: section3.yml
-  become: yes
-  when: rhel7cis_section3|bool
+- include: section_3/main.yml
+  when: rhel7cis_section3
+  tags:
+  - rhel7cis_section3
 
-- include: section4.yml
-  become: yes
-  when: rhel7cis_section4|bool
+- include: section_4/main.yml
+  when: rhel7cis_section4
+  tags:
+  - rhel7cis_section4
 
-- include: section5.yml
-  become: yes
-  when: rhel7cis_section5|bool
+- include: section_5/main.yml
+  when: rhel7cis_section5
+  tags:
+  - rhel7cis_section5
 
-- include: section6.yml
-  become: yes
-  when: rhel7cis_section6|bool
+- include: section_6/main.yml
+  when: rhel7cis_section6
+  tags:
+  - rhel7cis_section6
 
 - include: post.yml
-  become: yes
   tags:
-      - post_tasks
-      - always
+  - post_tasks
+  - always
 
-- name: run the OpenSCAP reporting tool again
-  import_tasks: audit_oscap_scan_after.yml
-  when: rhel7cis_oscap_scan
-  tags:
-      - oscapreport
+- name: flush handlers
+  meta: flush_handlers
+
+- import_tasks: post_LE_audit.yml
+  when:
+  - rhel7cis_run_audit
+
+- name: Show Audit Summary
+  debug:
+    msg: "{{ Audit_results.split('\n') }}"
+  when:
+  - rhel7cis_run_audit

@@ -1,0 +1,252 @@
+---
+
+- name: "AUTOMATED | 1.1.2 | PATCH | Ensure /tmp is configured | via tmp.mount option"
+  systemd:
+    name: tmp.mount
+    daemon_reload: yes
+    enabled: yes
+    masked: no
+    state: started
+  when:
+  - rhel7cis_tmp_svc
+  - rhel7cis_rule_1_1_2
+  tags:
+  - level2
+  - AUTOMATED
+  - patch
+  - rule_1.1.2
+
+- name: "AUTOMATED | 1.1.3 | PATCH | Ensure noexec option set on /tmp partition\n
+         AUTOMATED | 1.1.4 | PATCH | Ensure nodev option set on /tmp partition\n
+         AUTOMATED | 1.1.5 | PATCH | Ensure nosuid option set on /tmp partition\n
+         | drop custom tmp.mount"
+  template:
+    src: etc/tmp_mount.j2
+    dest: /etc/systemd/system/tmp.mount
+    owner: root
+    group: root
+    mode: 0644
+  notify: systemd restart tmp.mount
+  when:
+  - rhel7cis_tmp_svc
+  - rhel7cis_rule_1_1_3
+  - rhel7cis_rule_1_1_4
+  - rhel7cis_rule_1_1_5
+  tags:
+  - level1
+  - AUTOMATED
+  - patch
+  - rule_1.1.3
+  - rule_1.1.4
+  - rule_1.1.5
+
+- name: "AUTOMATED | 1.1.2 | PATCH | Ensure /tmp is configured\n
+         AUTOMATED | 1.1.3 | PATCH | Ensure noexec option set on /tmp partition\n
+         AUTOMATED | 1.1.4 | PATCH | Ensure nodev option set on /tmp partition\n
+         AUTOMATED | 1.1.5 | PATCH | Ensure nosuid option set on /tmp partition\n
+         | via fstab option"
+  mount:
+    name: /tmp
+    src: "{{ item.device }}"
+    fstype: "{{ item.fstype }}"
+    state: present
+    opts: defaults,{% if rhel7cis_rule_1_1_3 %}noexec,{% endif %}{% if rhel7cis_rule_1_1_4 %}nodev,{% endif %}{% if rhel7cis_rule_1_1_5 %}nosuid{% endif %}
+  loop: "{{ ansible_mounts }}"
+  when:
+  - item.mount == "/tmp"
+  - not rhel7cis_tmp_svc
+  - rhel7cis_rule_1_1_2 or rhel7cis_rule_1_1_3 or rhel7cis_rule_1_1_4 or rhel7cis_rule_1_1_5
+  tags:
+  - level2
+  - AUTOMATED
+  - patch
+  - rule_1.1.2
+  - rule_1.1.3
+  - rule_1.1.4
+  - rule_1.1.5
+  notify: remount tmp
+
+- name: "AUTOMATED | 1.1.6 | PATCH | Ensure /dev/shm is configured\n
+         AUTOMATED | 1.1.7 | PATCH | Ensure noexec option set on /dev/shm partition\n
+         AUTOMATED | 1.1.8 | PATCH | Ensure nodev option set on /dev/shm partition\n
+         AUTOMATED | 1.1.9 | PATCH | Ensure nosuid option set on /dev/shm partition\n"
+  mount:
+    name: /dev/shm
+    src: "{{ item.device }}"
+    fstype: tmpfs
+    state: present
+    opts: defaults,{% if rhel7cis_rule_1_1_7 %}noexec,{% endif %}{% if rhel7cis_rule_1_1_8 %}nodev,{% endif %}{% if rhel7cis_rule_1_1_9 %}nosuid{% endif %}
+  loop: "{{ ansible_mounts }}"
+  when:
+  - item.mount == "/dev/shm"
+  - rhel7cis_rule_1_1_6 or rhel7cis_rule_1_1_7 or rhel7cis_rule_1_1_8 or rhel7cis_rule_1_1_9
+  tags:
+  - level1
+  - AUTOMATED
+  - patch
+  - rule_1.1.6
+  - rule_1.1.7
+  - rule_1.1.8
+  - rule_1.1.9
+  notify: remount dev_shm
+
+- name: "AUTOMATED | 1.1.10 | PATCH | Ensure separate partition exists for /var"
+  mount:
+    name: /var
+    src: "{{ item.device }}"
+    fstype: "{{ item.fstype }}"
+    state: present
+  loop: "{{ ansible_mounts }}"
+  when:
+  - item.mount == "/var"
+  - rhel7cis_rule_1_1_10
+  tags:
+  - level2
+  - AUTOMATED
+  - patch
+  - rule_1.1.10
+
+- name: "AUTOMATED | 1.1.11 | PATCH | Ensure /var/tmp is configured\n
+         AUTOMATED | 1.1.12 | PATCH | Ensure noexec option set on /var/tmp partition\n
+         AUTOMATED | 1.1.13 | PATCH | Ensure nodev option set on /var/tmp partition\n
+         AUTOMATED | 1.1.14 | PATCH | Ensure nosuid option set on /var/tmp partition\n
+         | via fstab option"
+  mount:
+    name: /var/tmp
+    src: "{{ item.device }}"
+    fstype: "{{ item.fstype }}"
+    state: present
+    opts: defaults,{% if rhel7cis_rule_1_1_12 %}noexec,{% endif %}{% if rhel7cis_rule_1_1_13 %}nodev,{% endif %}{% if rhel7cis_rule_1_1_14 %}nosuid{% endif %}
+  loop: "{{ ansible_mounts }}"
+  when:
+  - item.mount == "/var/tmp"
+  - rhel7cis_rule_1_1_11 or rhel7cis_rule_1_1_12 or rhel7cis_rule_1_1_13 or rhel7cis_rule_1_1_14
+  tags:
+  - level1
+  - AUTOMATED
+  - patch
+  - rule_1.1.11
+  - rule_1.1.12
+  - rule_1.1.13
+  - rule_1.1.14
+  notify: remount var_tmp
+
+
+- name: "AUTOMATED | 1.1.15 | PATCH | Ensure separate partition exists for /var/log"
+  mount:
+    name: /var/log
+    src: "{{ item.device }}"
+    fstype: "{{ item.fstype }}"
+    state: present
+  loop: "{{ ansible_mounts }}"
+  when:
+  - item.mount == "/var/log"
+  - rhel7cis_rule_1_1_15
+  tags:
+  - level2
+  - AUTOMATED
+  - patch
+  - rule_1.1.15
+
+- name: "AUTOMATED | 1.1.16 | PATCH | Ensure separate partition exists for /var/log/audit"
+  mount:
+    name: /var/log/audit
+    src: "{{ item.device }}"
+    fstype: "{{ item.fstype }}"
+    state: present
+  loop: "{{ ansible_mounts }}"
+  when:
+  - item.mount == "/var/log/audit"
+  - rhel7cis_rule_1_1_16
+  tags:
+  - level2
+  - AUTOMATED
+  - patch
+  - rule_1.1.16
+
+- name: "AUTOMATED | 1.1.17 | PATCH | Ensure separate partition exists for /home\n
+         AUTOMATED | 1.1.18 | PATCH | Ensure nodev option set on /home partition"
+  mount:
+    name: /home
+    src: "{{ item.device }}"
+    fstype: "{{ item.fstype }}"
+    state: present
+    opts: defaults,{% if rhel7cis_rule_1_1_18 %}nodev{% endif %}
+  loop: "{{ ansible_mounts }}"
+  when:
+  - item.mount == "/home"
+  - rhel7cis_rule_1_1_17 or rhel7cis_rule_1_1_18
+  tags:
+  - level2
+  - AUTOMATED
+  - patch
+  - rule_1.1.17
+  - rule_1.1.18
+  notify: remount home
+
+- name: "MANUAL| 1.1.19 | PATCH | Ensure noexec option set on removable media partitions\n
+         MANUAL | 1.1.20 | PATCH | Ensure nodev option set on removable media partitions\n
+         MANUAL | 1.1.21 | PATCH | Ensure nosuid option set on removable media partitions"
+  debug:
+      msg: "--> Not relevant"
+  changed_when: no
+  when:
+  - rhel7cis_rule_1_1_19 or rhel7cis_rule_1_1_20 or rhel7cis_rule_1_1_21
+  tags:
+  - level1
+  - notAUTOMATED
+  - patch
+  - rule_1.1.19
+  - rule_1.1.20
+  - rule_1.1.21
+
+
+- name: "AUTOMATED | 1.1.22 | PATCH | Ensure sticky bit is set on all world-writable directories"
+  shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d -perm -0002 2>/dev/null | xargs chmod a+t
+  changed_when: no
+  failed_when: no
+  # when: sticky_bit_on_worldwritable_dirs_audit.rc == '0'
+  when:
+  - rhel7cis_rule_1_1_22
+  tags:
+  - level1
+  - patch
+  - rule_1.1.22
+
+- name: "AUTOMATED | 1.1.23 | PATCH | Disable Automounting"
+  service:
+    name: autofs
+    enabled: no
+  when:
+  - not rhel7cis_allow_autofs
+  - "'autofs' in ansible_facts.packages"
+  - rhel7cis_rule_1_1_23
+  tags:
+  - level1
+  - level2
+  - patch
+  - rule_1.1.23
+
+
+- name: "AUTOMATED | 1.1.24 | PATCH | Disable USB Storage"
+  block:
+  - name: "AUTOMATED | 1.1.24 | PATCH | Disable USB Storage | Edit modprobe config"
+    lineinfile:
+      dest: /etc/modprobe.d/usb-storage.conf
+      regexp: "^(#)?install usb-storage(\\s|$)"
+      line: "install usb-storage /bin/true"
+      mode: 0600
+      create: yes
+
+  - name: "AUTOMATED | 1.1.24 | PATCH | Remove USB Storage module"
+    modprobe:
+      name: usb-storage
+      state: absent
+  when:
+  - rhel7cis_rule_1_1_24
+  tags:
+  - level1
+  - AUTOMATED
+  - patch
+  - rule_1.1.24
+  - usb-storage
