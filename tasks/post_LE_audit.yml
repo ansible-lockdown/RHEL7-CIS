@@ -9,6 +9,15 @@
     output_file: "{{ post_audit_outfile }}"
   failed_when: false
 
+- name: ensure audit files readable by users
+  file:
+    path: "{{ item }}"
+    mode: 0644
+    state: file
+  loop:
+  - "{{ post_audit_outfile }}"
+  - "{{ pre_audit_outfile }}"
+
 - name: Capture audit data if json format
   block:
   - name: "capture data {{ post_audit_outfile }}"
