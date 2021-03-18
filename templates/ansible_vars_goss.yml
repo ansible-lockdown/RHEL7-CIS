@@ -377,7 +377,9 @@ rhel7cis_auditd:
   auditd_backlog_limit: {{ rhel7cis_audit_backlog_limit }}
 
 ## syslog
-rhel7_cis_rsyslog: true
+{% if rhel7cis_syslog == "rsyslog" %}
+rhel7cis_rsyslog: true
+{% endif %}
 
 ### Section 5
 rhel7cis_sshd_limited: false
@@ -441,10 +443,10 @@ skip_rhel7cis_pam_system_auth: true
 # choose one of below
 rhel7cis_pwhistory_so: "14"
 rhel7cis_unix_so: false
-rhel7cis_passwd_remember: "5"
+rhel7cis_passwd_remember: "{{ rhel7cis_pam_faillock.remember }}"
 
 # logins.def password settings
-rhel7_cis_pass_max_days: 365
-rhel7_cis_pass_min_days: 1
-rhel7_cis_pass_warn_age: 7
+rhel7cis_pass_max_days: {{ rhel7cis_pass.max_days }}
+rhel7cis_pass_min_days: {{ rhel7cis_pass.min_days }}
+rhel7cis_pass_warn_age: {{ rhel7cis_pass.warn_age }}
 
