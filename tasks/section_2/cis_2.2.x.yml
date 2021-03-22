@@ -105,7 +105,7 @@
       name: nfs-server
       masked: true
     when:
-    - rhel7_cis_nfs_rpc_server and not rhel7cis_nfs_server
+    - rhel7cis_nfs_rpc_server and not rhel7cis_nfs_server
   when:
   - "'nfs-utils' in ansible_facts.packages"
   - rhel7cis_rule_2_2_7
@@ -133,7 +133,7 @@
       name: rpcbind
       masked: true
     when:
-    - rhel7_cis_nfs_rpc_server and not rhel7cis_rpc_server
+    - rhel7cis_nfs_rpc_server and not rhel7cis_rpc_server
   when:
   - "'rpcbind' in ansible_facts.packages"
   - rhel7cis_rule_2_2_8
