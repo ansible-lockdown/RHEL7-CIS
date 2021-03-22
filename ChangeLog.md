@@ -1,11 +1,15 @@
 # release CIS RedHat Enterprise Linux 7 Benchmark v3.0.1 - 09-21-2020
 
-## Whats new
+## Whats new 1.0.0
 
 - New auditing tool all controlled via defaults main. run on host using [goss](https://github.com/aelsabbahy/goss)
 - reorder of rules inline with CIS changes
 - If Python3 discovered adds the epel repo to install python-rpm and then disables the repo after installing
 - Adding of the goss module to the library path
+
+## Whats new 1.0.1
+- Fixed typos
+- Added audit output file permissions
 
 ## High level changes within tasks
 
