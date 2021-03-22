@@ -124,7 +124,7 @@
       debug: 
         msg: "You will need to mkdir -p {{ item }} and chown properly to the correct owner and group."
       with_items: "{{ rhel_07_6_2_5_audit | map(attribute='dir') | list }}"
-      changed_when: rhel7cis_audit_complex
+        #changed_when: rhel7cis_audit_complex
       when:
       - rhel7cis_users_missing_home is changed
   vars:

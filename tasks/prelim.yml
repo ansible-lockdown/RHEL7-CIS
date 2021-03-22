@@ -55,7 +55,7 @@
 
 - name: "PRELIM | 6.2.8 | Set fact for home directory paths for interactive users"
   set_fact:
-    rhel_07_stig_interactive_homedir_results: "{{ rhel_07_6_2_8_getent.stdout_lines }}"
+    rhel_07_cis_interactive_homedir_results: "{{ rhel_07_6_2_8_getent.stdout_lines }}"
   when: rhel_07_6_2_8_getent.stdout_lines is defined
   tags:
   - rule_6.2.8

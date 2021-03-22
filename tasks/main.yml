@@ -1,13 +1,16 @@
 ---
 # tasks file for RHEL7-CIS
-- name: Check OS version and family
-  fail:
-    msg: "This role can only be run against RHEL 7. {{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported."
-  when:
-  - ansible_os_family == 'RedHat'
-  - ansible_distribution_major_version is version_compare('7', '!=')
-  tags:
-  - always
+#
+# This check is commented out because we are running thin ansible role on Amazon Linux 2 which is based
+# on RHEL 7, however, it does not pass this initial check.
+#- name: Check OS version and family
+#  fail:
+#    msg: "This role can only be run against RHEL 7. {{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported."
+#  when:
+#  - ansible_os_family == 'RedHat'
+#  - ansible_distribution_major_version is version_compare('7', '!=')
+#  tags:
+#  - always
 
 - name: Check ansible version
   fail:
@@ -19,7 +22,7 @@
 - name: Check rhel7cis_bootloader_password_hash variable has been changed
   assert:
     that: rhel7cis_bootloader_password_hash != 'grub.pbkdf2.sha512.changethispassword'
-    msg: "This role will not be able to run single user password commands as rhel7stig_bootloader_password_hash variable has not been set"
+    msg: "This role will not be able to run single user password commands as rhel7cis_bootloader_password_hash variable has not been set"
   when:
   - ansible_distribution_version >= '7.2'
   - rhel7cis_set_boot_pass
