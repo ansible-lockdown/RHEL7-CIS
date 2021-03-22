@@ -92,7 +92,7 @@
 
   - name: "AUTOMATED | 1.7.1.6 | AUDIT | Ensure no unconfined daemons exist | Message on unconfined daemones"
     debug:
-      msg: "Warning! You have unconfined daemons: {{ rhelcis_1_7_1_5_unconf_daemons.stdout_lines }}"
+      msg: "Warning! You have unconfined daemons: {{ rhelcis_1_7_1_6_unconf_daemons.stdout_lines }}"
     when: rhelcis_1_7_1_6_unconf_daemons.stdout != ""
   when:
   - rhel7cis_rule_1_7_1_6
