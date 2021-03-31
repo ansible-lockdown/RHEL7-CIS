@@ -8,8 +8,17 @@
 - Adding of the goss module to the library path
 
 ## Whats new 1.0.1
+
 - Fixed typos
 - Added audit output file permissions
+
+## Whats new in 1.0.2
+
+- renamed goss library and aligned ansible.cfg file
+  - thanks to Thulium-Drake
+
+- selinux variable in defaults main - default enforcing
+  - 1.7.1.3-5 now idempotent
 
 ## High level changes within tasks
 

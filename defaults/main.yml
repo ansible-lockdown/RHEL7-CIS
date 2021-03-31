@@ -31,6 +31,7 @@ rhel7cis_run_audit: false
 
 # Enable/Disable SELinux
 rhel7cis_selinux_disable: false
+rhel7cis_selinux_state: enforcing
 
 # Misc. environment variables
 rhel7cis_skip_for_travis: false
