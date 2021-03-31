@@ -8,6 +8,7 @@ rhel7cis_section5: {{ rhel7cis_section5 }}
 rhel7cis_section6: {{ rhel7cis_section6 }}
 
 rhel7cis_selinux_disable: {{ rhel7cis_selinux_disable }}
+rhel7cis_selinux_state: {{ rhel7cis_selinux_state }}
 
 
 rhel7cis_level1: true
