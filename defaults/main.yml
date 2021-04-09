@@ -233,7 +233,7 @@ rhel7cis_rule_4_2_1_6: true
 rhel7cis_rule_4_2_2_1: true
 rhel7cis_rule_4_2_2_2: true
 rhel7cis_rule_4_2_2_3: true
-rhel7cis_rule_4_2_3: true
+rhel7cis_rule_4_2_3: false
 rhel7cis_rule_4_2_4: true
 
 # Section 5 rules
