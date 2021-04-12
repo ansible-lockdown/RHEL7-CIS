@@ -6,6 +6,10 @@
 - reorder of rules inline with CIS changes
 - If Python3 discovered adds the epel repo to install python-rpm and then disables the repo after installing
 - Adding of the goss module to the library path
+- Python3 now default for control node (should be backward compatible in setup)
+- Grub password no longer created using passlib needs to be supplied as variable
+  - assert has been created if rule still enabled and password not changed
+- Use of the packages facts module
 
 ## Whats new 1.0.1
 
@@ -20,18 +24,12 @@
 - selinux variable in defaults main - default enforcing
   - 1.7.1.3-5 now idempotent
 
-## 1.0.3
+## Whats new in 1.0.3
 
-- regex on 4.1.1.3
-  - thanks to Thulium-Drake
+- 6.1.12 - rework audit (no score) control
+  - thanks to Thulium-Drake #204
 
-- 1.5.2 moved grub capture to prelim
+- 4.1.1.3 regex improvement
+  - thanks to Thulium-Drake #202
   
-## High level changes within tasks
-
-- Python3 now default for control node (should be backward compatible in setup)
-- Grub password no longer created using passlib needs to be supplied as variable
-
-  - assert has been created if rule still enabled and password not changed
-
-- use of the packages facts module
+- 1.5.2 moved grub capture to prelim
