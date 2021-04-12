@@ -20,6 +20,13 @@
 - selinux variable in defaults main - default enforcing
   - 1.7.1.3-5 now idempotent
 
+## 1.0.3
+
+- regex on 4.1.1.3
+  - thanks to Thulium-Drake
+
+- 1.5.2 moved grub capture to prelim
+  
 ## High level changes within tasks
 
 - Python3 now default for control node (should be backward compatible in setup)
