@@ -16,23 +16,14 @@
   - patch
   - rule_1.5.1
 
-- name: "AUTOMATED | 1.5.2 | PATCH | Ensure permissions on bootloader config are configured"
-  block:
-  - name: "AUTOMATED | 1.5.2 | AUDIT | Ensure permissions on bootloader config are configured | Get grub config settings"
-    stat:
-      path: /etc/grub2.cfg
-    register: grub_cfg
-    changed_when: no
-
-  - name: "AUTOMATED | 1.5.2 | PATCH | Ensure permissions on bootloader config are configured | Update grub config settings"
-    file:
-      path: "{{ grub_cfg.stat.lnk_source }}"
-      owner: root
-      group: root
-      mode: 0600
-    when:
-    - grub_cfg.stat.exists and grub_cfg.stat.islnk
+- name: "AUTOMATED | 1.5.2 | PATCH | Ensure permissions on bootloader config are configured | Update grub config settings"
+  file:
+    path: "{{ grub_cfg.stat.lnk_source }}"
+    owner: root
+    group: root
+    mode: 0600
   when:
+  - grub_cfg.stat.exists and grub_cfg.stat.islnk
   - rhel7cis_rule_1_5_2
   tags:
   - level1

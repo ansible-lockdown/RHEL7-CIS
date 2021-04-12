@@ -513,8 +513,8 @@ rhel7cis_int_gid: 1000
 
 ## Section6 vars
 
-# RHEL-07_6.1.1 Allow ansible to adjust package descrepancies . False will just display packages with descrepancies, True will correct descrepancies
-rhelcis_rpm_descrep_autofixes: true
+# RHEL-07_6.1.1 
+rhel7cis_rpm_audit_file: /var/tmp/rpm_file_check
 
 # RHEL-07_6.1.10 Allow ansible to adjust world-writable files. False will just display world-writable files, True will remove world-writable
 rhel7cis_no_world_write_adjust: true

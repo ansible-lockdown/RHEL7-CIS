@@ -19,6 +19,11 @@
   changed_when: no
   check_mode: no
 
+- name: "PRELIM | Get grub config settings"
+  stat:
+    path: /etc/grub2.cfg
+  register: grub_cfg
+  changed_when: no
 
 - name: "PRELIM | Section 1.7 | Ensure SELinux is installed"
   package:
