@@ -37,7 +37,7 @@
       #regexp: '(^GRUB_CMDLINE_LINUX\s*\=\s*)(?:")(.+)(?<!audit=1)(?:")'
       regexp: ^(GRUB_CMDLINE_LINUX=)(?:")(?!.*audit=1)(.+)(?:")$
       replace: '\1"\2 audit=1"'
-  notify: generate new grub config
+  notify: grub2cfg
   when:
       - rhel7cis_rule_4_1_1_3
   tags:
