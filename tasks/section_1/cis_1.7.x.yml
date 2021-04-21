@@ -21,7 +21,7 @@
     regexp: '(selinux|enforcing)\s*=\s*0\s*'
   register: selinux_grub_patch
   ignore_errors: yes
-  notify: generate new grub config
+  notify: grub2cfg
   when:
   - not rhel7cis_selinux_disable
   - rhel7cis_rule_1_7_1_2
