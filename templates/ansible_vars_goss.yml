@@ -18,7 +18,7 @@ run_heavy_tests: true
 
 
 
-rhel7cis_legacy_boot: true
+rhel7cis_legacy_boot: {{ rhel7cis_legacy_boot }}
 
 # These variables correspond with the CIS rule IDs or paragraph numbers defined in
 # the CIS benchmark documents.

@@ -59,20 +59,6 @@
   when:
   - rhel7cis_run_audit
 
-- name: "Check whether machine is UEFI-based"
-  stat:
-    path: /sys/firmware/efi
-  register: rhel_07_efi_boot
-  tags:
-  - goss_template
-
-- name: set fact for legacy or uefi boot
-  set_fact:
-    rhel7cis_legacy_boot: 'true'
-  when: not rhel_07_efi_boot.stat.exists
-  tags:
-  - goss_template
-
 - name: Copy ansible default vars values to test audit
   template:
     src: ansible_vars_goss.yml

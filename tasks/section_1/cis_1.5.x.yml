@@ -4,7 +4,10 @@
   copy:
     dest: /boot/grub2/user.cfg
     content: "GRUB2_PASSWORD={{ rhel7cis_bootloader_password_hash }}"
-  notify: generate new grub config
+    owner: root
+    group: root
+    mode: 0600
+  notify: grub2cfg
   when:
   - ansible_distribution_version >= '7.2'
   - rhel7cis_set_boot_pass
@@ -18,12 +21,12 @@
 
 - name: "AUTOMATED | 1.5.2 | PATCH | Ensure permissions on bootloader config are configured | Update grub config settings"
   file:
-    path: "{{ grub_cfg.stat.lnk_source }}"
+    path: "{{ bootloader_file }}"
     owner: root
     group: root
     mode: 0600
   when:
-  - grub_cfg.stat.exists and grub_cfg.stat.islnk
+  - rhel7cis_legacy_boot
   - rhel7cis_rule_1_5_2
   tags:
   - level1
