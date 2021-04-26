@@ -1,11 +1,15 @@
 ---
 
-- name: "NOTSCORED | 5.5 | AUDIT | Ensure root login is restricted to system console"
-  command: cat /etc/securetty
-  changed_when: no
-  become: yes
-  register: rhel_07_5_5_audit
-- debug:
+- name: "NOTSCORED | 5.5 | AUDIT | Ensure root login is restricted to system console "
+  block:
+  - name: "NOTSCORED | 5.5 | AUDIT | Ensure root login is restricted to system console"
+    command: cat /etc/securetty
+    changed_when: no
+    become: yes
+    register: rhel_07_5_5_audit
+
+  - name: "NOTSCORED | 5.5 | AUDIT | Ensure root login is restricted to system console"
+    debug:
     msg:
     - "These are the consoles with root login access, please review:"
     - "{{ rhel_07_5_5_audit.stdout_lines }}"
