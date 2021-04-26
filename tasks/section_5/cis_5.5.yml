@@ -10,9 +10,9 @@
 
   - name: "NOTSCORED | 5.5 | AUDIT | Ensure root login is restricted to system console"
     debug:
-    msg:
-    - "These are the consoles with root login access, please review:"
-    - "{{ rhel_07_5_5_audit.stdout_lines }}"
+      msg:
+      - "These are the consoles with root login access, please review:"
+      - "{{ rhel_07_5_5_audit.stdout_lines }}"
   when:
   - rhel7cis_rule_5_5
   tags:
