@@ -55,7 +55,7 @@
 - name: "AUTOMATED | 4.1.2.4 | PATCH | Ensure audit_backlog_limit is sufficient"
   block:
       - name: "AUTOMATED | 4.1.2.4 | AUDIT | Ensure audit_backlog_limit is sufficient | Grep GRUB_CMDLINE_LINUX parameter"
-        shell: grep GRUB_CMDLINE_LINUX /etc/default/grub | cut -f2 -d'"'
+        shell: grep 'GRUB_CMDLINE_LINUX=' /etc/default/grub | cut -f2 -d'"'
         changed_when: false
         failed_when: false
         register: rhel7cis_4_1_2_4_grub_cmdline_linux_settings
