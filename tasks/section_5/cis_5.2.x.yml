@@ -385,7 +385,7 @@
   - patch
   - rule_5.2.21
 
-- name: "SCORED | 5.2.22 | PATCH | Ensure SSH MaxSessionsi is limited"
+- name: "SCORED | 5.2.22 | PATCH | Ensure SSH MaxSessions is limited"
   lineinfile:
     state: present
     dest: /etc/ssh/sshd_config
