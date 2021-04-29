@@ -42,17 +42,24 @@
 - name: "SCORED | 5.4.1.4 | PATCH | Ensure inactive password lock is 30 days or less"
   block:
   - name: "SCORED | 5.4.1.4 | PATCH | Ensure inactive password lock is 30 days or less | Set default inactive setting"
-    command: useradd -D -f {{ rhel7cis_inactivelock.lock_days }}
+    lineinfile: 
+      path: /etc/default/useradd
+      regexp: '^INACTIVE='
+      line: "INACTIVE={{ rhel7cis_inactivelock['lock_days'] }}"
+      state: present
 
   - name: "AUDIT | 5.4.1.4 | PATCH | Ensure inactive password lock is 30 days or less | Getting user list"
-    shell: 'egrep ^[^:]+:[^\!*] /etc/shadow | cut -d: -f1'
+    #shell: 'egrep ^[^:]+:[^\!*] /etc/shadow | cut -d: -f1'
+    shell: "egrep ^[^:]+:[^\\!*] /etc/shadow | awk -F: '{print $1 \",\" $7}' | egrep -v  ',\\d|,[1-2][0-9]|,30|{{ rhel7cis_inactive_whitelist | join('|') }}' | cut -d , -f1"
     register: rhel_07_5_4_1_4_audit
     changed_when: no
 
   - name: "SCORED | 5.4.1.4 | PATCH | Ensure inactive password lock is 30 days or less | Apply Inactive setting to existing accounts"
-    command: chage --inactive {{ rhel7cis_inactivelock.lock_days }} "{{ item }}"
+    command: "chage --inactive {{ rhel7cis_inactivelock.lock_days }} {{ item }}"
     with_items:
     - "{{ rhel_07_5_4_1_4_audit.stdout_lines }}"
+    when: 
+    - rhel_07_5_4_1_4_audit.stdout | length > 0
   when:
   - rhel7cis_rule_5_4_1_4
   tags:

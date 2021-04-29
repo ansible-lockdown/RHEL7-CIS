@@ -1,6 +1,6 @@
 ---
 
-- name: "SCORED | 5.1.1 | PATCH | Ensure cron daemon is enabledi and running"
+- name: "SCORED | 5.1.1 | PATCH | Ensure cron daemon is enabled and running"
   service:
     name: crond
     enabled: yes
