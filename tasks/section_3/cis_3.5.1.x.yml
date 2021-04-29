@@ -97,7 +97,7 @@
         become: true
         changed_when: no
 
-      - name: "MANUAL | 3.5.1.7 | AUDIT | Ensure unnecessary services and ports are not accepted | Show services adn ports"
+      - name: "MANUAL | 3.5.1.7 | AUDIT | Ensure unnecessary services and ports are not accepted | Show services and ports"
         debug:
             msg:
                 - "The items below are the services and ports that are accepted, please correct as needed"
