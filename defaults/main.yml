@@ -482,9 +482,10 @@ rhel7cis_pam_faillock:
 rhel7cis_inactivelock:
     lock_days: 30
 
+# Accounte listed below will not have INACTIVE field set in shadow file
 rhel7cis_inactive_whitelist:
+- root
 - vagrant
-- fail4
 
 rhel7cis_pass:
     max_days: 90
