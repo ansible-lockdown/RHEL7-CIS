@@ -137,7 +137,7 @@
   tags:
   - level1
   - patch
-  - rhel7cis_rule_6_2_5
+  - rule_6.2.5
 
 - name: "AUTOMATED | 6.2.6 | PATCH | Ensure users' home directories permissions are 750 or more restrictive"
   block:
