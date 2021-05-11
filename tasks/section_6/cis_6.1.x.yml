@@ -6,6 +6,8 @@
     changed_when: false
     failed_when: false
     register: rhel7cis_6_1_1_packages_rpm
+    tags:
+    - skip_ansible_lint
     
   - name: "NOTSCORED | 6.1.1 | AUDIT | Audit system file permissions | Create list and warning"
     block:

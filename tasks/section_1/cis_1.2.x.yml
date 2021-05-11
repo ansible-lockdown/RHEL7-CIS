@@ -8,7 +8,7 @@
     - ansible_distribution == "RedHat"
   
   - name: "MANUAL| 1.2.1 | PATCH | Ensure GPG keys are configured | CentOS"
-    command: gpg --quiet --with-fingerprint /etc/pki/rpm-gpg/RPM-GPG-KEY-{{ ansible_distribution}}-{{ ansible_distribution_major_version }}
+    command: gpg --quiet --with-fingerprint /etc/pki/rpm-gpg/RPM-GPG-KEY-{{ ansible_distribution }}-{{ ansible_distribution_major_version }}
     when:
     - ansible_distribution == "CentOS"
   
@@ -26,6 +26,8 @@
     command: yum repolist
     changed_when: no
     register: repolist
+    tags:
+    - skip_ansible_lint
 
   - name: "AUDIT| 1.2.2 | Ensure package manager repositories are configured"
     debug:

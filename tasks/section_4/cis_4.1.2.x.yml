@@ -159,6 +159,8 @@
         changed_when: false
         failed_when: false
         register: rhel7cis_4_1_7_tally2_check
+        tags:
+        - skip_ansible_lint
 
       - name: "AUTOMATED | 4.1.7 | PATCH | Ensure login and logout events are collected | Set login and logout events"
         template:

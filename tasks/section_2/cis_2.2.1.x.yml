@@ -47,7 +47,6 @@
     name: chronyd
     state: stopped
     enabled: no
-  ignore_errors: yes
   when:
   - rhel7cis_time_synchronization == "ntp" and "'chrony' in ansible_facts.packages"
   - rhel7cis_rule_2_2_1_1
@@ -74,6 +73,9 @@
       line: "OPTIONS=\"-u chrony\""
       state: present
       create: yes
+      owner: root
+      group: root
+      mode: 0640
   when:
   - rhel7cis_time_synchronization == "chrony"
   - rhel7cis_rule_2_2_1_2

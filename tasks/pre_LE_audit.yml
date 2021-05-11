@@ -32,8 +32,11 @@
 
 - name: copy to audit content files to server
   copy:
-    src: "{{ rhel7cis_audit_local_copy}}"
+    src: "{{ rhel7cis_audit_local_copy }}"
     dest: "{{ goss_audit_dir  }}"
+    owner: root
+    group: root
+    mode: 0640
   when:
   - rhel7cis_audit_content == 'copy'
 

@@ -44,6 +44,7 @@
   when:
   - rhel7cis_rule_1_6_2
   tags:
+  - skip_ansible_lint
   - level1
   - patch
   - notAUTOMATED

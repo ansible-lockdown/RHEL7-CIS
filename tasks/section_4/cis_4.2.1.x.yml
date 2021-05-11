@@ -64,7 +64,7 @@
             path: /etc/rsyslog.conf
             state: present
             regexp: "{{ item.regexp }}"
-            line: "{{ item.line}}"
+            line: "{{ item.line }}"
             insertafter: '^[# ]*{{ item.insertafter }}\s*=\s*'
             #insertafter: "{{ item.insertafter }}"
         with_items:

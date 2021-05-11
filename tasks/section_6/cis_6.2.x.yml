@@ -212,6 +212,7 @@
   when:
   - rhel7cis_rule_6_2_7
   tags:
+  - skip_ansible_lint
   - level1
   - patch
   - rule_6.2.7

@@ -82,19 +82,19 @@
   - name: "SCORED | 5.4.1.5 | AUDIT | Ensure all users last password change date is in the past | Alert no pw change in the future exist"
     debug:
       msg: "Good News! All accounts have PW change dates that are in the past"
-    when: rhel7cis_5_4_1_5_user_list.stdout == ""
+    when: rhel7cis_5_4_1_5_user_list.stdout | length == 0
 
   - name: "SCORED | 5.4.1.5 | AUDIT | Ensure all users last password change date is in the past | Alert on accounts with pw change in the future"
     debug:
       msg: "Warning! The following accounts have the last PW change date in the future: {{ rhel7cis_5_4_1_5_user_list.stdout_lines }}"
     when:
-    - rhel7cis_5_4_1_5_user_list.stdout != ""
+    - rhel7cis_5_4_1_5_user_list.stdout | length > 0
     - not rhel7cis_futurepwchgdate_autofix
 
   - name: "SCORED | 5.4.1.5 | PATCH | Ensure all users last password change date is in the past | Fix accounts with pw change in the future"
     command: passwd --expire {{ item }}
     when:
-    - rhel7cis_5_4_1_5_user_list != ""
+    - rhel7cis_5_4_1_5_user_list | length > 0
     - rhel7cis_futurepwchgdate_autofix
     with_items:
     - "{{ rhel7cis_5_4_1_5_user_list.stdout_lines }}"

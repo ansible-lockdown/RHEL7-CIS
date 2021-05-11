@@ -12,12 +12,17 @@
   register: empty_password_accounts
   changed_when: no
   check_mode: no
+  tags:
+  - skip_ansible_lint
+
 
 - name: "PRELIM | Gather UID 0 accounts other than root"
   shell: "cat /etc/passwd | awk -F: '($3 == 0 && $1 != \"root\") {i++;print $1 } END {exit i}'"
   register: uid_zero_accounts_except_root
   changed_when: no
   check_mode: no
+  tags:
+  - skip_ansible_lint
 
 - name: "PRELIM | Check whether machine is UEFI-based"
   stat:
@@ -86,7 +91,8 @@
   changed_when: no
   failed_when: false
   tags:
-      - rule_6.2.8
+  - skip_ansible_lint
+  - rule_6.2.8
 
 - name: "PRELIM | 6.2.8 | Set fact for home directory paths for interactive users"
   set_fact:
