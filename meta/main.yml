@@ -4,7 +4,7 @@ galaxy_info:
     description: "Apply the CIS RHEL7 role"
     company: "MindPoint Group"
     license: MIT
-    min_ansible_version: 2.9
+    min_ansible_version: 2.9.0
     platforms:
     - name: EL
       versions:
@@ -14,4 +14,6 @@ galaxy_info:
     - security
     - cis
     - hardening
+    - ansible-role
+    - security-hardening
 dependencies: []
