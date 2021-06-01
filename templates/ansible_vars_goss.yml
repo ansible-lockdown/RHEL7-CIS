@@ -1,3 +1,4 @@
+---
 # Taken from LE rhel7-cis
 rhel7cis_notauto: {{ rhel7cis_notauto }}
 rhel7cis_section1: {{ rhel7cis_section1 }}
@@ -15,8 +16,6 @@ rhel7cis_level1: true
 rhel7cis_level2: true
 # to enable rules that may have IO impact on a system e.g. full filesystem scans or CPU heavy
 run_heavy_tests: true
-
-
 
 rhel7cis_legacy_boot: {{ rhel7cis_legacy_boot }}
 
@@ -356,20 +355,16 @@ rhel7cis_is_router: {{ rhel7cis_is_router }}
 # Time Synchronization
 rhel7cis_time_synchronization: {{ rhel7cis_time_synchronization }}
 
-
-
 rhel7cis_firewall: {{ rhel7cis_firewall }}
-#rhel7cis_firewall: iptables
+# rhel7cis_firewall: iptables
 rhel7cis_default_firewall_zone: {{ rhel7cis_default_zone }}
-rhel7cis_firewall_interface: 
+rhel7cis_firewall_interface:
 - ['ens224']
 - ['ens192']
 rhel7cis_firewall_services: {{ rhel7cis_firewall_services }}
 
-
-
-### Section 4
-## auditd settings
+# Section 4
+# auditd settings
 rhel7cis_auditd:
   space_left_action: {{ rhel7cis_auditd.space_left_action}}
   action_mail_acct: {{ rhel7cis_auditd.action_mail_acct }}
@@ -377,16 +372,16 @@ rhel7cis_auditd:
   max_log_file_action: {{ rhel7cis_auditd.max_log_file_action }}
   auditd_backlog_limit: {{ rhel7cis_audit_backlog_limit }}
 
-## syslog
+# syslog
 {% if rhel7cis_syslog == "rsyslog" %}
 rhel7cis_rsyslog: true
 {% endif %}
 
-### Section 5
+# Section 5
 rhel7cis_sshd_limited: false
 #Note the following to understand precedence and layout
 rhel7cis_sshd_access:
-- AllowUser 
+- AllowUser
 - AllowGroup
 - DenyUser
 - DenyGroup
@@ -401,38 +396,38 @@ rhel7cis_ssh_weak_ciphers:
 - arcfour128
 - arcfour256
 - blowfish-cbc
-- cast128-cbc 
+- cast128-cbc
 - rijndael-cbc@lysator.liu.se
 
 rhel7cis_ssh_strong_macs:  MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2- 512,hmac-sha2-256
 rhel7cis_ssh_weak_macs:
-- hmac-md5 
-- hmac-md5-96 
-- hmac-ripemd160 
+- hmac-md5
+- hmac-md5-96
+- hmac-ripemd160
 - hmac-sha1
-- hmac-sha1-96 
-- umac-64@openssh.com 
-- umac-128@openssh.com 
-- hmac-md5-etm@openssh.com 
-- hmac-md5-96-etm@openssh.com 
-- hmac-ripemd160-etm@openssh.com 
-- hmac-sha1-etm@openssh.com 
-- hmac-sha1-96-etm@openssh.com 
-- umac-64-etm@openssh.com 
+- hmac-sha1-96
+- umac-64@openssh.com
+- umac-128@openssh.com
+- hmac-md5-etm@openssh.com
+- hmac-md5-96-etm@openssh.com
+- hmac-ripemd160-etm@openssh.com
+- hmac-sha1-etm@openssh.com
+- hmac-sha1-96-etm@openssh.com
+- umac-64-etm@openssh.com
 - umac-128-etm@openssh.com
 
 rhel7cis_ssh_strong_kex: KexAlgorithms curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman- group14-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256
-rhel7cis_ssh_weak_kex: 
-- diffie-hellman-group1-sha1 
-- diffie-hellman-group14-sha1 
+rhel7cis_ssh_weak_kex:
+- diffie-hellman-group1-sha1
+- diffie-hellman-group14-sha1
 - diffie-hellman-group-exchange-sha1
 
 rhel7cis_ssh_aliveinterval: "300"
 rhel7cis_ssh_countmax: "3"
 
 ## PAM
-rhel7cis_pam_password: 
-  - minclass = 4 
+rhel7cis_pam_password:
+  - minclass = 4
 rhel7cis_pam_passwd_retry: "3"
 # faillock or tally2
 rhel7cis_accountlock: faillock
@@ -450,4 +445,3 @@ rhel7cis_passwd_remember: "{{ rhel7cis_pam_faillock.remember }}"
 rhel7cis_pass_max_days: {{ rhel7cis_pass.max_days }}
 rhel7cis_pass_min_days: {{ rhel7cis_pass.min_days }}
 rhel7cis_pass_warn_age: {{ rhel7cis_pass.warn_age }}
-
