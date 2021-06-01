@@ -1,47 +1,47 @@
 ---
 - name: "AUTOMATED | 4.1.1.1 | PATCH | Ensure audit log storage size is configured"
   package:
-      name: ['audit', 'audit-libs']
-      state: present
+    name: ['audit', 'audit-libs']
+    state: present
   vars:
-      ansible_python_interpreter: /bin/python
+    ansible_python_interpreter: /bin/python
   when:
-      - rhel7cis_rule_4_1_1_1
+  - rhel7cis_rule_4_1_1_1
   notify: restart auditd
   tags:
-      - level2
-      - auditd
-      - automated
-      - rule_4.1.1.1
+  - level2
+  - auditd
+  - automated
+  - rule_4.1.1.1
 
 - name: "AUTOMATED | 4.1.1.2 | PATCH | Ensure auditd service is enabled"
   service:
-      name: auditd
-      state: started
-      enabled: yes
+    name: auditd
+    state: started
+    enabled: yes
   when:
-      - not rhel7cis_skip_for_travis
-      - rhel7cis_rule_4_1_1_2
-      - ansible_connection != 'docker'
+  - not rhel7cis_skip_for_travis
+  - rhel7cis_rule_4_1_1_2
+  - ansible_connection != 'docker'
   tags:
-      - level2
-      - auditd
-      - patch
-      - automated
-      - rule_4.1.1.2
+  - level2
+  - auditd
+  - patch
+  - automated
+  - rule_4.1.1.2
 
 - name: "AUTOMATED | 4.1.1.3 | PATCH | Ensure auditing for processes that start prior to auditd is enabled"
   replace:
-      dest: /etc/default/grub
-      #regexp: '(^GRUB_CMDLINE_LINUX\s*\=\s*)(?:")(.+)(?<!audit=1)(?:")'
-      regexp: ^(GRUB_CMDLINE_LINUX=)(?:")(?!.*audit=1)(.+)(?:")$
-      replace: '\1"\2 audit=1"'
+    dest: /etc/default/grub
+    # regexp: '(^GRUB_CMDLINE_LINUX\s*\=\s*)(?:")(.+)(?<!audit=1)(?:")'
+    regexp: ^(GRUB_CMDLINE_LINUX=)(?:")(?!.*audit=1)(.+)(?:")$
+    replace: '\1"\2 audit=1"'
   notify: grub2cfg
   when:
-      - rhel7cis_rule_4_1_1_3
+  - rhel7cis_rule_4_1_1_3
   tags:
-      - level2
-      - auditd
-      - patch
-      - automated
-      - rule_4.1.1.3
+  - level2
+  - auditd
+  - patch
+  - automated
+  - rule_4.1.1.3
