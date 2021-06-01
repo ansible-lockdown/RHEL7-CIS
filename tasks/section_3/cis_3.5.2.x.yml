@@ -12,7 +12,7 @@
   - level1
   - patch
   - rule_3.5.2.1
- 
+
 - name: "AUTOMATED | 3.5.2.2 | PATCH | Ensure firewalld is not installed or stopped or masked"
   package:
     name: firewalld
