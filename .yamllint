@@ -9,7 +9,7 @@ extends: default
 
 rules:
   indentation:
-    spaces: 4
+    spaces: 2
   truthy: disable
   braces:
     max-spaces-inside: 1
