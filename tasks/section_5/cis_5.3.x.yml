@@ -53,10 +53,10 @@
 
   - name: "SCORED | 5.3.2 | PATCH | Ensure lockout for failed password attempts is configured | Add deny count and unlock times to authsucc"
     lineinfile:
-        dest: /etc/pam.d/{{ item }}
-        state: present
-        line: "auth        sufficient    pam_faillock.so authsucc audit deny={{ rhel7cis_pam_faillock.attempts }}{{ (rhel7cis_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}unlock_time={{ rhel7cis_pam_faillock.unlock_time }}"
-        insertafter: '^#?auth ?'
+      dest: /etc/pam.d/{{ item }}
+      state: present
+      line: "auth        sufficient    pam_faillock.so authsucc audit deny={{ rhel7cis_pam_faillock.attempts }}{{ (rhel7cis_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}unlock_time={{ rhel7cis_pam_faillock.unlock_time }}"
+      insertafter: '^#?auth ?'
     loop:
     - "system-auth"
     - "password-auth"
@@ -81,8 +81,8 @@
     - "system-auth"
     - "password-auth"
 
-# The two steps below were added to keep authconfig from overwritting the above configs. This follows steps from here: https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/chap-hardening_your_system_with_tools_and_services
-# With the steps below you will score five (5) points lower due to false positive results
+  # The two steps below were added to keep authconfig from overwritting the above configs. This follows steps from here: https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/chap-hardening_your_system_with_tools_and_services
+  # With the steps below you will score five (5) points lower due to false positive results
 
   - name: |
           "SCORED | 5.3.2 | PATCH | Ensure lockout for failed password attempts is configured | Copy system/passowrd-auth to system/password-auth-local
@@ -98,7 +98,7 @@
     loop:
     - "system-auth"
     - "password-auth"
-    
+
   - name: |
           "SCORED | 5.3.2 | PATCH | Ensure lockout for failed password attempts is configured | Setup symbolic link
            SCORED | 5.3.4 | PATCH | Ensure password reuse is limited | Setup symbolic link"
