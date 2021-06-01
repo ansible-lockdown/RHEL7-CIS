@@ -73,10 +73,10 @@
     shell: echo $(($(date --utc --date "$1" +%s)/86400))
     failed_when: no
     changed_when: no
-    register: rhel7cis_5_4_1_5_currentUT
+    register: rhel7cis_5_4_1_5_current_unix_time
 
   - name: "SCORED | 5.4.1.5 | AUDIT | Ensure all users last password change date is in the past | Get list of users with last changed pw date in the future"
-    shell: "cat /etc/shadow | awk -F: '{if($3>{{ rhel7cis_5_4_1_5_currentUT.stdout }})print$1}'"
+    shell: "cat /etc/shadow | awk -F: '{if($3>{{ rhel7cis_5_4_1_5_current_unix_time.stdout }})print$1}'"
     register: rhel7cis_5_4_1_5_user_list
 
   - name: "SCORED | 5.4.1.5 | AUDIT | Ensure all users last password change date is in the past | Alert no pw change in the future exist"

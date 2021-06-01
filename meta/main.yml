@@ -5,6 +5,7 @@ galaxy_info:
     company: "MindPoint Group"
     license: MIT
     min_ansible_version: 2.9.0
+    role_name: rhel7_cis
     platforms:
     - name: EL
       versions:
@@ -14,6 +15,4 @@ galaxy_info:
     - security
     - cis
     - hardening
-    - ansible-role
-    - security-hardening
 dependencies: []
