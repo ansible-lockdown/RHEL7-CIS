@@ -72,7 +72,7 @@
     register: rhelcis_1_7_1_6_unconf_daemons
     failed_when: no
     changed_when: no
-      
+
   - name: "AUTOMATED | 1.7.1.6 | AUDIT | Ensure no unconfined daemons exist | Message on no unconfined daemones"
     debug:
       msg: "Good News! There are no unconfined daemons found on your system"

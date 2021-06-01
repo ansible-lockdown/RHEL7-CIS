@@ -18,7 +18,7 @@
 
 - name: "SCORED | 1.10 | PATCH | Ensure GDM is removed or login is configured"
   block:
-  - name:  "SCORED | 1.10 | PATCH | login is configured | gdm"
+  - name: "SCORED | 1.10 | PATCH | login is configured | gdm"
     lineinfile:
       dest: /etc/dconf/profile/gdm
       regexp: "{{ item.regex }}"
@@ -28,8 +28,8 @@
     - { regex: '^system-db', line: 'system-db:gdm' }
     - { regex: '^file-db', line: 'file-db:/usr/share/gdm/greeter-dconf-defaults' }
     notify: update dconf
-    
-  - name:  "SCORED | 1.10 | PATCH | login is configured | banner"
+
+  - name: "SCORED | 1.10 | PATCH | login is configured | banner"
     lineinfile:
       dest: /etc/dconf/db/01-banner-message
       regexp: "{{ item.regex }}"
@@ -39,8 +39,8 @@
     - { regex: '^banner-message-enable', line: 'banner-message-enable=true' }
     - { regex: '^banner-message-text', line: 'banner-message-test={{ rhel7cis_warning_banner }}' }
     notify: update dconf
-  
-  - name:  "SCORED | 1.10 | PATCH | login is configured | login"
+
+  - name: "SCORED | 1.10 | PATCH | login is configured | login"
     lineinfile:
       dest: /etc/dconf/db/00-login-screen
       regexp: "{{ item.regex }}"
@@ -55,7 +55,7 @@
   - rhel7cis_rule_1_10
   tags:
   - level1
-  - scored 
+  - scored
   - patch
   - rule_1_10
   - gdm

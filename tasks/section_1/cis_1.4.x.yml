@@ -6,7 +6,7 @@
     package:
       name: aide
       state: installed
-   
+
   - name: "AUTOMATED | 1.4.1 | PATCH | Ensure AIDE is installed | started"
     command: /usr/sbin/aide --init -B 'database_out=file:/var/lib/aide/aide.db.gz'
     args:
