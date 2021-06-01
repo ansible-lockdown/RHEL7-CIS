@@ -53,11 +53,11 @@
     stat:
       path: "{{ goss_bin }}"
     register: goss_available
-  
+
   - name: If audit ensure goss is available
     assert:
       msg: "Audit has been selected: unable to find goss binary at {{ goss_bin }}"
-    when: 
+    when:
     - not goss_available.stat.exists
   when:
   - rhel7cis_run_audit
@@ -71,7 +71,7 @@
   - rhel7cis_run_audit
   tags:
   - goss_template
-  
+
 - name: "Run pre_remediation {{ benchmark }} audit"
   goss:
     goss_path: "{{ goss_bin }}"
@@ -86,10 +86,10 @@
   - name: "capture data {{ pre_audit_outfile }}"
     command: "cat {{ pre_audit_outfile }}"
     register: pre_audit
-    changed_when: false 
-    
+    changed_when: false
+
   - name: Capture pre-audit result
-    set_fact: 
+    set_fact:
       pre_audit_summary: "{{ pre_audit.stdout | from_json |json_query(summary) }}"
     vars:
       summary: 'summary."summary-line"'
