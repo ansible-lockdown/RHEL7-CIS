@@ -30,12 +30,12 @@
   - { name: net.ipv4.conf.all.send_redirects, value: 0 }
   - { name: net.ipv4.conf.default.send_redirects, value: 0 }
   notify:
-      - sysctl flush ipv4 route table
+  - sysctl flush ipv4 route table
   when:
-      - not rhel7cis_is_router
-      - rhel7cis_rule_3_2_2
+  - not rhel7cis_is_router
+  - rhel7cis_rule_3_2_2
   tags:
-      - level1
-      - sysctl
-      - patch
-      - rule_3.2.2
+  - level1
+  - sysctl
+  - patch
+  - rule_3.2.2

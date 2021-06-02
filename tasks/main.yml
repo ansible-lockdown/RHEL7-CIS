@@ -40,6 +40,7 @@
   when:
   - rhel7cis_run_audit
   tags:
+  - rhel7cis_run_audit
   - run_audit
 
 - name: Gather the package facts
@@ -47,10 +48,11 @@
     manager: auto
   tags:
   - always
+    
 
 - include: parse_etc_password.yml
   become: yes
-  when: 
+  when:
   - rhel7cis_section5
   - rhel7cis_section6
 
@@ -60,9 +62,9 @@
   - rhel7cis_section1
 
 - include: section_2/main.yml
-  when: rhel7cis_section2
   tags:
   - rhel7cis_section2
+  when: rhel7cis_section2
 
 - include: section_3/main.yml
   when: rhel7cis_section3

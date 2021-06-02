@@ -28,7 +28,7 @@
     register: epel_installed
     when:
     - python36_rpm_present.rc != '0'
-  
+
   - name: "PREREQ | Check required packages installed | Python3 "
     package:
       name: "{{ item }}"
@@ -37,7 +37,7 @@
     loop:
     - python36-rpm
     - libselinux-python3
-  
+
   - name: Disable Epel repo if installed earlier
     command: yum-config-manager disable epel
     when: epel_installed.changed
@@ -45,4 +45,3 @@
   - ( ansible_python.version.major == 3  and ansible_python.version.minor == 6 )
   vars:
     ansible_python_interpreter: "{{ python2_bin }}"
-

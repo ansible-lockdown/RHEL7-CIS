@@ -2,64 +2,64 @@
 
 - name: "AUTOMATED | 4.2.2.1 | PATCH | Ensure journald is configured to send logs to rsyslog"
   lineinfile:
-      path: /etc/systemd/journald.conf
-      regexp: '^[F|f]orward[T|t]o[S|s]yslog='
-      line: "ForwardToSyslog=yes"
+    path: /etc/systemd/journald.conf
+    regexp: '^[F|f]orward[T|t]o[S|s]yslog='
+    line: "ForwardToSyslog=yes"
   when:
-      - rhel7cis_rule_4_2_2_1
+  - rhel7cis_rule_4_2_2_1
   tags:
-      - level1
-      - patch
-      - manual
-      - rule_4.2.2.1
-      - journald
+  - level1
+  - patch
+  - manual
+  - rule_4.2.2.1
+  - journald
 
 - name: "AUTOMATED | 4.2.2.2 | PATCH | Ensure journald is configured to compress large log files"
   lineinfile:
-      path: /etc/systemd/journald.conf
-      regexp: '^[C|c]ompress='
-      line: "Compress=yes"
+    path: /etc/systemd/journald.conf
+    regexp: '^[C|c]ompress='
+    line: "Compress=yes"
   when:
-      - rhel7cis_rule_4_2_2_2
+  - rhel7cis_rule_4_2_2_2
   tags:
-      - level1
-      - patch
-      - automated
-      - rule_4.2.2.2
-      - journald
+  - level1
+  - patch
+  - automated
+  - rule_4.2.2.2
+  - journald
 
 - name: "AUTOMATED | 4.2.2.3 | PATCH | Ensure journald is configured to write logfiles to persistent disk"
   lineinfile:
-      path: /etc/systemd/journald.conf
-      regexp: '^[S|s]torage='
-      line: "Storage=persistent"
+    path: /etc/systemd/journald.conf
+    regexp: '^[S|s]torage='
+    line: "Storage=persistent"
   when:
-      - rhel7cis_rule_4_2_2_3
+  - rhel7cis_rule_4_2_2_3
   tags:
-      - level1
-      - patch
-      - automated
-      - rule_4.2.2.3
-      - journald
+  - level1
+  - patch
+  - automated
+  - rule_4.2.2.3
+  - journald
 
 - name: "AUTOMATED | 4.2.3 | PATCH | Ensure permissions on all logfiles are configured"
   command: find /var/log -type f -exec chmod g-wx,o-rwx "{}" + -o -type d -exec chmod g-wx,o-rwx "{}" +
   changed_when: no
   failed_when: no
   when:
-      - rhel7cis_rule_4_2_3
+  - rhel7cis_rule_4_2_3
   tags:
-      - level1
-      - patch
-      - automated
-      - rule_4.2.3
+  - level1
+  - patch
+  - automated
+  - rule_4.2.3
 
 - name: "MANUAL | 4.2.4 | AUDIT | Ensure logrotate is configured"
   find:
-      paths: /etc/logrotate.d/
+    paths: /etc/logrotate.d/
   register: log_rotates
   tags:
-      - level1
-      - audit
-      - manual
-      - rule_4.2.4
+  - level1
+  - audit
+  - manual
+  - rule_4.2.4

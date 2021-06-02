@@ -4,6 +4,9 @@
   template:
     src: etc/motd.j2
     dest: /etc/motd
+    owner: root
+    group: root
+    mode: 0644
   when:
   - rhel7cis_rule_1_8_1_1
   tags:
@@ -16,6 +19,9 @@
   template:
     src: etc/issue.j2
     dest: /etc/issue
+    owner: root
+    group: root
+    mode: 0644
   when:
   - rhel7cis_rule_1_8_1_2
   tags:
@@ -27,6 +33,9 @@
   template:
     src: etc/issue.net.j2
     dest: /etc/issue.net
+    owner: root
+    group: root
+    mode: 0644
   when:
   - rhel7cis_rule_1_8_1_3
   tags:

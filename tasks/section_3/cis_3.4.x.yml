@@ -6,6 +6,9 @@
     regexp: "^(#)?install dccp(\\s|$)"
     line: "install dccp /bin/true"
     create: yes
+    owner: root
+    group: root
+    mode: 0600
   when:
   - rhel7cis_rule_3_4_1
   tags:
@@ -19,8 +22,11 @@
     regexp: "^(#)?install sctp(\\s|$)"
     line: "install sctp /bin/true"
     create: yes
+    owner: root
+    group: root
+    mode: 0600
   when:
-  - rhel7cis_rule_3_4_2|bool
+  - rhel7cis_rule_3_4_2
   tags:
   - level1
   - patch
