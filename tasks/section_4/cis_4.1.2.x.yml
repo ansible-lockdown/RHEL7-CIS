@@ -6,9 +6,9 @@
     regexp: "^max_log_file( |=)"
     line: "max_log_file = 10"
     state: present
+  notify: restart auditd
   when:
   - rhel7cis_rule_4_1_2_1
-  notify: restart auditd
   tags:
   - level2
   - auditd
@@ -22,9 +22,9 @@
     regexp: "^max_log_file_action"
     line: "max_log_file_action = {{ rhel7cis_auditd['max_log_file_action'] }}"
     state: present
+  notify: restart auditd
   when:
   - rhel7cis_rule_4_1_2_2
-  notify: restart auditd
   tags:
   - level2
   - auditd
@@ -42,9 +42,9 @@
   - { regexp: '^space_left_action', line: "space_left_action = {{ rhel7cis_auditd['space_left_action'] }}" }
   - { regexp: '^action_mail_acct', line: "action_mail_acct = {{ rhel7cis_auditd['action_mail_acct'] }}" }
   - { regexp: '^admin_space_left_action', line: "admin_space_left_action = {{ rhel7cis_auditd['admin_space_left_action'] }}" }
+  notify: restart auditd
   when:
   - rhel7cis_rule_4_1_2_3
-  notify: restart auditd
   tags:
   - level2
   - auditd
@@ -91,9 +91,9 @@
     owner: root
     group: root
     mode: 0600
+  notify: restart auditd
   when:
   - rhel7cis_rule_4_1_3
-  notify: restart auditd
   tags:
   - level2
   - auditd
@@ -108,9 +108,9 @@
     owner: root
     group: root
     mode: 0600
+  notify: restart auditd
   when:
   - rhel7cis_rule_4_1_4
-  notify: restart auditd
   tags:
   - level2
   - auditd
@@ -125,9 +125,9 @@
     owner: root
     group: root
     mode: 0600
+  notify: restart auditd
   when:
   - rhel7cis_rule_4_1_5
-  notify: restart auditd
   tags:
   - level2
   - auditd
@@ -142,9 +142,9 @@
     owner: root
     group: root
     mode: 0600
+  notify: restart auditd
   when:
   - rhel7cis_rule_4_1_6
-  notify: restart auditd
   tags:
   - level2
   - auditd
@@ -169,7 +169,7 @@
       owner: root
       group: root
       mode: 0600
-  notify: restart auditd
+    notify: restart auditd
   when:
   - rhel7cis_rule_4_1_7
   tags:
@@ -186,9 +186,9 @@
     owner: root
     group: root
     mode: 0600
+  notify: restart auditd
   when:
   - rhel7cis_rule_4_1_8
-  notify: restart auditd
   tags:
   - level2
   - auditd
@@ -203,9 +203,9 @@
     owner: root
     group: root
     mode: 0600
+  notify: restart auditd
   when:
   - rhel7cis_rule_4_1_9
-  notify: restart auditd
   tags:
   - level2
   - auditd
@@ -220,9 +220,9 @@
     owner: root
     group: root
     mode: 0600
+  notify: restart auditd
   when:
   - rhel7cis_rule_4_1_10
-  notify: restart auditd
   tags:
   - level2
   - auditd
@@ -245,7 +245,7 @@
       owner: root
       group: root
       mode: 0600
-  notify: restart auditd
+    notify: restart auditd
   when:
   - rhel7cis_rule_4_1_11
   tags:
@@ -262,9 +262,9 @@
     owner: root
     group: root
     mode: 0600
+  notify: restart auditd
   when:
   - rhel7cis_rule_4_1_12
-  notify: restart auditd
   tags:
   - level2
   - auditd
@@ -279,9 +279,9 @@
     owner: root
     group: root
     mode: 0600
+  notify: restart auditd
   when:
   - rhel7cis_rule_4_1_13
-  notify: restart auditd
   tags:
   - level2
   - auditd
@@ -296,9 +296,9 @@
     owner: root
     group: root
     mode: 0600
+  notify: restart auditd
   when:
   - rhel7cis_rule_4_1_14
-  notify: restart auditd
   tags:
   - level2
   - auditd
@@ -313,9 +313,9 @@
     owner: root
     group: root
     mode: 0600
+  notify: restart auditd
   when:
   - rhel7cis_rule_4_1_15
-  notify: restart auditd
   tags:
   - level2
   - auditd
@@ -330,9 +330,9 @@
     owner: root
     group: root
     mode: 0600
+  notify: restart auditd
   when:
   - rhel7cis_rule_4_1_16
-  notify: restart auditd
   tags:
   - level2
   - auditd
@@ -347,9 +347,9 @@
     owner: root
     group: root
     mode: 0600
+  notify: restart auditd
   when:
   - rhel7cis_rule_4_1_17
-  notify: restart auditd
   tags:
   - level2
   - auditd
