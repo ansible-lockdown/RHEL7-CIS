@@ -34,7 +34,7 @@
   block:
   - name: "PRELIM | set fact if UEFI boot | RHEL or OEL"
     set_fact:
-      bootloader_file: /boot/efi/EFI/redhat/grub.cfg
+      rhel7cis_bootloader_file: /boot/efi/EFI/redhat/grub.cfg
       rhel7cis_legacy_boot: false
     when:
     - rhel7cis_efi_boot.stat.exists
@@ -42,7 +42,7 @@
 
   - name: "PRELIM | set fact if UEFI boot | CentOS "
     set_fact:
-      bootloader_file: /boot/efi/EFI/centos/grub.cfg
+      rhel7cis_bootloader_file: /boot/efi/EFI/centos/grub.cfg
       rhel7cis_legacy_boot: false
     when:
     - rhel7cis_efi_boot.stat.exists
@@ -50,14 +50,14 @@
 
   - name: "PRELIM | set if not UEFI boot"
     set_fact:
-      bootloader_file: /boot/grub2/grub.cfg
+      rhel7cis_bootloader_file: /boot/grub2/grub.cfg
       rhel7cis_legacy_boot: true
     when: not rhel7cis_efi_boot.stat.exists
 
   - name: output bootloader and efi state
     debug:
       msg:
-      - "bootloader file set to {{ bootloader_file }}"
+      - "bootloader file set to {{ rhel7cis_bootloader_file }}"
       - "legacy boot equals {{ rhel7cis_legacy_boot }}"
 
 - name: "PRELIM | Section 1.7 | Ensure SELinux is installed"

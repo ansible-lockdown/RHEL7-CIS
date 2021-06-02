@@ -38,6 +38,7 @@
 
 - import_tasks: pre_LE_audit.yml
   when:
+  - rhel7cis_run_audit
   tags:
   - rhel7cis_run_audit
   - run_audit

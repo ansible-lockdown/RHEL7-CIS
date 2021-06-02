@@ -21,7 +21,7 @@
 
 - name: "AUTOMATED | 1.5.2 | PATCH | Ensure permissions on bootloader config are configured | Update grub config settings"
   file:
-    path: "{{ bootloader_file }}"
+    path: "{{ rhel7cis_bootloader_file }}"
     owner: root
     group: root
     mode: 0600
