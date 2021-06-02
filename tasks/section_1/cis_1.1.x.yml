@@ -188,7 +188,7 @@
          MANUAL | 1.1.20 | PATCH | Ensure nodev option set on removable media partitions\n
          MANUAL | 1.1.21 | PATCH | Ensure nosuid option set on removable media partitions"
   debug:
-      msg: "--> Not relevant"
+    msg: "--> Not relevant"
   changed_when: no
   when:
   - rhel7cis_rule_1_1_19 or rhel7cis_rule_1_1_20 or rhel7cis_rule_1_1_21
@@ -209,6 +209,7 @@
   when:
   - rhel7cis_rule_1_1_22
   tags:
+  - skip_ansible_lint
   - level1
   - patch
   - rule_1.1.22

@@ -1,46 +1,46 @@
 ---
 - name: "SCORED | 6.2.8 | PATCH | Ensure users' home directories permissions are 750 or more restrictive"
   find:
-      paths:
-          - "{{ homedir }}"
-      recurse: true
-      file_type: any
+    paths:
+    - "{{ homedir }}"
+    recurse: true
+    file_type: any
   register: rhel_07_6_2_8_results
   when:
-      - rhel7cis_rule_6_2_8
+  - rhel7cis_rule_6_2_8
   tags:
-      - level1
-      - patch
-      - rule_6.2.8
+  - level1
+  - patch
+  - rule_6.2.8
 
 - name: "SCORED | 6.2.8 | PATCH | Ensure users' home directories permissions are 750 or more restrictive"
   file:
-      path: "{{ line_item.path }}"
-      mode: 0640
+    path: "{{ line_item.path }}"
+    mode: 0640
   loop: "{{ rhel_07_6_2_8_results.files }}"
   loop_control:
-      label: "{{ line_item.path }}"
-      loop_var: line_item
+    label: "{{ line_item.path }}"
+    loop_var: line_item
   when:
-      - rhel_07_6_2_8_results.files.isreg is defined
-      - rhel7cis_rule_6_2_8
+  - rhel_07_6_2_8_results.files.isreg is defined
+  - rhel7cis_rule_6_2_8
   tags:
-      - level1
-      - patch
-      - rule_6.2.8
+  - level1
+  - patch
+  - rule_6.2.8
 
 - name: "SCORED | 6.2.8 | PATCH | Ensure users' home directories permissions are 750 or more restrictive"
   file:
-      path: "{{ line_item.path }}"
-      mode: 0750
+    path: "{{ line_item.path }}"
+    mode: 0750
   loop: "{{ rhel_07_6_2_8_results.files }}"
   loop_control:
-      label: "{{ line_item.path }}"
-      loop_var: line_item
+    label: "{{ line_item.path }}"
+    loop_var: line_item
   when:
-      - rhel_07_6_2_8_results.files.isdir is defined
-      - rhel7cis_rule_6_2_8
+  - rhel_07_6_2_8_results.files.isdir is defined
+  - rhel7cis_rule_6_2_8
   tags:
-      - level1
-      - patch
-      - rule_6.2.8
+  - level1
+  - patch
+  - rule_6.2.8

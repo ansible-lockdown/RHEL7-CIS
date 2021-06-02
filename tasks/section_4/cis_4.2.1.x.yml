@@ -2,172 +2,172 @@
 
 - name: "AUTOMATED | 4.2.1.1 | PATCH | Ensure rsyslog or syslog-ng is installed"
   package:
-      name: "{{ rhel7cis_syslog }}"
-      state: present
+    name: "{{ rhel7cis_syslog }}"
+    state: present
   vars:
-      ansible_python_interpreter: /bin/python
+    ansible_python_interpreter: /bin/python
   when:
-      - rhel7cis_rule_4_2_1_1
+  - rhel7cis_rule_4_2_1_1
   tags:
-      - level1
-      - patch
-      - automated
-      - rule_4.2.1.1
+  - level1
+  - patch
+  - automated
+  - rule_4.2.1.1
 
 - name: "AUTOMATED | 4.2.1.2 | PATCH | Ensure rsyslog Service is enabled"
   service:
-      name: rsyslog
-      enabled: yes
+    name: rsyslog
+    enabled: yes
   when:
-      - rhel7cis_rule_4_2_1_2
-      - rhel7cis_syslog == 'rsyslog'
+  - rhel7cis_rule_4_2_1_2
+  - rhel7cis_syslog == 'rsyslog'
   tags:
-      - level1
-      - patch
-      - rsyslog
-      - automated
-      - rule_4.2.1.2
+  - level1
+  - patch
+  - rsyslog
+  - automated
+  - rule_4.2.1.2
 
 - name: "AUTOMATED | 4.2.1.3 | PATCH | Ensure rsyslog default file permissions configured"
   lineinfile:
-      dest: /etc/rsyslog.conf
-      regexp: '^\$FileCreateMode'
-      line: '$FileCreateMode 0640'
+    dest: /etc/rsyslog.conf
+    regexp: '^\$FileCreateMode'
+    line: '$FileCreateMode 0640'
   notify: restart rsyslog
   when:
-      - rhel7cis_rule_4_2_1_3
+  - rhel7cis_rule_4_2_1_3
   tags:
-      - level1
-      - patch
-      - automated
-      - rule_4.2.1.3
+  - level1
+  - patch
+  - automated
+  - rule_4.2.1.3
 
 - name: "MANUAL | 4.2.1.4 | PATCH | Ensure logging is configured"
   block:
-      - name: "MANUAL | 4.2.1.4 | AUDIT | Ensure logging is configured | rsyslog current config message out"
-        command: cat /etc/rsyslog.conf
-        become: yes
-        changed_when: false
-        failed_when: no
-        register: rhel_07_4_2_1_4_audit
+  - name: "MANUAL | 4.2.1.4 | AUDIT | Ensure logging is configured | rsyslog current config message out"
+    command: cat /etc/rsyslog.conf
+    become: yes
+    changed_when: false
+    failed_when: no
+    register: rhel_07_4_2_1_4_audit
 
-      - name: "MANUAL | 4.2.1.4 | PATCH | Ensure logging is configured | Debug out rsyslog settings"
-        debug:
-            msg:
-                - "These are the current logging configurations for rsyslog, please review:"
-                - "{{ rhel_07_4_2_1_4_audit.stdout_lines }}"
-        when:
-            - not rhel7cis_rsyslog_ansibleManaged
+  - name: "MANUAL | 4.2.1.4 | PATCH | Ensure logging is configured | Debug out rsyslog settings"
+    debug:
+      msg:
+      - "These are the current logging configurations for rsyslog, please review:"
+      - "{{ rhel_07_4_2_1_4_audit.stdout_lines }}"
+    when:
+    - not rhel7cis_rsyslog_ansibleManaged
 
-      - name: "MANUAL | 4.2.1.4 | PATCH | Ensure logging is configured | Set logging settings lineinfile"
-        lineinfile:
-            path: /etc/rsyslog.conf
-            state: present
-            regexp: "{{ item.regexp }}"
-            line: "{{ item.line}}"
-            insertafter: '^[# ]*{{ item.insertafter }}\s*=\s*'
-            #insertafter: "{{ item.insertafter }}"
-        with_items:
-            - { regexp: '^mail\.\*(.*)$', line: 'mail.*                                                  -/var/log/mail', insertafter: '# Log all the mail messages in one place.' }
-            - { regexp: '^mail.info(.*)$', line: 'mail.info                                               -/var/log/mail.info', insertafter: '# Log all the mail messages in one place.' }
-            - { regexp: '^mail.warning(.*)$', line: 'mail.warning                                            -/var/log/mail.warning', insertafter: '# Log all the mail messages in one place.' }
-            - { regexp: '^mail.err(.*)$', line: 'mail.err                                                /var/log/mail.err', insertafter: '# Log all the mail messages in one place.' }
-            - { regexp: '^news.crit(.*)$', line: 'news.crit                                               -/var/log/news/news.crit', insertafter: '# Save news errors of level crit and higher in a special file.' }
-            - { regexp: '^news.notice(.*)$', line: 'news.notice                                             -/var/log/news/news.crit', insertafter: '# Save news errors of level crit and higher in a special file.' }
-        notify: restart rsyslog
-        when:
-            - rhel7cis_rsyslog_ansibleManaged
+  - name: "MANUAL | 4.2.1.4 | PATCH | Ensure logging is configured | Set logging settings lineinfile"
+    lineinfile:
+      path: /etc/rsyslog.conf
+      state: present
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+      insertafter: '^[# ]*{{ item.insertafter }}\s*=\s*'
+    # insertafter: "{{ item.insertafter }}"
+    with_items:
+    - { regexp: '^mail\.\*(.*)$', line: 'mail.*                                                  -/var/log/mail', insertafter: '# Log all the mail messages in one place.' }
+    - { regexp: '^mail.info(.*)$', line: 'mail.info                                               -/var/log/mail.info', insertafter: '# Log all the mail messages in one place.' }
+    - { regexp: '^mail.warning(.*)$', line: 'mail.warning                                            -/var/log/mail.warning', insertafter: '# Log all the mail messages in one place.' }
+    - { regexp: '^mail.err(.*)$', line: 'mail.err                                                /var/log/mail.err', insertafter: '# Log all the mail messages in one place.' }
+    - { regexp: '^news.crit(.*)$', line: 'news.crit                                               -/var/log/news/news.crit', insertafter: '# Save news errors of level crit and higher in a special file.' }
+    - { regexp: '^news.notice(.*)$', line: 'news.notice                                             -/var/log/news/news.crit', insertafter: '# Save news errors of level crit and higher in a special file.' }
+    notify: restart rsyslog
+    when:
+    - rhel7cis_rsyslog_ansibleManaged
 
-      - name: "MANUAL | 4.2.1.4 | PATCH | Ensure logging is configured | Misc. log setting"
-        blockinfile:
-            path: /etc/rsyslog.conf
-            state: present
-            marker: "# {mark} MISC. LOG SETTINGS (ANSIBLE MANAGED)"
-            block: |
-                # misc. logging additions to meet CIS standards
-                *.=warning;*.=err                                        -/var/log/warn
-                *.crit                                                   /var/log/warn
-                *.*;mail.none;news.none                                  /var/log/messages
-            insertafter: '#### RULES ####'
-        notify: restart rsyslog
-        when:
-            - rhel7cis_rsyslog_ansibleManaged
+  - name: "MANUAL | 4.2.1.4 | PATCH | Ensure logging is configured | Misc. log setting"
+    blockinfile:
+      path: /etc/rsyslog.conf
+      state: present
+      marker: "# {mark} MISC. LOG SETTINGS (ANSIBLE MANAGED)"
+      block: |
+        # misc. logging additions to meet CIS standards
+        *.=warning;*.=err                                        -/var/log/warn
+        *.crit                                                   /var/log/warn
+        *.*;mail.none;news.none                                  /var/log/messages
+      insertafter: '#### RULES ####'
+    notify: restart rsyslog
+    when:
+    - rhel7cis_rsyslog_ansibleManaged
 
-      - name: "MANUAL | 4.2.1.4 | PATCH | Ensure logging is configured | Local log settings"
-        blockinfile:
-            path: /etc/rsyslog.conf
-            state: present
-            marker: "#{mark} LOCAL LOG SETTINGS (ANSIBLE MANAGED)"
-            block: |
-                # local log settings
-                local0,local1.*                                          -/var/log/localmessages
-                local2,local3.*                                          -/var/log/localmessages
-                local4,local5.*                                          -/var/log/localmessages
-                local6,local7.*                                          -/var/log/localmessages
-            insertafter: '#### RULES ####'
-        notify: restart rsyslog
+  - name: "MANUAL | 4.2.1.4 | PATCH | Ensure logging is configured | Local log settings"
+    blockinfile:
+      path: /etc/rsyslog.conf
+      state: present
+      marker: "#{mark} LOCAL LOG SETTINGS (ANSIBLE MANAGED)"
+      block: |
+        # local log settings
+        local0,local1.*                                          -/var/log/localmessages
+        local2,local3.*                                          -/var/log/localmessages
+        local4,local5.*                                          -/var/log/localmessages
+        local6,local7.*                                          -/var/log/localmessages
+      insertafter: '#### RULES ####'
+    notify: restart rsyslog
   when:
-      - rhel7cis_rule_4_2_1_4
+  - rhel7cis_rule_4_2_1_4
   tags:
-      - level1
-      - patch
-      - rsyslog
-      - manual
-      - rule_4.2.1.4
+  - level1
+  - patch
+  - rsyslog
+  - manual
+  - rule_4.2.1.4
 
 - name: "AUTOMATED | 4.2.1.5 | PATCH | Ensure rsyslog is configured to send logs to a remote log host"
   blockinfile:
-      path: /etc/rsyslog.conf
-      state: present
-      block: |
-          # remote host is: name/ip:port, e.g. 192.168.0.1:514, port optional
-          *.* @@{{ rhel7cis_remote_log_server }}
-      insertafter: EOF
+    path: /etc/rsyslog.conf
+    state: present
+    block: |
+      # remote host is: name/ip:port, e.g. 192.168.0.1:514, port optional
+      *.* @@{{ rhel7cis_remote_log_server }}
+    insertafter: EOF
+  notify: restart rsyslog
   register: result
   failed_when:
-      - result is failed
-      - result.rc != 257
-  notify: restart rsyslog
+  - result is failed
+  - result.rc != 257
   when:
-      - rhel7cis_rule_4_2_1_5
-      - rhel7cis_remote_log_server is defined
+  - rhel7cis_rule_4_2_1_5
+  - rhel7cis_remote_log_server is defined
   tags:
-      - level1
-      - patch
-      - automated
-      - rule_4.2.1.5
-      - rsyslog
+  - level1
+  - patch
+  - automated
+  - rule_4.2.1.5
+  - rsyslog
 
 - name: "MANUAL | 4.2.1.6 | PATCH | Ensure remote rsyslog messages are only accepted on designated log hosts."
   block:
-      - name: "MANUAL | 4.2.1.6 | PATCH | Ensure remote rsyslog messages are only accepted on designated log hosts. | When not log host"
-        replace:
-            path: /etc/rsyslog.conf
-            regexp: '({{ item }})'
-            replace: '#\1'
-        with_items:
-            - '^(\$ModLoad imtcp)'
-            - '^(\$InputTCPServerRun)'
-        notify: restart rsyslog
-        when:
-            - not rhel7cis_system_is_log_server
+  - name: "MANUAL | 4.2.1.6 | PATCH | Ensure remote rsyslog messages are only accepted on designated log hosts. | When not log host"
+    replace:
+      path: /etc/rsyslog.conf
+      regexp: '({{ item }})'
+      replace: '#\1'
+    with_items:
+    - '^(\$ModLoad imtcp)'
+    - '^(\$InputTCPServerRun)'
+    notify: restart rsyslog
+    when:
+    - not rhel7cis_system_is_log_server
 
-      - name: "MANUAL | 4.2.1.6 | PATCH | Ensure remote rsyslog messages are only accepted on designated log hosts. | When log host"
-        replace:
-            path: /etc/rsyslog.conf
-            regexp: '^#(.*{{ item }}.*)'
-            replace: '\1'
-        with_items:
-            - 'ModLoad imtcp'
-            - 'InputTCPServerRun'
-        notify: restart rsyslog
-        when:
-            - rhel7cis_system_is_log_server
+  - name: "MANUAL | 4.2.1.6 | PATCH | Ensure remote rsyslog messages are only accepted on designated log hosts. | When log host"
+    replace:
+      path: /etc/rsyslog.conf
+      regexp: '^#(.*{{ item }}.*)'
+      replace: '\1'
+    with_items:
+    - 'ModLoad imtcp'
+    - 'InputTCPServerRun'
+    notify: restart rsyslog
+    when:
+    - rhel7cis_system_is_log_server
   when:
-      - rhel7cis_rule_4_2_1_6
+  - rhel7cis_rule_4_2_1_6
   tags:
-      - level1
-      - patch
-      - manual
-      - rule_4.2.1.6
-      - rsyslog
+  - level1
+  - patch
+  - manual
+  - rule_4.2.1.6
+  - rsyslog

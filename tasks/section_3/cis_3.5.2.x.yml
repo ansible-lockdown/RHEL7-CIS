@@ -12,7 +12,7 @@
   - level1
   - patch
   - rule_3.5.2.1
- 
+
 - name: "AUTOMATED | 3.5.2.2 | PATCH | Ensure firewalld is not installed or stopped or masked"
   package:
     name: firewalld
@@ -68,7 +68,7 @@
       - "Below are the current nft tables, please review"
       - "{{ rhel7cis_3_5_2_5_nft_tables.stdout_lines }}"
     when:
-    - rhel7cis_3_5_2_5_nft_tables.stdout != ""
+    - rhel7cis_3_5_2_5_nft_tables.stdout | length > 0
 
   - name: "AUTOMATED | 3.5.2.5 | AUDIT | Ensure a table exists | Alert on no tables"
     debug:
@@ -76,7 +76,7 @@
       - "Warning! You currently have no nft tables, please review your setup"
       - 'Use the command "nft create table inet <table name>" to create a new table'
     when:
-    - rhel7cis_3_5_2_5_nft_tables.stdout == ""
+    - rhel7cis_3_5_2_5_nft_tables.stdout | length == 0
     - not rhel7cis_nft_tables_autoNewTable
 
   - name: "AUTOMATED | 3.5.2.5 | PATCH | Ensure a table exists | Create table if needed"
@@ -118,7 +118,7 @@
     - not rhel7cis_nft_tables_autoChainCreate
 
   - name: "AUTOMATED | 3.5.2.6 | PATCH | Ensure base chains exist | Create chains if needed"
-    shell: "{{ item }}"
+    command: "{{ item }}"
     failed_when: no
     with_items:
     - nft create chain inet "{{ rhel7cis_nft_tables_tableName }}" input { type filter hook input priority 0 \; }
@@ -129,6 +129,7 @@
   when:
   - rhel7cis_rule_3_5_2_6
   tags:
+  - skip_ansible_lint
   - level1
   - patch
   - rule_3.5.2.6
