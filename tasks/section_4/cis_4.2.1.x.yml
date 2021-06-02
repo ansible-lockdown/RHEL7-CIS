@@ -75,36 +75,36 @@
     - { regexp: '^news.crit(.*)$', line: 'news.crit                                               -/var/log/news/news.crit', insertafter: '# Save news errors of level crit and higher in a special file.' }
     - { regexp: '^news.notice(.*)$', line: 'news.notice                                             -/var/log/news/news.crit', insertafter: '# Save news errors of level crit and higher in a special file.' }
     notify: restart rsyslog
-  when:
-  - rhel7cis_rsyslog_ansibleManaged
+    when:
+    - rhel7cis_rsyslog_ansibleManaged
 
-- name: "MANUAL | 4.2.1.4 | PATCH | Ensure logging is configured | Misc. log setting"
-  blockinfile:
-    path: /etc/rsyslog.conf
-    state: present
-    marker: "# {mark} MISC. LOG SETTINGS (ANSIBLE MANAGED)"
-    block: |
-      # misc. logging additions to meet CIS standards
-      *.=warning;*.=err                                        -/var/log/warn
-      *.crit                                                   /var/log/warn
-      *.*;mail.none;news.none                                  /var/log/messages
-    insertafter: '#### RULES ####'
+  - name: "MANUAL | 4.2.1.4 | PATCH | Ensure logging is configured | Misc. log setting"
+    blockinfile:
+      path: /etc/rsyslog.conf
+      state: present
+      marker: "# {mark} MISC. LOG SETTINGS (ANSIBLE MANAGED)"
+      block: |
+        # misc. logging additions to meet CIS standards
+        *.=warning;*.=err                                        -/var/log/warn
+        *.crit                                                   /var/log/warn
+        *.*;mail.none;news.none                                  /var/log/messages
+      insertafter: '#### RULES ####'
     notify: restart rsyslog
-  when:
-  - rhel7cis_rsyslog_ansibleManaged
+    when:
+    - rhel7cis_rsyslog_ansibleManaged
 
-- name: "MANUAL | 4.2.1.4 | PATCH | Ensure logging is configured | Local log settings"
-  blockinfile:
-    path: /etc/rsyslog.conf
-    state: present
-    marker: "#{mark} LOCAL LOG SETTINGS (ANSIBLE MANAGED)"
-    block: |
-      # local log settings
-      local0,local1.*                                          -/var/log/localmessages
-      local2,local3.*                                          -/var/log/localmessages
-      local4,local5.*                                          -/var/log/localmessages
-      local6,local7.*                                          -/var/log/localmessages
-    insertafter: '#### RULES ####'
+  - name: "MANUAL | 4.2.1.4 | PATCH | Ensure logging is configured | Local log settings"
+    blockinfile:
+      path: /etc/rsyslog.conf
+      state: present
+      marker: "#{mark} LOCAL LOG SETTINGS (ANSIBLE MANAGED)"
+      block: |
+        # local log settings
+        local0,local1.*                                          -/var/log/localmessages
+        local2,local3.*                                          -/var/log/localmessages
+        local4,local5.*                                          -/var/log/localmessages
+        local6,local7.*                                          -/var/log/localmessages
+      insertafter: '#### RULES ####'
     notify: restart rsyslog
   when:
   - rhel7cis_rule_4_2_1_4
@@ -123,11 +123,11 @@
       # remote host is: name/ip:port, e.g. 192.168.0.1:514, port optional
       *.* @@{{ rhel7cis_remote_log_server }}
     insertafter: EOF
+  notify: restart rsyslog
   register: result
   failed_when:
   - result is failed
   - result.rc != 257
-  notify: restart rsyslog
   when:
   - rhel7cis_rule_4_2_1_5
   - rhel7cis_remote_log_server is defined
