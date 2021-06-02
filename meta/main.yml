@@ -1,4 +1,5 @@
 ---
+
 galaxy_info:
   author: "Sam Doran, Josh Springer, Daniel Shepherd, Bas Meijeri, James Cassell, Mike Renfro, DFed, Mark Bolwell, George Nalen"
   description: "Apply the CIS RHEL7 role"
