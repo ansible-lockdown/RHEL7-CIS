@@ -74,7 +74,7 @@
     - { regexp: '^mail.err(.*)$', line: 'mail.err                                                /var/log/mail.err', insertafter: '# Log all the mail messages in one place.' }
     - { regexp: '^news.crit(.*)$', line: 'news.crit                                               -/var/log/news/news.crit', insertafter: '# Save news errors of level crit and higher in a special file.' }
     - { regexp: '^news.notice(.*)$', line: 'news.notice                                             -/var/log/news/news.crit', insertafter: '# Save news errors of level crit and higher in a special file.' }
-  notify: restart rsyslog
+    notify: restart rsyslog
   when:
   - rhel7cis_rsyslog_ansibleManaged
 
@@ -89,7 +89,7 @@
       *.crit                                                   /var/log/warn
       *.*;mail.none;news.none                                  /var/log/messages
     insertafter: '#### RULES ####'
-  notify: restart rsyslog
+    notify: restart rsyslog
   when:
   - rhel7cis_rsyslog_ansibleManaged
 
@@ -105,7 +105,7 @@
       local4,local5.*                                          -/var/log/localmessages
       local6,local7.*                                          -/var/log/localmessages
     insertafter: '#### RULES ####'
-  notify: restart rsyslog
+    notify: restart rsyslog
   when:
   - rhel7cis_rule_4_2_1_4
   tags:
