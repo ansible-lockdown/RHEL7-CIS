@@ -64,7 +64,7 @@
 
 - name: Copy ansible default vars values to test audit
   template:
-    src: ansible_vars_goss.yml
+    src: ansible_vars_goss.yml.j2
     dest: "{{ goss_vars_path }}"
     mode: 0600
   when:
