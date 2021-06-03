@@ -1,5 +1,4 @@
 ---
-
 - name: "AUTOMATED | 3.3.1 | PATCH | Ensure source routed packets are not accepted"
   sysctl:
     name: '{{ item.name }}'
@@ -21,6 +20,28 @@
   - patch
   - rule_3.3.1
 
+- name: "AUTOMATED | 3.3.1 | PATCH | Ensure source routed packets are not accepted"
+  sysctl:
+    name: '{{ item.name }}'
+    value: '{{ item.value }}'
+    sysctl_set: yes
+    state: present
+    reload: yes
+    ignoreerrors: yes
+  with_items:
+  - { name: net.ipv6.conf.all.accept_source_route, value: 0 }
+  - { name: net.ipv6.conf.default.accept_source_route, value: 0 }
+  notify:
+  - sysctl flush ipv6 route table
+  when:
+  - rhel7cis_rule_3_3_1
+  - rhel7cis_ipv6_required
+  tags:
+  - level1
+  - sysctl
+  - patch
+  - rule_3.3.1
+
 - name: "AUTOMATED | 3.3.2 | PATCH | Ensure ICMP redirects are not accepted"
   sysctl:
     name: '{{ item.name }}'
@@ -36,6 +57,28 @@
   - sysctl flush ipv4 route table
   when:
   - rhel7cis_rule_3_3_2
+  tags:
+  - level1
+  - sysctl
+  - patch
+  - rule_3.3.2
+
+- name: "AUTOMATED | 3.3.2 | PATCH | Ensure ICMP redirects are not accepted"
+  sysctl:
+    name: '{{ item.name }}'
+    value: '{{ item.value }}'
+    sysctl_set: yes
+    state: present
+    reload: yes
+    ignoreerrors: yes
+  with_items:
+  - { name: net.ipv6.conf.all.accept_redirects, value: 0 }
+  - { name: net.ipv6.conf.default.accept_redirects, value: 0 }
+  notify:
+  - sysctl flush ipv6 route table
+  when:
+  - rhel7cis_rule_3_3_2
+  - rhel7cis_ipv6_required
   tags:
   - level1
   - sysctl

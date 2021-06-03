@@ -48,13 +48,12 @@
     manager: auto
   tags:
   - always
-    
 
 - include: parse_etc_password.yml
   become: yes
   when:
-  - rhel7cis_section5
-  - rhel7cis_section6
+  - rhel7cis_section5 or
+    rhel7cis_section6
 
 - include: section_1/main.yml
   when: rhel7cis_section1
