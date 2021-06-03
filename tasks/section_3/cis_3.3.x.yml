@@ -1,5 +1,4 @@
 ---
- 
 - name: "AUTOMATED | 3.3.1 | PATCH | Ensure source routed packets are not accepted"
   sysctl:
     name: '{{ item.name }}'
@@ -20,7 +19,7 @@
   - sysctl
   - patch
   - rule_3.3.1
- 
+
 - name: "AUTOMATED | 3.3.1 | PATCH | Ensure source routed packets are not accepted"
   sysctl:
     name: '{{ item.name }}'
@@ -42,7 +41,7 @@
   - sysctl
   - patch
   - rule_3.3.1
- 
+
 - name: "AUTOMATED | 3.3.2 | PATCH | Ensure ICMP redirects are not accepted"
   sysctl:
     name: '{{ item.name }}'
@@ -63,7 +62,7 @@
   - sysctl
   - patch
   - rule_3.3.2
- 
+
 - name: "AUTOMATED | 3.3.2 | PATCH | Ensure ICMP redirects are not accepted"
   sysctl:
     name: '{{ item.name }}'
@@ -85,7 +84,7 @@
   - sysctl
   - patch
   - rule_3.3.2
- 
+
 - name: "AUTOMATED | 3.3.3 | PATCH | Ensure secure ICMP redirects are not accepted"
   sysctl:
     name: '{{ item.name }}'
@@ -106,7 +105,7 @@
   - sysctl
   - patch
   - rule_3.3.3
- 
+
 - name: "AUTOMATED | 3.3.4 | PATCH | Ensure suspicious packets are logged"
   sysctl:
     name: '{{ item.name }}'
@@ -127,7 +126,7 @@
   - sysctl
   - patch
   - rule_3.3.4
- 
+
 - name: "AUTOMATED | 3.3.5 | PATCH | Ensure broadcast ICMP requests are ignored"
   sysctl:
     name: net.ipv4.icmp_echo_ignore_broadcasts
@@ -144,7 +143,7 @@
   - sysctl
   - patch
   - rule_3.3.5
- 
+
 - name: "AUTOMATED | 3.3.6 | PATCH | Ensure bogus ICMP responses are ignored"
   sysctl:
     name: net.ipv4.icmp_ignore_bogus_error_responses
@@ -161,7 +160,7 @@
   - sysctl
   - patch
   - rule_3.3.6
- 
+
 - name: "AUTOMATED | 3.3.7 | PATCH | Ensure Reverse Path Filtering is enabled"
   sysctl:
     name: '{{ item.name }}'
@@ -182,7 +181,7 @@
   - sysctl
   - patch
   - rule_3.3.7
- 
+
 - name: "AUTOMATED | 3.3.8 | PATCH | Ensure TCP SYN Cookies is enabled"
   sysctl:
     name: net.ipv4.tcp_syncookies
@@ -199,7 +198,7 @@
   - sysctl
   - patch
   - rule_3.3.8
- 
+
 - name: "NOTSCORED | 3.3.9 | PATCH | Ensure IPv6 router advertisements are not accepted"
   sysctl:
     name: '{{ item.name }}'

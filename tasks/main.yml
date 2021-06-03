@@ -48,7 +48,6 @@
     manager: auto
   tags:
   - always
-    
 
 - include: parse_etc_password.yml
   become: yes
