@@ -517,6 +517,11 @@ rhel7cis_futurepwchgdate_autofix: true
 # 5.4.2
 rhel7cis_int_gid: 1000
 
+# 5.6 Group to be used for su
+# this group needs to exists groups will not be created for remediation this is considered sys admins
+
+# rhel7cis_sugroup: sugroup
+
 ## Section6 vars
 
 # RHEL-07_6.1.1
