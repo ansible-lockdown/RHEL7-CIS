@@ -428,9 +428,8 @@ rhel7cis_ssh_weak_kex:
 rhel7cis_ssh_aliveinterval: "300"
 rhel7cis_ssh_countmax: "3"
 
-{% if rhel7cis_sugroup is defined %}
-rhel7cis_sugroup: {{ rhel7cis_sugroup }}
-{% endif %}
+rhel7cis_sugroup: {{ rhel7cis_sugroup| default('wheel') }}
+
 
 ## PAM
 rhel7cis_pam_password:
