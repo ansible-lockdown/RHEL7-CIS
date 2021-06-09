@@ -28,6 +28,9 @@
 
 - 1.5.2 moved grub capture to prelim
 
+- 5.6 ability to supply an sugroup rather than default to wheel
+  - thanks to ihotz #234
+
 ## Whats new in 1.0.2
 
 - renamed goss library and aligned ansible.cfg file
