@@ -568,8 +568,8 @@ goss_audit_dir: "/var/tmp/{{ benchmark }}-Audit/"
 goss_file: "{{ goss_audit_dir }}goss.yml"
 goss_vars_path: "{{ goss_audit_dir }}/vars/{{ ansible_hostname }}.yml"
 goss_out_dir: '/var/tmp'
-pre_audit_outfile: "{{ goss_out_dir }}/{{ ansible_hostname }}_pre_scan_{{ ansible_date_time.epoch }"
-post_audit_outfile: "{{ goss_out_dir }}/{{ ansible_hostname }}_post_scan_{{ ansible_date_time.epoch }"
+pre_audit_outfile: "{{ goss_out_dir }}/{{ ansible_hostname }}_pre_scan_{{ ansible_date_time.epoch }}"
+post_audit_outfile: "{{ goss_out_dir }}/{{ ansible_hostname }}_post_scan_{{ ansible_date_time.epoch }}"
 
 Audit_results: |
       The pre remediation results are: {{ pre_audit_summary }}.
