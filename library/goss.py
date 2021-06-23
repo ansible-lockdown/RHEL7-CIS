@@ -1,7 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # FROM: https://github.com/indusbox/goss-ansible
+
 import os
-from ansible.module_utils.basic import *
+
+from ansible.module_utils.basic import AnsibleModule
+
 
 DOCUMENTATION = '''
 ---
@@ -32,6 +35,12 @@ options:
       - Output goss format.
         Goss format list : goss v --format => [documentation json junit nagios nagios_verbose rspecish tap silent].
         Default is "rspecish".
+  format_options:
+    required: false
+    description:
+      - Extra options passed to the formatter, valid options: [perfdata pretty verbose]
+        Goss format options: goss -v --format json --format_options pretty
+        default: null
   output_file:
     required: false
     description:
@@ -60,88 +69,94 @@ examples:
 '''
 
 
-# launch goss validate command on the file
-def check(module, test_file_path, output_format, goss_path, vars_path):
-    cmd = "{0} --gossfile {1}".format(goss_path, test_file_path)
+def check(module, test_file_path, output_format, format_options, goss_path, vars_path):
+    """
+    Launch goss validate command on the file
+    """
+    cmd = f'{ goss_path } --gossfile { test_file_path }'
     # goss parent command flags
     if vars_path is not None:
-        cmd += " --vars {0}".format(vars_path)
+        cmd += f' --vars { vars_path }'
 
     # validate sub-command flags
-    cmd += " validate"
+    cmd += ' validate'
     if output_format is not None:
-        cmd += " --format {0}".format(output_format)
+        cmd += f' --format { output_format }'
+    if format_options is not None:
+        cmd += f' --format { output_format } --format-options { format_options }'
+
 
     return module.run_command(cmd)
 
 
-# write goss result to output_file_path
-def output_file(output_file_path, out):
+def write_result(output_file_path, out):
+    """
+    Write goss result to output_file_path
+    """
     if output_file_path is not None:
         with open(output_file_path, 'w') as output_file:
             output_file.write(out)
 
 
-def main():
+def run_module():
     module = AnsibleModule(
         argument_spec=dict(
             path=dict(required=True, type='str'),
             format=dict(required=False, type='str'),
             output_file=dict(required=False, type='str'),
+            format_options=dict(required=False, type='str'),
             vars_path=dict(required=False, type='str'),
             goss_path=dict(required=False, default='goss', type='str'),
         ),
         supports_check_mode=False
     )
 
-    test_file_path = module.params['path']  # test file path
+    test_file_path = module.params['path']
     output_format = module.params['format']  # goss output format
+    format_options = module.params['format_options']  # goss format options
     output_file_path = module.params['output_file']
     goss_path = module.params['goss_path']
     vars_path = module.params['vars_path']
 
-    if test_file_path is None:
-        module.fail_json(msg="test file path is null")
-
     test_file_path = os.path.expanduser(test_file_path)
 
-    # test if access to test file is ok
     if not os.access(test_file_path, os.R_OK):
-        module.fail_json(msg="Test file %s not readable" % (test_file_path))
+        module.fail_json(msg=f'Test file { test_file_path } not readable')
 
-    # test if test file is not a dir
     if os.path.isdir(test_file_path):
-        module.fail_json(msg="Test file must be a file ! : %s" % (test_file_path))
+        module.fail_json(msg=f'Test file { test_file_path } must be a file but is a path')
 
-    (rc, out, err) = check(module, test_file_path, output_format, goss_path, vars_path)
+    if format_options is not None:
+         format_options = (format_options)
+         options = ('pretty', 'perfdata', 'verbose')
+         if format_options not in options:
+             module.fail_json(msg=f' format_options  { format_options }  - must be one of perfdata, pretty or verbose')
+
+    rc, out, err = check(module, test_file_path, output_format, format_options, goss_path, vars_path)
+
 
     if output_file_path is not None:
         output_file_path = os.path.expanduser(output_file_path)
-        # check if output_file is a file
+
         if output_file_path.endswith(os.sep):
-            module.fail_json(msg="output_file must be a file. Actually :  %s "
-                             % (output_file_path))
+            module.fail_json(msg=f'output_file { output_file_path } must be a file')
 
         output_dirname = os.path.dirname(output_file_path)
 
-        # check if output directory exists
         if not os.path.exists(output_dirname):
-            module.fail_json(msg="directory %s does not exists" % (output_dirname))
+            module.fail_json(msg=f'directory { output_dirname } does not exists')
 
-        # check if writable
         if not os.access(os.path.dirname(output_file_path), os.W_OK):
-            module.fail_json(msg="Destination %s not writable" % (os.path.dirname(output_file_path)))
-        # write goss result on the output file
-        output_file(output_file_path, out)
+            module.fail_json(msg=f'Destination { output_dirname } not writable')
+
+        write_result(output_file_path, out)
 
     if rc is not None and rc != 0:
-        error_msg = "err : {0} ; out : {1}".format(err, out)
+        error_msg = 'err : { err } ; out : { out }'
         module.fail_json(msg=error_msg)
 
-    result = {}
-    result['stdout'] = out
-    result['changed'] = False
+    module.exit_json(stdout=out, changed=False)
 
-    module.exit_json(**result)
 
-main()
+if __name__ == '__main__':
+    run_module()
