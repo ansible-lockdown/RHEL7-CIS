@@ -65,7 +65,7 @@
     failed_when: path_colon_end.rc == 0
 
   - name: "AUTOMATED | 6.2.4 | AUDIT | Ensure root PATH Integrity | Determine dot in path"
-    shell: "/bin/bash --login -c 'env | grep ^PATH=' | sed -e 's/PATH=//' -e 's/::/:/' -e 's/:$//' -e 's/:/\\n/g'"
+    shell: "/bin/bash --login -c 'env | grep ^PATH=' | grep ^PATH | sed -e 's/PATH=//' -e 's/::/:/' -e 's/:$//' -e 's/:/\\n/g'"
     become: yes
     register: dot_in_path
     changed_when: False
