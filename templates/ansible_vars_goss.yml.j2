@@ -1,4 +1,14 @@
 ---
+## metadata for Audit benchmark
+rhel7cis_benchmark:
+- "type: CIS"
+- "version: '1.0'"
+- "os: RHEL 7"
+- "epoch: {{ ansible_date_time.epoch }}"
+- "hostname: {{ ansible_hostname }}"
+
+rhel7cis_os_distribution: {{ ansible_distribution | lower }}
+
 # Taken from LE rhel7-cis
 rhel7cis_notauto: {{ rhel7cis_notauto }}
 rhel7cis_section1: {{ rhel7cis_section1 }}
