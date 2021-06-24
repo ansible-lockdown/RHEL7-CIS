@@ -54,7 +54,7 @@
       path: "{{ goss_bin }}"
     register: goss_available
 
-  - name: If audit ensure goss is available
+  - name: Assert that goss is available
     assert:
       msg: "Audit has been selected: unable to find goss binary at {{ goss_bin }}"
     when:
@@ -80,6 +80,8 @@
     format: "{{ goss_format }}"
     output_file: "{{ pre_audit_outfile }}"
   failed_when: false
+  environment:
+    GOSS_FMT_OPTIONS: Pretty
 
 - name: Capture audit data if json format
   block:
