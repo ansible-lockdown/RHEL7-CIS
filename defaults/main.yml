@@ -560,7 +560,7 @@ goss_version:
 # goss_checksum: "checksum_{{ goss_version }}"
 goss_path: /usr/local/bin/
 goss_bin: "{{ goss_path }}goss"
-goss_format: documentation
+goss_format: json
 goss_url: "https://github.com/aelsabbahy/goss/releases/download/{{ goss_version.release }}/goss-linux-amd64"
 
 ## Goss tests information
