@@ -131,7 +131,7 @@
     dest: /etc/gshadow-
     owner: root
     group: root
-    mode: 0600
+    mode: 0000
   when:
   - rhel7cis_rule_6_1_9
   tags:
