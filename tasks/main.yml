@@ -37,7 +37,7 @@
 
   - name: Check sugroup if defined exists before continuing
     assert:
-      that: sugroup_exists.rc == '0'
+      that: sugroup_exists.rc == 0
       msg: "The variable rhel7cis_sugroup is defined but does not exist please rectify" 
   when:
   - rhel7cis_sugroup is defined
