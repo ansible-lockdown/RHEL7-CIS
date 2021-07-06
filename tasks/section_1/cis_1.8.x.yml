@@ -1,90 +1,112 @@
 ---
 
-- name: "AUTOMATED | 1.8.1.1 | PATCH | Ensure message of the day is configured properly"
-  template:
-    src: etc/motd.j2
-    dest: /etc/motd
-    owner: root
-    group: root
-    mode: 0644
-  when:
-  - rhel7cis_rule_1_8_1_1
+- name: 1.8.1 | L2 | PATCH | Ensure GNOME Display Manager is removed 
+  block:
+  - name: 1.8.1 | L2 | AUDIT | Ensure GNOME Display Manager is removed | check runlevel
+    fail:
+      msg: "System is at runlevel 5 and GDM is installed this can only be removed at Lvl <= 3"
+    when:
+    - ansible_env.SHLVL > 3
+  - name: 1.8.1 | L2 | AUDIT | Ensure GNOME Display Manager is removed | Remove package  
+    package:
+      name: gdm
+      state: absent
+  when: 
+  - "'gdm' in ansible_facts.packages"
+  - not rhel7cis_gui
+  - rhel7cis_rule_1_8_1
   tags:
-  - level1
-  - banner
-  - patch
-  - rule_1.8.1.1
+  - rule_1.8.1
 
-- name: "AUTOMATED | 1.8.1.2 | PATCH | Ensure local login warning banner is configured properly"
-  template:
-    src: etc/issue.j2
-    dest: /etc/issue
-    owner: root
-    group: root
-    mode: 0644
-  when:
-  - rhel7cis_rule_1_8_1_2
-  tags:
-  - level1
-  - patch
-  - rule_1.8.1.2
+- name: 1.8.2 | L1 | PATCH | Ensure GDM login banner is configured
+  block:
+  - name: 1.8.2 | L1 | PATCH | Ensure GDM login banner is configured | gdm profile
+    lineinfile:
+      path: /etc/dconf/profile/gdm
+      regexp: "^{{ item.regexp }}"
+      line: "{{ item.line }}"
+      state: present
+      create: true
+      mode: 0644
+      owner: root
+      group: root
+    with_items:
+    - {regexp: 'user-db', line: 'user-db:user' }
+    - {regexp: 'system-db', line: 'system-db:gdm' }
+    - {regexp: 'file-db', line: 'file-db:/usr/share/gdm/greeter-dconf-defaults' }
 
-- name: "AUTOMATED | 1.8.1.3 | PATCH | Ensure remote login warning banner is configured properly"
-  template:
-    src: etc/issue.net.j2
-    dest: /etc/issue.net
-    owner: root
-    group: root
-    mode: 0644
+  - name: 1.8.2 | L1 | PATCH | Ensure GDM login banner is configured | banner
+    lineinfile:
+      path: /etc/dconf/db/gdm.d/01-banner-message
+      regexp: "^{{ item.regexp }}"
+      line: "{{ item.line }}"
+      state: present
+      create: true
+      mode: 0644
+      owner: root
+      group: root
+    with_items:
+    - { regexp: '\[org\/gnome\/login-screen\]', line: '[org/gnome/login-screen]' }
+    - { regexp: 'banner-message-enable', line: 'banner-message-enable=true' }
+    - { regexp: 'banner-message-text', line: "banner-message-text='{{ rhel7cis_warning_banner }}' " }
   when:
-  - rhel7cis_rule_1_8_1_3
+  - "'gdm' in ansible_facts.packages"
+  - not rhel7cis_gui
+  - rhel7cis_rule_1_8_2
   tags:
-  - level1
-  - banner
-  - patch
-  - rule_1.8.1.3
+  - rule_1.8.2
 
-- name: "AUTOMATED | 1.8.1.4 | PATCH | Ensure permissions on /etc/motd are configured"
-  file:
-    dest: /etc/motd
-    state: file
-    owner: root
-    group: root
-    mode: 0644
-  when:
-  - rhel7cis_rule_1_8_1_4
-  tags:
-  - level1
-  - perms
-  - patch
-  - rule_1.8.1.4
+- name: 1.8.3 | L1 | PATCH | Ensure last logged in user display is disabled | banner
+  block:
+  - name: 1.8.3 | L1 | PATCH | Ensure last logged in user display is disabled | gdm profile
+    lineinfile:
+      path: /etc/dconf/profile/gdm
+      regexp: "^{{ item.regexp }}"
+      line: "{{ item.line }}"
+      state: present
+      create: true
+      mode: 0644
+      owner: root
+      group: root
+    with_items:
+    - {regexp: 'user-db', line: 'user-db:user' }
+    - {regexp: 'system-db', line: 'system-db:gdm' }
+    - {regexp: 'file-db', line: 'file-db:/usr/share/gdm/greeter-dconf-defaults' }
 
-- name: "AUTOMATED | 1.8.1.5 | PATCH | Ensure permissions on /etc/issue are configured"
-  file:
-    dest: /etc/issue
-    state: file
-    owner: root
-    group: root
-    mode: 0644
+  - name: 1.8.3 | L1 | PATCH | Ensure last logged in user display is disabled | login screen
+    lineinfile:
+      path: /etc/dconf/db/gdm.d/00-login-screen
+      regexp: "^{{ item.regexp }}"
+      line: "{{ item.line }}"
+      state: present
+      create: true
+      mode: 0644
+      owner: root
+      group: root
+    with_items:
+    - { regexp: '\[org\/gnome\/login-screen\]', line: '[org/gnome/login-screen]' }
+    - { regexp: 'disable-user-list', line: 'disable-user-list=true' }
   when:
-  - rhel7cis_rule_1_8_1_5
+  - "'gdm' in ansible_facts.packages"
+  - not rhel7cis_gui
+  - rhel7cis_rule_1_8_3
   tags:
-  - level1
-  - perms
-  - patch
-  - rule_1.8.1.5
+  - rule_1.8.3
 
-- name: "NOTAUTOMATED | 1.8.1.6 | PATCH | Ensure permissions on /etc/issue.net are configured"
-  file:
-    dest: /etc/issue.net
-    state: file
+- name: 1.8.4 | L1 | PATCH | Ensure XDCMP is not enabled
+  lineinfile:
+    path: /etc/gdm/custom.conf
+    regexp: ^Enable=true
+    state: absent
+    create: true
     owner: root
     group: root
     mode: 0644
   when:
-  - rhel7cis_rule_1_8_1_6
+  - "'gdm' in ansible_facts.packages"
+  - not rhel7cis_gui
+  - rhel7cis_rule_1_8_4
   tags:
-  - level1
-  - perms
-  - patch
-  - rule_1.8.1.6
+  - rule_1.8.4
+
+  

@@ -1,0 +1,49 @@
+---
+
+- name: "AUTOMATED | 1.3.1 | PATCH | Ensure sudo is installed"
+  package:
+    name: sudo
+    state: present
+  become: true
+  when:
+  - rhel7cis_rule_1_3_1
+  tags:
+  - level1
+  - AUTOMATED
+  - sudo
+  - patch
+  - rule_1.3.1
+  vars:
+    ansible_python_interpreter: /bin/python
+
+- name: "AUTOMATED | 1.3.2 | AUDIT | Ensure sudo commands use pty"
+  lineinfile:
+    dest: /etc/sudoers
+    regexp: '^Defaults    use_pty'
+    line: 'Defaults    use_pty'
+    state: present
+    validate: '/usr/sbin/visudo -cf %s'
+  become: true
+  when:
+  - rhel7cis_rule_1_3_2
+  tags:
+  - level1
+  - AUTOMATED
+  - patch
+  - rule_1.3.2
+
+- name: "AUTOMATED | 1.3.3 | PATCH | Ensure sudo log file exists"
+  lineinfile:
+    dest: /etc/sudoers
+    regexp: '^Defaults    logfile="{{ rhel7cis_varlog_location }}"'
+    line: 'Defaults    logfile="{{ rhel7cis_varlog_location }}"'
+    state: present
+    validate: '/usr/sbin/visudo -cf %s'
+  become: true
+  when:
+  - rhel7cis_rule_1_3_1 and rhel7cis_rule_1_3_3
+  tags:
+  - level1
+  - AUTOMATED
+  - patch
+  - rule_1.3.3

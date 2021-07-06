@@ -11,6 +11,16 @@
   - assert has been created if rule still enabled and password not changed
 - Use of the packages facts module
 
+## 1.0.4
+- Upgrade to CIS 3.1.1
+
+Highlights
+- section 1
+  - 1.3 sudo no longer required
+  - other groups changes increased tests
+
+
+
 ## Whats new in 1.0.3
 
 - Thanks to Thulium-Drake
