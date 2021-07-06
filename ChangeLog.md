@@ -12,9 +12,11 @@
 - Use of the packages facts module
 
 ## 1.0.4
+
 - Upgrade to CIS 3.1.1
 
-Highlights
+### Highlights
+
 - section 1
   - 1.3 sudo no longer required
   - other groups changes increased tests
