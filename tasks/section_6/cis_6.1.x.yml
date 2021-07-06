@@ -1,7 +1,7 @@
 ---
-- name: "NOTSCORED | 6.1.1 | PATCH | Audit system file permissions"
+- name: "6.1.1 | L2 | PATCH | Audit system file permissions"
   block:
-  - name: "NOTSCORED | 6.1.1 | AUDIT | Audit system file permissions | Audit the packages"
+  - name: "6.1.1 | AUDIT | Audit system file permissions | Audit the packages"
     shell: rpm -Va --nomtime --nosize --nomd5 --nolinkto
     changed_when: false
     failed_when: false
@@ -9,22 +9,22 @@
     tags:
     - skip_ansible_lint
 
-  - name: "NOTSCORED | 6.1.1 | AUDIT | Audit system file permissions | Create list and warning"
+  - name: "6.1.1 | AUDIT | Audit system file permissions | Create list and warning"
     block:
-    - name: "NOTSCORED | 6.1.1 | AUDIT | Audit system file permissions | Add file discrepancy list to system"
+    - name: "6.1.1 | AUDIT | Audit system file permissions | Add file discrepancy list to system"
       copy:
         dest: "{{ rhel7cis_rpm_audit_file }}"
         content: "{{ rhel7cis_6_1_1_packages_rpm.stdout }}"
       changed_when: rhel7cis_6_1_1_packages_rpm.stdout|length > 0
 
-    - name: "NOTSCORED | 6.1.1 | AUDIT | Audit system file permissions | Message out alert for package descrepancies"
+    - name: "6.1.1 | AUDIT | Audit system file permissions | Message out alert for package descrepancies"
       debug:
         msg: |
              "Warning! You have some package descrepancies issues.
               The file list can be found in {{ rhel7cis_rpm_audit_file }}"
       when: rhel7cis_6_1_1_packages_rpm.stdout|length > 0
 
-    - name: "NOTSCORED | 6.1.1 | AUDIT | Audit system file permissions | Message out no package descrepancies"
+    - name: "6.1.1 | AUDIT | Audit system file permissions | Message out no package descrepancies"
       debug:
         msg: "Good News! There are no package descrepancies"
       when: rhel7cis_6_1_1_packages_rpm.stdout|length == 0
@@ -35,7 +35,7 @@
   - patch
   - rule_6.1.1
 
-- name: "SCORED | 6.1.2 | PATCH | Ensure permissions on /etc/passwd are configured"
+- name: "6.1.2 | L1 | PATCH | Ensure permissions on /etc/passwd are configured"
   file:
     dest: /etc/passwd
     owner: root
@@ -48,12 +48,12 @@
   - patch
   - rule_6.1.2
 
-- name: "SCORED | 6.1.3 | PATCH | Ensure permissions on /etc/shadow are configured"
+- name: "6.1.3 | L1 | PATCH | Ensure permissions on /etc/passwd- are configured"
   file:
-    dest: /etc/shadow
+    dest: /etc/passwd-
     owner: root
     group: root
-    mode: 0000
+    mode: 0644
   when:
   - rhel7cis_rule_6_1_3
   tags:
@@ -61,12 +61,12 @@
   - patch
   - rule_6.1.3
 
-- name: "SCORED | 6.1.4 | PATCH | Ensure permissions on /etc/group are configured"
+- name: "6.1.4 | L1 | PATCH | Ensure permissions on /etc/shadow are configured"
   file:
-    dest: /etc/group
+    dest: /etc/shadow
     owner: root
     group: root
-    mode: 0644
+    mode: 0000
   when:
   - rhel7cis_rule_6_1_4
   tags:
@@ -74,9 +74,9 @@
   - patch
   - rule_6.1.4
 
-- name: "SCORED | 6.1.5 | PATCH | Ensure permissions on /etc/gshadow are configured"
+- name: "6.1.5 | L1 | PATCH | Ensure permissions on /etc/shadow- are configured"
   file:
-    dest: /etc/gshadow
+    dest: /etc/shadow-
     owner: root
     group: root
     mode: 0000
@@ -87,12 +87,12 @@
   - patch
   - rule_6.1.5
 
-- name: "SCORED | 6.1.6 | PATCH | Ensure permissions on /etc/passwd- are configured"
+- name: "6.1.6 | L1 | PATCH | Ensure permissions on /etc/gshadow- are configured"
   file:
-    dest: /etc/passwd-
+    dest: /etc/gshadow-
     owner: root
     group: root
-    mode: 0600
+    mode: 0000
   when:
   - rhel7cis_rule_6_1_6
   tags:
@@ -100,9 +100,9 @@
   - patch
   - rule_6.1.6
 
-- name: "SCORED | 6.1.7 | PATCH | Ensure permissions on /etc/shadow- are configured"
+- name: "6.1.7 | L1 | PATCH | Ensure permissions on /etc/gshadow are configured"
   file:
-    dest: /etc/shadow-
+    dest: /etc/gshadow
     owner: root
     group: root
     mode: 0000
@@ -113,12 +113,12 @@
   - patch
   - rule_6.1.7
 
-- name: "SCORED | 6.1.8 | PATCH | Ensure permissions on /etc/group- are configured"
+- name: "6.1.8 | L1 | PATCH | Ensure permissions on /etc/group are configured"
   file:
-    dest: /etc/group-
+    dest: /etc/group
     owner: root
     group: root
-    mode: 0600
+    mode: 0644
   when:
   - rhel7cis_rule_6_1_8
   tags:
@@ -126,12 +126,12 @@
   - patch
   - rule_6.1.8
 
-- name: "SCORED | 6.1.9 | PATCH | Ensure permissions on /etc/gshadow- are configured"
+- name: "6.1.9 | L1 | PATCH | Ensure permissions on /etc/group- are configured"
   file:
-    dest: /etc/gshadow-
+    dest: /etc/group-
     owner: root
     group: root
-    mode: 0000
+    mode: 0644
   when:
   - rhel7cis_rule_6_1_9
   tags:
@@ -139,16 +139,16 @@
   - patch
   - rule_6.1.9
 
-- name: "SCORED | 6.1.10 | PATCH | Ensure no world writable files exist"
+- name: "6.1.10 | L1 | PATCH | Ensure no world writable files exist"
   block:
-  - name: "SCORED | 6.1.10 | AUDIT | Ensure no world writable files exist | Get list of world-writable files"
+  - name: "6.1.10 | L1 | AUDIT | Ensure no world writable files exist | Get list of world-writable files"
     shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -0002
     become: yes
     failed_when: false
     changed_when: false
     register: rhel_07_6_1_10_perms_results
 
-  - name: "SCORED | 6.1.10 | AUDIT | Ensure no world writable files exist | Alert no world-writable files exist"
+  - name: "6.1.10 | L1 | AUDIT | Ensure no world writable files exist | Alert no world-writable files exist"
     debug:
       msg: "Good news! We have not found any world-writable files on your system"
     failed_when: false
@@ -156,7 +156,7 @@
     when:
     - rhel_07_6_1_10_perms_results.stdout is not defined
 
-  - name: "SCORED | 6.1.10 | PATCH | Ensure no world writable files exist | Adjust world-writable files if they exist (Configurable)"
+  - name: "6.1.10 | PATCH | Ensure no world writable files exist | Adjust world-writable files if they exist (Configurable)"
     file:
       path: '{{ item }}'
       mode: o-w
@@ -172,9 +172,9 @@
   - patch
   - rule_6.1.10
 
-- name: "SCORED | 6.1.11 | PATCH | Ensure no unowned files or directories exist"
+- name: "6.1.11 | L1 | PATCH | Ensure no unowned files or directories exist"
   block:
-  - name: "SCORED | 6.1.11 | AUDIT | Ensure no unowned files or directories exist | Finding all unowned files or directories"
+  - name: "6.1.11 | L1 | AUDIT | Ensure no unowned files or directories exist | Finding all unowned files or directories"
     command: find "{{ item.mount }}" -xdev -nouser
     check_mode: no
     register: rhel_07_6_1_11_audit
@@ -183,7 +183,7 @@
     when: item['device'].startswith('/dev') and not 'bind' in item['options']
     with_items: "{{ ansible_mounts }}"
 
-  - name: "SCORED | 6.1.11 | AUDIT | Ensure no unowned files or directories exist | Displaying any unowned files or directories"
+  - name: "6.1.11 | L1 | AUDIT | Ensure no unowned files or directories exist | Displaying any unowned files or directories"
     debug:
       msg: "Warning - Manual intervention is required -- missing owner on items in {{ item.item.mount }}: {{ item.stdout_lines | join(', ') }}"
     when:
@@ -197,9 +197,9 @@
   - patch
   - rule_6.1.11
 
-- name: "SCORED | 6.1.12 | PATCH | Ensure no ungrouped files or directories exist"
+- name: "6.1.12 | L1 | PATCH | Ensure no ungrouped files or directories exist"
   block:
-  - name: "SCORED | 6.1.12 | AUDIT | Ensure no ungrouped files or directories exist | Finding all ungrouped files or directories"
+  - name: "6.1.12 | L1 | AUDIT | Ensure no ungrouped files or directories exist | Finding all ungrouped files or directories"
     command: find "{{ item.mount }}" -xdev -nogroup
     check_mode: no
     register: rhel_07_6_1_12_audit
@@ -208,7 +208,7 @@
     when: item['device'].startswith('/dev') and not 'bind' in item['options']
     with_items: "{{ ansible_mounts }}"
 
-  - name: "SCORED | 6.1.12 | AUDIT | Ensure no ungrouped files or directories exist | Displaying all ungrouped files or directories"
+  - name: "6.1.12 | L1 | AUDIT | Ensure no ungrouped files or directories exist | Displaying all ungrouped files or directories"
     debug:
       msg: "Warning - Manual intervention is required -- missing group on items in {{ item }}!"
     changed_when: item | length > 0
@@ -220,9 +220,9 @@
   - patch
   - rule_6.1.12
 
-- name: "NOTSCORED | 6.1.13 | PATCH | Audit SUID executables"
+- name: "6.1.13 | L1 | PATCH | Audit SUID executables"
   block:
-  - name: "NOTSCORED | 6.1.13 | AUDIT | Audit SUID executables | Find all SUID executables"
+  - name: "6.1.13 | L1 | AUDIT | Audit SUID executables | Find all SUID executables"
     shell: df {{ item.mount }} -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -4000
     become: yes
     failed_when: false
@@ -230,7 +230,7 @@
     register: rhel_07_6_1_13_perms_results
     with_items: "{{ ansible_mounts }}"
 
-  - name: "NOTSCORED | 6.1.13 | AUDIT | Audit SUID executables |  Alert no SUID executables exist"
+  - name: "6.1.13 | L1 | AUDIT | Audit SUID executables |  Alert no SUID executables exist"
     debug:
       msg: "Good news! We have not found any SUID executable files on your system"
     failed_when: false
@@ -238,7 +238,7 @@
     when:
     - rhel_07_6_1_13_perms_results.stdout is not defined
 
-  - name: "NOTSCORED | 6.1.13 | AUDIT | Audit SUID executables |  Alert SUID executables exist"
+  - name: "6.1.13 | L1 | AUDIT | Audit SUID executables |  Alert SUID executables exist"
     debug:
       msg: "Warning - Manual intervention is required -- SUID set on items in {{ item.item.mount }}: {{ item.stout_lines | join(', ') }}"
     with_items: "{{ rhel_07_6_1_13_perms_results.stdout_lines }}"
@@ -251,9 +251,9 @@
   - patch
   - rule_6.1.13
 
-- name: "NOTSCORED | 6.1.14 | PATCH | Audit SGID executables"
+- name: "6.1.14 | L1 | PATCH | Audit SGID executables"
   block:
-  - name: "NOTSCORED | 6.1.14 | AUDIT | Audit SGID executables | Find all SGID executables"
+  - name: "6.1.14 | L1 | AUDIT | Audit SGID executables | Find all SGID executables"
     shell: df {{ item.mount }} -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -2000
     become: yes
     failed_when: false
@@ -261,7 +261,7 @@
     register: rhel_07_6_1_14_perms_results
     with_items: "{{ ansible_mounts }}"
 
-  - name: "NOTSCORED | 6.1.14 | AUDIT | Audit SGID executables |  Alert no SGID executables exist"
+  - name: "6.1.14 | L1 | AUDIT | Audit SGID executables |  Alert no SGID executables exist"
     debug:
       msg: "Good news! We have not found any SGID executable files on your system"
     failed_when: false
@@ -269,7 +269,7 @@
     when:
     - rhel_07_6_1_14_perms_results.stdout is not defined
 
-  - name: "NOTSCORED | 6.1.14 | AUDIT | Audit SGID executables |  Alert SGID executables exist"
+  - name: "6.1.14 | L1 | AUDIT | Audit SGID executables |  Alert SGID executables exist"
     debug:
       msg: "Warning - Manual intervention is required -- SGID set on items in {{ item.item.mount }}: {{ item.stout_lines | join(', ') }}"
     with_items: "{{ rhel_07_6_1_14_perms_results.stdout_lines }}"

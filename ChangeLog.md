@@ -32,6 +32,8 @@ Highlights
   - sudo moved from 1.3 to 5.2
   - Other controls changed numbers
   - ssh kex, mac and ciphers updates
+- section 6
+  - many control orders changed
 
 ## Whats new in 1.0.3
 
