@@ -18,10 +18,14 @@ Highlights
 - section 1
   - 1.3 sudo no longer required
   - other groups changes increased tests
+  - more controls for GDM
 - section 2
   - reorder of server services
   - rsyncd masked
   - 2.5 - 2.4
+- section 3
+  - some controls now L2
+  - tidy of some rules
 
 ## Whats new in 1.0.3
 
