@@ -3,15 +3,20 @@
 - name: "SECTION | 5.1 | Configure time-based job schedulers"
   include: cis_5.1.x.yml
 
-- name: "SECTION | 5.2 | Configure SSH Server"
+- name: "SECTION | 5.2 | Configure Sudo"
   include: cis_5.2.x.yml
 
-- name: "SECTION | 5.3 | Configure PAM"
+- name: "SECTION | 5.3 | Configure SSH Server"
   include: cis_5.3.x.yml
 
-- name: "SECTION | 5.4 | User Account and Environment"
-  include: cis_5.4.1.x.yml
+- name: "SECTION | 5.4 | Configure PAM"
+  include: cis_5.4.x.yml
 
-- include: cis_5.4.x.yml
-- include: cis_5.5.yml
+- name: "SECTION | 5.5.1 | Set Shadow Password Suite Parameters"
+  include: cis_5.5.1.x.yml
+
+- name: "SECTION | 5.5 | User Accounts and Environment"
+  include: cis_5.5.x.yml
+
 - include: cis_5.6.yml
+- include: cis_5.7.yml
