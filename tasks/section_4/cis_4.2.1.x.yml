@@ -73,7 +73,7 @@
     - { regexp: '^news.notice(.*)$', line: 'news.notice                                             -/var/log/news/news.crit', insertafter: '# Save news errors of level crit and higher in a special file.' }
     notify: restart rsyslog
     when:
-    - rhel7cis_rsyslog_ansibleManaged
+    - rhel7cis_rsyslog_ansiblemanaged
 
   - name: "4.2.1.4 | L1 | PATCH | Ensure logging is configured | Misc. log setting"
     blockinfile:
@@ -88,7 +88,7 @@
       insertafter: '#### RULES ####'
     notify: restart rsyslog
     when:
-    - rhel7cis_rsyslog_ansibleManaged
+    - rhel7cis_rsyslog_ansiblemanaged
 
   - name: "4.2.1.4 | L1 | PATCH | Ensure logging is configured | Local log settings"
     blockinfile:
