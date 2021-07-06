@@ -125,12 +125,6 @@ rhel7cis_rule_1_9: true
 # Section 2 rules
 # Section 2 is Services (inetd Services, Special Purpose Services, and Service Clients)
 rhel7cis_rule_2_1_1: true
-rhel7cis_rule_2_1_2: true
-rhel7cis_rule_2_1_3: true
-rhel7cis_rule_2_1_4: true
-rhel7cis_rule_2_1_5: true
-rhel7cis_rule_2_1_6: true
-rhel7cis_rule_2_1_7: true
 rhel7cis_rule_2_2_1_1: true
 rhel7cis_rule_2_2_1_2: true
 rhel7cis_rule_2_2_1_3: true
@@ -152,14 +146,12 @@ rhel7cis_rule_2_2_16: true
 rhel7cis_rule_2_2_17: true
 rhel7cis_rule_2_2_18: true
 rhel7cis_rule_2_2_19: true
-rhel7cis_rule_2_2_20: true
-rhel7cis_rule_2_2_21: true
 rhel7cis_rule_2_3_1: true
 rhel7cis_rule_2_3_2: true
 rhel7cis_rule_2_3_3: true
 rhel7cis_rule_2_3_4: true
 rhel7cis_rule_2_3_5: true
-rhel7cis_rule_2_5: true
+rhel7cis_rule_2_4: true
 
 # Section 3 rules
 # Section 3 is Network Configuration (Disable unused network protocols, Network parameters (host), Network parameters (Host and Router), Uncommon Network Protocols, Firewall Configuration, and Configure iptables)

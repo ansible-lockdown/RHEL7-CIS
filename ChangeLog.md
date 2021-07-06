@@ -23,7 +23,6 @@ Highlights
   - rsyncd masked
   - 2.5 - 2.4
 
-
 ## Whats new in 1.0.3
 
 - Thanks to Thulium-Drake
