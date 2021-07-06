@@ -191,7 +191,7 @@
   - patch
   - rule_3.3.8
 
-- name: "NOTSCORED | 3.3.9 | PATCH | Ensure IPv6 router advertisements are not accepted"
+- name: "3.3.9 | L1 |  PATCH | Ensure IPv6 router advertisements are not accepted"
   sysctl:
     name: '{{ item.name }}'
     value: '{{ item.value }}'

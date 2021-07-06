@@ -14,7 +14,7 @@
   - patch
   - rule_3.5.2.1
 
-- name: "AUTOMATED | 3.5.2.2 | PATCH | Ensure firewalld is not installed or stopped or masked"
+- name: "3.5.2.2 | L1 | PATCH | Ensure firewalld is not installed or stopped or masked"
   package:
     name: firewalld
     state: absent
@@ -28,7 +28,7 @@
   - patch
   - rule_3.5.2.2
 
-- name: "AUTOMATED | 3.5.2.3 | PATCH | Ensure iptables-services package is not installed"
+- name: "3.5.2.3 | L1 | PATCH | Ensure iptables-services package is not installed"
   package:
     name: iptables-services
     state: absent

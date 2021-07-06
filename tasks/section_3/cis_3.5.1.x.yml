@@ -56,12 +56,12 @@
 
 - name: "3.5.1.5 | L1 | PATCH | Ensure default zone is set"
   block:
-  - name: "SCORED | 3.5.1.5 | AUDIT | Ensure default zone is set"
+  - name: "3.5.1.5 | L1 | AUDIT | Ensure default zone is set"
     command: firewall-cmd --get-default-zone
     changed_when: no
     register: current_default_zone
 
-  - name: "SCORED | 3.5.1.5 | PATCH | Ensure default zone is set"
+  - name: "3.5.1.5 | L1 | PATCH | Ensure default zone is set"
     command: firewall-cmd --set-default-zone="{{ rhel7cis_default_zone }}"
     when:
     - current_default_zone.stdout != rhel7cis_default_zone

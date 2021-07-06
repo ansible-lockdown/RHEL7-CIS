@@ -225,7 +225,7 @@
       - "The following paths have colon end: {{ path_colon_end.stdout_lines }}"
       - "The following paths have a dot in the path: {{ dot_in_path.stdout_lines }}"
 
-  - name: "6.2.10 | L1 | PATCH | Ensure root PATH Integrity (AUTOMATED) | Determine rights and owner"
+  - name: "6.2.10 | L1 | PATCH | Ensure root PATH Integrity | Determine rights and owner"
     file: >
         path='{{ item }}'
         follow=yes
@@ -302,7 +302,6 @@
   - patch
   - rule_6.2.12
 
-
 - name: "6.2.13 | L1 | PATCH | Ensure users' home directories permissions are 750 or more restrictive"
   block:
   - name: "6.2.13 | L1 | AUDIT | Ensure users' home directories permissions are 750 or more restrictive"
@@ -325,7 +324,7 @@
     loop_control:
       label: "{{ item.0 }}"
 
-  - name: "6.2.12 | L1 | AUDIT | Ensure users' home directories permissions are 750 or more restrictive"
+  - name: "6.2.13 | L1 | AUDIT | Ensure users' home directories permissions are 750 or more restrictive"
     file:
       path: "{{ item.0 }}"
       recurse: yes
@@ -341,7 +340,7 @@
       label: "{{ item.0 }}"
 
   # set default ACLs so the homedir has an effective umask of 0027
-  - name: "6.2.12 | L1 | PATCH | Ensure users' home directories permissions are 750 or more restrictive"
+  - name: "6.2.13 | L1 | PATCH | Ensure users' home directories permissions are 750 or more restrictive"
     acl:
       path: "{{ item.0 }}"
       default: yes
