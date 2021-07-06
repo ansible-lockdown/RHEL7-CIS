@@ -29,7 +29,9 @@ Highlights
 - section 4
   - tidy up
 - section 5
-  - 
+  - sudo moved from 1.3 to 5.2
+  - Other controls changed numbers
+  - ssh kex, mac and ciphers updates
 
 ## Whats new in 1.0.3
 

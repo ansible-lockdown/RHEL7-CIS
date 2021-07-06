@@ -1,6 +1,6 @@
 ---
 
-- name: "SCORED | 5.1.1 | PATCH | Ensure cron daemon is enabled and running"
+- name: "5.1.1 | L1 | PATCH | Ensure cron daemon is enabled and running"
   service:
     name: crond
     enabled: yes
@@ -12,7 +12,7 @@
   - patch
   - rule_5.1.1
 
-- name: "SCORED | 5.1.2 | PATCH | Ensure permissions on /etc/crontab are configured"
+- name: "5.1.2 | L1 | PATCH | Ensure permissions on /etc/crontab are configured"
   file:
     dest: /etc/crontab
     owner: root
@@ -25,7 +25,7 @@
   - patch
   - rule_5.1.2
 
-- name: "SCORED | 5.1.3 | PATCH | Ensure permissions on /etc/cron.hourly are configured"
+- name: "5.1.3 | L1 | PATCH | Ensure permissions on /etc/cron.hourly are configured"
   file:
     dest: /etc/cron.hourly
     state: directory
@@ -39,7 +39,7 @@
   - patch
   - rule_5.1.3
 
-- name: "SCORED | 5.1.4 | PATCH | Ensure permissions on /etc/cron.daily are configured"
+- name: "5.1.4 | L1 | PATCH | Ensure permissions on /etc/cron.daily are configured"
   file:
     dest: /etc/cron.daily
     state: directory
@@ -53,7 +53,7 @@
   - patch
   - rule_5.1.4
 
-- name: "SCORED | 5.1.5 | PATCH | Ensure permissions on /etc/cron.weekly are configured"
+- name: "5.1.5 | L1 | PATCH | Ensure permissions on /etc/cron.weekly are configured"
   file:
     dest: /etc/cron.weekly
     state: directory
@@ -67,7 +67,7 @@
   - patch
   - rule_5.1.5
 
-- name: "SCORED | 5.1.6 | PATCH | Ensure permissions on /etc/cron.monthly are configured"
+- name: "5.1.6 | L1 | PATCH | Ensure permissions on /etc/cron.monthly are configured"
   file:
     dest: /etc/cron.monthly
     state: directory
@@ -81,7 +81,7 @@
   - patch
   - rule_5.1.6
 
-- name: "SCORED | 5.1.7 | PATCH | Ensure permissions on /etc/cron.d are configured"
+- name: "5.1.7 | L1 | PATCH | Ensure permissions on /etc/cron.d are configured"
   file:
     dest: /etc/cron.d
     state: directory
@@ -95,19 +95,19 @@
   - patch
   - rule_5.1.7
 
-- name: "SCORED | 5.1.8 | PATCH | Ensure cron is restricted to authorized users"
+- name: "5.1.8 | L1 | PATCH | Ensure cron is restricted to authorized users"
   block:
-  - name: "SCORED | 5.1.8 | PATCH | Ensure cron is restricted to authorized users | Remove cron.deny"
+  - name: "5.1.8 | L1 | PATCH | Ensure cron is restricted to authorized users | Remove cron.deny"
     file:
       dest: /etc/cron.deny
       state: absent
 
-  - name: "SCORED | 5.1.8 | PATCH | Ensure cron is restricted to authorized users | Check if cron.allow exists"
+  - name: "5.1.8 | L1 | PATCH | Ensure cron is restricted to authorized users | Check if cron.allow exists"
     stat:
       path: "/etc/cron.allow"
     register: p
 
-  - name: "SCORED | 5.1.8 | PATCH | Ensure cron is restricted to authorized users | Ensure cron.allow is restricted to authorized users"
+  - name: "5.1.8 | L1 | PATCH | Ensure cron is restricted to authorized users | Ensure cron.allow is restricted to authorized users"
     file:
       dest: /etc/cron.allow
       state: '{{ "file" if  p.stat.exists else "touch" }}'
@@ -121,19 +121,19 @@
   - patch
   - rule_5.1.8
 
-- name: "SCORED | 5.1.9 | PATCH | Ensure at is restricted to authorized users"
+- name: "5.1.9 | L1 | PATCH | Ensure at is restricted to authorized users"
   block:
-  - name: "SCORED | 5.1.9 | PATCH | Ensure at is restricted to authorized users | Remove at.deny"
+  - name: "5.1.9 | L1 | PATCH | Ensure at is restricted to authorized users | Remove at.deny"
     file:
       dest: /etc/at.deny
       state: absent
 
-  - name: "SCORED | 5.1.9 | AUDIT | Ensure at is restricted to authorized users | Check if at.allow exists"
+  - name: "5.1.9 | L1 | AUDIT | Ensure at is restricted to authorized users | Check if at.allow exists"
     stat:
       path: "/etc/at.allow"
     register: p
 
-  - name: "SCORED | 5.1.9 | PATCH | Ensure at is restricted to authorized users | Ensure at.allow is restricted to authorized users"
+  - name: "5.1.9 | L1 | PATCH | Ensure at is restricted to authorized users | Ensure at.allow is restricted to authorized users"
     file:
       dest: /etc/at.allow
       state: '{{ "file" if  p.stat.exists else "touch" }}'
