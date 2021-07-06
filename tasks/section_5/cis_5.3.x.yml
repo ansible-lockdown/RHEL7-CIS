@@ -55,7 +55,7 @@
       path: "{{ item.path }}"
       owner: root
       group: root
-      mode: 0644
+      mode: 0600
     loop: "{{ rhel_07_5_3_3_pub_results.files }}"
   when:
   - rhel7cis_rule_5_3_3
