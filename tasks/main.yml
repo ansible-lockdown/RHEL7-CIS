@@ -113,6 +113,11 @@
 - name: flush handlers
   meta: flush_handlers
 
+- name: reboot system
+  reboot:
+  when:
+  - rhel7cis_allow_reboot
+
 - import_tasks: post_LE_audit.yml
   when:
   - rhel7cis_run_audit
