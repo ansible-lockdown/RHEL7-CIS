@@ -54,7 +54,7 @@
       - "These are the current logging configurations for rsyslog, please review:"
       - "{{ rhel_07_4_2_1_4_audit.stdout_lines }}"
     when:
-    - not rhel7cis_rsyslog_ansibleManaged
+    - not rhel7cis_rsyslog_ansiblemanaged
 
   - name: "4.2.1.4 | L1 | PATCH | Ensure logging is configured | Set logging settings lineinfile"
     lineinfile:
