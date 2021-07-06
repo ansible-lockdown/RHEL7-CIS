@@ -26,6 +26,10 @@ Highlights
 - section 3
   - some controls now L2
   - tidy of some rules
+- section 4
+  - tidy up
+- section 5
+  - 
 
 ## Whats new in 1.0.3
 

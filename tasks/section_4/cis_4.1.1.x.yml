@@ -1,5 +1,5 @@
 ---
-- name: "AUTOMATED | 4.1.1.1 | PATCH | Ensure audit log storage size is configured"
+- name: "4.1.1.1 | L2 |  PATCH | Ensure audit log storage size is configured"
   package:
     name: ['audit', 'audit-libs']
     state: present
@@ -11,10 +11,9 @@
   tags:
   - level2
   - auditd
-  - automated
   - rule_4.1.1.1
 
-- name: "AUTOMATED | 4.1.1.2 | PATCH | Ensure auditd service is enabled"
+- name: "4.1.1.2 | L2 | PATCH | Ensure auditd service is enabled"
   service:
     name: auditd
     state: started
@@ -27,10 +26,9 @@
   - level2
   - auditd
   - patch
-  - automated
   - rule_4.1.1.2
 
-- name: "AUTOMATED | 4.1.1.3 | PATCH | Ensure auditing for processes that start prior to auditd is enabled"
+- name: "4.1.1.3 | L2 | PATCH | Ensure auditing for processes that start prior to auditd is enabled"
   replace:
     dest: /etc/default/grub
     # regexp: '(^GRUB_CMDLINE_LINUX\s*\=\s*)(?:")(.+)(?<!audit=1)(?:")'
@@ -43,5 +41,4 @@
   - level2
   - auditd
   - patch
-  - automated
   - rule_4.1.1.3
