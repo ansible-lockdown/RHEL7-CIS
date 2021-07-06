@@ -50,7 +50,7 @@
       file_type: any
     register: rhel_07_5_3_3_pub_results
 
-  - name: "5.3.3 | AUDIT | Ensure permissions on SSH public host key files are configured"
+  - name: "5.3.3 | L1 | AUDIT | Ensure permissions on SSH public host key files are configured"
     file:
       path: "{{ item.path }}"
       owner: root
