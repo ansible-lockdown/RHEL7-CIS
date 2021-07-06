@@ -12,5 +12,5 @@
 - name: "SECTION | 2.3 | Service Clients"
   include: cis_2.3.x.yml
 
-- name: "SECTION | 2.5 | Nonessential Services"
-  include: cis_2.5.x.yml
+- name: "SECTION | 2.4 | Nonessential Services"
+  include: cis_2.4.x.yml
