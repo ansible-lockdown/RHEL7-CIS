@@ -1,6 +1,6 @@
 ---
 
-- name: "AUTOMATED | 2.2.2 | PATCH | Ensure X Window System is not installed"
+- name: "2.2.2 | L1 | PATCH | Ensure X Window System is not installed"
   package:
     state: absent
     name:
@@ -18,7 +18,7 @@
   - patch
   - rule_2.2.2
 
-- name: "AUTOMATED | 2.2.3 | PATCH | Ensure Avahi Server is not installed | disabled"
+- name: "2.2.3 | L1 | PATCH | Ensure Avahi Server is not installed | disabled"
   service:
     name: avahi-daemon
     state: stopped
@@ -35,7 +35,7 @@
   - patch
   - rule_2.2.3
 
-- name: "AUTOMATED | 2.2.4 | PATCH | Ensure CUPS is not installed"
+- name: "2.2.4 | L1 | PATCH | Ensure CUPS is not installed"
   package:
     name: cups
     state: absent
@@ -53,9 +53,9 @@
   - patch
   - rule_2.2.4
 
-- name: "AUTOMATED | 2.2.5 | PATCH | Ensure DHCP Server is not enabled"
+- name: "2.2.5 | L1 | PATCH | Ensure DHCP Server is not enabled"
   package:
-    name: dhcpd
+    name: dhcp
     state: absent
   vars:
     ansible_python_interpreter: /bin/python
@@ -71,7 +71,7 @@
   - patch
   - rule_2.2.5
 
-- name: "AUTOMATED | 2.2.6 | PATCH | Ensure LDAP server is not installed"
+- name: "2.2.6 | L1 | PATCH | Ensure LDAP server is not installed"
   package:
     name: openldap-servers
     state: absent
@@ -89,81 +89,25 @@
   - patch
   - rule_2.2.6
 
-- name: "AUTOMATED | 2.2.7 | PATCH | Ensure nfs-utils is not installed or the nfs-server service is masked"
-  block:
-  - name: "AUTOMATED | 2.2.7 | PATCH | Ensure nfs-utils is not installed or the nfs-server service is masked | nfs-utils "
-    package:
-      name: nfs-utils
-      state: absent
-    vars:
-      ansible_python_interpreter: /bin/python
-    when:
-    - not rhel7cis_nfs_rpc_server and not rhel7cis_nfs_server
-
-  - name: "AUTOMATED | 2.2.7 | PATCH | Ensure nfs-utils is not installed or the nfs-server service is masked | nfs-server "
-    systemd:
-      name: nfs-server
-      masked: true
-    when:
-    - rhel7cis_nfs_rpc_server and not rhel7cis_nfs_server
-  when:
-  - "'nfs-utils' in ansible_facts.packages"
-  - rhel7cis_rule_2_2_7
-  tags:
-  - level1
-  - scored
-  - nfs
-  - services
-  - patch
-  - rule_2.2.7
-
-- name: "AUTOMATED | 2.2.8 | PATCH | Ensure rpcbind is not installed or the irpcbind services are masked"
-  block:
-  - name: "AUTOMATED | 2.2.8 | PATCH | Ensure rpcbind is not installed or the rpcbind services are masked | rpcbind"
-    package:
-      name: rpcbind
-      state: absent
-    vars:
-      ansible_python_interpreter: /bin/python
-    when:
-    - not rhel7cis_nfs_rpc_server and not rhel7cis_rpc_server
-
-  - name: "AUTOMATED | 2.2.8 | PATCH | Ensure rpcbind is not installed or the rpcbind services are masked | rpcbind-server"
-    systemd:
-      name: rpcbind
-      masked: true
-    when:
-    - rhel7cis_nfs_rpc_server and not rhel7cis_rpc_server
-  when:
-  - "'rpcbind' in ansible_facts.packages"
-  - rhel7cis_rule_2_2_8
-  tags:
-  - level1
-  - scored
-  - rpc
-  - services
-  - patch
-  - rule_2.2.8
-
-- name: "AUTOMATED | 2.2.9 | PATCH | Ensure dns server is not installed"
+- name: "2.2.7 | L1 | PATCH | Ensure dns server is not installed"
   package:
-    name: named
+    name: bind
     state: absent
   vars:
     ansible_python_interpreter: /bin/python
   when:
   - not rhel7cis_named_server
   - "'bind' in ansible_facts.packages"
-  - rhel7cis_rule_2_2_9
+  - rhel7cis_rule_2_2_7
   tags:
   - level1
   - scored
   - dns
   - services
   - patch
-  - rule_2.2.9
+  - rule_2.2.7
 
-- name: "AUTOMATED | 2.2.10 | PATCH | Ensure FTP server is not installed"
+- name: "2.2.8 | L1 | PATCH | Ensure FTP server is not installed"
   package:
     name: vsftpd
     state: absent
@@ -172,16 +116,16 @@
   when:
   - not rhel7cis_vsftpd_server
   - "'vsftpd' in ansible_facts.packages"
-  - rhel7cis_rule_2_2_10
+  - rhel7cis_rule_2_2_8
   tags:
   - level1
   - scored
   - ftp
   - services
   - patch
-  - rule_2.2.10
+  - rule_2.2.8
 
-- name: "AUTOMATED | 2.2.11 | PATCH | Ensure HTTP server is not installed"
+- name: "2.2.9 | L1 | PATCH | Ensure HTTP server is not installed"
   package:
     name: httpd
     state: absent
@@ -190,16 +134,16 @@
   when:
   - not rhel7cis_httpd_server
   - "'httpd' in ansible_facts.packages"
-  - rhel7cis_rule_2_2_11
+  - rhel7cis_rule_2_2_9
   tags:
   - level1
   - scored
   - ldap
   - services
   - patch
-  - rule_2.2.11
+  - rule_2.2.9
 
-- name: "AUTOMATED | 2.2.12 | PATCH | Ensure IMAP and POP3 server is not installed"
+- name: "2.2.10 | L1 | PATCH | Ensure IMAP and POP3 server is not installed"
   package:
     name: dovecot
     state: absent
@@ -208,16 +152,16 @@
   when:
   - not rhel7cis_dovecot_server
   - "'dovecot' in ansible_facts.packages"
-  - rhel7cis_rule_2_2_12
+  - rhel7cis_rule_2_2_10
   tags:
   - level1
   - scored
   - dovecot
   - services
   - patch
-  - rule_2.2.12
+  - rule_2.2.10
 
-- name: "AUTOMATED | 2.2.13 | PATCH | Ensure Samba server is not installed"
+- name: "2.2.11 | L1 | PATCH | Ensure Samba server is not installed"
   package:
     name: samba
     state: absent
@@ -226,16 +170,16 @@
   when:
   - not rhel7cis_smb_server
   - "'samba' in ansible_facts.packages"
-  - rhel7cis_rule_2_2_13
+  - rhel7cis_rule_2_2_11
   tags:
   - level1
   - scored
   - samba
   - services
   - patch
-  - rule_2.2.13
+  - rule_2.2.11
 
-- name: "AUTOMATED | 2.2.14 | PATCH | Ensure HTTP Proxy server is not installed"
+- name: "2.2.12 | L1 | PATCH | Ensure HTTP Proxy server is not installed"
   package:
     name: squid
     state: absent
@@ -244,16 +188,16 @@
   when:
   - not rhel7cis_squid_server
   - "'squid' in ansible_facts.packages"
-  - rhel7cis_rule_2_2_14
+  - rhel7cis_rule_2_2_12
   tags:
   - level1
   - scored
   - squid
   - services
   - patch
-  - rule_2.2.14
+  - rule_2.2.12
 
-- name: "AUTOMATED | 2.2.15 | PATCH | Ensure net-snmp is not installed"
+- name: "2.2.13 | L1 | PATCH | Ensure net-snmp is not installed"
   package:
     name: net-snmp
     state: absent
@@ -262,16 +206,52 @@
   when:
   - not rhel7cis_snmp_server
   - "'net-snmp' in ansible_facts.packages"
-  - rhel7cis_rule_2_2_15
+  - rhel7cis_rule_2_2_13
   tags:
   - level1
   - scored
   - squid
   - services
   - patch
+  - rule_2.2.13
+
+- name: "2.2.14 | L1 | PATCH | Ensure nis server is not installed"
+  package:
+    name: ypserv
+    state: absent
+  vars:
+    ansible_python_interpreter: /bin/python
+  when:
+  - not rhel7cis_nis_server
+  - "'ypserv' in ansible_facts.packages"
+  - rhel7cis_rule_2_2_14
+  tags:
+  - level1
+  - scored
+  - nis
+  - services
+  - patch
+  - rule_2.2.14
+
+- name: "2.2.15 | L1 | PATCH | Ensure telnet server is not installed"
+  package:
+    name: telnet-server
+    state: absent
+  vars:
+    ansible_python_interpreter: /bin/python
+  when:
+  - not rhel7cis_telnet_server
+  - "'telnet-server' in ansible_facts.packages"
+  - rhel7cis_rule_2.2_15
+  tags:
+  - level1
+  - scored
+  - telnet
+  - services
+  - patch
   - rule_2.2.15
 
-- name: "AUTOMATED | 2.2.16 | PATCH | Ensure mail transfer agent is configured for local-only mode"
+- name: "2.2.16 | L1 | PATCH | Ensure mail transfer agent is configured for local-only mode"
   lineinfile:
     dest: /etc/postfix/main.cf
     regexp: "^(#)?inet_interfaces"
@@ -286,56 +266,91 @@
   - patch
   - rule_2.2.16
 
-- name: "AUTOMATED | 2.2.17 | PATCH | Ensure rsync is not installed or the rsyncd services are masked"
-  package:
-    name: rsync
-    state: absent
-  vars:
-    ansible_python_interpreter: /bin/python
+- name: "2.2.17 | L1 | PATCH | Ensure nfs-utils is not installed or the nfs-server service is masked"
+  block:
+  - name: "2.2.17 | L1 | PATCH | Ensure nfs-utils is not installed or the nfs-server service is masked | nfs-utils "
+    package:
+      name: nfs-utils
+      state: absent
+    vars:
+      ansible_python_interpreter: /bin/python
+    when:
+    - not rhel7cis_nfs_rpc_server and not rhel7cis_nfs_server
+
+  - name: "2.2.17 | L1 | PATCH | Ensure nfs-utils is not installed or the nfs-server service is masked | nfs-server "
+    systemd:
+      name: nfs-server
+      masked: true
+    when:
+    - rhel7cis_nfs_rpc_server and not rhel7cis_nfs_server
   when:
-  - not rhel7cis_rsyncd_server
-  - "'rsync' in ansible_facts.packages"
+  - "'nfs-utils' in ansible_facts.packages"
   - rhel7cis_rule_2_2_17
   tags:
   - level1
   - scored
-  - rsync
+  - nfs
   - services
   - patch
   - rule_2.2.17
 
-- name: "AUTOMATED | 2.2.18 | PATCH | Ensure nis server is not installed"
-  package:
-    name: ypserv
-    state: absent
-  vars:
-    ansible_python_interpreter: /bin/python
+- name: "2.2.18 | L1 | PATCH | Ensure rpcbind is not installed or the rpcbind services are masked"
+  block:
+  - name: "2.2.18 | L1 | PATCH | Ensure rpcbind is not installed or the rpcbind services are masked | rpcbind"
+    package:
+      name: rpcbind
+      state: absent
+    vars:
+      ansible_python_interpreter: /bin/python
+    when:
+    - not rhel7cis_nfs_rpc_server and not rhel7cis_rpc_server
+
+  - name: "2.2.18 | L1 | PATCH | Ensure rpcbind is not installed or the rpcbind services are masked | rpcbind-server"
+    systemd:
+      name: rpcbind
+      masked: true
+    when:
+    - rhel7cis_nfs_rpc_server and not rhel7cis_rpc_server
+  
+  - name: "2.2.18 | L1 | PATCH | Ensure rpcbind is not installed or the rpcbind services are masked | rpcbind-server"
+    systemd:
+      name: rpcbind.socket
+      masked: true
+    when:
+    - rhel7cis_nfs_rpc_server and not rhel7cis_rpc_server
   when:
-  - not rhel7cis_nis_server
-  - "'ypserv' in ansible_facts.packages"
+  - "'rpcbind' in ansible_facts.packages"
   - rhel7cis_rule_2_2_18
   tags:
   - level1
   - scored
-  - nis
+  - rpc
   - services
   - patch
   - rule_2.2.18
 
-- name: "AUTOMATED | 2.2.19 | PATCH | Ensure telnet server is not installed"
-  package:
-    name: telnet-server
-    state: absent
-  vars:
-    ansible_python_interpreter: /bin/python
+- name: "2.2.19 | L1 | PATCH | Ensure rsync is not installed or the rsyncd services are masked"
+  block:
+  - name: "2.2.19 | L1 | PATCH | Ensure rsync is not installed or the rsyncd services are masked | pkg removal"
+    package:
+      name: rsync
+      state: absent
+    vars:
+      ansible_python_interpreter: /bin/python
+
+  - name: "2.2.19 | L1 | PATCH | Ensure rsync is not installed or the rsyncd services are masked | Mask "
+    systemd:
+      name: rsyncd
+      masked: true
+  
   when:
-  - not rhel7cis_telnet_server
-  - "'telnet-server' in ansible_facts.packages"
-  - rhel7cis_rule_2.2_19
+  - not rhel7cis_rsyncd_server
+  - "'rsync' in ansible_facts.packages"
+  - rhel7cis_rule_2_2_19
   tags:
   - level1
   - scored
-  - telnet
+  - rsync
   - services
   - patch
   - rule_2.2.19

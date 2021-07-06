@@ -1,6 +1,6 @@
 ---
 
-- name: "AUTOMATED | 2.1.2 | PATCH | Ensure xinetd is not installed"
+- name: "2.1.1 | L1 | PATCH | Ensure xinetd is not installed"
   package:
     name: xinetd
     state: absent
@@ -8,9 +8,8 @@
     ansible_python_interpreter: /bin/python
   when:
   - ("'xinetd' in ansible_facts.packages") and not rhel7cis_xinetd_required
-  - rhel7cis_rule_2_1_2
+  - rhel7cis_rule_2_1_1
   tags:
   - level1
   - patch
-  - AUTOMATED
-  - rule_2.1.2
+  - rule_2.1.1

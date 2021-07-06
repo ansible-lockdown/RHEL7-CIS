@@ -1,6 +1,6 @@
 ---
 
-- name: "AUTOMATED | 2.3.1 | PATCH | Ensure nis client is not installed"
+- name: "2.3.1 | L1 | PATCH | Ensure nis client is not installed"
   package:
     name: ypbind
     state: absent
@@ -17,7 +17,7 @@
   - patch
   - rule_2.3.1
 
-- name: "AUTOMATED | 2.3.2 | PATCH | Ensure rsh client is not installed"
+- name: "2.3.2 | L1 | PATCH | Ensure rsh client is not installed"
   package:
     name: rsh
     state: absent
@@ -34,7 +34,7 @@
   - patch
   - rule_2.3.2
 
-- name: "AUTOMATED | 2.3.3 | PATCH | Ensure talk client is not installed"
+- name: "2.3.3 | L1 | PATCH | Ensure talk client is not installed"
   package:
     name: talk
     state: absent
@@ -51,7 +51,7 @@
   - patch
   - rule_2.3.3
 
-- name: "AUTOMATED | 2.3.4 | PATCH | Ensure telnet client is not installed"
+- name: "2.3.4 | L1 | PATCH | Ensure telnet client is not installed"
   package:
     name: telnet
     state: absent
@@ -68,7 +68,7 @@
   - patch
   - rule_2.3.4
 
-- name: "AUTOMATED | 2.3.5 | PATCH | Ensure LDAP client is not installed"
+- name: "2.3.5 | L1 | PATCH | Ensure LDAP client is not installed"
   package:
     name: openldap-client
     state: absent

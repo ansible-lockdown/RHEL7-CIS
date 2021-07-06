@@ -18,7 +18,10 @@ Highlights
 - section 1
   - 1.3 sudo no longer required
   - other groups changes increased tests
-
+- section 2
+  - reorder of server services
+  - rsyncd masked
+  - 2.5 - 2.4
 
 
 ## Whats new in 1.0.3
