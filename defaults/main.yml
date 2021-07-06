@@ -496,7 +496,7 @@ rhel7cis_pass:
   warn_age: 7
 # Syslog system - either rsyslog or syslog-ng
 rhel7cis_syslog: rsyslog
-rhel7cis_rsyslog_ansibleManaged: true
+rhel7cis_rsyslog_ansiblemanaged: true
 
 # Var/tmp settings
 rhel7cis_vartmp:
@@ -533,7 +533,7 @@ rhel7cis_rpm_audit_file: /var/tmp/rpm_file_check
 # RHEL-07_6.1.10 Allow ansible to adjust world-writable files. False will just display world-writable files, True will remove world-writable
 rhel7cis_no_world_write_adjust: true
 rhel7cis_passwd_label: "{{ (this_item | default(item)).id }}: {{ (this_item | default(item)).dir }}"
-rhel7cis_dotperm_ansibleManaged: true
+rhel7cis_dotperm_ansiblemanaged: true
 
 # RHEL-07-6.2.18 Clear users from shadow group
 rhel7cis_remove_shadow_grp_usrs: true
