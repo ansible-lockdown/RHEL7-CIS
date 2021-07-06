@@ -99,7 +99,7 @@
   vars:
     ansible_python_interpreter: /bin/python
 
-- name: "1.6.1.8 | PATCH | Ensure the MCS Translation Service (mcstrans) is not installed"
+- name: "1.6.1.8 | L1 | PATCH | Ensure the MCS Translation Service (mcstrans) is not installed"
   package:
     name: mcstrans
     state: absent

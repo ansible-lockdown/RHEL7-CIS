@@ -74,13 +74,13 @@
 
 - name: "3.5.1.6 | L1 | AUDIT | Ensure network interfaces are assigned to appropriate zone"
   block:
-  - name: "MANUAL | 3.5.1.6 | AUDIT | Ensure network interfaces are assigned to appropriate zone | Get list of interfaces and policies"
+  - name: "3.5.1.6 | L1 | AUDIT | Ensure network interfaces are assigned to appropriate zone | Get list of interfaces and policies"
     shell: "nmcli -t connection show | awk -F: '{ if($4){print $4} }' | while read INT; do firewall-cmd --get-active-zones | grep -B1 $INT; done"
     register: rhel7cis_3_5_1_6_interfacepolicy
     changed_when: no
     become: yes
 
-  - name: "MANUAL | 3.5.1.6 | AUDIT | Ensure network interfaces are assigned to appropriate zone | Get list of interfaces and policies | Show the interface to policy"
+  - name: "3.5.1.6 | L1 | AUDIT | Ensure network interfaces are assigned to appropriate zone | Get list of interfaces and policies | Show the interface to policy"
     debug:
       msg:
       - "The items below are the policies tied to the interfaces, please correct as needed"
@@ -94,7 +94,7 @@
 
 - name: "3.5.1.7 | L1 | AUDIT | Ensure unnecessary services and ports are not accepted"
   block:
-  - name: "MANUAL | 3.5.1.7 | AUDIT | Ensure unnecessary services and ports are not accepted | Get list of services and ports"
+  - name: "3.5.1.7 | L1 | AUDIT | Ensure unnecessary services and ports are not accepted | Get list of services and ports"
     shell: "firewall-cmd --get-active-zones | awk '!/:/ {print $1}' | while read ZN; do firewall-cmd --list-all --zone=$ZN; done"
     register: rhel7cis_3_5_1_7_servicesport
     become: true

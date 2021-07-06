@@ -286,7 +286,7 @@
   - patch
   - rule_6.2.11
 
-- name: "6.2.12 | PATCH | Ensure users own their home directories"
+- name: "6.2.12 | L1 | PATCH | Ensure users own their home directories"
   file:
     path: "{{ item.dir }}"
     owner: "{{ item.id }}"

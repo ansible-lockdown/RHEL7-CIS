@@ -25,7 +25,7 @@
       file_type: any
     register: rhel_07_5_3_2_priv_results
 
-  - name: "5.3.2 | AUDIT | Ensure permissions on SSH private host key files are configured"
+  - name: "5.3.2 | L1 | AUDIT | Ensure permissions on SSH private host key files are configured"
     file:
       path: "{{ item.path }}"
       owner: root

@@ -9,22 +9,22 @@
     tags:
     - skip_ansible_lint
 
-  - name: "6.1.1 | AUDIT | Audit system file permissions | Create list and warning"
+  - name: "6.1.1 | L2 | AUDIT | Audit system file permissions | Create list and warning"
     block:
-    - name: "6.1.1 | AUDIT | Audit system file permissions | Add file discrepancy list to system"
+    - name: "6.1.1 | L2 | AUDIT | Audit system file permissions | Add file discrepancy list to system"
       copy:
         dest: "{{ rhel7cis_rpm_audit_file }}"
         content: "{{ rhel7cis_6_1_1_packages_rpm.stdout }}"
       changed_when: rhel7cis_6_1_1_packages_rpm.stdout|length > 0
 
-    - name: "6.1.1 | AUDIT | Audit system file permissions | Message out alert for package descrepancies"
+    - name: "6.1.1 | L2 | AUDIT | Audit system file permissions | Message out alert for package descrepancies"
       debug:
         msg: |
              "Warning! You have some package descrepancies issues.
               The file list can be found in {{ rhel7cis_rpm_audit_file }}"
       when: rhel7cis_6_1_1_packages_rpm.stdout|length > 0
 
-    - name: "6.1.1 | AUDIT | Audit system file permissions | Message out no package descrepancies"
+    - name: "6.1.1 | L2 | AUDIT | Audit system file permissions | Message out no package descrepancies"
       debug:
         msg: "Good News! There are no package descrepancies"
       when: rhel7cis_6_1_1_packages_rpm.stdout|length == 0
@@ -156,7 +156,7 @@
     when:
     - rhel_07_6_1_10_perms_results.stdout is not defined
 
-  - name: "6.1.10 | PATCH | Ensure no world writable files exist | Adjust world-writable files if they exist (Configurable)"
+  - name: "6.1.10 | L1 | PATCH | Ensure no world writable files exist | Adjust world-writable files if they exist (Configurable)"
     file:
       path: '{{ item }}'
       mode: o-w

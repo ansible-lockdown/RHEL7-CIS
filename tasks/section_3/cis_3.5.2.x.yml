@@ -1,6 +1,6 @@
 ---
 
-- name: "3.5.2.1 | PATCH |Ensure nftables is installed"
+- name: "3.5.2.1 | L1 | PATCH |Ensure nftables is installed"
   package:
     name: nftables
     state: present

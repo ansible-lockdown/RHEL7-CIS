@@ -51,7 +51,7 @@
 
 - name: "4.1.2.4 | L2 | PATCH | Ensure audit_backlog_limit is sufficient"
   block:
-  - name: "4.1.2.4 | AUDIT | Ensure audit_backlog_limit is sufficient | Grep GRUB_CMDLINE_LINUX parameter"
+  - name: "4.1.2.4 | L2 | AUDIT | Ensure audit_backlog_limit is sufficient | Grep GRUB_CMDLINE_LINUX parameter"
     shell: grep 'GRUB_CMDLINE_LINUX=' /etc/default/grub | cut -f2 -d'"'
     changed_when: false
     failed_when: false
@@ -222,7 +222,7 @@
 
 - name: "4.1.11 | L2 | PATCH | Ensure use of privileged commands is collected"
   block:
-  - name: "4.1.11 | AUDIT | Ensure use of privileged commands is collected"
+  - name: "4.1.11 | L2 | AUDIT | Ensure use of privileged commands is collected"
     shell: for i in  $(df | grep '^/dev' | awk '{ print $NF }'); do find $i -xdev -type f -perm -4000 -o -type f -perm -2000 2>/dev/null; done
     register: priv_procs
     changed_when: no
@@ -325,7 +325,7 @@
   - patch
   - rule_4.1.16
 
-- name: "4.1.17 | PATCH | Ensure the audit configuration is immutable"
+- name: "4.1.17 | L2 | PATCH | Ensure the audit configuration is immutable"
   template:
     src: audit/99_finalize.rules.j2
     dest: /etc/audit/rules.d/99_finalize.rules
