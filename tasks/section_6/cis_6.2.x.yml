@@ -256,7 +256,7 @@
   - name: "6.2.11 | L1 | PATCH | Ensure all users' home directories exist | Creates home directories"
     command: "mkhomedir_helper {{ item }}"
     check_mode: "{{ rhel7cis_disruptive_check_mode }}"
-    with_items: "{{ rhelcis_07_6_2_11_audit | map(attribute='id') | list }}"
+    with_items: "{{ rhel_07_6_2_11_audit | map(attribute='id') | list }}"
     when:
     - rhel7cis_users_missing_home is changed
 
