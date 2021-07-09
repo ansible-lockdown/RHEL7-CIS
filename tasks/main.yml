@@ -60,7 +60,6 @@
   when:
   - rhel7cis_run_audit
   tags:
-  - rhel7cis_run_audit
   - run_audit
 
 - name: Gather the package facts
