@@ -576,8 +576,8 @@ rhel7cis_audit_files: "/var/tmp/{{ benchmark }}-Audit/"
 # Where the goss configs and outputs are stored
 goss_out_dir: '/var/tmp'
 goss_audit_dir: "{{ goss_out_dir }}/{{ benchmark }}-Audit/"
-pre_audit_outfile: "{{ goss_out_dir }}/{{ ansible_hostname }}_pre_scan_{{ ansible_date_time.epoch }}"
-post_audit_outfile: "{{ goss_out_dir }}/{{ ansible_hostname }}_post_scan_{{ ansible_date_time.epoch }}"
+pre_audit_outfile: "{{ goss_out_dir }}/{{ ansible_hostname }}_pre_scan_{{ ansible_date_time.epoch }}.{{ goss_format }}"
+post_audit_outfile: "{{ goss_out_dir }}/{{ ansible_hostname }}_post_scan_{{ ansible_date_time.epoch }}.{{ goss_format }}"
 
 ## The following should not need changing
 goss_file: "{{ goss_audit_dir }}goss.yml"
