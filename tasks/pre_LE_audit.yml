@@ -77,7 +77,7 @@
     goss_path: "{{ goss_bin }}"
     path: "{{ goss_file }}"
     vars_path: "{{ goss_vars_path }}"
-    format: "{{ goss_format }}"
+    format: "{{ audit_format }}"
     output_file: "{{ pre_audit_outfile }}"
   failed_when: false
   environment:
@@ -96,7 +96,7 @@
     vars:
       summary: 'summary."summary-line"'
   when:
-  - goss_format == "json"
+  - audit_format == "json"
 
 - name: Capture audit data if documentation format
   block:
@@ -109,4 +109,4 @@
     set_fact:
       pre_audit_summary: "{{ pre_audit.stdout_lines }}"
   when:
-  - goss_format == "documentation"
+  - audit_format == "documentation"

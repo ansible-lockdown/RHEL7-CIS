@@ -547,7 +547,7 @@ goss_version:
     checksum: 'sha256:827e354b48f93bce933f5efcd1f00dc82569c42a179cf2d384b040d8a80bfbfb'
 goss_path: /usr/local/bin/
 goss_bin: "{{ goss_path }}goss"
-goss_format: json
+audit_format: json
 
 # if get_goss_file == download change accordingly
 goss_url: "https://github.com/aelsabbahy/goss/releases/download/{{ goss_version.release }}/goss-linux-amd64"
@@ -576,8 +576,8 @@ rhel7cis_audit_files: "/var/tmp/{{ benchmark }}-Audit/"
 # Where the goss configs and outputs are stored
 goss_out_dir: '/var/tmp'
 goss_audit_dir: "{{ goss_out_dir }}/{{ benchmark }}-Audit/"
-pre_audit_outfile: "{{ goss_out_dir }}/{{ ansible_hostname }}_pre_scan_{{ ansible_date_time.epoch }}.{{ goss_format }}"
-post_audit_outfile: "{{ goss_out_dir }}/{{ ansible_hostname }}_post_scan_{{ ansible_date_time.epoch }}.{{ goss_format }}"
+pre_audit_outfile: "{{ goss_out_dir }}/{{ ansible_hostname }}_pre_scan_{{ ansible_date_time.epoch }}.{{ audit_format }}"
+post_audit_outfile: "{{ goss_out_dir }}/{{ ansible_hostname }}_post_scan_{{ ansible_date_time.epoch }}.{{ audit_format }}"
 
 ## The following should not need changing
 goss_file: "{{ goss_audit_dir }}goss.yml"
