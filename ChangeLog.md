@@ -28,6 +28,7 @@
 - section 3
   - some controls now L2
   - tidy of some rules
+  - 3.1 disable ipv6 now via grub 9No longer sysctl
 - section 4
   - tidy up
 - section 5
