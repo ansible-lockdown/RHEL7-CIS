@@ -11,12 +11,13 @@
   - assert has been created if rule still enabled and password not changed
 - Use of the packages facts module
 
-## 1.0.4
+## Major 1.1
 
 - Upgrade to CIS 3.1.1
 
 ### Highlights
 
+- rhel7cis_allow_reboot is now an option to reboot at the end of remediation - default false
 - section 1
   - 1.3 sudo no longer required move to section 5
   - 1.4.1 bootloader password reworked
