@@ -333,8 +333,9 @@ rhel7cis_aide_cron:
   aide_month: '{{ rhel7cis_aide_cron.aide_month }}'
   aide_weekday: '{{ rhel7cis_aide_cron.aide_weekday }}'
 
-# 1.5.1 Bootloader password
-rhel7cis_bootloader_file: {{ rhel7cis_bootloader_file }}
+# 1.4.1 Bootloader password
+rhel7cis_bootloader_file: {{ rhel7cis_bootloader_path }}grub.cfg
+rhel7cis_bootloader_user: {{ rhel7cis_bootloader_path }}user.cfg
 rhel7cis_bootloader_password: {{ rhel7cis_bootloader_password_hash }}
 rhel7cis_set_boot_pass: {{ rhel7cis_set_boot_pass }}
 

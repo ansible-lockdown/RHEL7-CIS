@@ -370,7 +370,7 @@ rhel7cis_rhnsd_required: false
 
 # 1.4.2 Bootloader password
 rhel7cis_set_boot_pass: false
-rhel7cis_bootloader_password_hash: 'grub.pbkdf2.sha512.changethispassword'
+rhel7cis_bootloader_password_hash: 'grub.pbkdf2.sha512.changethispart'
 
 # System network parameters (host only OR host and router)
 rhel7cis_is_router: false

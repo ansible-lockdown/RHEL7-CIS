@@ -18,7 +18,8 @@
 ### Highlights
 
 - section 1
-  - 1.3 sudo no longer required
+  - 1.3 sudo no longer required move to section 5
+  - 1.4.1 bootloader password reworked
   - other groups changes increased tests
   - more controls for GDM
 - section 2
