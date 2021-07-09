@@ -22,7 +22,7 @@
   - level1
   - aide
   - patch
-  - rule_1.4.1
+  - rule_1.3.1
   vars:
     ansible_python_interpreter: /bin/python
 
