@@ -1,10 +1,19 @@
 ---
 
 - name: "MANUAL| 1.2.1 | PATCH | Ensure GPG keys are configured"
-  command: gpg --quiet --with-fingerprint /etc/pki/rpm-gpg/RPM-GPG-KEY-{{ ansible_distribution|lower }}-release
+  block:
+  - name: "MANUAL| 1.2.1 | PATCH | Ensure GPG keys are configured | RedHat"
+    command: gpg --quiet --with-fingerprint /etc/pki/rpm-gpg/RPM-GPG-KEY-{{ ansible_distribution|lower }}-release
+    when:
+    - ansible_distribution == "RedHat"
+
+  - name: "MANUAL| 1.2.1 | PATCH | Ensure GPG keys are configured | CentOS"
+    command: gpg --quiet --with-fingerprint /etc/pki/rpm-gpg/RPM-GPG-KEY-{{ ansible_distribution }}-{{ ansible_distribution_major_version }}
+    when:
+    - ansible_distribution == "CentOS"
+
   when:
   - rhel7cis_rule_1_2_1
-  - ansible_distribution == "RedHat"
   tags:
   - level1
   - notAUTOMATED
@@ -12,11 +21,21 @@
   - rule_1.2.1
 
 - name: "MANUAL| 1.2.2 | Ensure package manager repositories are configured"
-  command: yum repolist
-  changed_when: no
+  block:
+  - name: "MANUAL| 1.2.2 | Ensure package manager repositories are configured"
+    command: yum repolist
+    changed_when: no
+    register: repolist
+    tags:
+    - skip_ansible_lint
+
+  - name: "AUDIT| 1.2.2 | Ensure package manager repositories are configured"
+    debug:
+      msg:
+      - "Please check against site policy repos listed below match expected:"
+      - "{{ repolist.stdout_lines }}"
   when:
   - rhel7cis_rule_1_2_2
-  - ansible_distribution == "RedHat"
   tags:
   - level1
   - notAUTOMATED

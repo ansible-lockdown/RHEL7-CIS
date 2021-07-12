@@ -1,5 +1,4 @@
 ---
-
 - name: "AUTOMATED | 3.2.1 | PATCH | Ensure IP forwarding is disabled"
   sysctl:
     name: net.ipv4.ip_forward
@@ -18,6 +17,25 @@
   - patch
   - rule_3.2.1
 
+- name: "AUTOMATED | 3.2.1 | PATCH | Ensure IP forwarding is disabled"
+  sysctl:
+    name: net.ipv6.conf.all.forwarding
+    value: '0'
+    state: present
+    reload: yes
+    ignoreerrors: yes
+  notify:
+  - sysctl flush ipv6 route table
+  when:
+  - not rhel7cis_is_router
+  - rhel7cis_rule_3_2_1
+  - rhel7cis_ipv6_required
+  tags:
+  - level1
+  - sysctl
+  - patch
+  - rule_3.2.1
+
 - name: "AUTOMATED | 3.2.2 | PATCH | Ensure packet redirect sending is disabled"
   sysctl:
     name: '{{ item.name }}'
@@ -30,12 +48,12 @@
   - { name: net.ipv4.conf.all.send_redirects, value: 0 }
   - { name: net.ipv4.conf.default.send_redirects, value: 0 }
   notify:
-      - sysctl flush ipv4 route table
+  - sysctl flush ipv4 route table
   when:
-      - not rhel7cis_is_router
-      - rhel7cis_rule_3_2_2
+  - not rhel7cis_is_router
+  - rhel7cis_rule_3_2_2
   tags:
-      - level1
-      - sysctl
-      - patch
-      - rule_3.2.2
+  - level1
+  - sysctl
+  - patch
+  - rule_3.2.2

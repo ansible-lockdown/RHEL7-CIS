@@ -1,0 +1,11 @@
+parseable: true
+quiet: true
+skip_list:
+  - '204'
+  - '305'
+  - '303'
+  - '403'
+  - '306'
+  - '602'
+use_default_rules: true
+verbosity: 0

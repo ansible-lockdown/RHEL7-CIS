@@ -33,7 +33,7 @@
     state: stopped
     enabled: no
   when:
-  - "'ntp' in ansible_facts.packages" 
+  - "'ntp' in ansible_facts.packages"
   - rhel7cis_time_synchronization == "chrony"
   - rhel7cis_rule_2_2_1_1
   - not rhel7cis_system_is_container
@@ -47,15 +47,14 @@
     name: chronyd
     state: stopped
     enabled: no
-  ignore_errors: yes
   when:
   - rhel7cis_time_synchronization == "ntp" and "'chrony' in ansible_facts.packages"
   - rhel7cis_rule_2_2_1_1
   - not rhel7cis_system_is_container
   tags:
-   - level1
-   - patch
-   - rule_2.2.1.1
+  - level1
+  - patch
+  - rule_2.2.1.1
 
 - name: "AUTOMATED | 2.2.1.2 | PATCH | Ensure chrony is configured"
   block:
@@ -74,14 +73,17 @@
       line: "OPTIONS=\"-u chrony\""
       state: present
       create: yes
+      owner: root
+      group: root
+      mode: 0640
   when:
   - rhel7cis_time_synchronization == "chrony"
   - rhel7cis_rule_2_2_1_2
   - not rhel7cis_system_is_container
   tags:
-   - level1
-   - patch
-   - rule_2.2.1.2
+  - level1
+  - patch
+  - rule_2.2.1.2
 
 - name: "AUTOMATED | 2.2.1.3 | PATCH | Ensure ntp is configured"
   block:

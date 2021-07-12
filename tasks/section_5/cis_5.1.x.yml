@@ -1,6 +1,6 @@
 ---
 
-- name: "SCORED | 5.1.1 | PATCH | Ensure cron daemon is enabledi and running"
+- name: "SCORED | 5.1.1 | PATCH | Ensure cron daemon is enabled and running"
   service:
     name: crond
     enabled: yes
@@ -83,17 +83,17 @@
 
 - name: "SCORED | 5.1.7 | PATCH | Ensure permissions on /etc/cron.d are configured"
   file:
-      dest: /etc/cron.d
-      state: directory
-      owner: root
-      group: root
-      mode: 0700
+    dest: /etc/cron.d
+    state: directory
+    owner: root
+    group: root
+    mode: 0700
   when:
-      - rhel7cis_rule_5_1_7
+  - rhel7cis_rule_5_1_7
   tags:
-      - level1
-      - patch
-      - rule_5.1.7
+  - level1
+  - patch
+  - rule_5.1.7
 
 - name: "SCORED | 5.1.8 | PATCH | Ensure cron is restricted to authorized users"
   block:

@@ -20,14 +20,26 @@ python2_bin: /bin/python2.7
 # The audit variable found at the base
 benchmark: RHEL7-CIS
 
-# Enable goss binary download
+#### Basic external goss audit enablement settings ####
+#### Precise details - per setting can be found at the bottom of this file ####
+
+### Goss is required on the remote host
 rhel7cis_setup_audit: false
-# Options are downoad from github or copy from pre downloaded location
-# copy or download
+# How to retrive goss
+# Options are copy or download - detailed settings at the bottom of this file
+# you will need to access to either github or the file already dowmloaded
 get_goss_file: download
 
-# Enable audits to run
+# how to get audit files onto host options
+# options are git/copy/get_url
+rhel7cis_audit_content: git
+
+# enable audits to run - this  runs the audit and get the latest content
 rhel7cis_run_audit: false
+
+### End Goss enablements ####
+#### Detailed settings found at the end of this document ####
+
 
 # Enable/Disable SELinux
 rhel7cis_selinux_disable: false
@@ -377,14 +389,14 @@ rhel7cis_ipv6_required: true
 rhel7cis_config_aide: true
 # AIDE cron settings
 rhel7cis_aide_cron:
-    cron_user: root
-    cron_file: /etc/crontab
-    aide_job: '/usr/sbin/aide --check'
-    aide_minute: '0'
-    aide_hour: '5'
-    aide_day: '*'
-    aide_month: '*'
-    aide_weekday: '*'
+  cron_user: root
+  cron_file: /etc/crontab
+  aide_job: '/usr/sbin/aide --check'
+  aide_minute: '0'
+  aide_hour: '5'
+  aide_day: '*'
+  aide_month: '*'
+  aide_weekday: '*'
 
 # SELinux policy
 rhel7cis_selinux_pol: targeted
@@ -405,27 +417,27 @@ rhel7cis_ypbind_required: false
 rhel7cis_time_synchronization: chrony
 
 rhel7cis_time_synchronization_servers:
-    - 0.pool.ntp.org
-    - 1.pool.ntp.org
-    - 2.pool.ntp.org
-    - 3.pool.ntp.org
+  - 0.pool.ntp.org
+  - 1.pool.ntp.org
+  - 2.pool.ntp.org
+  - 3.pool.ntp.org
 
 rhel7cis_chrony_server_options: "minpoll 8"
 rhel7cis_ntp_server_options: "iburst"
 
 # 3.4.2 | PATCH | Ensure /etc/hosts.allow is configured
 rhel7cis_host_allow:
-    - "10.0.0.0/255.0.0.0"
-    - "172.16.0.0/255.240.0.0"
-    - "192.168.0.0/255.255.0.0"
+  - "10.0.0.0/255.0.0.0"
+  - "172.16.0.0/255.240.0.0"
+  - "192.168.0.0/255.255.0.0"
 
 # Firewall Service - either firewalld or iptables
 rhel7cis_firewall: firewalld
 rhel7cis_default_zone: public
 
 rhel7cis_firewall_services:
-    - ssh
-    - dhcpv6-client
+  - ssh
+  - dhcpv6-client
 
 # Warning Banner Content (issue, issue.net, motd)
 rhel7cis_warning_banner: |
@@ -436,10 +448,10 @@ rhel7cis_warning_banner: |
 
 # auditd settings
 rhel7cis_auditd:
-    space_left_action: email
-    action_mail_acct: root
-    admin_space_left_action: halt
-    max_log_file_action: keep_logs
+  space_left_action: email
+  action_mail_acct: root
+  admin_space_left_action: halt
+  max_log_file_action: keep_logs
 
 rhel7cis_logrotate: "daily"
 
@@ -459,61 +471,72 @@ rhel7cis_system_is_log_server: false
 rhel7cis_ssh_loglevel: INFO
 rhel7cis_ssh_maxsessions: 10
 rhel7cis_sshd:
-    clientalivecountmax: 3
-    clientaliveinterval: 300
-    ciphers: "chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr"
-    macs: "hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256"
-    kex: "curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group14-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256"
-    logingracetime: 60
-    # WARNING: make sure you understand the precedence when working with these values!!
-    # allowusers:
-    # allowgroups: systems dba
-    # denyusers:
-    # denygroups:
+  clientalivecountmax: 3
+  clientaliveinterval: 300
+  ciphers: "chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr"
+  macs: "hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256"
+  kex: "curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group14-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256"
+  logingracetime: 60
+  # WARNING: make sure you understand the precedence when working with these values!!
+  # allowusers:
+  # allowgroups: systems dba
+  # denyusers:
+  # denygroups:
 
 # pam variables
 rhel7cis_pam_faillock:
-    attempts: 5
-    interval: 900
-    unlock_time: 900
-    fail_for_root: no
-    remember: 5
-    pwhash: sha512
+  attempts: 5
+  interval: 900
+  unlock_time: 900
+  fail_for_root: no
+  remember: 5
+  pwhash: sha512
 rhel7cis_inactivelock:
-    lock_days: 30
+  lock_days: 30
+
+# Accounte listed below will not have INACTIVE field set in shadow file
+rhel7cis_inactive_whitelist:
+  - root
+  - vagrant
+
 rhel7cis_pass:
-    max_days: 90
-    min_days: 7
-    warn_age: 7
+  max_days: 90
+  min_days: 7
+  warn_age: 7
 # Syslog system - either rsyslog or syslog-ng
 rhel7cis_syslog: rsyslog
 rhel7cis_rsyslog_ansibleManaged: true
 
 # Var/tmp settings
 rhel7cis_vartmp:
-    source: /tmp
-    fstype: none
-    opts: "defaults,nodev,nosuid,noexec,bind"
-    enabled: no
+  source: /tmp
+  fstype: none
+  opts: "defaults,nodev,nosuid,noexec,bind"
+  enabled: no
 
-# Interactive user UID starting point 
+# Interactive user UID starting point
 rhel7cis_rule_5_4_2_min_uid: 1000
 
 # RHEL-07-5.4.5
 # Session timeout setting file (TMOUT setting can be set in multiple files)
 # Timeout value is in seconds. (60 seconds * 10 = 600)
 rhel7cis_shell_session_timeout:
-    file: /etc/profile.d/tmout.sh
-    timeout: 600
+  file: /etc/profile.d/tmout.sh
+  timeout: 600
 # RHEL-07-5.4.1.5 Allow ansible to expire password for account with a last changed date in the future. False will just display users in violation, true will expire those users passwords
 rhel7cis_futurepwchgdate_autofix: true
 
 # 5.4.2
 rhel7cis_int_gid: 1000
 
+# 5.6 Group to be used for su
+# this group needs to exists groups will not be created for remediation this is considered sys admins
+
+# rhel7cis_sugroup: sugroup
+
 ## Section6 vars
 
-# RHEL-07_6.1.1 
+# RHEL-07_6.1.1
 rhel7cis_rpm_audit_file: /var/tmp/rpm_file_check
 
 # RHEL-07_6.1.10 Allow ansible to adjust world-writable files. False will just display world-writable files, True will remove world-writable
@@ -521,46 +544,52 @@ rhel7cis_no_world_write_adjust: true
 rhel7cis_passwd_label: "{{ (this_item | default(item)).id }}: {{ (this_item | default(item)).dir }}"
 rhel7cis_dotperm_ansibleManaged: true
 
-# RHEL-07-6.2.18 Clear users from shadow group 
-rhel7cis_remove_shadow_grp_usrs: true 
+# RHEL-07-6.2.18 Clear users from shadow group
+rhel7cis_remove_shadow_grp_usrs: true
+#### Goss Configuration Settings ####
 
-# Goss Audit Variables
-# how to get audit files onto host options
-# options are git/copy/get_url
-rhel7cis_audit_content: git
+### Goss binary settings ###
+goss_version:
+    release: v0.3.16
+    checksum: 'sha256:827e354b48f93bce933f5efcd1f00dc82569c42a179cf2d384b040d8a80bfbfb'
+goss_path: /usr/local/bin/
+goss_bin: "{{ goss_path }}goss"
+goss_format: json
 
+# if get_goss_file == download change accordingly
+goss_url: "https://github.com/aelsabbahy/goss/releases/download/{{ goss_version.release }}/goss-linux-amd64"
+
+## if get_goss_file - copy the following needs to be updated for your environment
+## it is expected that it will be copied from somewhere accessible to the control node
+## e.g copy from ansible control node to remote host
+copy_goss_from_path: /some/accessible/path
+
+### Goss Audit Benchmark file ###
+## managed by the control rhel7cis_audit_content
 # git
 rhel7cis_audit_file_git: "https://github.com/ansible-lockdown/{{ benchmark }}-Audit.git"
 rhel7cis_audit_git_version: main
 
 # copy:
-#rhel7cis_audit_local_copy: "some path to copy from"
+rhel7cis_audit_local_copy: "some path to copy from"
 
 # get_url:
-#rhel7cis_audit_files_url: "some url maybe s3?"
+rhel7cis_audit_files_url: "some url maybe s3?"
 
+# Where the goss audit configuration will be stored
+rhel7cis_audit_files: "/var/tmp/{{ benchmark }}-Audit/"
 
-## audit controls ##
-goss_version:
-  release: v0.3.16
-  checksum: 'sha256:827e354b48f93bce933f5efcd1f00dc82569c42a179cf2d384b040d8a80bfbfb'
+## Goss configuration information
+# Where the goss configs and outputs are stored
+goss_out_dir: '/var/tmp'
+goss_audit_dir: "{{ goss_out_dir }}/{{ benchmark }}-Audit/"
+pre_audit_outfile: "{{ goss_out_dir }}/{{ ansible_hostname }}_pre_scan_{{ ansible_date_time.epoch }}"
+post_audit_outfile: "{{ goss_out_dir }}/{{ ansible_hostname }}_post_scan_{{ ansible_date_time.epoch }}"
 
-### Audit Settings ###
-#goss_checksum: "checksum_{{ goss_version }}"
-goss_path: /usr/local/bin/
-goss_bin: "{{ goss_path }}goss"
-goss_format: documentation
-goss_url: "https://github.com/aelsabbahy/goss/releases/download/{{ goss_version.release }}/goss-linux-amd64"
-
-## Goss tests information
-goss_audit_dir: "/var/tmp/{{ benchmark }}-Audit/"
+## The following should not need changing
 goss_file: "{{ goss_audit_dir }}goss.yml"
 goss_vars_path: "{{ goss_audit_dir }}/vars/{{ ansible_hostname }}.yml"
-goss_out_dir: '/var/tmp'
-pre_audit_outfile: "{{ goss_out_dir }}/pre_remediation_scan"
-post_audit_outfile: "{{ goss_out_dir }}/post_remediation_scan"
-
-Audit_results: |
+audit_results: |
       The pre remediation results are: {{ pre_audit_summary }}.
       The post remediation results are: {{ post_audit_summary }}.
       Full breakdown can be found in {{ goss_out_dir }}

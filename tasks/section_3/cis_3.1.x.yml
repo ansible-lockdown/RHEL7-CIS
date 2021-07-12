@@ -3,13 +3,13 @@
 - name: "MANUAL | 3.1.1 | PATCH | Disable IPv6 | sysctl"
   sysctl:
     name: "{{ item }}"
-    value: '0'
+    value: '1'
     reload: yes
     state: present
   loop:
   - net.ipv6.conf.all.disable_ipv6
   - net.ipv6.conf.default.disable_ipv6
-  when: 
+  when:
   - not rhel7cis_ipv6_required
   - rhel7cis_rule_3_1_1
   notify: sysctl flush ipv6 route table

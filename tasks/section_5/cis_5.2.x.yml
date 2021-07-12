@@ -76,7 +76,7 @@
     notify:
     - restart sshd
     when:
-    - "rhel7cis_sshd['allowusers']|default('') != ''"
+    - "rhel7cis_sshd['allowusers']|default('') | length > 0"
 
   - name: "SCORED | 5.2.4 | PATCH | Ensure SSH access is limited | Add line to sshd_config for allowgroups"
     lineinfile:
@@ -87,7 +87,7 @@
     notify:
     - restart sshd
     when:
-    - "rhel7cis_sshd['allowgroups']|default('') != ''"
+    - "rhel7cis_sshd['allowgroups']|default('') | length > 0"
 
   - name: "SCORED | 5.2.4 | PATCH | Ensure SSH access is limited | Add line to sshd_config for denyusers"
     lineinfile:
@@ -98,7 +98,7 @@
     notify:
     - restart sshd
     when:
-    - "rhel7cis_sshd['denyusers']|default('') != ''"
+    - "rhel7cis_sshd['denyusers']|default('') | length > 0"
 
   - name: "SCORED | 5.2.4 | PATCH | Ensure SSH access is limited | Add line to sshd_config for denygroups"
     lineinfile:
@@ -109,7 +109,7 @@
     notify:
     - restart sshd
     when:
-    - "rhel7cis_sshd['denygroups']|default('') != ''"
+    - "rhel7cis_sshd['denygroups']|default('') | length > 0"
   when:
   - rhel7cis_rule_5_2_4
   tags:
@@ -241,18 +241,18 @@
 
 - name: "SCORED | 5.2.13 | PATCH | Ensure only strong Ciphers are used"
   lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^Cipherss'
-      line: "Ciphers {{ rhel7cis_sshd['ciphers'] }}"
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: '^Cipherss'
+    line: "Ciphers {{ rhel7cis_sshd['ciphers'] }}"
   notify:
   - restart sshd
   when:
-      - rhel7cis_rule_5_2_13
+  - rhel7cis_rule_5_2_13
   tags:
-      - level1
-      - patch
-      - rule_5.2.13
+  - level1
+  - patch
+  - rule_5.2.13
 
 - name: "SCORED | 5.2.14 | PATCH | Ensure only approved MAC algorithms are used"
   lineinfile:
@@ -294,7 +294,7 @@
       line: "ClientAliveInterval {{ rhel7cis_sshd['clientaliveinterval'] }}"
     notify:
     - restart sshd
-  
+
   - name: "SCORED | 5.2.16 | PATCH | Ensure SSH Idle Timeout Interval is configured | Ensure SSH ClientAliveCountMax set to <= 3"
     lineinfile:
       state: present
@@ -385,7 +385,7 @@
   - patch
   - rule_5.2.21
 
-- name: "SCORED | 5.2.22 | PATCH | Ensure SSH MaxSessionsi is limited"
+- name: "SCORED | 5.2.22 | PATCH | Ensure SSH MaxSessions is limited"
   lineinfile:
     state: present
     dest: /etc/ssh/sshd_config

@@ -2,9 +2,7 @@
 - hosts: all
   become: true
   vars:
-      is_container: false
+    is_container: false
 
   roles:
   - role: "{{ playbook_dir }}"
-    rhel7cis_system_is_container: "{{ is_container | default(false) }}"
-    rhel7cis_skip_for_travis: false

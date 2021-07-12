@@ -20,4 +20,3 @@
     group: root
   when:
   - get_goss_file == 'copy'
-    

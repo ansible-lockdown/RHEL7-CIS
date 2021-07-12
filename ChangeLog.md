@@ -11,10 +11,25 @@
   - assert has been created if rule still enabled and password not changed
 - Use of the packages facts module
 
-## Whats new 1.0.1
+## Whats new in 1.0.3
 
-- Fixed typos
-- Added audit output file permissions
+- Thanks to Thulium-Drake
+  - 6.1.12 - rework audit (no score) control #204
+  - 4.1.1.3 regex improvement #202
+
+- Thanks to jlosito
+  - 1.2.1& 1.2.2- allow centos gpg key check #215
+  - 5.1.1 & 5.2.22 -typo fixes #221
+  - 5.4.1.4 - idempotence and Inactive whitelist added to defaults main #222
+  - 5.5 - Idempotence improvement #213
+
+- 4.2.1.4 - Idempotence improvement #217
+  - thanks to andreyzher
+
+- 1.5.2 moved grub capture to prelim
+
+- 5.6 ability to supply an sugroup rather than default to wheel
+  - thanks to ihotz #234
 
 ## Whats new in 1.0.2
 
@@ -24,12 +39,7 @@
 - selinux variable in defaults main - default enforcing
   - 1.7.1.3-5 now idempotent
 
-## Whats new in 1.0.3
+## Whats new 1.0.1
 
-- 6.1.12 - rework audit (no score) control
-  - thanks to Thulium-Drake #204
-
-- 4.1.1.3 regex improvement
-  - thanks to Thulium-Drake #202
-  
-- 1.5.2 moved grub capture to prelim
+- Fixed typos
+- Added audit output file permissions
