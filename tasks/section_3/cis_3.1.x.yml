@@ -3,7 +3,7 @@
 - name: "MANUAL | 3.1.1 | PATCH | Disable IPv6 | sysctl"
   sysctl:
     name: "{{ item }}"
-    value: '0'
+    value: '1'
     reload: yes
     state: present
   loop:
