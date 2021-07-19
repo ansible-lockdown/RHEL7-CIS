@@ -2,399 +2,399 @@
 
 - name: "5.3.1 | L1 | PATCH | Ensure permissions on /etc/ssh/sshd_config are configured"
   file:
-    dest: /etc/ssh/sshd_config
-    state: file
-    owner: root
-    group: root
-    mode: 0600
+      dest: /etc/ssh/sshd_config
+      state: file
+      owner: root
+      group: root
+      mode: 0600
   when:
-  - rhel7cis_rule_5_3_1
+      - rhel7cis_rule_5_3_1
   tags:
-  - level1
-  - patch
-  - rule_5.3.1
+      - level1
+      - patch
+      - rule_5.3.1
 
 - name: "5.3.2 | L1 | PATCH | Ensure permissions on SSH private host key files are configured"
   block:
-  - name: "5.3.2 | L1 | AUDIT | Ensure permissions on SSH private host key files are configured"
-    find:
-      paths:
-      - /etc/ssh
-      patterns: 'ssh_host_*_key'
-      recurse: true
-      file_type: any
-    register: rhel_07_5_3_2_priv_results
+      - name: "5.3.2 | L1 | AUDIT | Ensure permissions on SSH private host key files are configured"
+        find:
+            paths:
+                - /etc/ssh
+            patterns: 'ssh_host_*_key'
+            recurse: true
+            file_type: any
+        register: rhel_07_5_3_2_priv_results
 
-  - name: "5.3.2 | L1 | AUDIT | Ensure permissions on SSH private host key files are configured"
-    file:
-      path: "{{ item.path }}"
-      owner: root
-      group: root
-      mode: 0600
-    loop: "{{ rhel_07_5_3_2_priv_results.files }}"
+      - name: "5.3.2 | L1 | AUDIT | Ensure permissions on SSH private host key files are configured"
+        file:
+            path: "{{ item.path }}"
+            owner: root
+            group: root
+            mode: 0600
+        loop: "{{ rhel_07_5_3_2_priv_results.files }}"
   when:
-  - rhel7cis_rule_5_3_2
+      - rhel7cis_rule_5_3_2
   tags:
-  - level1
-  - patch
-  - rule_5.3.2
+      - level1
+      - patch
+      - rule_5.3.2
 
 - name: "5.3.3 | L1 | PATCH | Ensure permissions on SSH public host key files are configured"
   block:
-  - name: "5.3.3 | L1 | AUDIT | Ensure permissions on SSH public host key files are configured"
-    find:
-      paths:
-      - /etc/ssh
-      patterns: 'ssh_host_*_key'
-      recurse: true
-      file_type: any
-    register: rhel_07_5_3_3_pub_results
+      - name: "5.3.3 | L1 | AUDIT | Ensure permissions on SSH public host key files are configured"
+        find:
+            paths:
+                - /etc/ssh
+            patterns: 'ssh_host_*_key'
+            recurse: true
+            file_type: any
+        register: rhel_07_5_3_3_pub_results
 
-  - name: "5.3.3 | L1 | AUDIT | Ensure permissions on SSH public host key files are configured"
-    file:
-      path: "{{ item.path }}"
-      owner: root
-      group: root
-      mode: 0600
-    loop: "{{ rhel_07_5_3_3_pub_results.files }}"
+      - name: "5.3.3 | L1 | AUDIT | Ensure permissions on SSH public host key files are configured"
+        file:
+            path: "{{ item.path }}"
+            owner: root
+            group: root
+            mode: 0600
+        loop: "{{ rhel_07_5_3_3_pub_results.files }}"
   when:
-  - rhel7cis_rule_5_3_3
+      - rhel7cis_rule_5_3_3
   tags:
-  - level1
-  - patch
-  - rule_5.3.3
+      - level1
+      - patch
+      - rule_5.3.3
 
 
 - name: "5.3.4 | L1 | PATCH | Ensure SSH access is limited"
   block:
-  - name: "5.3.4 | L1 | PATCH | Ensure SSH access is limited | Add line to sshd_config for allowusers"
-    lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: "^AllowUsers"
-      line: AllowUsers {{ rhel7cis_sshd['allowusers'] }}
-    notify:
-    - restart sshd
-    when:
-    - "rhel7cis_sshd['allowusers']|default('') | length > 0"
+      - name: "5.3.4 | L1 | PATCH | Ensure SSH access is limited | Add line to sshd_config for allowusers"
+        lineinfile:
+            state: present
+            dest: /etc/ssh/sshd_config
+            regexp: "^AllowUsers"
+            line: AllowUsers {{ rhel7cis_sshd['allowusers'] }}
+        notify:
+            - restart sshd
+        when:
+            - "rhel7cis_sshd['allowusers']|default('') | length > 0"
 
-  - name: "5.3.4 | L1 | PATCH | Ensure SSH access is limited | Add line to sshd_config for allowgroups"
-    lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: "^AllowGroups"
-      line: AllowGroups {{ rhel7cis_sshd['allowgroups'] }}
-    notify:
-    - restart sshd
-    when:
-    - "rhel7cis_sshd['allowgroups']|default('') | length > 0"
+      - name: "5.3.4 | L1 | PATCH | Ensure SSH access is limited | Add line to sshd_config for allowgroups"
+        lineinfile:
+            state: present
+            dest: /etc/ssh/sshd_config
+            regexp: "^AllowGroups"
+            line: AllowGroups {{ rhel7cis_sshd['allowgroups'] }}
+        notify:
+            - restart sshd
+        when:
+            - "rhel7cis_sshd['allowgroups']|default('') | length > 0"
 
-  - name: "5.3.4 | L1 | PATCH | Ensure SSH access is limited | Add line to sshd_config for denyusers"
-    lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: "^DenyUsers"
-      line: DenyUsers {{ rhel7cis_sshd['denyusers'] }}
-    notify:
-    - restart sshd
-    when:
-    - "rhel7cis_sshd['denyusers']|default('') | length > 0"
+      - name: "5.3.4 | L1 | PATCH | Ensure SSH access is limited | Add line to sshd_config for denyusers"
+        lineinfile:
+            state: present
+            dest: /etc/ssh/sshd_config
+            regexp: "^DenyUsers"
+            line: DenyUsers {{ rhel7cis_sshd['denyusers'] }}
+        notify:
+            - restart sshd
+        when:
+            - "rhel7cis_sshd['denyusers']|default('') | length > 0"
 
-  - name: "5.3.4 | L1 | PATCH | Ensure SSH access is limited | Add line to sshd_config for denygroups"
-    lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: "^DenyGroups"
-      line: DenyGroups {{ rhel7cis_sshd['denygroups'] }}
-    notify:
-    - restart sshd
-    when:
-    - "rhel7cis_sshd['denygroups']|default('') | length > 0"
+      - name: "5.3.4 | L1 | PATCH | Ensure SSH access is limited | Add line to sshd_config for denygroups"
+        lineinfile:
+            state: present
+            dest: /etc/ssh/sshd_config
+            regexp: "^DenyGroups"
+            line: DenyGroups {{ rhel7cis_sshd['denygroups'] }}
+        notify:
+            - restart sshd
+        when:
+            - "rhel7cis_sshd['denygroups']|default('') | length > 0"
   when:
-  - rhel7cis_rule_5_3_4
+      - rhel7cis_rule_5_3_4
   tags:
-  - level1
-  - patch
-  - rule_5.3.4
+      - level1
+      - patch
+      - rule_5.3.4
 
 
 - name: "5.3.5 | L1 | PATCH | Ensure SSH LogLevel is appropriate"
   lineinfile:
-    state: present
-    dest: /etc/ssh/sshd_config
-    regexp: "^#LogLevel|^LogLevel"
-    line: 'LogLevel {{ rhel7cis_ssh_loglevel }}'
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: "^#LogLevel|^LogLevel"
+      line: 'LogLevel {{ rhel7cis_ssh_loglevel }}'
   notify:
-  - restart sshd
+      - restart sshd
   when:
-  - rhel7cis_rule_5_3_5
+      - rhel7cis_rule_5_3_5
   tags:
-  - level1
-  - patch
-  - rule_5.3.5
+      - level1
+      - patch
+      - rule_5.3.5
 
 - name: "5.3.6 | L2 | PATCH | Ensure SSH X11 forwarding is disabled"
   lineinfile:
-    state: present
-    dest: /etc/ssh/sshd_config
-    regexp: "^#X11Forwarding|^X11Forwarding"
-    line: 'X11Forwarding no'
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: "^#X11Forwarding|^X11Forwarding"
+      line: 'X11Forwarding no'
   notify:
-  - restart sshd
+      - restart sshd
   when:
-  - rhel7cis_rule_5_3_6
+      - rhel7cis_rule_5_3_6
   tags:
-  - level2
-  - patch
-  - rule_5.3.6
+      - level2
+      - patch
+      - rule_5.3.6
 
 - name: "5.3.7 | L1 | PATCH | Ensure SSH MaxAuthTries is set to 4 or less"
   lineinfile:
-    state: present
-    dest: /etc/ssh/sshd_config
-    regexp: '^(#)?MaxAuthTries \d'
-    line: 'MaxAuthTries 4'
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^(#)?MaxAuthTries \d'
+      line: 'MaxAuthTries 4'
   notify:
-  - restart sshd
+      - restart sshd
   when:
-  - rhel7cis_rule_5_3_7
+      - rhel7cis_rule_5_3_7
   tags:
-  - level1
-  - patch
-  - rule_5.3.7
+      - level1
+      - patch
+      - rule_5.3.7
 
 - name: "5.3.8 | L1 | PATCH | Ensure SSH IgnoreRhosts is enabled"
   lineinfile:
-    state: present
-    dest: /etc/ssh/sshd_config
-    regexp: "^#IgnoreRhosts|^IgnoreRhosts"
-    line: 'IgnoreRhosts yes'
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: "^#IgnoreRhosts|^IgnoreRhosts"
+      line: 'IgnoreRhosts yes'
   notify:
-  - restart sshd
+      - restart sshd
   when:
-  - rhel7cis_rule_5_3_8
+      - rhel7cis_rule_5_3_8
   tags:
-  - level1
-  - patch
-  - rule_5.3.8
+      - level1
+      - patch
+      - rule_5.3.8
 
 - name: "5.3.9 | L1 | PATCH | Ensure SSH HostbasedAuthentication is disabled"
   lineinfile:
-    state: present
-    dest: /etc/ssh/sshd_config
-    regexp: ^#HostbasedAuthentication|^HostbasedAuthentication"
-    line: 'HostbasedAuthentication no'
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: ^#HostbasedAuthentication|^HostbasedAuthentication"
+      line: 'HostbasedAuthentication no'
   notify:
-  - restart sshd
+      - restart sshd
   when:
-  - rhel7cis_rule_5_3_9
+      - rhel7cis_rule_5_3_9
   tags:
-  - level1
-  - patch
-  - rule_5.3.9
+      - level1
+      - patch
+      - rule_5.3.9
 
 - name: "5.3.10 | L1 | PATCH | Ensure SSH root login is disabled"
   lineinfile:
-    state: present
-    dest: /etc/ssh/sshd_config
-    regexp: "^#PermitRootLogin|^PermitRootLogin"
-    line: 'PermitRootLogin no'
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: "^#PermitRootLogin|^PermitRootLogin"
+      line: 'PermitRootLogin no'
   notify:
-  - restart sshd
+      - restart sshd
   when:
-  - rhel7cis_rule_5_3_10
+      - rhel7cis_rule_5_3_10
   tags:
-  - level1
-  - patch
-  - rule_5.3.10
+      - level1
+      - patch
+      - rule_5.3.10
 
 - name: "5.3.11 | L1 | PATCH | Ensure SSH PermitEmptyPasswords is disabled"
   lineinfile:
-    state: present
-    dest: /etc/ssh/sshd_config
-    regexp: "^#PermitEmptyPasswords|^PermitEmptyPasswords"
-    line: 'PermitEmptyPasswords no'
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: "^#PermitEmptyPasswords|^PermitEmptyPasswords"
+      line: 'PermitEmptyPasswords no'
   notify:
-  - restart sshd
+      - restart sshd
   when:
-  - rhel7cis_rule_5_3_11
+      - rhel7cis_rule_5_3_11
   tags:
-  - level1
-  - patch
-  - rule_5.3.11
+      - level1
+      - patch
+      - rule_5.3.11
 
 - name: "5.3.12 | L1 | PATCH | Ensure SSH PermitUserEnvironment is disabled"
   lineinfile:
-    state: present
-    dest: /etc/ssh/sshd_config
-    regexp: "^#PermitUserEnvironment|^PermitUserEnvironment"
-    line: 'PermitUserEnvironment no'
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: "^#PermitUserEnvironment|^PermitUserEnvironment"
+      line: 'PermitUserEnvironment no'
   notify:
-  - restart sshd
+      - restart sshd
   when:
-  - rhel7cis_rule_5_3_12
+      - rhel7cis_rule_5_3_12
   tags:
-  - level1
-  - patch
-  - rule_5.3.12
+      - level1
+      - patch
+      - rule_5.3.12
 
 - name: "5.3.13 | L1 | PATCH | Ensure only strong Ciphers are used"
   lineinfile:
-    state: present
-    dest: /etc/ssh/sshd_config
-    regexp: '^Cipherss'
-    line: "Ciphers {{ rhel7cis_sshd['ciphers'] }}"
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^Cipherss'
+      line: "Ciphers {{ rhel7cis_sshd['ciphers'] }}"
   notify:
-  - restart sshd
+      - restart sshd
   when:
-  - rhel7cis_rule_5_3_13
+      - rhel7cis_rule_5_3_13
   tags:
-  - level1
-  - patch
-  - rule_5.3.13
+      - level1
+      - patch
+      - rule_5.3.13
 
 - name: "5.3.14 | L1 | PATCH | Ensure only strong MAC algorithms are used"
   lineinfile:
-    state: present
-    dest: /etc/ssh/sshd_config
-    regexp: '^MACs'
-    line: "MACs {{ rhel7cis_sshd['macs'] }}"
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^MACs'
+      line: "MACs {{ rhel7cis_sshd['macs'] }}"
   notify:
-  - restart sshd
+      - restart sshd
   when:
-  - rhel7cis_rule_5_3_14
+      - rhel7cis_rule_5_3_14
   tags:
-  - level1
-  - patch
-  - rule_5.3.14
+      - level1
+      - patch
+      - rule_5.3.14
 
 - name: "5.3.15 | L1 | PATCH | Ensure only strong Key Exchange algorithms are used"
   lineinfile:
-    state: present
-    dest: /etc/ssh/sshd_config
-    regexp: '^KexAlgorithms'
-    line: "KexAlgorithms {{ rhel7cis_sshd['kex'] }}"
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^KexAlgorithms'
+      line: "KexAlgorithms {{ rhel7cis_sshd['kex'] }}"
   notify:
-  - restart sshd
+      - restart sshd
   when:
-  - rhel7cis_rule_5_3_15
+      - rhel7cis_rule_5_3_15
   tags:
-  - level1
-  - patch
-  - rule_5.3.15
+      - level1
+      - patch
+      - rule_5.3.15
 
 - name: "5.3.16 | L1 | PATCH | Ensure SSH Idle Timeout Interval is configured"
   block:
-  - name: "5.3.16 | L1 | PATCH | Ensure SSH Idle Timeout Interval is configured | Add line in sshd_config for ClientAliveInterval"
-    lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^ClientAliveInterval'
-      line: "ClientAliveInterval {{ rhel7cis_sshd['clientaliveinterval'] }}"
-    notify:
-    - restart sshd
+      - name: "5.3.16 | L1 | PATCH | Ensure SSH Idle Timeout Interval is configured | Add line in sshd_config for ClientAliveInterval"
+        lineinfile:
+            state: present
+            dest: /etc/ssh/sshd_config
+            regexp: '^ClientAliveInterval'
+            line: "ClientAliveInterval {{ rhel7cis_sshd['clientaliveinterval'] }}"
+        notify:
+            - restart sshd
 
-  - name: "5.3.16 | L1 | PATCH | Ensure SSH Idle Timeout Interval is configured | Ensure SSH ClientAliveCountMax set to <= 3"
-    lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^ClientAliveCountMax'
-      line: "ClientAliveCountMax {{ rhel7cis_sshd['clientalivecountmax'] }}"
-    notify:
-    - restart sshd
+      - name: "5.3.16 | L1 | PATCH | Ensure SSH Idle Timeout Interval is configured | Ensure SSH ClientAliveCountMax set to <= 3"
+        lineinfile:
+            state: present
+            dest: /etc/ssh/sshd_config
+            regexp: '^ClientAliveCountMax'
+            line: "ClientAliveCountMax {{ rhel7cis_sshd['clientalivecountmax'] }}"
+        notify:
+            - restart sshd
   when:
-  - rhel7cis_rule_5_3_16
+      - rhel7cis_rule_5_3_16
   tags:
-  - level1
-  - patch
-  - rule_5.3.16
+      - level1
+      - patch
+      - rule_5.3.16
 
 - name: "5.3.17 | L1 | PATCH | Ensure SSH LoginGraceTime is set to one minute or less"
   lineinfile:
-    state: present
-    dest: /etc/ssh/sshd_config
-    regexp: "^#LoginGraceTime|^LoginGraceTime"
-    line: "LoginGraceTime {{ rhel7cis_sshd['logingracetime'] }}"
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: "^#LoginGraceTime|^LoginGraceTime"
+      line: "LoginGraceTime {{ rhel7cis_sshd['logingracetime'] }}"
   notify:
-  - restart sshd
+      - restart sshd
   when:
-  - rhel7cis_rule_5_3_17
+      - rhel7cis_rule_5_3_17
   tags:
-  - level1
-  - patch
-  - rule_5.3.17
+      - level1
+      - patch
+      - rule_5.3.17
 
 - name: "5.3.18 | L1 | PATCH | Ensure SSH warning banner is configured"
   lineinfile:
-    state: present
-    dest: /etc/ssh/sshd_config
-    regexp: '^Banner'
-    line: 'Banner /etc/issue.net'
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^Banner'
+      line: 'Banner /etc/issue.net'
   notify:
-  - restart sshd
+      - restart sshd
   when:
-  - rhel7cis_rule_5_3_18
+      - rhel7cis_rule_5_3_18
   tags:
-  - level1
-  - patch
-  - rule_5.3.18
+      - level1
+      - patch
+      - rule_5.3.18
 
 - name: "5.3.19 | L1 | PATCH | Ensure SSH PAM is enabled"
   lineinfile:
-    state: present
-    dest: /etc/ssh/sshd_config
-    regexp: "^#UsePAM|^UsePAM"
-    line: 'UsePAM yes'
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: "^#UsePAM|^UsePAM"
+      line: 'UsePAM yes'
   notify:
-  - restart sshd
+      - restart sshd
   when:
-  - rhel7cis_rule_5_3_19
+      - rhel7cis_rule_5_3_19
   tags:
-  - level1
-  - patch
-  - rule_5.3.19
+      - level1
+      - patch
+      - rule_5.3.19
 
 - name: "5.3.20 | L1 | PATCH | Ensure SSH AllowTcpForwarding is disabled"
   lineinfile:
-    state: present
-    dest: /etc/ssh/sshd_config
-    regexp: "^#AllowTcpForwarding|^AllowTcpForwarding"
-    line: 'AllowTcpForwarding no'
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: "^#AllowTcpForwarding|^AllowTcpForwarding"
+      line: 'AllowTcpForwarding no'
   notify:
-  - restart sshd
+      - restart sshd
   when:
-  - rhel7cis_rule_5_3_20
+      - rhel7cis_rule_5_3_20
   tags:
-  - level2
-  - patch
-  - rule_5.3.20
+      - level2
+      - patch
+      - rule_5.3.20
 
 - name: "5.3.21 | L1 | PATCH | Ensure SSH MaxStartups is configured"
   lineinfile:
-    state: present
-    dest: /etc/ssh/sshd_config
-    regexp: "^#MaxStartups|^MaxStartups"
-    line: 'MaxStartups 10:30:60'
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: "^#MaxStartups|^MaxStartups"
+      line: 'MaxStartups 10:30:60'
   notify:
-  - restart sshd
+      - restart sshd
   when:
-  - rhel7cis_rule_5_3_21
+      - rhel7cis_rule_5_3_21
   tags:
-  - level1
-  - patch
-  - rule_5.3.21
+      - level1
+      - patch
+      - rule_5.3.21
 
 - name: "5.3.22 | L1 | PATCH | Ensure SSH MaxSessions is limited"
   lineinfile:
-    state: present
-    dest: /etc/ssh/sshd_config
-    regexp: "^#MaxSessions|^MaxSessions"
-    line: 'MaxSessions {{ rhel7cis_ssh_maxsessions }}'
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: "^#MaxSessions|^MaxSessions"
+      line: 'MaxSessions {{ rhel7cis_ssh_maxsessions }}'
   notify:
-  - restart sshd
+      - restart sshd
   when:
-  - rhel7cis_rule_5_3_22
+      - rhel7cis_rule_5_3_22
   tags:
-  - level1
-  - patch
-  - rule_5.3.22
+      - level1
+      - patch
+      - rule_5.3.22

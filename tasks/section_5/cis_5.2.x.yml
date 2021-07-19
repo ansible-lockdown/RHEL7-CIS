@@ -2,45 +2,45 @@
 
 - name: "5.2.1 | L1 | PATCH | Ensure sudo is installed"
   package:
-    name: sudo
-    state: present
+      name: sudo
+      state: present
   become: true
   when:
-  - rhel7cis_rule_5_2_1
+      - rhel7cis_rule_5_2_1
   tags:
-  - level1
-  - sudo
-  - patch
-  - rule_5.2.1
+      - level1
+      - sudo
+      - patch
+      - rule_5.2.1
   vars:
-    ansible_python_interpreter: /bin/python
+      ansible_python_interpreter: /bin/python
 
 - name: "5.2.2 | L1 | AUDIT | Ensure sudo commands use pty"
   lineinfile:
-    dest: /etc/sudoers
-    regexp: '^Defaults    use_pty'
-    line: 'Defaults    use_pty'
-    state: present
-    validate: '/usr/sbin/visudo -cf %s'
+      dest: /etc/sudoers
+      regexp: '^Defaults    use_pty'
+      line: 'Defaults    use_pty'
+      state: present
+      validate: '/usr/sbin/visudo -cf %s'
   become: true
   when:
-  - rhel7cis_rule_5_2_2
+      - rhel7cis_rule_5_2_2
   tags:
-  - level1
-  - patch
-  - rule_5.2.2
+      - level1
+      - patch
+      - rule_5.2.2
 
 - name: "5.2.3 | L1 | PATCH | Ensure sudo log file exists"
   lineinfile:
-    dest: /etc/sudoers
-    regexp: '^Defaults    logfile="{{ rhel7cis_varlog_location }}"'
-    line: 'Defaults    logfile="{{ rhel7cis_varlog_location }}"'
-    state: present
-    validate: '/usr/sbin/visudo -cf %s'
+      dest: /etc/sudoers
+      regexp: '^Defaults    logfile="{{ rhel7cis_varlog_location }}"'
+      line: 'Defaults    logfile="{{ rhel7cis_varlog_location }}"'
+      state: present
+      validate: '/usr/sbin/visudo -cf %s'
   become: true
   when:
-  - rhel7cis_rule_5_2_1 and rhel7cis_rule_5_2_3
+      - rhel7cis_rule_5_2_1 and rhel7cis_rule_5_2_3
   tags:
-  - level1
-  - patch
-  - rule_5.2.3
+      - level1
+      - patch
+      - rule_5.2.3

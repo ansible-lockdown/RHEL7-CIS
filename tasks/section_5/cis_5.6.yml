@@ -2,20 +2,20 @@
 
 - name: "5.6 | L1 | AUDIT | Ensure root login is restricted to system console "
   block:
-  - name: "5.6 | L1 | AUDIT | Ensure root login is restricted to system console"
-    command: cat /etc/securetty
-    changed_when: no
-    become: yes
-    register: rhel_07_5_6_audit
+      - name: "5.6 | L1 | AUDIT | Ensure root login is restricted to system console"
+        command: cat /etc/securetty
+        changed_when: no
+        become: yes
+        register: rhel_07_5_6_audit
 
-  - name: "5.6 | L1 | AUDIT | Ensure root login is restricted to system console"
-    debug:
-      msg:
-      - "These are the consoles with root login access, please review:"
-      - "{{ rhel_07_5_6_audit.stdout_lines }}"
+      - name: "5.6 | L1 | AUDIT | Ensure root login is restricted to system console"
+        debug:
+            msg:
+                - "These are the consoles with root login access, please review:"
+                - "{{ rhel_07_5_6_audit.stdout_lines }}"
   when:
-  - rhel7cis_rule_5_6
+      - rhel7cis_rule_5_6
   tags:
-  - level1
-  - audit
-  - rule_5.6
+      - level1
+      - audit
+      - rule_5.6
