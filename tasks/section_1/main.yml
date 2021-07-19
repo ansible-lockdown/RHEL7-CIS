@@ -1,7 +1,6 @@
 ---
 
-- name: "SECTION | 1.1 | FileSystem Configurations\n
-         SECTION | 1.1.1.x | Disable unused filesystems"
+- name: "SECTION | 1.1 | FileSystem Configurations"
   include: cis_1.1.1.x.yml
 - include: cis_1.1.x.yml
 
@@ -20,10 +19,10 @@
 
 - name: "SECTION | 1.6 | Mandatory Access Control"
   include: cis_1.6.x.yml
+  when: not rhel7cis_selinux_disable
 
 - name: "SECTION | 1.7 | Warning Banners"
   include: cis_1.7.x.yml
-  when: not rhel7cis_selinux_disable
 
 - name: "SECTION | 1.8 | GDM Login"
   include: cis_1.8.x.yml
