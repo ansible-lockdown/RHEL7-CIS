@@ -2,9 +2,9 @@
 
 - name: "Run post_remediation {{ benchmark }} audit"
   goss:
-    goss_path: "{{ goss_bin }}"
+    goss_path: "{{ audit_bin }}"
     path: "{{ goss_file }}"
-    vars_path: "{{ goss_vars_path }}"
+    vars_path: "{{ audit_vars_path }}"
     format: "{{ audit_format }}"
     output_file: "{{ post_audit_outfile }}"
   failed_when: false

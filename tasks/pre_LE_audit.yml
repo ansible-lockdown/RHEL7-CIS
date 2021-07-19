@@ -3,13 +3,13 @@
 - name: Setup the LE audit
   include_tasks: LE_audit_setup.yml
   when:
-  - rhel7cis_setup_audit
+  - setup_audit
   tags:
   - setup_audit
 
-- name: "Ensure {{ goss_audit_dir }} exists"
+- name: "Ensure {{ audit_conf_dir }} exists"
   file:
-    path: "{{ goss_audit_dir }}"
+    path: "{{ audit_conf_dir }}"
     state: directory
     mode: '0755'
 
@@ -25,7 +25,7 @@
   - name: retrieve audit content files from git
     git:
       repo: "{{ rhel7cis_audit_file_git }}"
-      dest: "{{ goss_audit_dir  }}"
+      dest: "{{ audit_conf_dir  }}"
       version: "{{ rhel7cis_audit_git_version }}"
   when:
   - rhel7cis_audit_content == 'git'
@@ -33,7 +33,7 @@
 - name: copy to audit content files to server
   copy:
     src: "{{ rhel7cis_audit_local_copy }}"
-    dest: "{{ goss_audit_dir  }}"
+    dest: "{{ audit_conf_dir  }}"
     owner: root
     group: root
     mode: 0640
@@ -43,7 +43,7 @@
 - name: get audit content from url
   get_url:
     url: "{{ rhel7cis_audit_files_url }}"
-    dest: "{{ goss_audit_dir  }}"
+    dest: "{{ audit_conf_dir  }}"
   when:
   - rhel7cis_audit_content == 'get_url'
 
@@ -51,32 +51,32 @@
   block:
   - name: Check for goss file
     stat:
-      path: "{{ goss_bin }}"
+      path: "{{ audit_bin }}"
     register: goss_available
 
   - name: Assert that goss is available
     assert:
-      msg: "Audit has been selected: unable to find goss binary at {{ goss_bin }}"
+      msg: "Audit has been selected: unable to find goss binary at {{ audit_bin }}"
     when:
     - not goss_available.stat.exists
   when:
-  - rhel7cis_run_audit
+  - run_audit
 
 - name: Copy ansible default vars values to test audit
   template:
     src: ansible_vars_goss.yml.j2
-    dest: "{{ goss_vars_path }}"
+    dest: "{{ audit_vars_path }}"
     mode: 0600
   when:
-  - rhel7cis_run_audit
+  - run_audit
   tags:
   - goss_template
 
 - name: "Run pre_remediation {{ benchmark }} audit"
   goss:
-    goss_path: "{{ goss_bin }}"
+    goss_path: "{{ audit_bin }}"
     path: "{{ goss_file }}"
-    vars_path: "{{ goss_vars_path }}"
+    vars_path: "{{ audit_vars_path }}"
     format: "{{ audit_format }}"
     output_file: "{{ pre_audit_outfile }}"
   failed_when: false

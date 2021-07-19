@@ -58,7 +58,7 @@
 
 - import_tasks: pre_LE_audit.yml
   when:
-  - rhel7cis_run_audit
+  - run_audit
   tags:
   - run_audit
 
@@ -119,7 +119,7 @@
 
 - import_tasks: post_LE_audit.yml
   when:
-  - rhel7cis_run_audit
+  - run_audit
   tags:
   - run_audit
 
@@ -127,4 +127,4 @@
   debug:
     msg: "{{ audit_results.split('\n') }}"
   when:
-  - rhel7cis_run_audit
+  - run_audit

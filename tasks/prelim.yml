@@ -15,7 +15,6 @@
   tags:
   - skip_ansible_lint
 
-
 - name: "PRELIM | Gather UID 0 accounts other than root"
   shell: "cat /etc/passwd | awk -F: '($3 == 0 && $1 != \"root\") {i++;print $1 } END {exit i}'"
   register: uid_zero_accounts_except_root
@@ -59,6 +58,10 @@
       msg:
       - "bootloader path set to {{ rhel7cis_bootloader_path }}"
       - "legacy boot equals {{ rhel7cis_legacy_boot }}"
+
+- name: "PRELIM | Section 1.1 | Create list of mount points"
+  set_fact:
+      mount_names: "{{ ansible_mounts | map(attribute='mount') | list }}"
 
 - name: "PRELIM | Section 1.7 | Ensure SELinux is installed"
   package:
