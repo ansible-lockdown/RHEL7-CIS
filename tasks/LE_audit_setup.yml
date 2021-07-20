@@ -3,7 +3,7 @@
 - name: Download goss binary
   get_url:
       url: "{{ goss_url }}"
-      dest: "{{ goss_bin }}"
+      dest: "{{ audit_bin }}"
       owner: root
       group: root
       checksum: "{{ goss_version.checksum }}"
@@ -14,7 +14,7 @@
 - name: copy goss binary
   copy:
       src:
-      dest: "{{ goss_bin }}"
+      dest: "{{ audit_bin }}"
       mode: 0555
       owner: root
       group: root
