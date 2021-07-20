@@ -65,7 +65,7 @@
             line: "{{ item.line }}"
             insertafter: '^[# ]*{{ item.insertafter }}\s*=\s*'
         with_items:
-            - { regexp: '^*.emerg(.*)$', line: '*.emerg                                                 :omusrmsg:*', insertafter: '# Everybody gets emergency messages' }
+            - { regexp: '^\*\.emerg(.*)$', line: '*.emerg                                                 :omusrmsg:*', insertafter: '# Everybody gets emergency messages' }
             - { regexp: '^authpriv(.*)$', line: 'auth,authpriv.*                                              /var/log/secure', insertafter: '# # The authpriv file has restricted access.' }
             - { regexp: '^mail\.\*(.*)$', line: 'mail.*                                                  -/var/log/mail', insertafter: '# Log all the mail messages in one place.' }
             - { regexp: '^mail.info(.*)$', line: 'mail.info                                               -/var/log/mail.info', insertafter: '# Log all the mail messages in one place.' }
