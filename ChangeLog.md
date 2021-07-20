@@ -18,7 +18,9 @@
 ### Highlights
 
 - rhel7cis_allow_reboot is now an option to reboot at the end of remediation - default false
+- linting - including command replaced with shell
 - section 1
+  - 1.1 rewritten to providing better auditing and output
   - 1.3 sudo no longer required move to section 5
   - 1.4.1 bootloader password reworked
   - other groups changes increased tests
@@ -39,6 +41,7 @@
   - ssh kex, mac and ciphers updates
 - section 6
   - many control orders changed
+  - 6.2.11 create missing home dirs rewritten
 
 ## Whats new in 1.0.3
 
