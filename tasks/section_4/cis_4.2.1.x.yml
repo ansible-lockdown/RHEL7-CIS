@@ -13,10 +13,11 @@
       - patch
       - rule_4.2.1.1
 
-- name: "4.2.1.2 | L1 | PATCH | Ensure rsyslog Service is enabled"
+- name: "4.2.1.2 | L1 | PATCH | Ensure rsyslog Service is enabled and running"
   service:
       name: rsyslog
       enabled: yes
+      state: started
   when:
       - rhel7cis_rule_4_2_1_2
       - rhel7cis_syslog == 'rsyslog'
@@ -64,6 +65,7 @@
             line: "{{ item.line }}"
             insertafter: '^[# ]*{{ item.insertafter }}\s*=\s*'
         with_items:
+            - { regexp: '^*.emerg(.*)$', line: '*.emerg                                                 :omusrmsg:*', insertafter: '# Everybody gets emergency messages' }
             - { regexp: '^authpriv(.*)$', line: 'auth,authpriv.*                                              /var/log/secure', insertafter: '# # The authpriv file has restricted access.' }
             - { regexp: '^mail\.\*(.*)$', line: 'mail.*                                                  -/var/log/mail', insertafter: '# Log all the mail messages in one place.' }
             - { regexp: '^mail.info(.*)$', line: 'mail.info                                               -/var/log/mail.info', insertafter: '# Log all the mail messages in one place.' }
