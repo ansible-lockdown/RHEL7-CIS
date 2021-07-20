@@ -242,39 +242,34 @@
 
 - name: "6.2.11 | L1 | PATCH | Ensure all users' home directories exist"
   block:
-  - name: capture audit task for missing homedirs
-    block: &r7s_homedir_audit
-        - name: "6.2.11 | L1 | AUDIT | Ensure all users' home directories exist | Find users missing home directories"
-          shell: set -o pipefail ; pwck -r | grep -P {{ ld_regex | quote }}
-          check_mode: no
-          register: rhel7cis_users_missing_home
-          changed_when: rhel_07_6_2_11_audit | length > 0
-          # failed_when: 0: success, 1: no grep match, 2: pwck found something
-          failed_when: rhel7cis_users_missing_home.rc not in [0,1,2]
+      - name: "6.2.11 | L1 | AUDIT | Ensure all users' home directories exist | Find users missing home directories"
+        shell: set -o pipefail ; pwck -r | grep -P {{ ld_regex | quote }}
+        check_mode: no
+        register: rhel7cis_users_missing_home
+        changed_when: rhel_07_6_2_11_audit | length > 0
+        # failed_when: 0: success, 1: no grep match, 2: pwck found something
+        failed_when: rhel7cis_users_missing_home.rc not in [0,1,2]
 
-    # NOTE: due to https://github.com/ansible/ansible/issues/24862 This is a shell command, and is quite frankly less than ideal.
-  - name: "6.2.11 | L1 | PATCH | Ensure all users' home directories exist | Creates home directories"
-    command: "mkhomedir_helper {{ item }}"
-    #check_mode: "{{ rhel7cis_disruptive_check_mode }}"
-    with_items: "{{ rhel_07_6_2_11_audit | map(attribute='id') | list }}"
-    when:
-        - rhel7cis_users_missing_home is changed
-      # NOTE: Now we need to address that SELINUX will not let mkhomedir_helper create home directories for UUID < 500, so the ftp user will still show up in a pwck. Not sure this is needed, I need to confirm if that user is removed in an earlier task.
-      # ^ Likely doesn't matter as 6.2.5 defines "local interactive users" as those w/ uid 1000-4999
-        - name: replay audit task
-          block: *r7s_homedir_audit
-          # CAUTION: debug loops don't show changed since 2.4:
-          # Fix: https://github.com/ansible/ansible/pull/59958
-        - name: "6.2.11 | L1 | AUDIT | Ensure all users' home directories exist | Alert about correcting owner and group"
-          debug:
-              msg: You will need to mkdir -p {{ item }} and chown properly to the correct owner and group.
-          with_items: "{{ rhel_07_6_2_11_audit | map(attribute='dir') | list }}"
-          #changed_when: rhel7cis_audit_complex
-          when:
-              - rhel7cis_users_missing_home is changed
+      - name: "6.2.11 | L1 | AUDIT | Ensure all users' home directories exist | set fact missinghome dirs"
+        set_fact:
+            missing_home_dirs: "{{ rhel_07_6_2_11_audit | map(attribute='id') | list }}"
+
+      - name: "6.2.11 | L1 | PATCH | Ensure all users' home directories exist | create missing home dirs"
+        shell: "mkhomedir_helper {{ item }}"
+        with_items:
+            - "{{ missing_home_dirs }}"
+        when: rhel7cis_users_missing_home is changed
+
+      - name: "6.2.11 | L1 | Audit| Ensure all users' home directories exist | Warning"
+        debug:
+            msg: "WARNING! {{ item }} user home directory has been created please ensure any SELINUX settings are applied"
+        with_items:
+            - "{{ missing_home_dirs }}"
+        when: rhel7cis_users_missing_home is changed
+
   vars:
       ld_regex: >-
-          ^user '(?P<user>.*)': directory '(?P<dir>.*)' does not exist$
+         ^user '(?P<user>.*)': directory '(?P<dir>.*)' does not exist$
       ld_users: "{{ rhel7cis_users_missing_home.stdout_lines | map('regex_replace', ld_regex, '\\g<user>') | list }}"
       rhel_07_6_2_11_audit: "{{ rhel7cis_passwd | selectattr('uid', '>=', 1000) | selectattr('id', 'in', ld_users) | list }}"
   when:
