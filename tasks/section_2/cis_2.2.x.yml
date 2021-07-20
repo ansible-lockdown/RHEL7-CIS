@@ -1,6 +1,6 @@
 ---
 
-- name: "2.2.2 | L1 | PATCH | Ensure X Window System is not installed"
+- name: "2.2.2 | L1 | PATCH | Ensure X11 Server components are not installed"
   package:
       state: absent
       name:
@@ -53,7 +53,7 @@
       - patch
       - rule_2.2.4
 
-- name: "2.2.5 | L1 | PATCH | Ensure DHCP Server is not enabled"
+- name: "2.2.5 | L1 | PATCH | Ensure DHCP Server is not installed"
   package:
       name: dhcp
       state: absent
@@ -89,7 +89,7 @@
       - patch
       - rule_2.2.6
 
-- name: "2.2.7 | L1 | PATCH | Ensure dns server is not installed"
+- name: "2.2.7 | L1 | PATCH | Ensure DNS server is not installed"
   package:
       name: bind
       state: absent
@@ -215,7 +215,7 @@
       - patch
       - rule_2.2.13
 
-- name: "2.2.14 | L1 | PATCH | Ensure nis server is not installed"
+- name: "2.2.14 | L1 | PATCH | Ensure NIS server is not installed"
   package:
       name: ypserv
       state: absent
@@ -233,7 +233,7 @@
       - patch
       - rule_2.2.14
 
-- name: "2.2.15 | L1 | PATCH | Ensure telnet server is not installed"
+- name: "2.2.15 | L1 | PATCH | Ensure telnet-server is not installed"
   package:
       name: telnet-server
       state: absent

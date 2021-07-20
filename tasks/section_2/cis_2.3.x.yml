@@ -1,6 +1,6 @@
 ---
 
-- name: "2.3.1 | L1 | PATCH | Ensure nis client is not installed"
+- name: "2.3.1 | L1 | PATCH | Ensure NIS client is not installed"
   package:
       name: ypbind
       state: absent
