@@ -27,11 +27,11 @@
   block:
       - name: "1.1.1.2 | L2 | PATCH | Ensure mounting of squashfs filesystems is disabled | Edit modprobe config "
         lineinfile:
-          dest: /etc/modprobe.d/CIS.conf
-          regexp: "^(#)?install squashfs(\\s|$)"
-          line: "install squashfs /bin/true"
-          create: yes
-          mode: '0600'
+            dest: /etc/modprobe.d/CIS.conf
+            regexp: "^(#)?install squashfs(\\s|$)"
+            line: "install squashfs /bin/true"
+            create: yes
+            mode: '0600'
 
       - name: "1.1.1.2 | L2 | PATCH | Remove squashfs module | rmmod"
         modprobe:

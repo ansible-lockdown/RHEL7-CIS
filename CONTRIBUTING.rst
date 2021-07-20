@@ -64,4 +64,3 @@ following text in your contribution commit message:
 This message can be entered manually, or if you have configured git
 with the correct `user.name` and `user.email`, you can use the `-s`
 option to `git commit` to automatically include the signoff message.
-

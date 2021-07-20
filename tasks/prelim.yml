@@ -25,39 +25,39 @@
 
 - name: "PRELIM | Check whether machine is UEFI-based"
   stat:
-    path: /sys/firmware/efi
+      path: /sys/firmware/efi
   register: rhel7cis_efi_boot
   changed_when: no
 
 - name: set bootloader type
   block:
-  - name: "PRELIM | set fact if UEFI boot | RHEL or OEL"
-    set_fact:
-      rhel7cis_bootloader_path: /boot/efi/EFI/redhat/
-      rhel7cis_legacy_boot: false
-    when:
-    - rhel7cis_efi_boot.stat.exists
-    - ansible_distribution != 'CentOS'  # Note: rhel & OEL both use redhat path
+      - name: "PRELIM | set fact if UEFI boot | RHEL or OEL"
+        set_fact:
+            rhel7cis_bootloader_path: /boot/efi/EFI/redhat/
+            rhel7cis_legacy_boot: false
+        when:
+        - rhel7cis_efi_boot.stat.exists
+        - ansible_distribution != 'CentOS'  # Note: rhel & OEL both use redhat path
 
-  - name: "PRELIM | set fact if UEFI boot | CentOS "
-    set_fact:
-      rhel7cis_bootloader_path: /boot/efi/EFI/centos/
-      rhel7cis_legacy_boot: false
-    when:
-    - rhel7cis_efi_boot.stat.exists
-    - ansible_distribution == 'CentOS'
+      - name: "PRELIM | set fact if UEFI boot | CentOS "
+        set_fact:
+            rhel7cis_bootloader_path: /boot/efi/EFI/centos/
+            rhel7cis_legacy_boot: false
+        when:
+        - rhel7cis_efi_boot.stat.exists
+        - ansible_distribution == 'CentOS'
 
-  - name: "PRELIM | set if not UEFI boot"
-    set_fact:
-      rhel7cis_bootloader_path: /boot/grub2/
-      rhel7cis_legacy_boot: true
-    when: not rhel7cis_efi_boot.stat.exists
+      - name: "PRELIM | set if not UEFI boot"
+        set_fact:
+            rhel7cis_bootloader_path: /boot/grub2/
+            rhel7cis_legacy_boot: true
+        when: not rhel7cis_efi_boot.stat.exists
 
-  - name: output bootloader and efi state
-    debug:
-      msg:
-      - "bootloader path set to {{ rhel7cis_bootloader_path }}"
-      - "legacy boot equals {{ rhel7cis_legacy_boot }}"
+      - name: output bootloader and efi state
+        debug:
+            msg:
+            - "bootloader path set to {{ rhel7cis_bootloader_path }}"
+            - "legacy boot equals {{ rhel7cis_legacy_boot }}"
 
 - name: "PRELIM | Section 1.1 | Create list of mount points"
   set_fact:
@@ -65,23 +65,23 @@
 
 - name: "PRELIM | Section 1.7 | Ensure SELinux is installed"
   package:
-    name: libselinux
-    state: present
+      name: libselinux
+      state: present
   when:
   - not rhel7cis_selinux_disable
   vars:
-    ansible_python_interpreter: /bin/python
+      ansible_python_interpreter: /bin/python
 
 - name: "PRELIM | Section 4.1 | Configure System Accounting (auditd)"
   package:
-    name: audit
-    state: present
+      name: audit
+      state: present
   vars:
-    ansible_python_interpreter: /bin/python
+      ansible_python_interpreter: /bin/python
 
 - name: "PRELIM | Section 5.1 | Configure cron"
   package:
-    name: cronie
-    state: present
+      name: cronie
+      state: present
   vars:
-    ansible_python_interpreter: /bin/python
+      ansible_python_interpreter: /bin/python

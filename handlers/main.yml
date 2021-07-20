@@ -4,55 +4,55 @@
 - name: sysctl flush ipv4 route table
   become: yes
   sysctl:
-    name: net.ipv4.route.flush
-    value: '1'
-    sysctl_set: yes
+      name: net.ipv4.route.flush
+      value: '1'
+      sysctl_set: yes
   when: ansible_virtualization_type != "docker"
 
 - name: sysctl flush ipv6 route table
   become: yes
   sysctl:
-    name: net.ipv6.route.flush
-    value: '1'
-    sysctl_set: yes
+      name: net.ipv6.route.flush
+      value: '1'
+      sysctl_set: yes
   when: ansible_virtualization_type != "docker"
 
 - name: systemd restart tmp.mount
   become: yes
   systemd:
-    name: tmp.mount
-    daemon_reload: yes
-    enabled: yes
-    masked: no
-    state: reloaded
+      name: tmp.mount
+      daemon_reload: yes
+      enabled: yes
+      masked: no
+      state: reloaded
 
 - name: remount tmp
   command: mount -o remount /tmp
   args:
-    warn: false
+      warn: false
 
 - name: remount dev_shm
   command: mount -o remount /dev/shm
   args:
-    warn: false
+      warn: false
 
 - name: remount var_tmp
   command: mount -o remount /var/tmp
   args:
-    warn: false
+      warn: false
 
 - name: systemd restart var-tmp.mount
   systemd:
-    name: var-tmp.mount
-    daemon_reload: yes
-    enabled: yes
-    masked: no
-    state: reloaded
+      name: var-tmp.mount
+      daemon_reload: yes
+      enabled: yes
+      masked: no
+      state: reloaded
 
 - name: remount home
   command: mount -o remount /home
   args:
-    warn: false
+      warn: false
 
 - name: update dconf
   become: yes
@@ -61,26 +61,26 @@
 - name: restart firewalld
   become: yes
   service:
-    name: firewalld
-    state: restarted
+      name: firewalld
+      state: restarted
 
 - name: restart xinetd
   become: yes
   service:
-    name: xinetd
-    state: restarted
+      name: xinetd
+      state: restarted
 
 - name: restart sshd
   become: yes
   service:
-    name: sshd
-    state: restarted
+      name: sshd
+      state: restarted
 
 - name: restart postfix
   become: yes
   service:
-    name: postfix
-    state: restarted
+      name: postfix
+      state: restarted
 
 - name: reload dconf
   become: yes
@@ -92,11 +92,11 @@
   check_mode: no
   failed_when: no
   args:
-    warn: no
+      warn: no
   when:
-  - not rhel7cis_skip_for_travis
+      - not rhel7cis_skip_for_travis
   tags:
-  - skip_ansible_lint
+      - skip_ansible_lint
 
 - name: grub2cfg
   command: /sbin/grub2-mkconfig -o "{{ rhel7cis_bootloader_path }}grub.cfg"
@@ -104,11 +104,11 @@
 - name: restart rsyslog
   become: yes
   service:
-    name: rsyslog
-    state: restarted
+      name: rsyslog
+      state: restarted
 
 - name: restart syslog-ng
   become: yes
   service:
-    name: syslog-ng
-    state: restarted
+      name: syslog-ng
+      state: restarted

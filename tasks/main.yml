@@ -2,112 +2,112 @@
 # tasks file for RHEL7-CIS
 - name: Check OS version and family
   fail:
-    msg: "This role can only be run against RHEL 7. {{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported."
+      msg: "This role can only be run against RHEL 7. {{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported."
   when:
-  - ansible_os_family == 'RedHat'
-  - ansible_distribution_major_version is version_compare('7', '!=')
+      - ansible_os_family == 'RedHat'
+      - ansible_distribution_major_version is version_compare('7', '!=')
   tags:
-  - always
+      - always
 
 - name: Check ansible version
   fail:
-    msg: You must use ansible 2.9 or greater
+      msg: You must use ansible 2.9 or greater
   when: not ansible_version.full is version_compare('2.9', '>=')
   tags:
-  - always
+      - always
 
 - name: Check rhel7cis_bootloader_password_hash variable has been changed
   assert:
-    that: rhel7cis_bootloader_password_hash != 'grub.pbkdf2.sha512.changethispart'
-    msg: "This role will not be able to run single user password commands as rhel7stig_bootloader_password_hash variable has not been set"
+      that: rhel7cis_bootloader_password_hash != 'grub.pbkdf2.sha512.changethispart'
+      msg: "This role will not be able to run single user password commands as rhel7stig_bootloader_password_hash variable has not been set"
   when:
-  - ansible_distribution_version >= '7.2'
-  - rhel7cis_set_boot_pass
-  - rhel7cis_rule_1_5_1
+      - ansible_distribution_version >= '7.2'
+      - rhel7cis_set_boot_pass
+      - rhel7cis_rule_1_5_1
 
 - name: "check sugroup exists if used"
   block:
-  - name: "Check su group exists if defined"
-    command: grep -w "{{ rhel7cis_sugroup }}" /etc/group
-    register: sugroup_exists
-    changed_when: false
-    failed_when: sugroup_exists.rc >= 2
-    tags:
-    - skip_ansible_lint
+      - name: "Check su group exists if defined"
+        command: grep -w "{{ rhel7cis_sugroup }}" /etc/group
+        register: sugroup_exists
+        changed_when: false
+        failed_when: sugroup_exists.rc >= 2
+        tags:
+            - skip_ansible_lint
 
-  - name: Check sugroup if defined exists before continuing
-    assert:
-      that: sugroup_exists.rc == 0
-      msg: "The variable rhel7cis_sugroup is defined but does not exist please rectify" 
+      - name: Check sugroup if defined exists before continuing
+        assert:
+            that: sugroup_exists.rc == 0
+            msg: "The variable rhel7cis_sugroup is defined but does not exist please rectify"
   when:
-  - rhel7cis_sugroup is defined
-  - rhel7cis_rule_5_6
+      - rhel7cis_sugroup is defined
+      - rhel7cis_rule_5_6
   tags:
-  - rule_5.6
+      - rule_5.6
 
 - include: check_prereqs.yml
   tags:
-  - always
-  - prereqs
+      - always
+      - prereqs
 
 - include: prelim.yml
   become: yes
   tags:
-  - prelim_tasks
-  - always
+      - prelim_tasks
+      - always
 
 - import_tasks: pre_LE_audit.yml
   when:
-  - run_audit
+      - run_audit
   tags:
-  - run_audit
+      - run_audit
 
 - name: Gather the package facts
   package_facts:
-    manager: auto
+      manager: auto
   tags:
-  - always
+      - always
 
 - include: parse_etc_password.yml
   become: yes
   when:
-  - rhel7cis_section5 or
-    rhel7cis_section6
+      - rhel7cis_section5 or
+        rhel7cis_section6
 
 - include: section_1/main.yml
   when: rhel7cis_section1
   tags:
-  - rhel7cis_section1
+      - rhel7cis_section1
 
 - include: section_2/main.yml
   tags:
-  - rhel7cis_section2
+      - rhel7cis_section2
   when: rhel7cis_section2
 
 - include: section_3/main.yml
   when: rhel7cis_section3
   tags:
-  - rhel7cis_section3
+      - rhel7cis_section3
 
 - include: section_4/main.yml
   when: rhel7cis_section4
   tags:
-  - rhel7cis_section4
+      - rhel7cis_section4
 
 - include: section_5/main.yml
   when: rhel7cis_section5
   tags:
-  - rhel7cis_section5
+      - rhel7cis_section5
 
 - include: section_6/main.yml
   when: rhel7cis_section6
   tags:
-  - rhel7cis_section6
+      - rhel7cis_section6
 
 - include: post.yml
   tags:
-  - post_tasks
-  - always
+      - post_tasks
+      - always
 
 - name: flush handlers
   meta: flush_handlers
@@ -115,16 +115,16 @@
 - name: reboot system
   reboot:
   when:
-  - rhel7cis_allow_reboot
+      - rhel7cis_allow_reboot
 
 - import_tasks: post_LE_audit.yml
   when:
-  - run_audit
+      - run_audit
   tags:
-  - run_audit
+      - run_audit
 
 - name: Show Audit Summary
   debug:
-    msg: "{{ audit_results.split('\n') }}"
+      msg: "{{ audit_results.split('\n') }}"
   when:
-  - run_audit
+      - run_audit
