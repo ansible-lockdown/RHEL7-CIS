@@ -34,7 +34,7 @@ get_goss_file: download
 
 # how to get audit files onto host options
 # options are git/copy/get_url
-rhel7cis_audit_content: git
+audit_content: git
 
 # enable audits to run - this  runs the audit and get the latest content
 run_audit: false
