@@ -22,6 +22,7 @@
                   msg: |
                       "Warning! You have some package descrepancies issues.
                        The file list can be found in {{ rhel7cis_rpm_audit_file }}"
+              changed_when: rhel7cis_6_1_1_packages_rpm.stdout|length > 0
               when: rhel7cis_6_1_1_packages_rpm.stdout|length > 0
 
             - name: "6.1.1 | L2 | AUDIT | Audit system file permissions | Message out no package descrepancies"
