@@ -292,7 +292,7 @@
       - patch
       - rule_4.1.14
 
-- name: "4.1.15 | L2 | PATCH | Ensure system administrator actions (sudo) are collected"
+- name: "4.1.15 | L2 | PATCH | Ensure system administrator command executions (sudo) are collected"
   template:
       src: audit/actions.rules.j2
       dest: /etc/audit/rules.d/actions.rules

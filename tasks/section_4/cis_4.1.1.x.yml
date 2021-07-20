@@ -1,5 +1,5 @@
 ---
-- name: "4.1.1.1 | L2 |  PATCH | Ensure audit log storage size is configured"
+- name: "4.1.1.1 | L2 | PATCH | Ensure auditd is installed"
   package:
       name: ['audit', 'audit-libs']
       state: present
@@ -13,7 +13,7 @@
       - auditd
       - rule_4.1.1.1
 
-- name: "4.1.1.2 | L2 | PATCH | Ensure auditd service is enabled"
+- name: "4.1.1.2 | L2 | PATCH | Ensure auditd service is enabled and running"
   service:
       name: auditd
       state: started
