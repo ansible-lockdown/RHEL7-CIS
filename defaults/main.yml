@@ -36,6 +36,9 @@ get_goss_file: download
 # options are git/copy/get_url
 audit_content: git
 
+# Timeout for those cmds that take longer to run where timeout set
+audit_cmd_timeout: 30000
+
 # enable audits to run - this  runs the audit and get the latest content
 run_audit: false
 

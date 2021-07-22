@@ -9,6 +9,9 @@ rhel7cis_benchmark:
 
 rhel7cis_os_distribution: {{ ansible_distribution | lower }}
 
+# timeout for each command to run where set - default = 10seconds/10000ms
+timeout_ms: {{ audit_cmd_timeout }}
+
 # Taken from LE rhel7-cis
 rhel7cis_notauto: {{ rhel7cis_notauto }}
 rhel7cis_section1: {{ rhel7cis_section1 }}
