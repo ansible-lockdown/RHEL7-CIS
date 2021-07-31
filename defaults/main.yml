@@ -10,6 +10,8 @@ rhel7cis_section4: true
 rhel7cis_section5: true
 rhel7cis_section6: true
 
+# Disable/Enable OS check
+rhel7cis_os_check: true
 
 ## Python Binary
 ## This is used for python3 Installations where python2 OS modules are used in ansible

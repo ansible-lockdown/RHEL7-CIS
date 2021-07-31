@@ -6,6 +6,7 @@
   when:
   - ansible_os_family == 'RedHat'
   - ansible_distribution_major_version is version_compare('7', '!=')
+  - rhel7cis_os_check
   tags:
   - always
 
