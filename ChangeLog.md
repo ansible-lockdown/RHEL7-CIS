@@ -11,6 +11,38 @@
   - assert has been created if rule still enabled and password not changed
 - Use of the packages facts module
 
+## Major 1.1
+
+- Upgrade to CIS 3.1.1
+
+### Highlights
+
+- rhel7cis_allow_reboot is now an option to reboot at the end of remediation - default false
+- linting - including command replaced with shell
+- section 1
+  - 1.1 rewritten to providing better auditing and output
+  - 1.3 sudo no longer required move to section 5
+  - 1.4.1 bootloader password reworked
+  - other groups changes increased tests
+  - more controls for GDM
+- section 2
+  - reorder of server services
+  - rsyncd masked
+  - 2.5 - 2.4
+- section 3
+  - some controls now L2
+  - tidy of some rules
+  - 3.1 disable ipv6 now via grub 9No longer sysctl
+- section 4
+  - tidy up
+- section 5
+  - sudo moved from 1.3 to 5.2
+  - Other controls changed numbers
+  - ssh kex, mac and ciphers updates
+- section 6
+  - many control orders changed
+  - 6.2.11 create missing home dirs rewritten
+
 ## Whats new in 1.0.3
 
 - Thanks to Thulium-Drake

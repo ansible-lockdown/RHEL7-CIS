@@ -10,6 +10,8 @@ rhel7cis_section4: true
 rhel7cis_section5: true
 rhel7cis_section6: true
 
+# Should always reboot after this number of changes allow this to be automated as part of remediation
+rhel7cis_allow_reboot: false
 
 ## Python Binary
 ## This is used for python3 Installations where python2 OS modules are used in ansible
@@ -24,7 +26,7 @@ benchmark: RHEL7-CIS
 #### Precise details - per setting can be found at the bottom of this file ####
 
 ### Goss is required on the remote host
-rhel7cis_setup_audit: false
+setup_audit: false
 # How to retrive goss
 # Options are copy or download - detailed settings at the bottom of this file
 # you will need to access to either github or the file already dowmloaded
@@ -32,10 +34,13 @@ get_goss_file: download
 
 # how to get audit files onto host options
 # options are git/copy/get_url
-rhel7cis_audit_content: git
+audit_content: git
+
+# Timeout for those cmds that take longer to run where timeout set
+audit_cmd_timeout: 30000
 
 # enable audits to run - this  runs the audit and get the latest content
-rhel7cis_run_audit: false
+run_audit: false
 
 ### End Goss enablements ####
 #### Detailed settings found at the end of this document ####
@@ -65,7 +70,6 @@ rhel7cis_tmp_svc: false
 rhel7cis_rule_1_1_1_1: true
 rhel7cis_rule_1_1_1_2: true
 rhel7cis_rule_1_1_1_3: true
-rhel7cis_rule_1_1_1_4: true
 rhel7cis_rule_1_1_2: true
 rhel7cis_rule_1_1_3: true
 rhel7cis_rule_1_1_4: true
@@ -96,42 +100,36 @@ rhel7cis_rule_1_2_4: true
 rhel7cis_rule_1_2_5: true
 rhel7cis_rule_1_3_1: true
 rhel7cis_rule_1_3_2: true
-rhel7cis_rule_1_3_3: true
 rhel7cis_rule_1_4_1: true
 rhel7cis_rule_1_4_2: true
+rhel7cis_rule_1_4_3: true
 rhel7cis_rule_1_5_1: true
 rhel7cis_rule_1_5_2: true
 rhel7cis_rule_1_5_3: true
-rhel7cis_rule_1_6_1: true
-rhel7cis_rule_1_6_2: true
-rhel7cis_rule_1_6_3: true
-rhel7cis_rule_1_6_4: true
-rhel7cis_rule_1_7_1_1: true
-rhel7cis_rule_1_7_1_2: true
-rhel7cis_rule_1_7_1_3: true
-rhel7cis_rule_1_7_1_4: true
-rhel7cis_rule_1_7_1_5: true
-rhel7cis_rule_1_7_1_6: true
-rhel7cis_rule_1_7_1_7: true
-rhel7cis_rule_1_7_1_8: true
-rhel7cis_rule_1_8_1_1: true
-rhel7cis_rule_1_8_1_2: true
-rhel7cis_rule_1_8_1_3: true
-rhel7cis_rule_1_8_1_4: true
-rhel7cis_rule_1_8_1_5: true
-rhel7cis_rule_1_8_1_6: true
+rhel7cis_rule_1_5_4: true
+rhel7cis_rule_1_6_1_1: true
+rhel7cis_rule_1_6_1_2: true
+rhel7cis_rule_1_6_1_3: true
+rhel7cis_rule_1_6_1_4: true
+rhel7cis_rule_1_6_1_5: true
+rhel7cis_rule_1_6_1_6: true
+rhel7cis_rule_1_6_1_7: true
+rhel7cis_rule_1_6_1_8: true
+rhel7cis_rule_1_7_1: true
+rhel7cis_rule_1_7_2: true
+rhel7cis_rule_1_7_3: true
+rhel7cis_rule_1_7_4: true
+rhel7cis_rule_1_7_5: true
+rhel7cis_rule_1_7_6: true
+rhel7cis_rule_1_8_1: true
+rhel7cis_rule_1_8_2: true
+rhel7cis_rule_1_8_3: true
+rhel7cis_rule_1_8_4: true
 rhel7cis_rule_1_9: true
-rhel7cis_rule_1_10: true
 
 # Section 2 rules
 # Section 2 is Services (inetd Services, Special Purpose Services, and Service Clients)
 rhel7cis_rule_2_1_1: true
-rhel7cis_rule_2_1_2: true
-rhel7cis_rule_2_1_3: true
-rhel7cis_rule_2_1_4: true
-rhel7cis_rule_2_1_5: true
-rhel7cis_rule_2_1_6: true
-rhel7cis_rule_2_1_7: true
 rhel7cis_rule_2_2_1_1: true
 rhel7cis_rule_2_2_1_2: true
 rhel7cis_rule_2_2_1_3: true
@@ -153,14 +151,12 @@ rhel7cis_rule_2_2_16: true
 rhel7cis_rule_2_2_17: true
 rhel7cis_rule_2_2_18: true
 rhel7cis_rule_2_2_19: true
-rhel7cis_rule_2_2_20: true
-rhel7cis_rule_2_2_21: true
 rhel7cis_rule_2_3_1: true
 rhel7cis_rule_2_3_2: true
 rhel7cis_rule_2_3_3: true
 rhel7cis_rule_2_3_4: true
 rhel7cis_rule_2_3_5: true
-rhel7cis_rule_2_5: true
+rhel7cis_rule_2_4: true
 
 # Section 3 rules
 # Section 3 is Network Configuration (Disable unused network protocols, Network parameters (host), Network parameters (Host and Router), Uncommon Network Protocols, Firewall Configuration, and Configure iptables)
@@ -263,41 +259,43 @@ rhel7cis_rule_5_1_9: true
 rhel7cis_rule_5_2_1: true
 rhel7cis_rule_5_2_2: true
 rhel7cis_rule_5_2_3: true
-rhel7cis_rule_5_2_4: true
-rhel7cis_rule_5_2_5: true
-rhel7cis_rule_5_2_6: true
-rhel7cis_rule_5_2_7: true
-rhel7cis_rule_5_2_8: true
-rhel7cis_rule_5_2_9: true
-rhel7cis_rule_5_2_10: true
-rhel7cis_rule_5_2_12: true
-rhel7cis_rule_5_2_11: true
-rhel7cis_rule_5_2_13: true
-rhel7cis_rule_5_2_14: true
-rhel7cis_rule_5_2_15: true
-rhel7cis_rule_5_2_16: true
-rhel7cis_rule_5_2_17: true
-rhel7cis_rule_5_2_18: true
-rhel7cis_rule_5_2_19: true
-rhel7cis_rule_5_2_20: true
-rhel7cis_rule_5_2_21: true
-rhel7cis_rule_5_2_22: true
 rhel7cis_rule_5_3_1: true
 rhel7cis_rule_5_3_2: true
 rhel7cis_rule_5_3_3: true
 rhel7cis_rule_5_3_4: true
-rhel7cis_rule_5_4_1_1: true
-rhel7cis_rule_5_4_1_2: true
-rhel7cis_rule_5_4_1_3: true
-rhel7cis_rule_5_4_1_4: true
-rhel7cis_rule_5_4_1_5: true
+rhel7cis_rule_5_3_5: true
+rhel7cis_rule_5_3_6: true
+rhel7cis_rule_5_3_7: true
+rhel7cis_rule_5_3_8: true
+rhel7cis_rule_5_3_9: true
+rhel7cis_rule_5_3_10: true
+rhel7cis_rule_5_3_12: true
+rhel7cis_rule_5_3_11: true
+rhel7cis_rule_5_3_13: true
+rhel7cis_rule_5_3_14: true
+rhel7cis_rule_5_3_15: true
+rhel7cis_rule_5_3_16: true
+rhel7cis_rule_5_3_17: true
+rhel7cis_rule_5_3_18: true
+rhel7cis_rule_5_3_19: true
+rhel7cis_rule_5_3_20: true
+rhel7cis_rule_5_3_21: true
+rhel7cis_rule_5_3_22: true
+rhel7cis_rule_5_4_1: true
 rhel7cis_rule_5_4_2: true
 rhel7cis_rule_5_4_3: true
 rhel7cis_rule_5_4_4: true
-rhel7cis_rule_5_4_5: true
-rhel7cis_rule_5_5: true
+rhel7cis_rule_5_5_1_1: true
+rhel7cis_rule_5_5_1_2: true
+rhel7cis_rule_5_5_1_3: true
+rhel7cis_rule_5_5_1_4: true
+rhel7cis_rule_5_5_1_5: true
+rhel7cis_rule_5_5_2: true
+rhel7cis_rule_5_5_3: true
+rhel7cis_rule_5_5_4: true
+rhel7cis_rule_5_5_5: true
 rhel7cis_rule_5_6: true
-
+rhel7cis_rule_5_7: true
 # Section 6 rules
 # Section 6 is System Maintenance (System File Permissions and User and Group Settings)
 rhel7cis_rule_6_1_1: true
@@ -331,8 +329,6 @@ rhel7cis_rule_6_2_14: true
 rhel7cis_rule_6_2_15: true
 rhel7cis_rule_6_2_16: true
 rhel7cis_rule_6_2_17: true
-rhel7cis_rule_6_2_18: true
-rhel7cis_rule_6_2_19: true
 
 # Service configuration booleans set true to keep service
 rhel7cis_avahi_server: false
@@ -377,7 +373,7 @@ rhel7cis_rhnsd_required: false
 
 # 1.4.2 Bootloader password
 rhel7cis_set_boot_pass: false
-rhel7cis_bootloader_password_hash: 'grub.pbkdf2.sha512.changethispassword'
+rhel7cis_bootloader_password_hash: 'grub.pbkdf2.sha512.changethispart'
 
 # System network parameters (host only OR host and router)
 rhel7cis_is_router: false
@@ -389,14 +385,14 @@ rhel7cis_ipv6_required: true
 rhel7cis_config_aide: true
 # AIDE cron settings
 rhel7cis_aide_cron:
-  cron_user: root
-  cron_file: /etc/crontab
-  aide_job: '/usr/sbin/aide --check'
-  aide_minute: '0'
-  aide_hour: '5'
-  aide_day: '*'
-  aide_month: '*'
-  aide_weekday: '*'
+    cron_user: root
+    cron_file: /etc/crontab
+    aide_job: '/usr/sbin/aide --check'
+    aide_minute: '0'
+    aide_hour: '5'
+    aide_day: '*'
+    aide_month: '*'
+    aide_weekday: '*'
 
 # SELinux policy
 rhel7cis_selinux_pol: targeted
@@ -417,27 +413,27 @@ rhel7cis_ypbind_required: false
 rhel7cis_time_synchronization: chrony
 
 rhel7cis_time_synchronization_servers:
-  - 0.pool.ntp.org
-  - 1.pool.ntp.org
-  - 2.pool.ntp.org
-  - 3.pool.ntp.org
+    - 0.pool.ntp.org
+    - 1.pool.ntp.org
+    - 2.pool.ntp.org
+    - 3.pool.ntp.org
 
 rhel7cis_chrony_server_options: "minpoll 8"
 rhel7cis_ntp_server_options: "iburst"
 
 # 3.4.2 | PATCH | Ensure /etc/hosts.allow is configured
 rhel7cis_host_allow:
-  - "10.0.0.0/255.0.0.0"
-  - "172.16.0.0/255.240.0.0"
-  - "192.168.0.0/255.255.0.0"
+    - "10.0.0.0/255.0.0.0"
+    - "172.16.0.0/255.240.0.0"
+    - "192.168.0.0/255.255.0.0"
 
 # Firewall Service - either firewalld or iptables
 rhel7cis_firewall: firewalld
 rhel7cis_default_zone: public
 
 rhel7cis_firewall_services:
-  - ssh
-  - dhcpv6-client
+    - ssh
+    - dhcpv6-client
 
 # Warning Banner Content (issue, issue.net, motd)
 rhel7cis_warning_banner: |
@@ -448,10 +444,10 @@ rhel7cis_warning_banner: |
 
 # auditd settings
 rhel7cis_auditd:
-  space_left_action: email
-  action_mail_acct: root
-  admin_space_left_action: halt
-  max_log_file_action: keep_logs
+    space_left_action: email
+    action_mail_acct: root
+    admin_space_left_action: halt
+    max_log_file_action: keep_logs
 
 rhel7cis_logrotate: "daily"
 
@@ -471,48 +467,48 @@ rhel7cis_system_is_log_server: false
 rhel7cis_ssh_loglevel: INFO
 rhel7cis_ssh_maxsessions: 10
 rhel7cis_sshd:
-  clientalivecountmax: 3
-  clientaliveinterval: 300
-  ciphers: "chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr"
-  macs: "hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256"
-  kex: "curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group14-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256"
-  logingracetime: 60
-  # WARNING: make sure you understand the precedence when working with these values!!
-  # allowusers:
-  # allowgroups: systems dba
-  # denyusers:
-  # denygroups:
+    clientalivecountmax: 3
+    clientaliveinterval: 300
+    ciphers: "chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr"
+    macs: "hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256"
+    kex: "curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group14-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256"
+    logingracetime: 60
+    # WARNING: make sure you understand the precedence when working with these values!!
+    # allowusers:
+    # allowgroups: systems dba
+    # denyusers:
+    # denygroups:
 
 # pam variables
 rhel7cis_pam_faillock:
-  attempts: 5
-  interval: 900
-  unlock_time: 900
-  fail_for_root: no
-  remember: 5
-  pwhash: sha512
+    attempts: 5
+    interval: 900
+    unlock_time: 900
+    fail_for_root: no
+    remember: 5
+    pwhash: sha512
 rhel7cis_inactivelock:
-  lock_days: 30
+    lock_days: 30
 
 # Accounte listed below will not have INACTIVE field set in shadow file
 rhel7cis_inactive_whitelist:
-  - root
-  - vagrant
+    - root
+    - vagrant
 
 rhel7cis_pass:
-  max_days: 90
-  min_days: 7
-  warn_age: 7
+    max_days: 90
+    min_days: 7
+    warn_age: 7
 # Syslog system - either rsyslog or syslog-ng
 rhel7cis_syslog: rsyslog
-rhel7cis_rsyslog_ansibleManaged: true
+rhel7cis_rsyslog_ansiblemanaged: true
 
 # Var/tmp settings
 rhel7cis_vartmp:
-  source: /tmp
-  fstype: none
-  opts: "defaults,nodev,nosuid,noexec,bind"
-  enabled: no
+    source: /tmp
+    fstype: none
+    opts: "defaults,nodev,nosuid,noexec,bind"
+    enabled: no
 
 # Interactive user UID starting point
 rhel7cis_rule_5_4_2_min_uid: 1000
@@ -521,8 +517,8 @@ rhel7cis_rule_5_4_2_min_uid: 1000
 # Session timeout setting file (TMOUT setting can be set in multiple files)
 # Timeout value is in seconds. (60 seconds * 10 = 600)
 rhel7cis_shell_session_timeout:
-  file: /etc/profile.d/tmout.sh
-  timeout: 600
+    file: /etc/profile.d/tmout.sh
+    timeout: 600
 # RHEL-07-5.4.1.5 Allow ansible to expire password for account with a last changed date in the future. False will just display users in violation, true will expire those users passwords
 rhel7cis_futurepwchgdate_autofix: true
 
@@ -542,7 +538,7 @@ rhel7cis_rpm_audit_file: /var/tmp/rpm_file_check
 # RHEL-07_6.1.10 Allow ansible to adjust world-writable files. False will just display world-writable files, True will remove world-writable
 rhel7cis_no_world_write_adjust: true
 rhel7cis_passwd_label: "{{ (this_item | default(item)).id }}: {{ (this_item | default(item)).dir }}"
-rhel7cis_dotperm_ansibleManaged: true
+rhel7cis_dotperm_ansiblemanaged: true
 
 # RHEL-07-6.2.18 Clear users from shadow group
 rhel7cis_remove_shadow_grp_usrs: true
@@ -552,9 +548,9 @@ rhel7cis_remove_shadow_grp_usrs: true
 goss_version:
     release: v0.3.16
     checksum: 'sha256:827e354b48f93bce933f5efcd1f00dc82569c42a179cf2d384b040d8a80bfbfb'
-goss_path: /usr/local/bin/
-goss_bin: "{{ goss_path }}goss"
-goss_format: json
+audit_bin_path: /usr/local/bin/
+audit_bin: "{{ audit_bin_path }}goss"
+audit_format: json
 
 # if get_goss_file == download change accordingly
 goss_url: "https://github.com/aelsabbahy/goss/releases/download/{{ goss_version.release }}/goss-linux-amd64"
@@ -581,15 +577,15 @@ rhel7cis_audit_files: "/var/tmp/{{ benchmark }}-Audit/"
 
 ## Goss configuration information
 # Where the goss configs and outputs are stored
-goss_out_dir: '/var/tmp'
-goss_audit_dir: "{{ goss_out_dir }}/{{ benchmark }}-Audit/"
-pre_audit_outfile: "{{ goss_out_dir }}/{{ ansible_hostname }}_pre_scan_{{ ansible_date_time.epoch }}"
-post_audit_outfile: "{{ goss_out_dir }}/{{ ansible_hostname }}_post_scan_{{ ansible_date_time.epoch }}"
+audit_out_dir: '/var/tmp'
+audit_conf_dir: "{{ audit_out_dir }}/{{ benchmark }}-Audit/"
+pre_audit_outfile: "{{ audit_out_dir }}/{{ ansible_hostname }}_pre_scan_{{ ansible_date_time.epoch }}.{{ audit_format }}"
+post_audit_outfile: "{{ audit_out_dir }}/{{ ansible_hostname }}_post_scan_{{ ansible_date_time.epoch }}.{{ audit_format }}"
 
 ## The following should not need changing
-goss_file: "{{ goss_audit_dir }}goss.yml"
-goss_vars_path: "{{ goss_audit_dir }}/vars/{{ ansible_hostname }}.yml"
+goss_file: "{{ audit_conf_dir }}goss.yml"
+audit_vars_path: "{{ audit_conf_dir  }}/vars/{{ ansible_hostname }}.yml"
 audit_results: |
       The pre remediation results are: {{ pre_audit_summary }}.
       The post remediation results are: {{ post_audit_summary }}.
-      Full breakdown can be found in {{ goss_out_dir }}
+      Full breakdown can be found in {{ audit_out_dir }}

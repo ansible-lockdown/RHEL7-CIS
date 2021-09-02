@@ -9,6 +9,9 @@ rhel7cis_benchmark:
 
 rhel7cis_os_distribution: {{ ansible_distribution | lower }}
 
+# timeout for each command to run where set - default = 10seconds/10000ms
+timeout_ms: {{ audit_cmd_timeout }}
+
 # Taken from LE rhel7-cis
 rhel7cis_notauto: {{ rhel7cis_notauto }}
 rhel7cis_section1: {{ rhel7cis_section1 }}
@@ -37,7 +40,6 @@ rhel7cis_legacy_boot: {{ rhel7cis_legacy_boot }}
 rhel7cis_rule_1_1_1_1: {{ rhel7cis_rule_1_1_1_1 }}
 rhel7cis_rule_1_1_1_2: {{ rhel7cis_rule_1_1_1_2 }}
 rhel7cis_rule_1_1_1_3: {{ rhel7cis_rule_1_1_1_3 }}
-rhel7cis_rule_1_1_1_4: {{ rhel7cis_rule_1_1_1_4 }}
 rhel7cis_rule_1_1_2: {{ rhel7cis_rule_1_1_2 }}
 rhel7cis_rule_1_1_3: {{ rhel7cis_rule_1_1_3 }}
 rhel7cis_rule_1_1_4: {{ rhel7cis_rule_1_1_4 }}
@@ -68,42 +70,35 @@ rhel7cis_rule_1_2_4: {{ rhel7cis_rule_1_2_4 }}
 rhel7cis_rule_1_2_5: {{ rhel7cis_rule_1_2_5 }}
 rhel7cis_rule_1_3_1: {{ rhel7cis_rule_1_3_1 }}
 rhel7cis_rule_1_3_2: {{ rhel7cis_rule_1_3_2 }}
-rhel7cis_rule_1_3_3: {{ rhel7cis_rule_1_3_3 }}
 rhel7cis_rule_1_4_1: {{ rhel7cis_rule_1_4_1 }}
 rhel7cis_rule_1_4_2: {{ rhel7cis_rule_1_4_2 }}
+rhel7cis_rule_1_4_3: {{ rhel7cis_rule_1_4_3 }}
 rhel7cis_rule_1_5_1: {{ rhel7cis_rule_1_5_1 }}
 rhel7cis_rule_1_5_2: {{ rhel7cis_rule_1_5_2 }}
-rhel7cis_rule_1_5_3: {{ rhel7cis_rule_1_5_2 }}
-rhel7cis_rule_1_6_1: {{ rhel7cis_rule_1_6_1 }}
-rhel7cis_rule_1_6_2: {{ rhel7cis_rule_1_6_2 }}
-rhel7cis_rule_1_6_3: {{ rhel7cis_rule_1_6_3 }}
-rhel7cis_rule_1_6_4: {{ rhel7cis_rule_1_6_4 }}
-rhel7cis_rule_1_7_1_1: {{ rhel7cis_rule_1_7_1_1 }}
-rhel7cis_rule_1_7_1_2: {{ rhel7cis_rule_1_7_1_2 }}
-rhel7cis_rule_1_7_1_3: {{ rhel7cis_rule_1_7_1_3 }}
-rhel7cis_rule_1_7_1_4: {{ rhel7cis_rule_1_7_1_4 }}
-rhel7cis_rule_1_7_1_5: {{ rhel7cis_rule_1_7_1_5 }}
-rhel7cis_rule_1_7_1_6: {{ rhel7cis_rule_1_7_1_6 }}
-rhel7cis_rule_1_7_1_7: {{ rhel7cis_rule_1_7_1_7 }}
-rhel7cis_rule_1_7_1_8: {{ rhel7cis_rule_1_7_1_8 }}
-rhel7cis_rule_1_8_1_1: {{ rhel7cis_rule_1_8_1_1 }}
-rhel7cis_rule_1_8_1_2: {{ rhel7cis_rule_1_8_1_1 }}
-rhel7cis_rule_1_8_1_3: {{ rhel7cis_rule_1_8_1_1 }}
-rhel7cis_rule_1_8_1_4: {{ rhel7cis_rule_1_8_1_1 }}
-rhel7cis_rule_1_8_1_5: {{ rhel7cis_rule_1_8_1_1 }}
-rhel7cis_rule_1_8_1_6: {{ rhel7cis_rule_1_8_1_1 }}
+rhel7cis_rule_1_5_3: {{ rhel7cis_rule_1_5_3 }}
+rhel7cis_rule_1_5_4: {{ rhel7cis_rule_1_5_4 }}
+rhel7cis_rule_1_6_1_1: {{ rhel7cis_rule_1_6_1_1 }}
+rhel7cis_rule_1_6_1_2: {{ rhel7cis_rule_1_6_1_2 }}
+rhel7cis_rule_1_6_1_3: {{ rhel7cis_rule_1_6_1_3 }}
+rhel7cis_rule_1_6_1_4: {{ rhel7cis_rule_1_6_1_4 }}
+rhel7cis_rule_1_6_1_5: {{ rhel7cis_rule_1_6_1_5 }}
+rhel7cis_rule_1_6_1_6: {{ rhel7cis_rule_1_6_1_6 }}
+rhel7cis_rule_1_6_1_7: {{ rhel7cis_rule_1_6_1_7 }}
+rhel7cis_rule_1_6_1_8: {{ rhel7cis_rule_1_6_1_8 }}
+rhel7cis_rule_1_7_1: {{ rhel7cis_rule_1_7_1 }}
+rhel7cis_rule_1_7_2: {{ rhel7cis_rule_1_7_2 }}
+rhel7cis_rule_1_7_3: {{ rhel7cis_rule_1_7_3 }}
+rhel7cis_rule_1_7_4: {{ rhel7cis_rule_1_7_4 }}
+rhel7cis_rule_1_7_5: {{ rhel7cis_rule_1_7_5 }}
+rhel7cis_rule_1_7_6: {{ rhel7cis_rule_1_7_6 }}
+rhel7cis_rule_1_8_1: {{ rhel7cis_rule_1_8_1 }}
+rhel7cis_rule_1_8_2: {{ rhel7cis_rule_1_8_2 }}
+rhel7cis_rule_1_8_3: {{ rhel7cis_rule_1_8_3 }}
+rhel7cis_rule_1_8_4: {{ rhel7cis_rule_1_8_4 }}
 rhel7cis_rule_1_9: {{ rhel7cis_rule_1_9 }}
-rhel7cis_rule_1_10: {{ rhel7cis_rule_1_10 }}
-
 
 # section 2 rules
 rhel7cis_rule_2_1_1: {{ rhel7cis_rule_2_1_1 }}
-rhel7cis_rule_2_1_2: {{ rhel7cis_rule_2_1_2 }}
-rhel7cis_rule_2_1_3: {{ rhel7cis_rule_2_1_3 }}
-rhel7cis_rule_2_1_4: {{ rhel7cis_rule_2_1_4 }}
-rhel7cis_rule_2_1_5: {{ rhel7cis_rule_2_1_5 }}
-rhel7cis_rule_2_1_6: {{ rhel7cis_rule_2_1_6 }}
-rhel7cis_rule_2_1_7: {{ rhel7cis_rule_2_1_7 }}
 rhel7cis_rule_2_2_1_1: {{ rhel7cis_rule_2_2_1_1 }}
 rhel7cis_rule_2_2_1_2: {{ rhel7cis_rule_2_2_1_2 }}
 rhel7cis_rule_2_2_1_3: {{ rhel7cis_rule_2_2_1_3 }}
@@ -125,8 +120,6 @@ rhel7cis_rule_2_2_16: {{ rhel7cis_rule_2_2_16 }}
 rhel7cis_rule_2_2_17: {{ rhel7cis_rule_2_2_17 }}
 rhel7cis_rule_2_2_18: {{ rhel7cis_rule_2_2_18 }}
 rhel7cis_rule_2_2_19: {{ rhel7cis_rule_2_2_19 }}
-rhel7cis_rule_2_2_20: {{ rhel7cis_rule_2_2_20 }}
-rhel7cis_rule_2_2_21: {{ rhel7cis_rule_2_2_21 }}
 rhel7cis_rule_2_3_1: {{ rhel7cis_rule_2_3_1 }}
 rhel7cis_rule_2_3_2: {{ rhel7cis_rule_2_3_2 }}
 rhel7cis_rule_2_3_3: {{ rhel7cis_rule_2_3_3 }}
@@ -217,39 +210,42 @@ rhel7cis_rule_5_1_9: {{ rhel7cis_rule_5_1_9 }}
 rhel7cis_rule_5_2_1: {{ rhel7cis_rule_5_2_1 }}
 rhel7cis_rule_5_2_2: {{ rhel7cis_rule_5_2_2 }}
 rhel7cis_rule_5_2_3: {{ rhel7cis_rule_5_2_3 }}
-rhel7cis_rule_5_2_4: {{ rhel7cis_rule_5_2_4 }}
-rhel7cis_rule_5_2_5: {{ rhel7cis_rule_5_2_5 }}
-rhel7cis_rule_5_2_6: {{ rhel7cis_rule_5_2_6 }}
-rhel7cis_rule_5_2_7: {{ rhel7cis_rule_5_2_7 }}
-rhel7cis_rule_5_2_8: {{ rhel7cis_rule_5_2_8 }}
-rhel7cis_rule_5_2_9: {{ rhel7cis_rule_5_2_9 }}
-rhel7cis_rule_5_2_10: {{ rhel7cis_rule_5_2_10 }}
-rhel7cis_rule_5_2_11: {{ rhel7cis_rule_5_2_11 }}
-rhel7cis_rule_5_2_12: {{ rhel7cis_rule_5_2_12 }}
-rhel7cis_rule_5_2_13: {{ rhel7cis_rule_5_2_13 }}
-rhel7cis_rule_5_2_14: {{ rhel7cis_rule_5_2_14 }}
-rhel7cis_rule_5_2_15: {{ rhel7cis_rule_5_2_15 }}
-rhel7cis_rule_5_2_16: {{ rhel7cis_rule_5_2_16 }}
-rhel7cis_rule_5_2_17: {{ rhel7cis_rule_5_2_17 }}
-rhel7cis_rule_5_2_18: {{ rhel7cis_rule_5_2_18 }}
-rhel7cis_rule_5_2_19: {{ rhel7cis_rule_5_2_19 }}
-rhel7cis_rule_5_2_20: {{ rhel7cis_rule_5_2_20 }}
-rhel7cis_rule_5_2_21: {{ rhel7cis_rule_5_2_21 }}
-rhel7cis_rule_5_2_22: {{ rhel7cis_rule_5_2_22 }}
 rhel7cis_rule_5_3_1: {{ rhel7cis_rule_5_3_1 }}
 rhel7cis_rule_5_3_2: {{ rhel7cis_rule_5_3_2 }}
 rhel7cis_rule_5_3_3: {{ rhel7cis_rule_5_3_3 }}
 rhel7cis_rule_5_3_4: {{ rhel7cis_rule_5_3_4 }}
-rhel7cis_rule_5_4_1_1: {{ rhel7cis_rule_5_4_1_1 }}
-rhel7cis_rule_5_4_1_2: {{ rhel7cis_rule_5_4_1_2 }}
-rhel7cis_rule_5_4_1_3: {{ rhel7cis_rule_5_4_1_3 }}
-rhel7cis_rule_5_4_1_4: {{ rhel7cis_rule_5_4_1_4 }}
-rhel7cis_rule_5_4_1_5: {{ rhel7cis_rule_5_4_1_5 }}
+rhel7cis_rule_5_3_5: {{ rhel7cis_rule_5_3_5 }}
+rhel7cis_rule_5_3_6: {{ rhel7cis_rule_5_3_6 }}
+rhel7cis_rule_5_3_7: {{ rhel7cis_rule_5_3_7 }}
+rhel7cis_rule_5_3_8: {{ rhel7cis_rule_5_3_8 }}
+rhel7cis_rule_5_3_9: {{ rhel7cis_rule_5_3_9 }}
+rhel7cis_rule_5_3_10: {{ rhel7cis_rule_5_3_10 }}
+rhel7cis_rule_5_3_11: {{ rhel7cis_rule_5_3_11 }}
+rhel7cis_rule_5_3_12: {{ rhel7cis_rule_5_3_12 }}
+rhel7cis_rule_5_3_13: {{ rhel7cis_rule_5_3_13 }}
+rhel7cis_rule_5_3_14: {{ rhel7cis_rule_5_3_14 }}
+rhel7cis_rule_5_3_15: {{ rhel7cis_rule_5_3_15 }}
+rhel7cis_rule_5_3_16: {{ rhel7cis_rule_5_3_16 }}
+rhel7cis_rule_5_3_17: {{ rhel7cis_rule_5_3_17 }}
+rhel7cis_rule_5_3_18: {{ rhel7cis_rule_5_3_18 }}
+rhel7cis_rule_5_3_19: {{ rhel7cis_rule_5_3_19 }}
+rhel7cis_rule_5_3_20: {{ rhel7cis_rule_5_3_20 }}
+rhel7cis_rule_5_3_21: {{ rhel7cis_rule_5_3_21 }}
+rhel7cis_rule_5_3_22: {{ rhel7cis_rule_5_3_22 }}
+rhel7cis_rule_5_4_1: {{ rhel7cis_rule_5_4_1 }}
 rhel7cis_rule_5_4_2: {{ rhel7cis_rule_5_4_2 }}
 rhel7cis_rule_5_4_3: {{ rhel7cis_rule_5_4_3 }}
 rhel7cis_rule_5_4_4: {{ rhel7cis_rule_5_4_4 }}
-rhel7cis_rule_5_4_5: {{ rhel7cis_rule_5_4_5 }}
-rhel7cis_rule_5_6: {{ rhel7cis_rule_5_6 }}
+rhel7cis_rule_5_5_1_1: {{ rhel7cis_rule_5_5_1_1 }}
+rhel7cis_rule_5_5_1_2: {{ rhel7cis_rule_5_5_1_2 }}
+rhel7cis_rule_5_5_1_3: {{ rhel7cis_rule_5_5_1_3 }}
+rhel7cis_rule_5_5_1_4: {{ rhel7cis_rule_5_5_1_4 }}
+rhel7cis_rule_5_5_1_5: {{ rhel7cis_rule_5_5_1_5 }}
+rhel7cis_rule_5_5_2: {{ rhel7cis_rule_5_5_2 }}
+rhel7cis_rule_5_5_3: {{ rhel7cis_rule_5_5_3 }}
+rhel7cis_rule_5_5_4: {{ rhel7cis_rule_5_5_4 }}
+rhel7cis_rule_5_5_5: {{ rhel7cis_rule_5_5_5 }}
+rhel7cis_rule_5_7: {{ rhel7cis_rule_5_7 }}
 
 # Section 6
 rhel7cis_rule_6_1_1: {{ rhel7cis_rule_6_1_1 }}
@@ -284,7 +280,6 @@ rhel7cis_rule_6_2_14: {{ rhel7cis_rule_6_2_14 }}
 rhel7cis_rule_6_2_15: {{ rhel7cis_rule_6_2_15 }}
 rhel7cis_rule_6_2_16: {{ rhel7cis_rule_6_2_16 }}
 rhel7cis_rule_6_2_17: {{ rhel7cis_rule_6_2_17 }}
-rhel7cis_rule_6_2_18: {{ rhel7cis_rule_6_2_18 }}
 
 
 # Service configuration booleans set true to keep service
@@ -341,8 +336,9 @@ rhel7cis_aide_cron:
   aide_month: '{{ rhel7cis_aide_cron.aide_month }}'
   aide_weekday: '{{ rhel7cis_aide_cron.aide_weekday }}'
 
-# 1.5.1 Bootloader password
-rhel7cis_bootloader_file: {{ rhel7cis_bootloader_file }}
+# 1.4.1 Bootloader password
+rhel7cis_bootloader_file: {{ rhel7cis_bootloader_path }}grub.cfg
+rhel7cis_bootloader_user: {{ rhel7cis_bootloader_path }}user.cfg
 rhel7cis_bootloader_password: {{ rhel7cis_bootloader_password_hash }}
 rhel7cis_set_boot_pass: {{ rhel7cis_set_boot_pass }}
 

@@ -1,0 +1,25 @@
+---
+
+- name: "4.2.3 | L1 | PATCH | Ensure permissions on all logfiles are configured"
+  command: find /var/log -type f -exec chmod g-wx,o-rwx "{}" + -o -type d -exec chmod g-wx,o-rwx "{}" +
+  changed_when: no
+  failed_when: no
+  when:
+      - rhel7cis_rule_4_2_3
+  tags:
+      - level1
+      - patch
+      - automated
+      - rule_4.2.3
+
+- name: "4.2.4 | L1 | AUDIT | Ensure logrotate is configured"
+  find:
+      paths: /etc/logrotate.d/
+  register: log_rotates
+  when:
+      - rhel7cis_rule_4_2_4
+  tags:
+      - level1
+      - audit
+      - manual
+      - rule_4.2.4

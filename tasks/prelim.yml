@@ -15,7 +15,6 @@
   tags:
   - skip_ansible_lint
 
-
 - name: "PRELIM | Gather UID 0 accounts other than root"
   shell: "cat /etc/passwd | awk -F: '($3 == 0 && $1 != \"root\") {i++;print $1 } END {exit i}'"
   register: uid_zero_accounts_except_root
@@ -26,77 +25,63 @@
 
 - name: "PRELIM | Check whether machine is UEFI-based"
   stat:
-    path: /sys/firmware/efi
+      path: /sys/firmware/efi
   register: rhel7cis_efi_boot
   changed_when: no
 
 - name: set bootloader type
   block:
-  - name: "PRELIM | set fact if UEFI boot | RHEL or OEL"
-    set_fact:
-      rhel7cis_bootloader_file: /boot/efi/EFI/redhat/grub.cfg
-      rhel7cis_legacy_boot: false
-    when:
-    - rhel7cis_efi_boot.stat.exists
-    - ansible_distribution != 'CentOS'  # Note: rhel & OEL both use redhat path
+      - name: "PRELIM | set fact if UEFI boot | RHEL or OEL"
+        set_fact:
+            rhel7cis_bootloader_path: /boot/efi/EFI/redhat/
+            rhel7cis_legacy_boot: false
+        when:
+        - rhel7cis_efi_boot.stat.exists
+        - ansible_distribution != 'CentOS'  # Note: rhel & OEL both use redhat path
 
-  - name: "PRELIM | set fact if UEFI boot | CentOS "
-    set_fact:
-      rhel7cis_bootloader_file: /boot/efi/EFI/centos/grub.cfg
-      rhel7cis_legacy_boot: false
-    when:
-    - rhel7cis_efi_boot.stat.exists
-    - ansible_distribution == 'CentOS'
+      - name: "PRELIM | set fact if UEFI boot | CentOS "
+        set_fact:
+            rhel7cis_bootloader_path: /boot/efi/EFI/centos/
+            rhel7cis_legacy_boot: false
+        when:
+        - rhel7cis_efi_boot.stat.exists
+        - ansible_distribution == 'CentOS'
 
-  - name: "PRELIM | set if not UEFI boot"
-    set_fact:
-      rhel7cis_bootloader_file: /boot/grub2/grub.cfg
-      rhel7cis_legacy_boot: true
-    when: not rhel7cis_efi_boot.stat.exists
+      - name: "PRELIM | set if not UEFI boot"
+        set_fact:
+            rhel7cis_bootloader_path: /boot/grub2/
+            rhel7cis_legacy_boot: true
+        when: not rhel7cis_efi_boot.stat.exists
 
-  - name: output bootloader and efi state
-    debug:
-      msg:
-      - "bootloader file set to {{ rhel7cis_bootloader_file }}"
-      - "legacy boot equals {{ rhel7cis_legacy_boot }}"
+      - name: output bootloader and efi state
+        debug:
+            msg:
+            - "bootloader path set to {{ rhel7cis_bootloader_path }}"
+            - "legacy boot equals {{ rhel7cis_legacy_boot }}"
+
+- name: "PRELIM | Section 1.1 | Create list of mount points"
+  set_fact:
+      mount_names: "{{ ansible_mounts | map(attribute='mount') | list }}"
 
 - name: "PRELIM | Section 1.7 | Ensure SELinux is installed"
   package:
-    name: libselinux
-    state: present
+      name: libselinux
+      state: present
   when:
   - not rhel7cis_selinux_disable
   vars:
-    ansible_python_interpreter: /bin/python
+      ansible_python_interpreter: /bin/python
 
 - name: "PRELIM | Section 4.1 | Configure System Accounting (auditd)"
   package:
-    name: audit
-    state: present
+      name: audit
+      state: present
   vars:
-    ansible_python_interpreter: /bin/python
+      ansible_python_interpreter: /bin/python
 
 - name: "PRELIM | Section 5.1 | Configure cron"
   package:
-    name: cronie
-    state: present
+      name: cronie
+      state: present
   vars:
-    ansible_python_interpreter: /bin/python
-
-### NOTE: You will need to adjust the UID range in parenthases below.
-### ALSO NOTE: We weed out any user with a home dir not in standard locations because interactive users shouldn't have those paths as a home dir. Add or removed directory paths as needed below.
-- name: "PRELIM | 6.2.8 | Gather local interactive user directories"
-  shell: "getent passwd {1000..65535} | cut -d: -f6 | sort -u | grep -v '/var/' | grep -v '/nonexistent/*' | grep -v '/run/*'"
-  register: rhel_07_6_2_8_getent
-  changed_when: no
-  failed_when: false
-  tags:
-  - skip_ansible_lint
-  - rule_6.2.8
-
-- name: "PRELIM | 6.2.8 | Set fact for home directory paths for interactive users"
-  set_fact:
-    rhel_07_stig_interactive_homedir_results: "{{ rhel_07_6_2_8_getent.stdout_lines }}"
-  when: rhel_07_6_2_8_getent.stdout_lines is defined
-  tags:
-  - rule_6.2.8
+      ansible_python_interpreter: /bin/python

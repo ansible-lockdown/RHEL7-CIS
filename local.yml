@@ -4,7 +4,7 @@
   connection: local
   become: true
   vars:
-    is_container: false
+      is_container: false
   roles:
   - role: "{{ playbook_dir }}"
     rhel7stig_system_is_container: "{{ is_container | default(false) }}"

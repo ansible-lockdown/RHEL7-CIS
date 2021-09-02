@@ -1,0 +1,27 @@
+---
+
+- name: "5.7 | L1 | PATCH | Ensure access to the su command is restricted"
+  block:
+      - name: "5.7 | L1 | PATCH | Ensure access to the su command is restricted | Setting pam_wheel to use_uid"
+        lineinfile:
+            state: present
+            dest: /etc/pam.d/su
+            regexp: '^(#)?auth\s+required\s+pam_wheel\.so'
+            line: 'auth            required        pam_wheel.so use_uid {% if rhel7cis_sugroup is defined %}group={{ rhel7cis_sugroup }}{% endif %}'
+        when:
+            - rhel7cis_rule_5_7
+        tags:
+            - level1
+            - patch
+            - rule_5.7
+
+      - name: "5.7 | L1 | PATCH | Ensure access to the su command is restricted | wheel group contains root"
+        user:
+            name: root
+            groups: "{{ rhel7cis_sugroup | default('wheel') }}"
+  when:
+      - rhel7cis_rule_5_7
+  tags:
+      - level1
+      - patch
+      - rule_5.7
