@@ -20,7 +20,7 @@
 - name: Check rhel7cis_bootloader_password_hash variable has been changed
   assert:
       that: rhel7cis_bootloader_password_hash != 'grub.pbkdf2.sha512.changethispart'
-      msg: "This role will not be able to run single user password commands as  cis_bootloader_password_hash variable has not been set"
+      msg: "This role will not be able to run single user password commands as  rhel7cis_bootloader_password_hash variable has not been set"
   when:
       - ansible_distribution_version >= '7.2'
       - rhel7cis_set_boot_pass
