@@ -11,7 +11,7 @@ rhel7cis_section5: true
 rhel7cis_section6: true
 
 # Disable/Enable OS check
- rhel7cis_os_check: true
+rhel7cis_os_check: true
 
 # Should always reboot after this number of changes allow this to be automated as part of remediation
 rhel7cis_allow_reboot: false

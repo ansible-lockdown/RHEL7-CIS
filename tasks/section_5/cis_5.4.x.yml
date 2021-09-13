@@ -102,7 +102,7 @@
                 5.4.4 | L1 | PATCH | Ensure password reuse is limited | Copy system/password-auth to system/password-auth-local"
         copy:
             src: "/etc/pam.d/{{ item }}"
-            dest: /etc/pam.d/{{ item }}-local"
+            dest: "/etc/pam.d/{{ item }}-local"
             remote_src: yes
             owner: root
             group: root
