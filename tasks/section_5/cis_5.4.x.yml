@@ -3,7 +3,7 @@
 - name: "5.4.1 | L1 | PATCH | Ensure password creation requirements are configured"
   lineinfile:
       state: present
-      dest: /etc/security/pwquality.conf
+      dest: "/etc/security/pwquality.conf"
       regexp: '^{{ item.key }}'
       line: '{{ item.key }} = {{ item.value }}'
   with_items:
@@ -23,7 +23,7 @@
   block:
       - name: " 5.4.2 | L1 | PATCH | Ensure lockout for failed password attempts is configured | Add deny count and unlock time for preauth"
         lineinfile:
-            dest: /etc/pam.d/{{ item }}
+            dest: "/etc/pam.d/{{ item }}"
             state: present
             line: "auth        required      pam_faillock.so preauth audit silent deny={{ rhel7cis_pam_faillock.attempts }}{{ (rhel7cis_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}unlock_time={{ rhel7cis_pam_faillock.unlock_time }}"
             insertafter: '^#?auth ?'
@@ -33,7 +33,7 @@
 
       - name: " 5.4.2 | L1 | PATCH | Ensure lockout for failed password attempts is configured | Add success and default settings to pam_unix.so"
         lineinfile:
-            dest: /etc/pam.d/{{ item }}
+            dest: "/etc/pam.d/{{ item }}"
             state: present
             line: "auth        [success=1 default=bad] pam_unix.so"
             insertafter: '^#?auth ?'
@@ -43,7 +43,7 @@
 
       - name: " 5.4.2 | L1 | PATCH | Ensure lockout for failed password attempts is configured | Add default, deny count, and unlock times for authfail"
         lineinfile:
-            dest: /etc/pam.d/{{ item }}
+            dest: "/etc/pam.d/{{ item }}"
             state: present
             line: "auth        [default=die] pam_faillock.so authfail audit deny={{ rhel7cis_pam_faillock.attempts }}{{ (rhel7cis_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}unlock_time={{ rhel7cis_pam_faillock.unlock_time }}"
             insertafter: '^#?auth ?'
@@ -53,7 +53,7 @@
 
       - name: " 5.4.2 | L1 | PATCH | Ensure lockout for failed password attempts is configured | Add deny count and unlock times to authsucc"
         lineinfile:
-            dest: /etc/pam.d/{{ item }}
+            dest: "/etc/pam.d/{{ item }}"
             state: present
             line: "auth        sufficient    pam_faillock.so authsucc audit deny={{ rhel7cis_pam_faillock.attempts }}{{ (rhel7cis_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}unlock_time={{ rhel7cis_pam_faillock.unlock_time }}"
             insertafter: '^#?auth ?'
@@ -61,9 +61,21 @@
             - "system-auth"
             - "password-auth"
 
+      - name: "SCORED | 5.4.2 | PATCH | Ensure lockout for failed password attempts is configured | Activate deny count and unlock times to failed password"
+        lineinfile:
+            dest: "/etc/pam.d/{{ item }}"
+            state: present
+            line: "account     required      pam_faillock.so"
+            firstmatch: yes
+            regexp: '^\s*account\s+required\s+pam_faillock.so\s*'
+            insertbefore: '^#?account ?'
+        loop:
+            - "system-auth"
+            - "password-auth"
+
       - name: " 5.4.3 | L1 | PATCH | Ensure password hashing algorithm is SHA-512 | add sha512 settings"
         lineinfile:
-            dest: /etc/pam.d/{{ item }}
+            dest: "/etc/pam.d/{{ item }}"
             state: present
             line: "password    sufficient    pam_unix.so {{ rhel7cis_pam_faillock.pwhash }} shadow nullok try_first_pass use_authtok"
             insertafter: '^#?password ?'
@@ -73,7 +85,7 @@
 
       - name: " 5.4.4 | L1 | PATCH | Ensure password reuse is limited | add remember settings"
         lineinfile:
-            dest: /etc/pam.d/{{ item }}
+            dest: "/etc/pam.d/{{ item }}"
             state: present
             line: "password    required    pam_pwhistory.so remember={{ rhel7cis_pam_faillock.remember }}"
             insertafter: '^#?password ?'
@@ -89,8 +101,8 @@
                 5.4.3 | L1 | PATCH | Ensure password hashing algorithm is SHA-512"
                 5.4.4 | L1 | PATCH | Ensure password reuse is limited | Copy system/password-auth to system/password-auth-local"
         copy:
-            src: /etc/pam.d/{{ item }}
-            dest: /etc/pam.d/{{ item }}-local
+            src: "/etc/pam.d/{{ item }}"
+            dest: /etc/pam.d/{{ item }}-local"
             remote_src: yes
             owner: root
             group: root
@@ -103,8 +115,8 @@
               " 5.4.2 | L1 | PATCH | Ensure lockout for failed password attempts is configured | Setup symbolic link
                 5.4.4 | L1 | PATCH | Ensure password reuse is limited | Setup symbolic link"
         file:
-            src: /etc/pam.d/{{ item }}-local
-            dest: /etc/pam.d/{{ item }}
+            src: "/etc/pam.d/{{ item }}-local"
+            dest: "/etc/pam.d/{{ item }}"
             state: link
             force: yes
         loop:
