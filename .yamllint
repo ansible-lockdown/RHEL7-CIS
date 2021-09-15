@@ -9,7 +9,7 @@ extends: default
 rules:
   indentation:
     # Requiring 2 space indentation
-    spaces: 2
+    spaces: 4
     # Requiring consistent indentation within a file, either indented or not
     indent-sequences: consistent
   truthy: disable

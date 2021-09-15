@@ -1,0 +1,106 @@
+---
+
+- name: "5.5.1.1 | L1 | PATCH | Ensure password expiration is 365 days or less"
+  lineinfile:
+      state: present
+      dest: /etc/login.defs
+      regexp: '^PASS_MAX_DAYS'
+      line: "PASS_MAX_DAYS {{ rhel7cis_pass['max_days'] }}"
+  when:
+      - rhel7cis_rule_5_5_1_1
+  tags:
+      - level1
+      - patch
+      - rule_5.5.1.1
+
+- name: "5.5.1.2 | L1 | PATCH | Ensure minimum days between password changes is configured"
+  lineinfile:
+      state: present
+      dest: /etc/login.defs
+      regexp: '^PASS_MIN_DAYS'
+      line: "PASS_MIN_DAYS {{ rhel7cis_pass['min_days'] }}"
+  when:
+      - rhel7cis_rule_5_5_1_2
+  tags:
+      - level1
+      - patch
+      - rule_5.5.1.2
+
+- name: "5.5.1.3 | L1 | PATCH | Ensure password expiration warning days is 7 or more"
+  lineinfile:
+      state: present
+      dest: /etc/login.defs
+      regexp: '^PASS_WARN_AGE'
+      line: "PASS_WARN_AGE {{ rhel7cis_pass['warn_age'] }}"
+  when:
+      - rhel7cis_rule_5_5_1_3
+  tags:
+      - level1
+      - patch
+      - rule_5.5.1.3
+
+- name: "5.5.1.4 | L1 | PATCH | Ensure inactive password lock is 30 days or less"
+  block:
+      - name: "5.5.1.4 | L1 | PATCH | Ensure inactive password lock is 30 days or less | Set default inactive setting"
+        lineinfile:
+            path: /etc/default/useradd
+            regexp: '^INACTIVE='
+            line: "INACTIVE={{ rhel7cis_inactivelock['lock_days'] }}"
+            state: present
+
+      - name: "5.5.1.4 | L1 | AUDIT | Ensure inactive password lock is 30 days or less | Getting user list"
+        # shell: 'egrep ^[^:]+:[^\!*] /etc/shadow | cut -d: -f1'
+        shell: "egrep ^[^:]+:[^\\!*] /etc/shadow | awk -F: '{print $1 \",\" $7}' | egrep -v  ',\\d|,[1-2][0-9]|,30|{{ rhel7cis_inactive_whitelist | join('|') }}' | cut -d , -f1"
+        register: rhel_07_5_5_1_4_audit
+        changed_when: no
+
+      - name: "5.5.1.4 | L1 | PATCH | Ensure inactive password lock is 30 days or less | Apply Inactive setting to existing accounts"
+        shell: "chage --inactive {{ rhel7cis_inactivelock.lock_days }} {{ item }}"
+        with_items:
+            - "{{ rhel_07_5_5_1_4_audit.stdout_lines }}"
+        when:
+            - rhel_07_5_5_1_4_audit.stdout | length > 0
+  when:
+      - rhel7cis_rule_5_5_1_4
+  tags:
+      - level1
+      - patch
+      - rule_5.5.1.4
+
+- name: "5.5.1.5 | L1 | PATCH | Ensure all users last password change date is in the past"
+  block:
+      - name: "5.5.1.5 | L1 | AUDIT | Ensure all users last password change date is in the past | Get current date in Unix Time"
+        shell: echo $(($(date --utc --date "$1" +%s)/86400))
+        failed_when: no
+        changed_when: no
+        register: rhel7cis_5_5_1_5_current_unix_time
+
+      - name: "5.5.1.5 | L1 | AUDIT | Ensure all users last password change date is in the past | Get list of users with last changed pw date in the future"
+        shell: "cat /etc/shadow | awk -F: '{if($3>{{ rhel7cis_5_5_1_5_current_unix_time.stdout }})print$1}'"
+        register: rhel7cis_5_5_1_5_user_list
+
+      - name: "5.5.1.5 | L1 | AUDIT | Ensure all users last password change date is in the past | Alert no pw change in the future exist"
+        debug:
+            msg: "Good News! All accounts have PW change dates that are in the past"
+        when: rhel7cis_5_5_1_5_user_list.stdout | length == 0
+
+      - name: "5.5.1.5 | L1 | AUDIT | Ensure all users last password change date is in the past | Alert on accounts with pw change in the future"
+        debug:
+            msg: "Warning! The following accounts have the last PW change date in the future: {{ rhel7cis_5_5_1_5_user_list.stdout_lines }}"
+        when:
+            - rhel7cis_5_5_1_5_user_list.stdout | length > 0
+            - not rhel7cis_futurepwchgdate_autofix
+
+      - name: "5.5.1.5 | L1 | PATCH | Ensure all users last password change date is in the past | Fix accounts with pw change in the future"
+        shell: passwd --expire {{ item }}
+        when:
+            - rhel7cis_5_5_1_5_user_list | length > 0
+            - rhel7cis_futurepwchgdate_autofix
+        with_items:
+            - "{{ rhel7cis_5_5_1_5_user_list.stdout_lines }}"
+  when:
+      - rhel7cis_rule_5_5_1_5
+  tags:
+      - level1
+      - patch
+      - rule_5.5.1.5

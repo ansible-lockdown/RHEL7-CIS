@@ -8,7 +8,7 @@ RHEL 7 CIS
 Configure RHEL/Centos 7 machine to be [CIS](https://www.cisecurity.org/cis-benchmarks/) compliant
 Untested on OEL
 
-Based on [CIS RedHat Enterprise Linux 7 Benchmark v3.0.1 - 09-21-2020 ](https://www.cisecurity.org/cis-benchmarks/)
+Based on [CIS RedHat Enterprise Linux 7 Benchmark v3.1.1 - 05-21-2021 ](https://www.cisecurity.org/cis-benchmarks/)
 
 Caution(s)
 -------
@@ -17,7 +17,7 @@ This role **will make changes to the system** which may have unintended conseque
 
 This role was developed against a clean install of the Operating System. If you are implimenting to an existing system please review this role for any site specific changes that are needed.
 
-To use release version please point to main branch.
+To use release version please point to main branch and relevant release for the cis benchmark you wish to work with.
 
 Coming from a previous release
 ------------------------------
@@ -96,16 +96,17 @@ Below is an example of the tag section from a control within this role. Using th
 Example Audit Summary
 ---------------------
 
-This is based on a vagrant image with selections enabled. e.g. No Gui or firewall.
-Note: More tests are run during audit as we check config and running state.
+The audit when run from ansible also uses all the specific variables, so will test relevant variables based on host configuration settings.
+This is based on a vagrant image, based upon a preconfigured image for filesystem layout etc. e.g. No Gui or firewall.
+Note: More tests are run during audit as we are checking config and running state.
 
 ```sh
-TASK [/vagrant/RHEL7-CIS : Show Audit Summary] ******************************************************************************************************************************************************************************
+TASK [RHEL7-CIS : Show Audit Summary] ******************************************************************************************************************************************************************************
 ******
-ok: [localhost] => {
+ok: [cent7_efi] => {
     "msg": [
-        "The pre remediation results are: Count: 377, Failed: 127, Duration: 12.417s.",
-        "The post remediation results are: Count: 377, Failed: 20, Duration: 14.133s.",
+        "The pre remediation results are: Count: 380, Failed: 121, Duration: 10.399s.",
+        "The post remediation results are: Count: 380, Failed: 10, Duration: 12.324s.",
         "Full breakdown can be found in /var/tmp",
         ""
     ]
@@ -113,7 +114,7 @@ ok: [localhost] => {
 
 PLAY RECAP ******************************************************************************************************************************************************************************************************************
 ******
-localhost                  : ok=270  changed=140  unreachable=0    failed=0    skipped=129  rescued=0    ignored=0 
+cent7_efi                  : ok=274  changed=143  unreachable=0    failed=0    skipped=140  rescued=0    ignored=0  
 
 ```
 
@@ -135,6 +136,16 @@ We encourage you (the community) to contribute to this role. Please read the rul
 - All community Pull Requests are pulled into the devel branch
 - Pull Requests into devel will confirm your commits have a GPG signature, Signed-off, and a functional test before being approved
 - Once your changes are merged and a more detailed review is complete, an authorized member will merge your changes into the main branch for a new release
+
+Support
+-------
+
+This is a community project at its core and will be managed as such.
+
+If you would are interested in dedicated support to assist or provide bespoke setups
+
+- [Ansible Counselor](https://www.mindpointgroup.com/products/ansible-counselor-on-demand-ansible-services-and-consulting/)
+- [Try us out](https://engage.mindpointgroup.com/try-ansible-counselor)
 
 Credits
 -------

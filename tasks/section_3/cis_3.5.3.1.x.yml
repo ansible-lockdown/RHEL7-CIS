@@ -1,43 +1,46 @@
 ---
 
-- name: "AUTOMATED | 3.5.3.1.1 | PATCH | Ensure iptables is installed"
+- name: "3.5.3.1.1 | L1 | PATCH | Ensure iptables packages are installed"
   package:
-    name: "{{ item }}"
-    state: present
+      name: "{{ item }}"
+      state: present
   loop:
-  - iptables
-  - iptables-services
+      - iptables
+      - iptables-services
   vars:
-    ansible_python_interpreter: /bin/python
+      ansible_python_interpreter: /bin/python
   when:
-  - rhel7cis_rule_3_5_3_1_1
+      - "'iptables' not in ansible_facts.packages"
+      - rhel7cis_rule_3_5_3_1_1
   tags:
-  - level1
-  - patch
-  - rule_3.5.3.1
+      - level1
+      - patch
+      - rule_3.5.3.1
 
-- name: "AUTOMATED | 3.5.3.1.2 | PATCH | Ensure nftables is not installed"
+- name: "3.5.3.1.2 | L1 | PATCH | Ensure nftables is not installed with iptables"
   package:
-    name: nftables
-    state: absent
+      name: nftables
+      state: absent
   vars:
-    ansible_python_interpreter: /bin/python
+      ansible_python_interpreter: /bin/python
   when:
-  - rhel7cis_rule_3_5_3_1_2
+      - "'nftables' in ansible_facts.packages"
+      - rhel7cis_rule_3_5_3_1_2
   tags:
-  - level1
-  - patch
-  - rule_3.5.3.2
+      - level1
+      - patch
+      - rule_3.5.3.2
 
-- name: "AUTOMATED | 3.5.3.1.3 | PATCH | Ensure firewalld is not installed or stopped and masked"
+- name: "3.5.3.1.3 | L1 | PATCH | Ensure firewalld is either not installed or masked with iptables"
   package:
-    name: firewalld
-    state: absent
+      name: firewalld
+      state: absent
   vars:
-    ansible_python_interpreter: /bin/python
+      ansible_python_interpreter: /bin/python
   when:
-  - rhel7cis_rule_3_5_3_1_3
+      - "'firewalld' in ansible_facts.packages"
+      - rhel7cis_rule_3_5_3_1_3
   tags:
-  - level1
-  - patch
-  - rule_3.5.3.3
+      - level1
+      - patch
+      - rule_3.5.3.3

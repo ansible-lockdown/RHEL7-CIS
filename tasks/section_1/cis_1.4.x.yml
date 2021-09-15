@@ -1,47 +1,70 @@
 ---
 
-- name: "AUTOMATED | 1.4.1 | PATCH | Ensure AIDE is installed"
+- name: "1.4.1 | L1 | PATCH | Ensure bootloader password is set"
+  copy:
+      dest: "{{ rhel7cis_bootloader_path }}user.cfg"
+      content: "GRUB2_PASSWORD={{ rhel7cis_bootloader_password_hash }}"
+      owner: root
+      group: root
+      mode: "{% if rhel7cis_legacy_boot %}0600{% else %}0700{% endif %}"
+  notify: grub2cfg
+  when:
+      - ansible_distribution_version >= '7.2'
+      - rhel7cis_set_boot_pass
+      - rhel7cis_rule_1_4_1
+  tags:
+      - level1
+      - grub
+      - patch
+      - rule_1.4.1
+
+- name: "1.4.2 | L1 | PATCH | Ensure permissions on bootloader config are configured"
   block:
-  - name: "AUTOMATED | 1.4.1 | PATCH | Ensure AIDE is installed | Install"
-    package:
-      name: aide
-      state: installed
+      - name: "1.4.2 | L1 | PATCH | Ensure permissions on bootloader config are configured | Update grub config settings"
+        file:
+            path: "{{ rhel7cis_bootloader_path }}grub.cfg"
+            owner: root
+            group: root
+            mode: 0600
+        when:
+            - rhel7cis_legacy_boot
 
-  - name: "AUTOMATED | 1.4.1 | PATCH | Ensure AIDE is installed | started"
-    command: /usr/sbin/aide --init -B 'database_out=file:/var/lib/aide/aide.db.gz'
-    args:
-      creates: /var/lib/aide/aide.db.gz
-    changed_when: no
-    failed_when: no
-    async: 45
-    poll: 0
+      - name: "1.4.2 | L1 | PATCH | Ensure permissions on bootloader config are configured | UEFI"
+        mount:
+            name: /boot/efi
+            src: "UUID={{ item.uuid }}"
+            fstype: vfat
+            state: present
+            opts: defaults,umask=0027,fmask=0077,uid=0,gid=0
+            passno: '0'
+        loop: "{{ ansible_mounts }}"
+        when:
+            - not rhel7cis_legacy_boot
+            - item.mount == "/boot/efi"
   when:
-  - rhel7cis_config_aide
-  - rhel7cis_rule_1_4_1
+      - rhel7cis_rule_1_4_2
   tags:
-  - level1
-  - AUTOMATED
-  - aide
-  - patch
-  - rule_1.4.1
-  vars:
-    ansible_python_interpreter: /bin/python
+      - level1
+      - grub
+      - patch
+      - rule_1.4.2
 
-- name: "AUTOMATED | 1.4.2 | PATCH | Ensure filesystem integrity is regularly checked | cron"
-  cron:
-    name: Run AIDE integrity check
-    minute: "{{ rhel7cis_aide_cron['aide_minute'] | default('0') }}"
-    hour: "{{ rhel7cis_aide_cron['aide_hour'] | default('5') }}"
-    day: "{{ rhel7cis_aide_cron['aide_day'] | default('*') }}"
-    month: "{{ rhel7cis_aide_cron['aide_month'] | default('*') }}"
-    weekday: "{{ rhel7cis_aide_cron['aide_weekday'] | default('*') }}"
-    job: "{{ rhel7cis_aide_cron['aide_job'] }}"
+- name: "1.4.3 | L1 | PATCH | Ensure authentication required for single user mode"
+  block:
+      - name: "1.4.3 | L1 | PATCH | Ensure authentication required for single user mode | Emergency service"
+        lineinfile:
+            dest: /usr/lib/systemd/system/emergency.service
+            regexp: '/sbin/sulogin'
+            line: 'ExecStart=-/bin/sh -c "/sbin/sulogin; /usr/bin/systemctl --fail --no-block default'
+
+      - name: "1.4.3 | L1 | PATCH | Ensure authentication required for single user mode | Rescue service"
+        lineinfile:
+            dest: /usr/lib/systemd/system/rescue.service
+            regexp: '/sbin/sulogin'
+            line: 'ExecStart=-/bin/sh -c "/sbin/sulogin; /usr/bin/systemctl --fail --no-block default'
   when:
-  - rhel7cis_rule_1_4_2
+      - rhel7cis_rule_1_4_3
   tags:
-  - level1
-  - AUTOMATED
-  - aide
-  - file_integrity
-  - patch
-  - rule_1.4.2
+      - level1
+      - patch
+      - rule_1.4.3

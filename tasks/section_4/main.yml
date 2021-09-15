@@ -11,3 +11,6 @@
 
 - name: "SECTION | 4.2.2.x| Configure journald"
   include: cis_4.2.2.x.yml
+
+- name: "SECTION | 4.2.x | logfile configuration"
+  include: cis_4.2.x.yml
