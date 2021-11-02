@@ -242,7 +242,7 @@
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
-      regexp: '^Cipherss'
+      regexp: '^Ciphers'
       line: "Ciphers {{ rhel7cis_sshd['ciphers'] }}"
   notify:
       - restart sshd
