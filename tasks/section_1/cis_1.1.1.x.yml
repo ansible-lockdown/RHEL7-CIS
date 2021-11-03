@@ -68,3 +68,26 @@
       - patch
       - rule_1.1.1.3
       - udf
+
+- name: "1.1.1.4 | L1 | PATCH | Ensure mounting of vfat filesystems is disabled"
+  block:
+      - name: "1.1.1.4 | L1 | PATCH | Ensure mounting of vfat filesystems is disabled | Edit modprobe config"
+        lineinfile:
+            dest: /etc/modprobe.d/CIS.conf
+            regexp: "^(#)?install vfat(\\s|$)"
+            line: "install vfat /bin/true"
+            create: yes
+            mode: '0600'
+
+      - name: "1.1.1.4 | L1 | PATCH | Remove vfat module | rmmod "
+        modprobe:
+            name: vfat
+            state: absent
+  when:
+      - rhel7cis_rule_1_1_1_4
+      - ansible_connection != 'docker'
+  tags:
+      - level1
+      - patch
+      - rule_1.1.1.4
+      - vfat
