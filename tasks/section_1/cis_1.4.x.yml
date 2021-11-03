@@ -61,7 +61,7 @@
         lineinfile:
             dest: /usr/lib/systemd/system/rescue.service
             regexp: '/sbin/sulogin'
-            line: 'ExecStart=-/bin/sh -c "/sbin/sulogin; /usr/bin/systemctl --fail --no-block default'
+            line: 'ExecStart=-/bin/sh -c "/sbin/sulogin; /usr/bin/systemctl --fail --no-block default"'
   when:
       - rhel7cis_rule_1_4_3
   tags:
