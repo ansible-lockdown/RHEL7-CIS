@@ -73,7 +73,6 @@ rhel7cis_tmp_svc: false
 rhel7cis_rule_1_1_1_1: true
 rhel7cis_rule_1_1_1_2: true
 rhel7cis_rule_1_1_1_3: true
-rhel7cis_rule_1_1_1_4: true
 rhel7cis_rule_1_1_2: true
 rhel7cis_rule_1_1_3: true
 rhel7cis_rule_1_1_4: true
