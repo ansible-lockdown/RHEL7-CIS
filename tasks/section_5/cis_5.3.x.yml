@@ -242,7 +242,7 @@
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
-      regexp: '^Cipherss'
+      regexp: '^Ciphers'
       line: "Ciphers {{ rhel7cis_sshd['ciphers'] }}"
   notify:
       - restart sshd
@@ -274,6 +274,8 @@
       dest: /etc/ssh/sshd_config
       regexp: '^KexAlgorithms'
       line: "KexAlgorithms {{ rhel7cis_sshd['kex'] }}"
+      insertafter: '^MACs'
+
   notify:
       - restart sshd
   when:
