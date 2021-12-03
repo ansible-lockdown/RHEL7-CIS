@@ -16,11 +16,12 @@
             - rule_5.7
 
       - name: "5.7 | L1 | PATCH | Ensure access to the su command is restricted | wheel group contains root"
-        user:
-            name: root
-            groups: "{{ rhel7cis_sugroup | default('wheel') }}"
+        group:
+            name: "{{ rhel7cis_sugroup }}"
+            state: present
   when:
       - rhel7cis_rule_5_7
+      - rhel7cis_sugroup is defined
   tags:
       - level1
       - patch
