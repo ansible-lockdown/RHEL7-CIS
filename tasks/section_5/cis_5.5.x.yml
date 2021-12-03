@@ -78,13 +78,13 @@
       - name: "5.5.5 | L1 | PATCH | Ensure default user umask is configured | Set umask for /etc/bashrc"
         replace:
             path: /etc/bashrc
-            regexp: '(^\s+umask) 002'
+            regexp: '(^\s+umask) 0[012][0-6]'
             replace: '\1 027'
 
       - name: "5.5.5 | L1 | PATCH | Ensure default user umask is configured | Set umask for /etc/profile"
         replace:
             path: /etc/profile
-            regexp: '(^\s+umask) 002'
+            regexp: '(^\s+umask) 0[012][0-6]'
             replace: '\1 027'
   when:
       - rhel7cis_rule_5_5_5
