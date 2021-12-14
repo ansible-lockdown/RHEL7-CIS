@@ -438,6 +438,17 @@ rhel7cis_firewall_services:
     - ssh
     - dhcpv6-client
 
+# 3.5.2.x
+# NFT firewall
+# not tested but added example for clarity - This will break connections
+# If the tables dont exist automatically create the tablename below
+rhel7cis_nft_tables_autoNewTable: false
+# create chain if doesnt exist
+rhel7cis_nft_tables_autoChainCreate: false
+# create a table called
+rhel7cis_nft_tables_tableName: filter
+
+
 # Warning Banner Content (issue, issue.net, motd)
 rhel7cis_warning_banner: |
     Authorized uses only. All activity may be monitored and reported.
