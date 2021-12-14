@@ -3,7 +3,7 @@
 benchmark_version: '3.1.1'
 
 # Set if genuine RHEL (subscription manager check) not for derivatives e.g. CentOS
-rhel7cis_is_redhat_os: {% if ansible_distribution == "RedHat" %}true{% else %}false{% endif %}
+is_redhat_os: {% if ansible_distribution == "RedHat" %}true{% else %}false{% endif %}
 
 # timeout for each command to run where set - default = 10seconds/10000ms
 timeout_ms: {{ audit_cmd_timeout }}
