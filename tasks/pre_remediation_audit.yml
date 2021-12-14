@@ -72,16 +72,10 @@
   tags:
       - goss_template
 
-- name: "Run pre_remediation {{ benchmark }} audit"
-  goss:
-      goss_path: "{{ audit_bin }}"
-      path: "{{ goss_file }}"
-      vars_path: "{{ audit_vars_path }}"
-      format: "{{ audit_format }}"
-      output_file: "{{ pre_audit_outfile }}"
-  failed_when: false
-  environment:
-      GOSS_FMT_OPTIONS: Pretty
+- name: "Pre Audit | Run pre_remediation {{ benchmark }} audit"
+  shell: "{{ audit_conf_dir }}/run_audit.sh -v {{ audit_vars_path }} -o {{ pre_audit_outfile }} -g {{ group_names }}"
+  vars:
+      warn: false
 
 - name: Capture audit data if json format
   block:

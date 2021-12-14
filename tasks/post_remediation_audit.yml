@@ -1,15 +1,9 @@
 ---
 
-- name: "Run post_remediation {{ benchmark }} audit"
-  goss:
-      goss_path: "{{ audit_bin }}"
-      path: "{{ goss_file }}"
-      vars_path: "{{ audit_vars_path }}"
-      format: "{{ audit_format }}"
-      output_file: "{{ post_audit_outfile }}"
-  failed_when: false
-  environment:
-      GOSS_FMT_OPTIONS: Pretty
+- name: "Post Audit | Run post_remediation {{ benchmark }} audit"
+  shell: "{{ audit_conf_dir }}/run_audit.sh -v {{ audit_vars_path }} -o {{ post_audit_outfile }} -g {{ group_names }}"
+  vars:
+      warn: false
 
 - name: ensure audit files readable by users
   file:
