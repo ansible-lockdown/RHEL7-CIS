@@ -575,19 +575,19 @@ goss_url: "https://github.com/aelsabbahy/goss/releases/download/{{ goss_version.
 copy_goss_from_path: /some/accessible/path
 
 ### Goss Audit Benchmark file ###
-## managed by the control rhel7cis_audit_content
+## managed by the control audit_content
 # git
-rhel7cis_audit_file_git: "https://github.com/ansible-lockdown/{{ benchmark }}-Audit.git"
-rhel7cis_audit_git_version: main
+audit_file_git: "https://github.com/ansible-lockdown/{{ benchmark }}-Audit.git"
+audit_git_version: main
 
 # copy:
-rhel7cis_audit_local_copy: "some path to copy from"
+audit_local_copy: "some path to copy from"
 
 # get_url:
-rhel7cis_audit_files_url: "some url maybe s3?"
+audit_files_url: "some url maybe s3?"
 
 # Where the goss audit configuration will be stored
-rhel7cis_audit_files: "/var/tmp/{{ benchmark }}-Audit/"
+audit_files: "/var/tmp/{{ benchmark }}-Audit/"
 
 ## Goss configuration information
 # Where the goss configs and outputs are stored
