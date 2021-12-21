@@ -1,0 +1,6 @@
+# adding github settings to show correct language
+*.sh linguist-detectable=true
+*.yml linguist-detectable=true
+*.ps1 linguist-detectable=true
+*.j2 linguist-detectable=true
+*.md linguist-documentation

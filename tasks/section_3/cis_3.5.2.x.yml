@@ -63,7 +63,7 @@
   block:
       - name: "3.5.2.5 | L1 | AUDIT | Ensure an nftables table exists | Check for tables"
         command: nft list tables
-        register: rhel7cis_3_5_2_4_nft_tables
+        register: rhel7cis_3_5_2_5_nft_tables
 
       - name: "3.5.2.5 | L1 | AUDIT | Ensure an nftables table exists | Show existing tables"
         debug:

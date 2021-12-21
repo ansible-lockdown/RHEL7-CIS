@@ -1,13 +1,9 @@
 ---
 ## metadata for Audit benchmark
-rhel7cis_benchmark:
-- "type: CIS"
-- "version: '3.0.1'"
-- "os: RHEL 7"
-- "epoch: {{ ansible_date_time.epoch }}"
-- "hostname: {{ ansible_hostname }}"
+benchmark_version: '3.1.1'
 
-rhel7cis_os_distribution: {{ ansible_distribution | lower }}
+# Set if genuine RHEL (subscription manager check) not for derivatives e.g. CentOS
+is_redhat_os: {% if ansible_distribution == "RedHat" %}true{% else %}false{% endif %}
 
 # timeout for each command to run where set - default = 10seconds/10000ms
 timeout_ms: {{ audit_cmd_timeout }}

@@ -1,17 +1,11 @@
 ---
 
-- name: "Run post_remediation {{ benchmark }} audit"
-  goss:
-      goss_path: "{{ audit_bin }}"
-      path: "{{ goss_file }}"
-      vars_path: "{{ audit_vars_path }}"
-      format: "{{ audit_format }}"
-      output_file: "{{ post_audit_outfile }}"
-  failed_when: false
-  environment:
-      GOSS_FMT_OPTIONS: Pretty
+- name: "Post Audit | Run post_remediation {{ benchmark }} audit"
+  shell: "{{ audit_conf_dir }}/run_audit.sh -v {{ audit_vars_path }} -o {{ post_audit_outfile }} -g {{ group_names }}"
+  vars:
+      warn: false
 
-- name: ensure audit files readable by users
+- name: Post Audit | ensure audit files readable by users
   file:
       path: "{{ item }}"
       mode: 0644
@@ -20,7 +14,7 @@
       - "{{ post_audit_outfile }}"
       - "{{ pre_audit_outfile }}"
 
-- name: Capture audit data if json format
+- name: Post Audit | Capture audit data if json format
   block:
       - name: "capture data {{ post_audit_outfile }}"
         command: "cat {{ post_audit_outfile }}"
@@ -35,14 +29,14 @@
   when:
       - audit_format == "json"
 
-- name: Capture audit data if documentation format
+- name: Post Audit | Capture audit data if documentation format
   block:
-      - name: "capture data {{ post_audit_outfile }}"
+      - name: "Post Audit | capture data {{ post_audit_outfile }}"
         command: "tail -2 {{ post_audit_outfile }}"
         register: post_audit
         changed_when: false
 
-      - name: Capture post-audit result
+      - name: Post Audit | Capture post-audit result
         set_fact:
             post_audit_summary: "{{ post_audit.stdout_lines }}"
   when:
