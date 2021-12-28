@@ -47,6 +47,7 @@
       name: firewalld
       state: started
       enabled: true
+      masked: false
   when:
       - rhel7cis_rule_3_5_1_4
   tags:
