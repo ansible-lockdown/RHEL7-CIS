@@ -114,8 +114,6 @@
       opts: defaults,{% if rhel7cis_rule_1_1_7 %}noexec,{% endif %}{% if rhel7cis_rule_1_1_8 %}nodev,{% endif %}{% if rhel7cis_rule_1_1_9 %}nosuid{% endif %},seclabel
   notify: remount dev_shm
   when:
-      - dev_shm_mount_present is defined
-      - item.mount == "/dev/shm"
       - rhel7cis_rule_1_1_7 or
         rhel7cis_rule_1_1_8 or
         rhel7cis_rule_1_1_9
