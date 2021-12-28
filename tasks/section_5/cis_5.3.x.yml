@@ -74,7 +74,9 @@
             state: present
             dest: /etc/ssh/sshd_config
             regexp: "^AllowUsers"
+            insertbefore: "# Accept locale-related environment variables"
             line: AllowUsers {{ rhel7cis_sshd['allowusers'] }}
+            validate: /usr/sbin/sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" -f %s
         notify:
             - restart sshd
         when:
@@ -85,7 +87,9 @@
             state: present
             dest: /etc/ssh/sshd_config
             regexp: "^AllowGroups"
+            insertbefore: "# Accept locale-related environment variables"
             line: AllowGroups {{ rhel7cis_sshd['allowgroups'] }}
+            validate: /usr/sbin/sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" -f %s
         notify:
             - restart sshd
         when:
@@ -96,7 +100,9 @@
             state: present
             dest: /etc/ssh/sshd_config
             regexp: "^DenyUsers"
+            insertbefore: "# Accept locale-related environment variables"
             line: DenyUsers {{ rhel7cis_sshd['denyusers'] }}
+            validate: /usr/sbin/sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" -f %s
         notify:
             - restart sshd
         when:
@@ -107,7 +113,9 @@
             state: present
             dest: /etc/ssh/sshd_config
             regexp: "^DenyGroups"
+            insertbefore: "# Accept locale-related environment variables"
             line: DenyGroups {{ rhel7cis_sshd['denygroups'] }}
+            validate: /usr/sbin/sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" -f %s
         notify:
             - restart sshd
         when:
@@ -126,6 +134,7 @@
       dest: /etc/ssh/sshd_config
       regexp: "^#LogLevel|^LogLevel"
       line: 'LogLevel {{ rhel7cis_ssh_loglevel }}'
+      validate: /usr/sbin/sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" -f %s
   notify:
       - restart sshd
   when:
@@ -142,6 +151,7 @@
       dest: /etc/ssh/sshd_config
       regexp: "^#X11Forwarding|^X11Forwarding"
       line: 'X11Forwarding no'
+      validate: /usr/sbin/sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" -f %s
   notify:
       - restart sshd
   when:
@@ -158,6 +168,7 @@
       dest: /etc/ssh/sshd_config
       regexp: '^(#)?MaxAuthTries \d'
       line: 'MaxAuthTries 4'
+      validate: /usr/sbin/sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" -f %s
   notify:
       - restart sshd
   when:
@@ -174,6 +185,7 @@
       dest: /etc/ssh/sshd_config
       regexp: "^#IgnoreRhosts|^IgnoreRhosts"
       line: 'IgnoreRhosts yes'
+      validate: /usr/sbin/sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" -f %s
   notify:
       - restart sshd
   when:
@@ -190,6 +202,7 @@
       dest: /etc/ssh/sshd_config
       regexp: ^#HostbasedAuthentication|^HostbasedAuthentication"
       line: 'HostbasedAuthentication no'
+      validate: /usr/sbin/sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" -f %s
   notify:
       - restart sshd
   when:
@@ -206,6 +219,7 @@
       dest: /etc/ssh/sshd_config
       regexp: "^#PermitRootLogin|^PermitRootLogin"
       line: 'PermitRootLogin no'
+      validate: /usr/sbin/sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" -f %s
   notify:
       - restart sshd
   when:
@@ -222,6 +236,7 @@
       dest: /etc/ssh/sshd_config
       regexp: "^#PermitEmptyPasswords|^PermitEmptyPasswords"
       line: 'PermitEmptyPasswords no'
+      validate: /usr/sbin/sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" -f %s
   notify:
       - restart sshd
   when:
@@ -238,6 +253,7 @@
       dest: /etc/ssh/sshd_config
       regexp: "^#PermitUserEnvironment|^PermitUserEnvironment"
       line: 'PermitUserEnvironment no'
+      validate: /usr/sbin/sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" -f %s
   notify:
       - restart sshd
   when:
@@ -253,7 +269,9 @@
       state: present
       dest: /etc/ssh/sshd_config
       regexp: '^Ciphers'
+      insertbefore: "# Accept locale-related environment variables"
       line: "Ciphers {{ rhel7cis_sshd['ciphers'] }}"
+      validate: /usr/sbin/sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" -f %s
   notify:
       - restart sshd
   when:
@@ -269,7 +287,9 @@
       state: present
       dest: /etc/ssh/sshd_config
       regexp: '^MACs'
+      insertbefore: "# Accept locale-related environment variables"
       line: "MACs {{ rhel7cis_sshd['macs'] }}"
+      validate: /usr/sbin/sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" -f %s
   notify:
       - restart sshd
   when:
@@ -287,6 +307,7 @@
       regexp: '^KexAlgorithms'
       line: "KexAlgorithms {{ rhel7cis_sshd['kex'] }}"
       insertafter: '^MACs'
+      validate: /usr/sbin/sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" -f %s
   notify:
       - restart sshd
   when:
@@ -303,8 +324,9 @@
         lineinfile:
             state: present
             dest: /etc/ssh/sshd_config
-            regexp: '^ClientAliveInterval'
+            regexp: "^#ClientAliveInterval|^ClientAliveInterval"
             line: "ClientAliveInterval {{ rhel7cis_sshd['clientaliveinterval'] }}"
+            validate: /usr/sbin/sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" -f %s
         notify:
             - restart sshd
 
@@ -312,8 +334,9 @@
         lineinfile:
             state: present
             dest: /etc/ssh/sshd_config
-            regexp: '^ClientAliveCountMax'
+            regexp: "^#ClientAliveCountMax|^ClientAliveCountMax"
             line: "ClientAliveCountMax {{ rhel7cis_sshd['clientalivecountmax'] }}"
+            validate: /usr/sbin/sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" -f %s
         notify:
             - restart sshd
   when:
@@ -330,6 +353,7 @@
       dest: /etc/ssh/sshd_config
       regexp: "^#LoginGraceTime|^LoginGraceTime"
       line: "LoginGraceTime {{ rhel7cis_sshd['logingracetime'] }}"
+      validate: /usr/sbin/sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" -f %s
   notify:
       - restart sshd
   when:
@@ -344,8 +368,9 @@
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
-      regexp: '^Banner'
+      insertafter: "Banner none"
       line: 'Banner /etc/issue.net'
+      validate: /usr/sbin/sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" -f %s
   notify:
       - restart sshd
   when:
@@ -362,6 +387,7 @@
       dest: /etc/ssh/sshd_config
       regexp: "^#UsePAM|^UsePAM"
       line: 'UsePAM yes'
+      validate: /usr/sbin/sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" -f %s
   notify:
       - restart sshd
   when:
@@ -372,12 +398,13 @@
       - ssh
       - rule_5.3.19
 
-- name: "5.3.20 | L1 | PATCH | Ensure SSH AllowTcpForwarding is disabled"
+- name: "5.3.20 | L2 | PATCH | Ensure SSH AllowTcpForwarding is disabled"
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
       regexp: "^#AllowTcpForwarding|^AllowTcpForwarding"
       line: 'AllowTcpForwarding no'
+      validate: /usr/sbin/sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" -f %s
   notify:
       - restart sshd
   when:
@@ -394,6 +421,7 @@
       dest: /etc/ssh/sshd_config
       regexp: "^#MaxStartups|^MaxStartups"
       line: 'MaxStartups 10:30:60'
+      validate: /usr/sbin/sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" -f %s
   notify:
       - restart sshd
   when:
@@ -410,6 +438,7 @@
       dest: /etc/ssh/sshd_config
       regexp: "^#MaxSessions|^MaxSessions"
       line: 'MaxSessions {{ rhel7cis_ssh_maxsessions }}'
+      validate: /usr/sbin/sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" -f %s
   notify:
       - restart sshd
   when:
