@@ -12,6 +12,7 @@
   tags:
       - level1
       - patch
+      - ssh
       - rule_5.3.1
 
 - name: "5.3.2 | L1 | PATCH | Ensure permissions on SSH private host key files are configured"
@@ -37,6 +38,7 @@
   tags:
       - level1
       - patch
+      - ssh
       - rule_5.3.2
 
 - name: "5.3.3 | L1 | PATCH | Ensure permissions on SSH public host key files are configured"
@@ -62,8 +64,8 @@
   tags:
       - level1
       - patch
+      - ssh
       - rule_5.3.3
-
 
 - name: "5.3.4 | L1 | PATCH | Ensure SSH access is limited"
   block:
@@ -115,8 +117,8 @@
   tags:
       - level1
       - patch
+      - ssh
       - rule_5.3.4
-
 
 - name: "5.3.5 | L1 | PATCH | Ensure SSH LogLevel is appropriate"
   lineinfile:
@@ -131,6 +133,7 @@
   tags:
       - level1
       - patch
+      - ssh
       - rule_5.3.5
 
 - name: "5.3.6 | L2 | PATCH | Ensure SSH X11 forwarding is disabled"
@@ -146,6 +149,7 @@
   tags:
       - level2
       - patch
+      - ssh
       - rule_5.3.6
 
 - name: "5.3.7 | L1 | PATCH | Ensure SSH MaxAuthTries is set to 4 or less"
@@ -161,6 +165,7 @@
   tags:
       - level1
       - patch
+      - ssh
       - rule_5.3.7
 
 - name: "5.3.8 | L1 | PATCH | Ensure SSH IgnoreRhosts is enabled"
@@ -176,6 +181,7 @@
   tags:
       - level1
       - patch
+      - ssh
       - rule_5.3.8
 
 - name: "5.3.9 | L1 | PATCH | Ensure SSH HostbasedAuthentication is disabled"
@@ -191,6 +197,7 @@
   tags:
       - level1
       - patch
+      - ssh
       - rule_5.3.9
 
 - name: "5.3.10 | L1 | PATCH | Ensure SSH root login is disabled"
@@ -206,6 +213,7 @@
   tags:
       - level1
       - patch
+      - ssh
       - rule_5.3.10
 
 - name: "5.3.11 | L1 | PATCH | Ensure SSH PermitEmptyPasswords is disabled"
@@ -221,6 +229,7 @@
   tags:
       - level1
       - patch
+      - ssh
       - rule_5.3.11
 
 - name: "5.3.12 | L1 | PATCH | Ensure SSH PermitUserEnvironment is disabled"
@@ -236,6 +245,7 @@
   tags:
       - level1
       - patch
+      - ssh
       - rule_5.3.12
 
 - name: "5.3.13 | L1 | PATCH | Ensure only strong Ciphers are used"
@@ -251,6 +261,7 @@
   tags:
       - level1
       - patch
+      - ssh
       - rule_5.3.13
 
 - name: "5.3.14 | L1 | PATCH | Ensure only strong MAC algorithms are used"
@@ -266,6 +277,7 @@
   tags:
       - level1
       - patch
+      - ssh
       - rule_5.3.14
 
 - name: "5.3.15 | L1 | PATCH | Ensure only strong Key Exchange algorithms are used"
@@ -275,7 +287,6 @@
       regexp: '^KexAlgorithms'
       line: "KexAlgorithms {{ rhel7cis_sshd['kex'] }}"
       insertafter: '^MACs'
-
   notify:
       - restart sshd
   when:
@@ -283,6 +294,7 @@
   tags:
       - level1
       - patch
+      - ssh
       - rule_5.3.15
 
 - name: "5.3.16 | L1 | PATCH | Ensure SSH Idle Timeout Interval is configured"
@@ -309,6 +321,7 @@
   tags:
       - level1
       - patch
+      - ssh
       - rule_5.3.16
 
 - name: "5.3.17 | L1 | PATCH | Ensure SSH LoginGraceTime is set to one minute or less"
@@ -324,6 +337,7 @@
   tags:
       - level1
       - patch
+      - ssh
       - rule_5.3.17
 
 - name: "5.3.18 | L1 | PATCH | Ensure SSH warning banner is configured"
@@ -339,6 +353,7 @@
   tags:
       - level1
       - patch
+      - ssh
       - rule_5.3.18
 
 - name: "5.3.19 | L1 | PATCH | Ensure SSH PAM is enabled"
@@ -354,6 +369,7 @@
   tags:
       - level1
       - patch
+      - ssh
       - rule_5.3.19
 
 - name: "5.3.20 | L1 | PATCH | Ensure SSH AllowTcpForwarding is disabled"
@@ -369,6 +385,7 @@
   tags:
       - level2
       - patch
+      - ssh
       - rule_5.3.20
 
 - name: "5.3.21 | L1 | PATCH | Ensure SSH MaxStartups is configured"
@@ -384,6 +401,7 @@
   tags:
       - level1
       - patch
+      - ssh
       - rule_5.3.21
 
 - name: "5.3.22 | L1 | PATCH | Ensure SSH MaxSessions is limited"
@@ -399,4 +417,5 @@
   tags:
       - level1
       - patch
+      - ssh
       - rule_5.3.22
