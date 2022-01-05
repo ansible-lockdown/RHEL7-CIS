@@ -366,11 +366,15 @@
 
 - name: "5.3.18 | L1 | PATCH | Ensure SSH warning banner is configured"
   lineinfile:
-      state: present
       dest: /etc/ssh/sshd_config
-      insertafter: "Banner none"
-      line: 'Banner /etc/issue.net'
+      regexp: '^Banner ((?!/etc/issue.net$)).*$'
+      line: "{{ item.line|default(omit) }}"
+      insertafter: "{{ item.after|default(omit)}}"
+      state: "{{ item.state }}"
       validate: /usr/sbin/sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" -f %s
+  with_items:
+      - { state: absent }
+      - { state: present, line: 'Banner /etc/issue.net', after: '#Banner none' }
   notify:
       - restart sshd
   when:
