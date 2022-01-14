@@ -1,7 +1,7 @@
 ---
 
 - name: "4.2.3 | L1 | PATCH | Ensure permissions on all logfiles are configured"
-  command: find /var/log -type f -exec chmod g-wx,o-rwx "{}" + -o -type d -exec chmod g-wx,o-rwx "{}" +
+  command: find /var/log -type f -exec chmod g-wx,o-rwx "{}" +
   changed_when: no
   failed_when: no
   when:

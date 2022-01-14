@@ -57,7 +57,7 @@
       - prelim_tasks
       - always
 
-- import_tasks: pre_LE_audit.yml
+- import_tasks: pre_remediation_audit.yml
   when:
       - run_audit
   tags:
@@ -118,7 +118,7 @@
   when:
       - rhel7cis_allow_reboot
 
-- import_tasks: post_LE_audit.yml
+- import_tasks: post_remediation_audit.yml
   when:
       - run_audit
   tags:

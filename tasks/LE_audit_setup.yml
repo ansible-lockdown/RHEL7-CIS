@@ -13,7 +13,7 @@
 
 - name: copy goss binary
   copy:
-      src:
+      src: "{{ copy_goss_from_path }}"
       dest: "{{ audit_bin }}"
       mode: 0555
       owner: root
