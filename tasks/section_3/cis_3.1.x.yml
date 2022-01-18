@@ -20,7 +20,7 @@
       - name: "3.1.2 | L1 | PATCH | Ensure wireless interfaces are disabled | Check if wifi is enabled"
         shell: nmcli radio wifi
         register: rhel_07_wifi_enabled
-        check_mode: no
+        check_mode: false
         changed_when: rhel_07_wifi_enabled.stdout != "disabled"
 
       - name: "3.1.2 | L1 | PATCH | Ensure wireless interfaces are disabled | Disable wifi if enabled"

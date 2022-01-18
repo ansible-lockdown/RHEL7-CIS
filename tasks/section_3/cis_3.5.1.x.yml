@@ -59,7 +59,7 @@
   block:
       - name: "3.5.1.5 | L1 | AUDIT | Ensure default zone is set"
         command: firewall-cmd --get-default-zone
-        changed_when: no
+        changed_when: false
         register: current_default_zone
 
       - name: "3.5.1.5 | L1 | PATCH | Ensure default zone is set"
@@ -78,7 +78,7 @@
       - name: "3.5.1.6 | L1 | AUDIT | Ensure network interfaces are assigned to appropriate zone | Get list of interfaces and policies"
         shell: "nmcli -t connection show | awk -F: '{ if($4){print $4} }' | while read INT; do firewall-cmd --get-active-zones | grep -B1 $INT; done"
         register: rhel7cis_3_5_1_6_interfacepolicy
-        changed_when: no
+        changed_when: false
         become: yes
 
       - name: "3.5.1.6 | L1 | AUDIT | Ensure network interfaces are assigned to appropriate zone | Get list of interfaces and policies | Show the interface to policy"
