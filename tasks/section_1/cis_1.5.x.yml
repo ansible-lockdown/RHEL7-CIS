@@ -39,7 +39,7 @@
 
 - name: "1.5.2 | L1 | PATCH | Ensure XD/NX support is enabled"
   shell: dmesg|grep -E "NX|XD" | grep " active"
-  changed_when: no
+  changed_when: false
   when:
       - rhel7cis_rule_1_5_2
   tags:
