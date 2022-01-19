@@ -4,7 +4,7 @@
 - name: Perform YUM package cleanup
   package:
       autoremove: true
-  changed_when: no
+  changed_when: false
   ignore_errors: yes
   tags:
       - skip_ansible_lint

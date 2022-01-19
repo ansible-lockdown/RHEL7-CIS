@@ -11,8 +11,8 @@
         shell: /usr/sbin/aide --init -B 'database_out=file:/var/lib/aide/aide.db.gz'
         args:
             creates: /var/lib/aide/aide.db.gz
-        changed_when: no
-        failed_when: no
+        changed_when: false
+        failed_when: false
         async: 45
         poll: 0
   when:

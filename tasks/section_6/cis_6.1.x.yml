@@ -177,10 +177,10 @@
   block:
       - name: "6.1.11 | L1 | AUDIT | Ensure no unowned files or directories exist | Finding all unowned files or directories"
         command: find "{{ item.mount }}" -xdev -nouser
-        check_mode: no
+        check_mode: false
         register: rhel_07_6_1_11_audit
-        failed_when: no
-        changed_when: no
+        failed_when: false
+        changed_when: false
         when: item['device'].startswith('/dev') and not 'bind' in item['options']
         with_items: "{{ ansible_mounts }}"
 
@@ -202,10 +202,10 @@
   block:
       - name: "6.1.12 | L1 | AUDIT | Ensure no ungrouped files or directories exist | Finding all ungrouped files or directories"
         command: find "{{ item.mount }}" -xdev -nogroup
-        check_mode: no
+        check_mode: false
         register: rhel_07_6_1_12_audit
-        failed_when: no
-        changed_when: no
+        failed_when: false
+        changed_when: false
         when: item['device'].startswith('/dev') and not 'bind' in item['options']
         with_items: "{{ ansible_mounts }}"
 
