@@ -40,8 +40,8 @@
 
 - name: "5.5.3 | L1 | PATCH | Ensure default group for the root account is GID 0"
   shell: usermod -g 0 root
-  changed_when: no
-  failed_when: no
+  changed_when: false
+  failed_when: false
   when:
       - rhel7cis_rule_5_5_3
   tags:

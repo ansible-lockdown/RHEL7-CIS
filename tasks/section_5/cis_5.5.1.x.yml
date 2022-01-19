@@ -52,7 +52,7 @@
         # shell: 'egrep ^[^:]+:[^\!*] /etc/shadow | cut -d: -f1'
         shell: "egrep ^[^:]+:[^\\!*] /etc/shadow | awk -F: '{print $1 \",\" $7}' | egrep -v  ',\\d|,[1-2][0-9]|,30|{{ rhel7cis_inactive_whitelist | join('|') }}' | cut -d , -f1"
         register: rhel_07_5_5_1_4_audit
-        changed_when: no
+        changed_when: false
 
       - name: "5.5.1.4 | L1 | PATCH | Ensure inactive password lock is 30 days or less | Apply Inactive setting to existing accounts"
         shell: "chage --inactive {{ rhel7cis_inactivelock.lock_days }} {{ item }}"
@@ -71,8 +71,8 @@
   block:
       - name: "5.5.1.5 | L1 | AUDIT | Ensure all users last password change date is in the past | Get current date in Unix Time"
         shell: echo $(($(date --utc --date "$1" +%s)/86400))
-        failed_when: no
-        changed_when: no
+        failed_when: false
+        changed_when: false
         register: rhel7cis_5_5_1_5_current_unix_time
 
       - name: "5.5.1.5 | L1 | AUDIT | Ensure all users last password change date is in the past | Get list of users with last changed pw date in the future"
