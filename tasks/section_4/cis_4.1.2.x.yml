@@ -224,8 +224,8 @@
       - name: "4.1.11 | L2 | AUDIT | Ensure use of privileged commands is collected"
         shell: for i in  $(df | grep '^/dev' | awk '{ print $NF }'); do find $i -xdev -type f -perm -4000 -o -type f -perm -2000 2>/dev/null; done
         register: priv_procs
-        changed_when: no
-        check_mode: no
+        changed_when: false
+        check_mode: false
 
       - name: "4.1.11 | L2 | PATCH | Ensure use of privileged commands is collected"
         template:
