@@ -24,8 +24,8 @@
 
 - name: "6.2.2 | L1 | PATCH |  Ensure /etc/shadow password fields are not empty"
   command: passwd -l {{ item }}
-  changed_when: no
-  failed_when: no
+  changed_when: false
+  failed_when: false
   loop: "{{ empty_password_accounts.stdout_lines }}"
   when:
       - empty_password_accounts.rc
@@ -39,9 +39,9 @@
   block:
       - name: "6.2.3 | L1 | AUDIT | Ensure all groups in /etc/passwd exist in /etc/group | Check /etc/passwd entries"
         shell: pwck -r | grep 'no group' | awk '{ gsub("[:\47]",""); print $2}'
-        changed_when: no
-        failed_when: no
-        check_mode: no
+        changed_when: false
+        failed_when: false
+        check_mode: false
         register: passwd_gid_check
 
       - name: "6.2.3 | L1 | AUDIT | Ensure all groups in /etc/passwd exist in /etc/group | Print message that all groups match between passwd and group files"
@@ -52,7 +52,7 @@
       - name: "6.2.3 | L1 | AUDIT | Ensure all groups in /etc/passwd exist in /etc/group | Print warning about users with invalid GIDs missing GID entries in /etc/group"
         debug:
             msg: "WARNING: The following users have non-existent GIDs (Groups): {{ passwd_gid_check.stdout_lines | join (', ') }}"
-        changed_when: no
+        changed_when: false
         when: passwd_gid_check.stdout is defined
   when:
       - rhel7cis_rule_6_2_3
@@ -65,8 +65,8 @@
   block:
       - name: "6.2.4 | L1 | AUDIT | Ensure shadow group is empty"
         shell: "grep ^shadow:[^:]*:[^:]*:[^:]+ /etc/group"
-        changed_when: no
-        failed_when: no
+        changed_when: false
+        failed_when: false
         register: users_in_shadow_group
 
       - name: "6.2.4 | L1 | AUDIT | Ensure shadow group is empty | Print no user in shadow group"
@@ -89,8 +89,8 @@
   block:
       - name: "6.2.5 | L1 | AUDIT | Ensure no duplicate user names exist | Check for duplicate User Names"
         shell: "pwck -r | awk -F: '{if ($1 in users) print $1 ; else users[$1]}' /etc/passwd"
-        changed_when: no
-        failed_when: no
+        changed_when: false
+        failed_when: false
         register: user_username_check
 
       - name: "6.2.5 | L1 | AUDIT | Ensure no duplicate user names exist | Print message that no duplicate user names exist"
@@ -113,8 +113,8 @@
   block:
       - name: "6.2.6 | L1 | AUDIT | Ensure no duplicate group names exist | Check for duplicate group names"
         shell: 'getent passwd | cut -d: -f1 | sort -n | uniq -d'
-        changed_when: no
-        failed_when: no
+        changed_when: false
+        failed_when: false
         register: group_group_check
 
       - name: "6.2.6 | L1 | AUDIT | Ensure no duplicate group names exist | Print message that no duplicate groups exist"
@@ -137,8 +137,8 @@
   block:
       - name: "6.2.7 | L1 | AUDIT | Ensure no duplicate UIDs exist | Check for duplicate UIDs"
         shell: "pwck -r | awk -F: '{if ($3 in uid) print $1 ; else uid[$3]}' /etc/passwd"
-        changed_when: no
-        failed_when: no
+        changed_when: false
+        failed_when: false
         register: user_uid_check
 
       - name: "6.2.7 | L1 | AUDIT | Ensure no duplicate UIDs exist | Print message that no duplicate UIDs exist"
@@ -162,8 +162,8 @@
   block:
       - name: "6.2.8 | L1 | AUDIT | Ensure no duplicate GIDs exist | Check for duplicate GIDs"
         shell: "pwck -r | awk -F: '{if ($3 in users) print $1 ; else users[$3]}' /etc/group"
-        changed_when: no
-        failed_when: no
+        changed_when: false
+        failed_when: false
         register: user_user_check
 
       - name: "6.2.8 | L1 | AUDIT | Ensure no duplicate GIDs exist | Print message that no duplicate GID's exist"
@@ -184,8 +184,8 @@
 
 - name: "6.2.9 | L1 | PATCH | Ensure root is the only UID 0 account"
   command: passwd -l {{ item }}
-  changed_when: no
-  failed_when: no
+  changed_when: false
+  failed_when: false
   loop: "{{ uid_zero_accounts_except_root.stdout_lines }}"
   when:
       - uid_zero_accounts_except_root.rc
@@ -201,21 +201,21 @@
         shell: 'echo $PATH | grep ::'
         become: yes
         register: path_colon
-        changed_when: False
+        changed_when: false
         failed_when: path_colon.rc == 0
 
       - name: "6.2.10 | L1 | AUDIT | Ensure root PATH Integrity | Determin colon end"
         shell: 'echo $PATH | grep :$'
         become: yes
         register: path_colon_end
-        changed_when: False
+        changed_when: false
         failed_when: path_colon_end.rc == 0
 
       - name: "6.2.10 | L1 | AUDIT | Ensure root PATH Integrity | Determine dot in path"
         shell: "/bin/bash --login -c 'env | grep ^PATH=' | grep ^PATH | sed -e 's/PATH=//' -e 's/::/:/' -e 's/:$//' -e 's/:/\\n/g'"
         become: yes
         register: dot_in_path
-        changed_when: False
+        changed_when: false
         failed_when: '"." in dot_in_path.stdout_lines'
 
       - name: "6.2.10 | L1 | AUDIT | Ensure root PATH Integrity | Alert on empty value, colon end, and dot in path"
@@ -244,7 +244,7 @@
   block:
       - name: "6.2.11 | L1 | AUDIT | Ensure all users' home directories exist | Find users missing home directories"
         shell: set -o pipefail ; pwck -r | grep -P {{ ld_regex | quote }}
-        check_mode: no
+        check_mode: false
         register: rhel7cis_users_missing_home
         changed_when: rhel_07_6_2_11_audit | length > 0
         # failed_when: 0: success, 1: no grep match, 2: pwck found something
@@ -305,7 +305,7 @@
 
       - name: "6.2.13 | L1 | AUDIT | Ensure users' home directories permissions are 750 or more restrictive"
         command: find -H {{ item.0 | quote }} -not -type l -perm /027
-        check_mode: no
+        check_mode: false
         register: rhel_07_6_2_13_patch_audit
         changed_when: rhel_07_6_2_13_patch_audit.stdout != ""
         when:
@@ -362,8 +362,8 @@
       - name: "6.2.14 | L1 | AUDIT | Ensure users' dot files are not group or world-writable | Check for files"
         shell: find /home/ -name "\.*" -perm /g+w,o+w
         become: yes
-        changed_when: no
-        failed_when: no
+        changed_when: false
+        failed_when: false
         register: rhel7cis_6_2_14_audit
 
       - name: "6.2.14 | L1 | AUDIT | Ensure users' dot files are not group or world-writable | Alert on files found"
