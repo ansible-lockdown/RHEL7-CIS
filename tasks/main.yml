@@ -52,7 +52,6 @@
       - prereqs
 
 - include: prelim.yml
-  become: yes
   tags:
       - prelim_tasks
       - always
@@ -70,7 +69,6 @@
       - always
 
 - include: parse_etc_password.yml
-  become: yes
   when:
       - rhel7cis_section5 or
         rhel7cis_section6

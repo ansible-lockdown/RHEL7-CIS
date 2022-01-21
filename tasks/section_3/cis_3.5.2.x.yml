@@ -141,38 +141,34 @@
   block:
       - name: "3.5.2.7 | L1 | AUDIT | Ensure nftables loopback traffic is configured | Gather iif lo accept existence"
         shell: nft list ruleset | awk '/hook input/,/}/' | grep 'iif "lo" accept'
-        register: rhel7cis_3_5_2_7_iiflo
         changed_when: false
         failed_when: false
+        register: rhel7cis_3_5_2_7_iiflo
 
       - name: "3.5.2.7 | L1 | AUDIT | Ensure nftables loopback traffic is configured | Gather ip saddr existence"
         shell: nft list ruleset | awk '/hook input/,/}/' | grep 'ip saddr'
-        register: rhel7cis_3_5_2_7_ipsaddr
         changed_when: false
         failed_when: false
+        register: rhel7cis_3_5_2_7_ipsaddr
 
       - name: "3.5.2.7 | L1 | AUDIT | Ensure nftables loopback traffic is configured | Gather ip6 saddr existence"
         shell: nft list ruleset | awk '/hook input/,/}/' | grep 'ip6 saddr'
-        become: true
-        register: rhel7cis_3_5_2_7_ip6saddr
         changed_when: false
         failed_when: false
+        register: rhel7cis_3_5_2_7_ip6saddr
 
       - name: "3.5.2.7 | L1 | PATCH | Ensure nftables loopback traffic is configured | Set iif lo accept rule"
         command: nft add rule inet "{{ rhel7cis_nft_tables_tableName }}" input iif lo accept
-        become: true
         when:
             - '"iif \"lo\" accept" not in rhel7cis_3_5_2_7_iiflo.stdout'
 
       - name: "3.5.2.7 | L1 | PATCH | Ensure nftables loopback traffic is configured | Set ip sddr rule"
         command: nft add rule inet "{{ rhel7cis_nft_tables_tableName }}" input ip saddr 127.0.0.0/8 counter drop
-        become: true
         when:
             - '"ip saddr 127.0.0.0/8 counter packets 0 bytes 0 drop" not in rhel7cis_3_5_2_7_ipsaddr.stdout'
 
       - name: "3.5.2.7 | L1 | PATCH | Ensure nftables loopback traffic is configured | Set ip6 saddr rule"
         command: nft add rule inet "{{ rhel7cis_nft_tables_tableName }}" input ip6 saddr ::1 counter drop
-        become: true
         when:
             - '"ip6 saddr ::1 counter packets 0 bytes 0 drop" not in rhel7cis_3_5_2_7_ip6saddr.stdout'
   when:
@@ -186,17 +182,15 @@
   block:
       - name: "3.5.2.8 | L1 | AUDIT | Ensure nftables outbound and established connections are configured | Gather incoming connection rules"
         shell: nft list ruleset | awk '/hook input/,/}/' | grep -E 'ip protocol (tcp|udp|icmp) ct state'
-        become: true
-        register: rhel7cis_3_5_2_8_inconnectionrule
         changed_when: false
         failed_when: false
+        register: rhel7cis_3_5_2_8_inconnectionrule
 
       - name: "3.5.2.8 | L1 | AUDIT | Ensure nftables outbound and established connections are configured | Gather outbound connection rules"
         shell: nft list ruleset | awk '/hook output/,/}/' | grep -E 'ip protocol (tcp|udp|icmp) ct state'
-        become: true
-        register: rhel7cis_3_5_2_8_outconnectionrule
         changed_when: false
         failed_when: false
+        register: rhel7cis_3_5_2_8_outconnectionrule
 
       - name: "3.5.2.8 | L1 | PATCH | Ensure nftables outbound and established connections are configured | Add input tcp established accpet policy"
         command: nft add rule inet "{{ rhel7cis_nft_tables_tableName }}" input ip protocol tcp ct state established accept

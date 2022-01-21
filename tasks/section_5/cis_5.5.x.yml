@@ -7,7 +7,8 @@
             name: "{{ item.id }}"
             shell: /usr/sbin/nologin
         loop: "{{ rhel7cis_passwd }}"
-        become: true
+        loop_control:
+            label: "{{ item.id }}"
         when:
             - item.id != "root"
             - item.id != "sync"
@@ -22,7 +23,8 @@
             name: "{{ item.id }}"
             password_lock: true
         loop: "{{ rhel7cis_passwd }}"
-        become: true
+        loop_control:
+            label: "{{ item.id }}"
         when:
             - item.id != "halt"
             - item.id != "shutdown"

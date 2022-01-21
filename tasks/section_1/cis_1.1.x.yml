@@ -45,6 +45,8 @@
             opts: defaults,{% if rhel7cis_rule_1_1_3 %}noexec,{% endif %}{% if rhel7cis_rule_1_1_4 %}nodev,{% endif %}{% if rhel7cis_rule_1_1_5 %}nosuid{% endif %}
         notify: remount tmp
         loop: "{{ ansible_mounts }}"
+        loop_control:
+            label: "{{ item.mount }}"
         when:
             - not rhel7cis_tmp_svc
             - item.mount == "/tmp"
@@ -192,6 +194,8 @@
       state: present
       opts: defaults,{% if rhel7cis_rule_1_1_12 %}noexec,{% endif %}{% if rhel7cis_rule_1_1_13 %}nodev,{% endif %}{% if rhel7cis_rule_1_1_14 %}nosuid{% endif %}
   loop: "{{ ansible_mounts }}"
+  loop_control:
+      label: "{{ item.mount }}"
   when:
       - var_tmp_mount_present is defined
       - item.mount == "/var/tmp"
@@ -297,6 +301,8 @@
       state: present
       opts: defaults,{% if rhel7cis_rule_1_1_17 %}nodev{% endif %}
   loop: "{{ ansible_mounts }}"
+  loop_control:
+      label: "{{ item.mount }}"
   when:
       - home_mount_present is defined
       - item.mount == "/home"

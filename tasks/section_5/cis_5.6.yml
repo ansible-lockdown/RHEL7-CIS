@@ -5,7 +5,7 @@
       - name: "5.6 | L1 | AUDIT | Ensure root login is restricted to system console"
         command: cat /etc/securetty
         changed_when: false
-        become: yes
+        check_mode: false
         register: rhel_07_5_6_audit
 
       - name: "5.6 | L1 | AUDIT | Ensure root login is restricted to system console"

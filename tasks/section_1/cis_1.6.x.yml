@@ -65,9 +65,10 @@
   block:
       - name: "1.6.1.6 | L1 | AUDIT | Ensure no unconfined daemons exist | Find the unconfined daemons"
         shell: ps -eZ | egrep "initrc" | egrep -vw "tr|ps|egrep|bash|awk" | tr ':' ' ' | awk '{ print $NF }'
-        register: rhelcis_1_6_1_6_unconf_daemons
         failed_when: false
         changed_when: false
+        check_mode: false
+        register: rhelcis_1_6_1_6_unconf_daemons
 
       - name: "1.6.1.6 | L1 | AUDIT | Ensure no unconfined daemons exist | Message on no unconfined daemones"
         debug:

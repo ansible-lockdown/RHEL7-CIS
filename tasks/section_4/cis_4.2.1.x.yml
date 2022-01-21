@@ -44,7 +44,6 @@
   block:
       - name: "4.2.1.4 | L1 | AUDIT | Ensure logging is configured | rsyslog current config message out"
         shell: cat /etc/rsyslog.conf
-        become: yes
         changed_when: false
         failed_when: false
         register: rhel_07_4_2_1_4_audit
@@ -74,6 +73,8 @@
             - { regexp: '^news.crit(.*)$', line: 'news.crit                                               -/var/log/news/news.crit', insertafter: '# Save news errors of level crit and higher in a special file.' }
             - { regexp: '^news.err(.*)$', line: 'news.err                                             -/var/log/news/news.err', insertafter: '# Save news errors of level crit and higher in a special file.' }
             - { regexp: '^news.notice(.*)$', line: 'news.notice                                             -/var/log/news/news.notice', insertafter: '# Save news errors of level crit and higher in a special file.' }
+        loop_control:
+            label: "{{ item.regexp }}"
         notify: restart rsyslog
         when:
             - rhel7cis_rsyslog_ansiblemanaged
