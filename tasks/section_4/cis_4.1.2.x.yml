@@ -55,6 +55,7 @@
         shell: grep 'GRUB_CMDLINE_LINUX=' /etc/default/grub | cut -f2 -d'"'
         changed_when: false
         failed_when: false
+        check_mode: false
         register: rhel7cis_4_1_2_4_grub_cmdline_linux_settings
 
       - name: "4.1.2.4 | L2 | PATCH | Ensure audit_backlog_limit is sufficient | Set audit_backlog_limit if not configured"

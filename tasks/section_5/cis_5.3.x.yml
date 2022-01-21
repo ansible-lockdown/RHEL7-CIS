@@ -33,6 +33,8 @@
             group: root
             mode: 0600
         loop: "{{ rhel_07_5_3_2_priv_results.files }}"
+        loop_control:
+            label: "{{ item.path }}"
   when:
       - rhel7cis_rule_5_3_2
   tags:
@@ -59,6 +61,8 @@
             group: root
             mode: 0600
         loop: "{{ rhel_07_5_3_3_pub_results.files }}"
+        loop_control:
+            label: "{{ item.path }}"
   when:
       - rhel7cis_rule_5_3_3
   tags:

@@ -115,6 +115,7 @@
         shell: 'getent passwd | cut -d: -f1 | sort -n | uniq -d'
         changed_when: false
         failed_when: false
+        check_mode: false
         register: group_group_check
 
       - name: "6.2.6 | L1 | AUDIT | Ensure no duplicate group names exist | Print message that no duplicate groups exist"
@@ -199,24 +200,24 @@
   block:
       - name: "6.2.10 | L1 | AUDIT | Ensure root PATH Integrity | Determine empty value"
         shell: 'echo $PATH | grep ::'
-        become: yes
-        register: path_colon
         changed_when: false
         failed_when: path_colon.rc == 0
+        check_mode: false
+        register: path_colon
 
       - name: "6.2.10 | L1 | AUDIT | Ensure root PATH Integrity | Determin colon end"
         shell: 'echo $PATH | grep :$'
-        become: yes
-        register: path_colon_end
         changed_when: false
         failed_when: path_colon_end.rc == 0
+        check_mode: false
+        register: path_colon_end
 
       - name: "6.2.10 | L1 | AUDIT | Ensure root PATH Integrity | Determine dot in path"
         shell: "/bin/bash --login -c 'env | grep ^PATH=' | grep ^PATH | sed -e 's/PATH=//' -e 's/::/:/' -e 's/:$//' -e 's/:/\\n/g'"
-        become: yes
-        register: dot_in_path
         changed_when: false
         failed_when: '"." in dot_in_path.stdout_lines'
+        check_mode: false
+        register: dot_in_path
 
       - name: "6.2.10 | L1 | AUDIT | Ensure root PATH Integrity | Alert on empty value, colon end, and dot in path"
         debug:
@@ -244,11 +245,11 @@
   block:
       - name: "6.2.11 | L1 | AUDIT | Ensure all users' home directories exist | Find users missing home directories"
         shell: set -o pipefail ; pwck -r | grep -P {{ ld_regex | quote }}
-        check_mode: false
-        register: rhel7cis_users_missing_home
         changed_when: rhel_07_6_2_11_audit | length > 0
         # failed_when: 0: success, 1: no grep match, 2: pwck found something
         failed_when: rhel7cis_users_missing_home.rc not in [0,1,2]
+        check_mode: false
+        register: rhel7cis_users_missing_home
 
       - name: "6.2.11 | L1 | AUDIT | Ensure all users' home directories exist | set fact missinghome dirs"
         set_fact:
@@ -361,7 +362,6 @@
   block:
       - name: "6.2.14 | L1 | AUDIT | Ensure users' dot files are not group or world-writable | Check for files"
         shell: find /home/ -name "\.*" -perm /g+w,o+w
-        become: yes
         changed_when: false
         failed_when: false
         register: rhel7cis_6_2_14_audit

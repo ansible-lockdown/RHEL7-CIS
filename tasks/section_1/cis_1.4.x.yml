@@ -38,6 +38,8 @@
             opts: defaults,umask=0027,fmask=0077,uid=0,gid=0
             passno: '0'
         loop: "{{ ansible_mounts }}"
+        loop_control:
+            label: "{{ item.mount }}"
         when:
             - not rhel7cis_legacy_boot
             - item.mount == "/boot/efi"

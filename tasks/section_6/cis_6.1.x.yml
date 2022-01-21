@@ -5,6 +5,7 @@
         shell: rpm -Va --nomtime --nosize --nomd5 --nolinkto
         changed_when: false
         failed_when: false
+        check_mode: false
         register: rhel7cis_6_1_1_packages_rpm
         tags:
             - skip_ansible_lint
@@ -144,7 +145,6 @@
   block:
       - name: "6.1.10 | L1 | AUDIT | Ensure no world writable files exist | Get list of world-writable files"
         shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -0002
-        become: yes
         failed_when: false
         changed_when: false
         register: rhel_07_6_1_10_perms_results
@@ -183,6 +183,8 @@
         changed_when: false
         when: item['device'].startswith('/dev') and not 'bind' in item['options']
         with_items: "{{ ansible_mounts }}"
+        loop_control:
+            label: "{{ item.mount }}"
 
       - name: "6.1.11 | L1 | AUDIT | Ensure no unowned files or directories exist | Displaying any unowned files or directories"
         debug:
@@ -208,6 +210,8 @@
         changed_when: false
         when: item['device'].startswith('/dev') and not 'bind' in item['options']
         with_items: "{{ ansible_mounts }}"
+        loop_control:
+            label: "{{ item.mount }}"
 
       - name: "6.1.12 | L1 | AUDIT | Ensure no ungrouped files or directories exist | Displaying all ungrouped files or directories"
         debug:
@@ -225,11 +229,12 @@
   block:
       - name: "6.1.13 | L1 | AUDIT | Audit SUID executables | Find all SUID executables"
         shell: df {{ item.mount }} -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -4000
-        become: yes
         failed_when: false
         changed_when: false
         register: rhel_07_6_1_13_perms_results
         with_items: "{{ ansible_mounts }}"
+        loop_control:
+            label: "{{ item.mount }}"
 
       - name: "6.1.13 | L1 | AUDIT | Audit SUID executables |  Alert no SUID executables exist"
         debug:
@@ -256,11 +261,12 @@
   block:
       - name: "6.1.14 | L1 | AUDIT | Audit SGID executables | Find all SGID executables"
         shell: df {{ item.mount }} -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -2000
-        become: yes
         failed_when: false
         changed_when: false
         register: rhel_07_6_1_14_perms_results
         with_items: "{{ ansible_mounts }}"
+        loop_control:
+            label: "{{ item.mount }}"
 
       - name: "6.1.14 | L1 | AUDIT | Audit SGID executables |  Alert no SGID executables exist"
         debug:
