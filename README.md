@@ -15,7 +15,9 @@ Caution(s)
 
 This role **will make changes to the system** which may have unintended consequences. This is not an auditing tool but rather a remediation tool to be used after an audit has been conducted.
 
-This role was developed against a clean install of the Operating System. If you are implimenting to an existing system please review this role for any site specific changes that are needed.
+Check Mode is not supported! The role will complete in check mode without errors, but it is not supported and should be used with caution. The RHEL7-CIS-Audit role or a compliance scanner should be used for compliance checking over check mode. 
+
+This role was developed against a clean install of the Operating System. If you are implementing to an existing system please review this role for any site specific changes that are needed.
 
 To use release version please point to main branch and relevant release for the cis benchmark you wish to work with.
 
@@ -97,7 +99,7 @@ Example Audit Summary
 ---------------------
 
 The audit when run from ansible also uses all the specific variables, so will test relevant variables based on host configuration settings.
-This is based on a vagrant image, based upon a preconfigured image for filesystem layout etc. e.g. No Gui or firewall.
+This is based on a vagrant image, based upon a pre-configured image for filesystem layout etc. e.g. No Gui or firewall.
 Note: More tests are run during audit as we are checking config and running state.
 
 ```sh
