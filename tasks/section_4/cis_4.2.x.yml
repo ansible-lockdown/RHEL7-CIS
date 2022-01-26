@@ -13,9 +13,31 @@
       - rule_4.2.3
 
 - name: "4.2.4 | L1 | AUDIT | Ensure logrotate is configured"
-  find:
-      paths: /etc/logrotate.d/
-  register: log_rotates
+  block:
+      - name: "4.2.4 | L1 | AUDIT | Ensure logrotate is configured"
+        find:
+            paths: /etc/logrotate.d/
+        register: log_rotate
+
+      - debug:
+          var: log_rotate
+
+      - name: "4.2.4 | L1 | AUDIT | Ensure logrotate is configured | set fact"
+        set_fact:
+            logrotate_files: "{{ logrotate_files + [ item.path ] }}"
+        with_items: "{{ log_rotate.files }}"
+        no_log: true
+        when: log_rotate.examined > 0
+
+      - name: "4.2.4 | L1 | AUDIT | Ensure logrotate is configured | output list"
+        debug:
+            msg: 
+            - WARNING!! The following files need to confirm with site requirements
+            - /etc/logrotate.conf
+            - "{{ logrotate_files }}"
+        when: logrotate_files | length > 0
+  vars:
+      logrotate_files: []
   when:
       - rhel7cis_rule_4_2_4
   tags:
