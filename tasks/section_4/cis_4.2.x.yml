@@ -19,20 +19,13 @@
             paths: /etc/logrotate.d/
         register: log_rotate
 
-      - name: "4.2.4 | L1 | AUDIT | Ensure logrotate is configured | set fact"
-        set_fact:
-            logrotate_files: "{{ logrotate_files + [ item.path ] }}"
-        with_items: "{{ log_rotate.files }}"
-        no_log: true
-        when: log_rotate.examined > 0
-
       - name: "4.2.4 | L1 | AUDIT | Ensure logrotate is configured | output list"
         debug:
-            msg: 
+            msg:
             - WARNING!! The following files need to confirm with site requirements
             - /etc/logrotate.conf
-            - "{{ logrotate_files }}"
-        when: logrotate_files | length > 0
+            - "{{ log_rotate.files | map(attribute='path') | list }}"
+        when: log_rotate.matched > 0
   vars:
       logrotate_files: []
   when:
