@@ -19,9 +19,6 @@
             paths: /etc/logrotate.d/
         register: log_rotate
 
-      - debug:
-          var: log_rotate
-
       - name: "4.2.4 | L1 | AUDIT | Ensure logrotate is configured | set fact"
         set_fact:
             logrotate_files: "{{ logrotate_files + [ item.path ] }}"
