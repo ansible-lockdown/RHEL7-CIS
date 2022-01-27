@@ -26,8 +26,6 @@
             - /etc/logrotate.conf
             - "{{ log_rotate.files | map(attribute='path') | list }}"
         when: log_rotate.matched > 0
-  vars:
-      logrotate_files: []
   when:
       - rhel7cis_rule_4_2_4
   tags:
