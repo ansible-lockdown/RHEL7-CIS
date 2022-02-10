@@ -70,13 +70,13 @@
 
 - name: "2.3.5 | L1 | PATCH | Ensure LDAP client is not installed"
   package:
-      name: openldap-client
+      name: openldap-clients
       state: absent
   vars:
       ansible_python_interpreter: /bin/python
   when:
       - not rhel7cis_openldap_clients_required
-      - "'openldap-client' in ansible_facts.packages"
+      - "'openldap-clients' in ansible_facts.packages"
       - rhel7cis_rule_2_3_5
   tags:
       - level1
