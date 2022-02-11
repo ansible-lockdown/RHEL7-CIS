@@ -13,19 +13,17 @@
   include: cis_3.4.x.yml
 
 - name: "SECTION | 3.5.1 | Configure firewalld"
-  include: cis_3.5.1.x.yml
+  include_tasks: cis_3.5.1.x.yml
   when:
       - rhel7cis_firewall == "firewalld"
-  apply:
-    tags:
+  tags:
       - firewalld
 
 - name: "SECTION | 3.5.2 | Configure nftables"
   include_tasks: cis_3.5.2.x.yml
   when:
   - rhel7cis_firewall == "nftables"
-  apply:
-    tags:
+  tags:
       - nftables
 
 - name: "SECTION | 3.5.3.x.x | Configure iptables"
@@ -36,15 +34,14 @@
       include_tasks: cis_3.5.3.2.x.yml
   when:
       - rhel7cis_firewall == "iptables"
-  apply:
-    tags:
+  tags:
       - iptables
 
-- name: "SECTION | 3.5.3.1.x | Configure iptables"
+- name: "SECTION | 3.5.3.3.x | Configure ip6tables"
   include_tasks: cis_3.5.3.3.x.yml
   when:
-  - rhel7cis_ipv6_required
-  - rhel7cis_firewall == "iptables"
-  apply:
-    tags:
+      - not rhel7cis_ipv6_required
+      - rhel7cis_firewall == "iptables"
+  tags:
+      - iptables
       - ip6tables

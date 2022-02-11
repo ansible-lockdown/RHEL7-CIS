@@ -10,7 +10,8 @@
   vars:
       ansible_python_interpreter: /bin/python
   when:
-      - "'iptables' not in ansible_facts.packages"
+      - "'iptables' not in ansible_facts.packages or
+        'iptables-services' not in ansible_facts.packages"
       - rhel7cis_rule_3_5_3_1_1
   tags:
       - level1
