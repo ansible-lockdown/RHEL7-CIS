@@ -127,3 +127,5 @@
       msg: "{{ audit_results.split('\n') }}"
   when:
       - run_audit
+  tags:
+      - run_audit

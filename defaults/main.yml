@@ -448,6 +448,12 @@ rhel7cis_nft_tables_autoChainCreate: false
 # create a table called
 rhel7cis_nft_tables_tableName: filter
 
+# 3.5.3.x.x iptables
+rhel7cis_save_iptables_cis_rules: true
+rhel7cis_save_ip6tables_cis_rules: true
+# rhel7cis_firewall: iptables
+rhel7cis_iptables_boot_config: /etc/sysconfig/iptables
+rhel7cis_ip6tables_boot_config: /etc/sysconfig/ip6tables
 
 # Warning Banner Content (issue, issue.net, motd)
 rhel7cis_warning_banner: |

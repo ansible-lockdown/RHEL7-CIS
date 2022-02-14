@@ -61,7 +61,7 @@
             - "system-auth"
             - "password-auth"
 
-      - name: "SCORED | 5.4.2 | PATCH | Ensure lockout for failed password attempts is configured | Activate deny count and unlock times to failed password"
+      - name: "5.4.2 | PATCH | Ensure lockout for failed password attempts is configured | Activate deny count and unlock times to failed password"
         lineinfile:
             dest: "/etc/pam.d/{{ item }}"
             state: present

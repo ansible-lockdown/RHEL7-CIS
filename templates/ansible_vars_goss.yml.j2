@@ -159,6 +159,18 @@ rhel7cis_rule_3_5_2_11: {{ rhel7cis_rule_3_5_2_11 }}
 rhel7cis_rule_3_5_3_1_1: {{ rhel7cis_rule_3_5_3_1_1 }}
 rhel7cis_rule_3_5_3_1_2: {{ rhel7cis_rule_3_5_3_1_2 }}
 rhel7cis_rule_3_5_3_1_3: {{ rhel7cis_rule_3_5_3_1_3 }}
+rhel7cis_rule_3_5_3_2_1: {{ rhel7cis_rule_3_5_3_2_1 }}
+rhel7cis_rule_3_5_3_2_2: {{ rhel7cis_rule_3_5_3_2_2 }}
+rhel7cis_rule_3_5_3_2_3: {{ rhel7cis_rule_3_5_3_2_3 }}
+rhel7cis_rule_3_5_3_2_4: {{ rhel7cis_rule_3_5_3_2_4 }}
+rhel7cis_rule_3_5_3_2_5: {{ rhel7cis_rule_3_5_3_2_5 }}
+rhel7cis_rule_3_5_3_2_6: {{ rhel7cis_rule_3_5_3_2_6 }}
+rhel7cis_rule_3_5_3_3_1: {{ rhel7cis_rule_3_5_3_3_1 }}
+rhel7cis_rule_3_5_3_3_2: {{ rhel7cis_rule_3_5_3_3_2 }}
+rhel7cis_rule_3_5_3_3_3: {{ rhel7cis_rule_3_5_3_3_3 }}
+rhel7cis_rule_3_5_3_3_4: {{ rhel7cis_rule_3_5_3_3_4 }}
+rhel7cis_rule_3_5_3_3_5: {{ rhel7cis_rule_3_5_3_3_5 }}
+rhel7cis_rule_3_5_3_3_6: {{ rhel7cis_rule_3_5_3_3_6 }}
 
 # Section 4 rules
 rhel7cis_rule_4_1_1_1: {{ rhel7cis_rule_4_1_1_1 }}
@@ -368,10 +380,14 @@ rhel7cis_firewall_interface:
 - ['ens192']
 rhel7cis_firewall_services: {{ rhel7cis_firewall_services }}
 
+# rhel7cis_firewall: iptables
+iptables_boot_config: {{ rhel7cis_iptables_boot_config }}
+ip6tables_boot_config: {{ rhel7cis_ip6tables_boot_config }}
+
 # Section 4
 # auditd settings
 rhel7cis_auditd:
-  space_left_action: {{ rhel7cis_auditd.space_left_action}}
+  space_left_action: {{ rhel7cis_auditd.space_left_action }}
   action_mail_acct: {{ rhel7cis_auditd.action_mail_acct }}
   admin_space_left_action: {{ rhel7cis_auditd.admin_space_left_action }}
   max_log_file_action: {{ rhel7cis_auditd.max_log_file_action }}
