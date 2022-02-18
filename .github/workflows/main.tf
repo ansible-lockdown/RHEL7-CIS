@@ -61,6 +61,7 @@ resource "local_file" "inventory" {
       vars:
         setup_audit: true
         run_audit: true
+        audit_git_version: devel
         system_is_ec2: true
     EOF
 }
