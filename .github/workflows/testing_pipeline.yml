@@ -6,14 +6,30 @@ name: testing_pipeline
 # Triggers the workflow on push or pull request
 # events but only for the devel branch
 on:
-  pull_request:
-    branches: 
+  pull_request_target:
+    branches:
       - devel
       - main
+    paths:
+      - '**.yml'
+      - '**.sh'
+      - '**.j2'
+      - '**.ps1'
+      - '**.cfg'
 
 # A workflow run is made up of one or more jobs
 # that can run sequentially or in parallel
 jobs:
+  # This will create messages for first time contributers and direct them to the Discord server
+  welcome:
+      runs-on: ubuntu-latest
+      steps:
+          - uses: actions/first-interaction@v1.1.0
+            with:
+                repo-token: ${{ secrets.GITHUB_TOKEN }}
+                pr-message: |-
+                  Congrats on opening your first pull request and thank you for taking the time to help improve Ansible-Lockdown! 
+                  Please join in the conversation happening on the [Discord Server](https://discord.gg/ArDjfhY8) as well.
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
