@@ -139,6 +139,16 @@ We encourage you (the community) to contribute to this role. Please read the rul
 - Pull Requests into devel will confirm your commits have a GPG signature, Signed-off, and a functional test before being approved
 - Once your changes are merged and a more detailed review is complete, an authorized member will merge your changes into the main branch for a new release
 
+Pipeline Testing
+----------------
+
+uses:
+
+- ansible-core 2.12
+- ansible collections - pulls in the latest version based on requirements file
+- runs the audit using the devel branch
+
+
 Support
 -------
 
