@@ -1,12 +1,13 @@
 # This is a basic workflow to help you get started with Actions
 
-name: testing_pipeline
+name: linux_benchmark_pipeline
 
 # Controls when the action will run.
 # Triggers the workflow on push or pull request
 # events but only for the devel branch
 on:
   pull_request_target:
+    types: [opened, reopened, synchronize]
     branches:
       - devel
       - main
@@ -23,6 +24,7 @@ jobs:
   # This will create messages for first time contributers and direct them to the Discord server
   welcome:
       runs-on: ubuntu-latest
+
       steps:
           - uses: actions/first-interaction@v1.1.0
             with:
@@ -34,16 +36,8 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    # Set the OS to test on here
-    # Name matches the os_name.tfvars file
-    # one of
-    # - centos7
-    # - rocky8
-    # - ubuntu20
-    # - ubuntu18
 
     env: 
-      TEST_OS: centos7
       ENABLE_DEBUG: false
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -51,6 +45,8 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, 
       # so your job can access it
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Add_ssh_key
         working-directory: .github/workflows
@@ -62,8 +58,6 @@ jobs:
           chmod 700 .ssh
           echo $PRIVATE_KEY > .ssh/github_actions.pem
           chmod 600 .ssh/github_actions.pem
-          #ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-          #ssh-add .ssh/github_actions.pem
 
 ### Build out the server
       - name: Terraform_Init
@@ -79,7 +73,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: terraform apply -var-file "${TEST_OS}.tfvars" --auto-approve
+        run: terraform apply -var-file "OS.tfvars" -var-file "github_vars.tfvars" --auto-approve -input=false
 
 ## Debug Section
       - name: DEBUG - Show Ansible hostfile
@@ -88,8 +82,17 @@ jobs:
         run: cat hosts.yml
 
 # Centos 7 images take a while to come up insert sleep or playbook fails
+
+      - name: Check if test os is rhel7
+        working-directory: .github/workflows
+        id: test_os
+        run: >-
+          echo "::set-output name=RHEL7::$(
+          grep -c RHEL7 OS.tfvars
+          )"
+
       - name: if RHEL7 - Sleep for 60 seconds
-        if: env.TEST_OS == 'centos7'
+        if: steps.test_os.outputs.RHEL7 >= 1
         run: sleep 60s
         shell: bash
 
@@ -106,13 +109,12 @@ jobs:
           ANSIBLE_HOST_KEY_CHECKING: "false"
           ANSIBLE_DEPRECATION_WARNINGS: "false"
 
-# Remove test system
+# Remove test system - User secrets to keep if necessary
 
-      - name: Terraform_Destroy - if Apply & Playbook Success
+      - name: Terraform_Destroy
         working-directory: .github/workflows
-        if: ${{ steps.Terraform-Apply.outcome }} == 'success' && ${{ steps.Run_Ansible_playbook.outcome }} == 'success'
+        if: always() && env.ENABLE_DEBUG == 'false'
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          OS_TFVARS: centos7.tfvars
-        run: terraform destroy -var-file "${TEST_OS}.tfvars" -auto-approve
+        run: terraform destroy -var-file "OS.tfvars" -var-file "github_vars.tfvars" --auto-approve -input=false

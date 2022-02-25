@@ -9,7 +9,17 @@ data "aws_vpc" "default" {
   default = true
 }
 
-resource "aws_security_group" "allow_ssh" {
+resource "random_id" "server" {
+  keepers = {
+    # Generate a new id each time we switch to a new AMI id
+    ami_id = "${var.ami_id}"
+  }
+
+  byte_length = 8
+}
+
+resource "aws_security_group" "github_actions" {
+  name   = "${var.namespace}-${random_id.server.hex}"
   vpc_id = data.aws_vpc.default.id
 
   ingress {
@@ -18,7 +28,7 @@ resource "aws_security_group" "allow_ssh" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
+  
   ingress {
     from_port   = 80
     to_port     = 80
@@ -32,6 +42,9 @@ resource "aws_security_group" "allow_ssh" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+  tags = {
+    Name = "${var.namespace}-SG"
+ }
 }
 
 // instance setup
@@ -42,7 +55,7 @@ resource "aws_instance" "testing_vm" {
   key_name                    = var.ami_key_pair_name # This is the key as known in the ec2 key_pairs
   instance_type               = var.instance_type
   tags                        = var.instance_tags
-  vpc_security_group_ids      = [aws_security_group.allow_ssh.id]
+  vpc_security_group_ids      = [aws_security_group.github_actions.id]
   root_block_device {
         delete_on_termination = true
   }
@@ -51,6 +64,8 @@ resource "aws_instance" "testing_vm" {
 // generate inventory file
 resource "local_file" "inventory" {
   filename = "./hosts.yml"
+  directory_permission = "0755"
+  file_permission      = "0644"
   content  = <<EOF
     # benchmark host
     all:
@@ -61,7 +76,8 @@ resource "local_file" "inventory" {
       vars:
         setup_audit: true
         run_audit: true
-        audit_git_version: devel
         system_is_ec2: true
+        audit_git_version: devel
     EOF
 }
+

@@ -1,12 +1,14 @@
-// Taken from the terraform.tfvars
+// Taken from the OSname.tfvars
 
 variable "aws_region" {
   description = "AWS region"
+  default     = "us-east-1"
   type        = string
 }
 
 variable "instance_type" {
   description = "EC2 Instance Type"
+  default     = "t3.micro"
   type        = string
 }
 
@@ -16,14 +18,7 @@ variable "instance_tags" {
 }
 
 variable "ami_key_pair_name" {
-  type    = string
-  default = "github_actions"
-}
-
-// Taken from the OSname.tfvars
-
-variable "ami_id" {
-  description = "AMI ID"
+  description = "Name of key pair in AWS thats used"
   type        = string
 }
 
@@ -32,17 +27,39 @@ variable "ami_os" {
   type        = string
 }
 
+variable "ami_id" {
+  description = "AMI ID reference"
+  type = string
+}
+
 variable "ami_username" {
   description = "Username for the ami id"
   type        = string
 }
 
 variable "ami_user_home" {
-  description = "home directory for the user"
+  description = "home dir for the username"
   type        = string
 }
 
-variable "ansible_inventory_vars" {
-  description = "variables for ansible inventory"
-  type        = map(string)
+variable "namespace" {
+  description = "Name used across all tags"
+  type        = string
+}
+
+// taken from github_vars.tfvars &
+
+variable "main_vpc_cidr" {
+  description = "Private cidr block to be used for vpc"
+  type        = string
+}
+
+variable "public_subnets" {
+  description = "public subnet cidr block"
+  type        = string
+}
+
+variable "private_subnets" {
+  description = "private subnet cidr block"
+  type        = string
 }
