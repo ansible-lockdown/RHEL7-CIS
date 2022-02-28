@@ -16,6 +16,11 @@ galaxy_info:
         - security
         - cis
         - hardening
+        - benchmark
+        - compliance
+        - redhat
+        - complianceascode
+        - rhel7
 collections:
   - community.general
   - community.crypto
