@@ -31,7 +31,7 @@ jobs:
                 repo-token: ${{ secrets.GITHUB_TOKEN }}
                 pr-message: |-
                   Congrats on opening your first pull request and thank you for taking the time to help improve Ansible-Lockdown! 
-                  Please join in the conversation happening on the [Discord Server](https://discord.gg/ArDjfhY8) as well.
+                  Please join in the conversation happening on the [Discord Server](https://discord.gg/JFxpSgPFEJ) as well.
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
