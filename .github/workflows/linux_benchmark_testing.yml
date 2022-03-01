@@ -1,0 +1,120 @@
+# This is a basic workflow to help you get started with Actions
+
+name: linux_benchmark_pipeline
+
+# Controls when the action will run.
+# Triggers the workflow on push or pull request
+# events but only for the devel branch
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize]
+    branches:
+      - devel
+      - main
+    paths:
+      - '**.yml'
+      - '**.sh'
+      - '**.j2'
+      - '**.ps1'
+      - '**.cfg'
+
+# A workflow run is made up of one or more jobs
+# that can run sequentially or in parallel
+jobs:
+  # This will create messages for first time contributers and direct them to the Discord server
+  welcome:
+      runs-on: ubuntu-latest
+
+      steps:
+          - uses: actions/first-interaction@v1.1.0
+            with:
+                repo-token: ${{ secrets.GITHUB_TOKEN }}
+                pr-message: |-
+                  Congrats on opening your first pull request and thank you for taking the time to help improve Ansible-Lockdown! 
+                  Please join in the conversation happening on the [Discord Server](https://discord.gg/JFxpSgPFEJ) as well.
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    env: 
+      ENABLE_DEBUG: false
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, 
+      # so your job can access it
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Add_ssh_key
+        working-directory: .github/workflows
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+          PRIVATE_KEY: "${{ secrets.SSH_PRV_KEY }}"
+        run: |
+          mkdir .ssh
+          chmod 700 .ssh
+          echo $PRIVATE_KEY > .ssh/github_actions.pem
+          chmod 600 .ssh/github_actions.pem
+
+### Build out the server
+      - name: Terraform_Init
+        working-directory: .github/workflows
+        run: terraform init
+
+      - name: Terraform_Validate
+        working-directory: .github/workflows
+        run: terraform validate
+
+      - name: Terraform_Apply
+        working-directory: .github/workflows
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: terraform apply -var-file "OS.tfvars" -var-file "github_vars.tfvars" --auto-approve -input=false
+
+## Debug Section
+      - name: DEBUG - Show Ansible hostfile
+        if: env.ENABLE_DEBUG == 'true'
+        working-directory: .github/workflows
+        run: cat hosts.yml
+
+# Centos 7 images take a while to come up insert sleep or playbook fails
+
+      - name: Check if test os is rhel7
+        working-directory: .github/workflows
+        id: test_os
+        run: >-
+          echo "::set-output name=RHEL7::$(
+          grep -c RHEL7 OS.tfvars
+          )"
+
+      - name: if RHEL7 - Sleep for 60 seconds
+        if: steps.test_os.outputs.RHEL7 >= 1
+        run: sleep 60s
+        shell: bash
+
+# Run the ansible playbook
+      - name: Run_Ansible_Playbook
+        uses: arillso/action.playbook@master
+        with:
+          playbook: site.yml
+          inventory: .github/workflows/hosts.yml
+          galaxy_file: collections/requirements.yml
+          private_key: ${{ secrets.SSH_PRV_KEY }}
+#          verbose: 3
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: "false"
+          ANSIBLE_DEPRECATION_WARNINGS: "false"
+
+# Remove test system - User secrets to keep if necessary
+
+      - name: Terraform_Destroy
+        working-directory: .github/workflows
+        if: always() && env.ENABLE_DEBUG == 'false'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: terraform destroy -var-file "OS.tfvars" -var-file "github_vars.tfvars" --auto-approve -input=false
