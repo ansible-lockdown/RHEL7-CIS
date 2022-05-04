@@ -562,7 +562,12 @@ rhel7cis_dotperm_ansiblemanaged: true
 
 # RHEL-07-6.2.18 Clear users from shadow group
 rhel7cis_remove_shadow_grp_usrs: true
+
 #### Goss Configuration Settings ####
+audit_run_script_environment:
+    AUDIT_BIN: "{{ audit_bin }}"
+    AUDIT_FILE: 'goss.yml'
+    AUDIT_CONTENT_LOCATION: "{{ audit_out_dir }}"
 
 ### Goss binary settings ###
 goss_version:
