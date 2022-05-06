@@ -83,8 +83,9 @@ Below is an example of the tag section from a control within this role. Using th
 
 ```sh
       tags:
-      - level1
-      - scored
+      - level1-workstation
+      - level1-server
+      - automated
       - avahi
       - services
       - patch
