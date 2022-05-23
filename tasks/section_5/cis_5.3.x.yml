@@ -204,7 +204,7 @@
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
-      regexp: ^#HostbasedAuthentication|^HostbasedAuthentication"
+      regexp: "^#HostbasedAuthentication|^HostbasedAuthentication"
       line: 'HostbasedAuthentication no'
       validate: /usr/sbin/sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" -f %s
   notify:
