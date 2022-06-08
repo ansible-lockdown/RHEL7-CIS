@@ -51,7 +51,7 @@
       - { chain: OUTPUT, protocol: icmp, ctstate: 'NEW,ESTABLISHED' }
       - { chain: INPUT, protocol: tcp, ctstate: 'ESTABLISHED' }
       - { chain: INPUT, protocol: udp, ctstate: 'ESTABLISHED' }
-      - { chain: INPUT, protocol: icmp, ctstate: 'ESTABLISHED' }
+      - { chain: INPUT, protocol: icmp, ctstate: 'NEW,ESTABLISHED' }
   when:
       - rhel7cis_rule_3_5_3_3_2
   tags:

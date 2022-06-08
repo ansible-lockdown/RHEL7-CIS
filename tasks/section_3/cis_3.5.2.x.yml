@@ -204,8 +204,8 @@
         when:
             - '"ip protocol udp ct state established accept" not in rhel7cis_3_5_2_8_inconnectionrule.stdout'
 
-      - name: "3.5.2.8 | L1 | PATCH | Ensure nftables outbound and established connections are configured | Add input icmp established accpet policy"
-        command: nft add rule inet "{{ rhel7cis_nft_tables_tableName }}" input ip protocol icmp ct state established accept
+      - name: "3.5.2.8 | L1 | PATCH | Ensure nftables outbound and established connections are configured | Add input icmp new, established accpet policy"
+        command: nft add rule inet "{{ rhel7cis_nft_tables_tableName }}" input ip protocol icmp ct state new,established accept
         become: true
         when:
             - '"ip protocol icmp ct state established accept" not in rhel7cis_3_5_2_8_inconnectionrule.stdout'
