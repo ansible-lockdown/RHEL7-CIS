@@ -1,8 +1,8 @@
 ---
 
-- name: "6.2.1 | L1 | PATCH | Ensure accounts in /etc/passwd use shadow passwords"
+- name: "6.2.1 | PATCH | Ensure accounts in /etc/passwd use shadow passwords"
   block:
-      - name: "6.2.1 | L1 | PATCH | Ensure accounts in /etc/passwd use shadow passwords"
+      - name: "6.2.1 | PATCH | Ensure accounts in /etc/passwd use shadow passwords"
         shell: sed -e 's/^\([a-zA-Z0-9_]*\):[^:]*:/\1:x:/' -i /etc/passwd
         loop: "{{ rhel7cis_passwd | selectattr('password', '!=', 'x') | list }}"
         args:
@@ -11,7 +11,7 @@
         when:
             - rhel7cis_passwd | selectattr('password', '!=', 'x')
 
-      - name: "6.2.1 | L1 | PATCH | Ensure accounts in /etc/passwd use shadow passwords | Good News"
+      - name: "6.2.1 | PATCH | Ensure accounts in /etc/passwd use shadow passwords | Good News"
         debug:
             msg: "Good News!!  No Unshadowed passwords have been found"
         when: rhel7_6_2_1_shadow is not changed
@@ -22,7 +22,7 @@
       - patch
       - rule_6.2.1
 
-- name: "6.2.2 | L1 | PATCH |  Ensure /etc/shadow password fields are not empty"
+- name: "6.2.2 | PATCH |  Ensure /etc/shadow password fields are not empty"
   command: passwd -l {{ item }}
   changed_when: false
   failed_when: false
@@ -35,21 +35,21 @@
       - patch
       - rule_6.2.2
 
-- name: "6.2.3 | L1 | PATCH | Ensure all groups in /etc/passwd exist in /etc/group"
+- name: "6.2.3 | PATCH | Ensure all groups in /etc/passwd exist in /etc/group"
   block:
-      - name: "6.2.3 | L1 | AUDIT | Ensure all groups in /etc/passwd exist in /etc/group | Check /etc/passwd entries"
+      - name: "6.2.3 | AUDIT | Ensure all groups in /etc/passwd exist in /etc/group | Check /etc/passwd entries"
         shell: pwck -r | grep 'no group' | awk '{ gsub("[:\47]",""); print $2}'
         changed_when: false
         failed_when: false
         check_mode: false
         register: passwd_gid_check
 
-      - name: "6.2.3 | L1 | AUDIT | Ensure all groups in /etc/passwd exist in /etc/group | Print message that all groups match between passwd and group files"
+      - name: "6.2.3 | AUDIT | Ensure all groups in /etc/passwd exist in /etc/group | Print message that all groups match between passwd and group files"
         debug:
             msg: "Good News! There are no users that have non-existent GUIDs (Groups)"
         when: passwd_gid_check.stdout is not defined
 
-      - name: "6.2.3 | L1 | AUDIT | Ensure all groups in /etc/passwd exist in /etc/group | Print warning about users with invalid GIDs missing GID entries in /etc/group"
+      - name: "6.2.3 | AUDIT | Ensure all groups in /etc/passwd exist in /etc/group | Print warning about users with invalid GIDs missing GID entries in /etc/group"
         debug:
             msg: "WARNING: The following users have non-existent GIDs (Groups): {{ passwd_gid_check.stdout_lines | join (', ') }}"
         changed_when: false
@@ -61,20 +61,20 @@
       - patch
       - rule_6.2.3
 
-- name: "6.2.4 | L1 | AUDIT | Ensure shadow group is empty"
+- name: "6.2.4 | AUDIT | Ensure shadow group is empty"
   block:
-      - name: "6.2.4 | L1 | AUDIT | Ensure shadow group is empty"
+      - name: "6.2.4 | AUDIT | Ensure shadow group is empty"
         shell: "grep ^shadow:[^:]*:[^:]*:[^:]+ /etc/group"
         changed_when: false
         failed_when: false
         register: users_in_shadow_group
 
-      - name: "6.2.4 | L1 | AUDIT | Ensure shadow group is empty | Print no user in shadow group"
+      - name: "6.2.4 | AUDIT | Ensure shadow group is empty | Print no user in shadow group"
         debug:
             msg: "Good News! There are no users in the shadow group"
         when: users_is_shadow_group.stdout is undefined
 
-      - name: "6.2.4  L1 | AUDIT | Ensure shadow group is empty | Print no user in shadow group"
+      - name: "6.2.4  AUDIT | Ensure shadow group is empty | Print no user in shadow group"
         debug:
             msg: "Warning: The following users are in the shadow group: {{ users_is_shadow_group.stdout_lines }}"
         when: users_is_shadow_group.stdout is defined
@@ -85,20 +85,20 @@
       - patch
       - rule_6.2.4
 
-- name: "6.2.5 | L1 | PATCH | Ensure no duplicate user names exist"
+- name: "6.2.5 | PATCH | Ensure no duplicate user names exist"
   block:
-      - name: "6.2.5 | L1 | AUDIT | Ensure no duplicate user names exist | Check for duplicate User Names"
+      - name: "6.2.5 | AUDIT | Ensure no duplicate user names exist | Check for duplicate User Names"
         shell: "pwck -r | awk -F: '{if ($1 in users) print $1 ; else users[$1]}' /etc/passwd"
         changed_when: false
         failed_when: false
         register: user_username_check
 
-      - name: "6.2.5 | L1 | AUDIT | Ensure no duplicate user names exist | Print message that no duplicate user names exist"
+      - name: "6.2.5 | AUDIT | Ensure no duplicate user names exist | Print message that no duplicate user names exist"
         debug:
             msg: "Good News! There are no duplicate user names in the system"
         when: user_username_check.stdout is not defined
 
-      - name: "6.2.5 | L1 | AUDIT | Ensure no duplicate user names exist | Print warning about users with duplicate User Names"
+      - name: "6.2.5 | AUDIT | Ensure no duplicate user names exist | Print warning about users with duplicate User Names"
         debug:
             msg: "Warning: The following user names are duplicates: {{ user_username_check.stdout_lines }}"
         when: user_username_check.stdout is defined
@@ -109,21 +109,21 @@
       - patch
       - rule_6.2.5
 
-- name: "6.2.6 | L1 | PATCH | Ensure no duplicate group names exist"
+- name: "6.2.6 | PATCH | Ensure no duplicate group names exist"
   block:
-      - name: "6.2.6 | L1 | AUDIT | Ensure no duplicate group names exist | Check for duplicate group names"
+      - name: "6.2.6 | AUDIT | Ensure no duplicate group names exist | Check for duplicate group names"
         shell: 'getent passwd | cut -d: -f1 | sort -n | uniq -d'
         changed_when: false
         failed_when: false
         check_mode: false
         register: group_group_check
 
-      - name: "6.2.6 | L1 | AUDIT | Ensure no duplicate group names exist | Print message that no duplicate groups exist"
+      - name: "6.2.6 | AUDIT | Ensure no duplicate group names exist | Print message that no duplicate groups exist"
         debug:
             msg: "Good News! There are no duplicate group names in the system"
         when: group_group_check.stdout is defined
 
-      - name: "6.2.6 | L1 | AUDIT | Ensure no duplicate group names exist | Print warning about users with duplicate group names"
+      - name: "6.2.6 | AUDIT | Ensure no duplicate group names exist | Print warning about users with duplicate group names"
         debug:
             msg: "Warning: The following group names are duplicates: {{ group_group_check.stdout_lines }}"
         when: group_group_check.stdout is not defined
@@ -134,20 +134,20 @@
       - patch
       - rule_6.2.6
 
-- name: "6.2.7 | L1 | PATCH | Ensure no duplicate UIDs exist"
+- name: "6.2.7 | PATCH | Ensure no duplicate UIDs exist"
   block:
-      - name: "6.2.7 | L1 | AUDIT | Ensure no duplicate UIDs exist | Check for duplicate UIDs"
+      - name: "6.2.7 | AUDIT | Ensure no duplicate UIDs exist | Check for duplicate UIDs"
         shell: "pwck -r | awk -F: '{if ($3 in uid) print $1 ; else uid[$3]}' /etc/passwd"
         changed_when: false
         failed_when: false
         register: user_uid_check
 
-      - name: "6.2.7 | L1 | AUDIT | Ensure no duplicate UIDs exist | Print message that no duplicate UIDs exist"
+      - name: "6.2.7 | AUDIT | Ensure no duplicate UIDs exist | Print message that no duplicate UIDs exist"
         debug:
             msg: "Good News! There are no duplicate UID's in the system"
         when: user_uid_check.stdout is not defined
 
-      - name: "6.2.7 | L1 | AUDIT | Ensure no duplicate UIDs exist | Print warning about users with duplicate UIDs"
+      - name: "6.2.7 | AUDIT | Ensure no duplicate UIDs exist | Print warning about users with duplicate UIDs"
         debug:
             msg: "Warning: The following users have UIDs that are duplicates: {{ user_uid_check.stdout_lines }}"
         when: user_uid_check.stdout is defined
@@ -159,20 +159,20 @@
       - rule_6.2.7
 
 
-- name: "6.2.8 | L1 | PATCH | Ensure no duplicate GIDs exist"
+- name: "6.2.8 | PATCH | Ensure no duplicate GIDs exist"
   block:
-      - name: "6.2.8 | L1 | AUDIT | Ensure no duplicate GIDs exist | Check for duplicate GIDs"
+      - name: "6.2.8 | AUDIT | Ensure no duplicate GIDs exist | Check for duplicate GIDs"
         shell: "pwck -r | awk -F: '{if ($3 in users) print $1 ; else users[$3]}' /etc/group"
         changed_when: false
         failed_when: false
         register: user_user_check
 
-      - name: "6.2.8 | L1 | AUDIT | Ensure no duplicate GIDs exist | Print message that no duplicate GID's exist"
+      - name: "6.2.8 | AUDIT | Ensure no duplicate GIDs exist | Print message that no duplicate GID's exist"
         debug:
             msg: "Good News! There are no duplicate GIDs in the system"
         when: user_user_check.stdout is not defined
 
-      - name: "6.2.8 | L1 | AUDIT | Ensure no duplicate GIDs exist | Print warning about users with duplicate GIDs"
+      - name: "6.2.8 | AUDIT | Ensure no duplicate GIDs exist | Print warning about users with duplicate GIDs"
         debug:
             msg: "Warning: The following groups have duplicate GIDs: {{ user_user_check.stdout_lines }}"
         when: user_user_check.stdout is defined
@@ -183,7 +183,7 @@
       - patch
       - rule_6.2.8
 
-- name: "6.2.9 | L1 | PATCH | Ensure root is the only UID 0 account"
+- name: "6.2.9 | PATCH | Ensure root is the only UID 0 account"
   command: passwd -l {{ item }}
   changed_when: false
   failed_when: false
@@ -196,37 +196,37 @@
       - patch
       - rule_6.2.9
 
-- name: "6.2.10 | L1 | PATCH | Ensure root PATH Integrity"
+- name: "6.2.10 | PATCH | Ensure root PATH Integrity"
   block:
-      - name: "6.2.10 | L1 | AUDIT | Ensure root PATH Integrity | Determine empty value"
+      - name: "6.2.10 | AUDIT | Ensure root PATH Integrity | Determine empty value"
         shell: 'echo $PATH | grep ::'
         changed_when: false
         failed_when: path_colon.rc == 0
         check_mode: false
         register: path_colon
 
-      - name: "6.2.10 | L1 | AUDIT | Ensure root PATH Integrity | Determin colon end"
+      - name: "6.2.10 | AUDIT | Ensure root PATH Integrity | Determin colon end"
         shell: 'echo $PATH | grep :$'
         changed_when: false
         failed_when: path_colon_end.rc == 0
         check_mode: false
         register: path_colon_end
 
-      - name: "6.2.10 | L1 | AUDIT | Ensure root PATH Integrity | Determine dot in path"
+      - name: "6.2.10 | AUDIT | Ensure root PATH Integrity | Determine dot in path"
         shell: "/bin/bash --login -c 'env | grep ^PATH=' | grep ^PATH | sed -e 's/PATH=//' -e 's/::/:/' -e 's/:$//' -e 's/:/\\n/g'"
         changed_when: false
         failed_when: '"." in dot_in_path.stdout_lines'
         check_mode: false
         register: dot_in_path
 
-      - name: "6.2.10 | L1 | AUDIT | Ensure root PATH Integrity | Alert on empty value, colon end, and dot in path"
+      - name: "6.2.10 | AUDIT | Ensure root PATH Integrity | Alert on empty value, colon end, and dot in path"
         debug:
             msg:
                 - "The following paths have an empty value: {{ path_colon.stdout_lines }}"
                 - "The following paths have colon end: {{ path_colon_end.stdout_lines }}"
                 - "The following paths have a dot in the path: {{ dot_in_path.stdout_lines }}"
 
-      - name: "6.2.10 | L1 | PATCH | Ensure root PATH Integrity | Determine rights and owner"
+      - name: "6.2.10 | PATCH | Ensure root PATH Integrity | Determine rights and owner"
         file: >
             path='{{ item }}'
             follow=yes
@@ -241,9 +241,9 @@
       - patch
       - rule_6.2.10
 
-- name: "6.2.11 | L1 | PATCH | Ensure all users' home directories exist"
+- name: "6.2.11 | PATCH | Ensure all users' home directories exist"
   block:
-      - name: "6.2.11 | L1 | AUDIT | Ensure all users' home directories exist | Find users missing home directories"
+      - name: "6.2.11 | AUDIT | Ensure all users' home directories exist | Find users missing home directories"
         shell: set -o pipefail ; pwck -r | grep -P {{ ld_regex | quote }}
         changed_when: rhel_07_6_2_11_audit | length > 0
         # failed_when: 0: success, 1: no grep match, 2: pwck found something
@@ -251,17 +251,17 @@
         check_mode: false
         register: rhel7cis_users_missing_home
 
-      - name: "6.2.11 | L1 | AUDIT | Ensure all users' home directories exist | set fact missinghome dirs"
+      - name: "6.2.11 | AUDIT | Ensure all users' home directories exist | set fact missinghome dirs"
         set_fact:
             missing_home_dirs: "{{ rhel_07_6_2_11_audit | map(attribute='id') | list }}"
 
-      - name: "6.2.11 | L1 | PATCH | Ensure all users' home directories exist | create missing home dirs"
+      - name: "6.2.11 | PATCH | Ensure all users' home directories exist | create missing home dirs"
         shell: "mkhomedir_helper {{ item }}"
         with_items:
             - "{{ missing_home_dirs }}"
         when: rhel7cis_users_missing_home is changed
 
-      - name: "6.2.11 | L1 | Audit| Ensure all users' home directories exist | Warning"
+      - name: "6.2.11 | Audit| Ensure all users' home directories exist | Warning"
         debug:
             msg: "WARNING! {{ item }} user home directory has been created please ensure any SELINUX settings are applied"
         with_items:
@@ -280,7 +280,7 @@
       - patch
       - rule_6.2.11
 
-- name: "6.2.12 | L1 | PATCH | Ensure users own their home directories"
+- name: "6.2.12 | PATCH | Ensure users own their home directories"
   file:
       path: "{{ item.dir }}"
       owner: "{{ item.id }}"
@@ -296,15 +296,15 @@
       - patch
       - rule_6.2.12
 
-- name: "6.2.13 | L1 | PATCH | Ensure users' home directories permissions are 750 or more restrictive"
+- name: "6.2.13 | PATCH | Ensure users' home directories permissions are 750 or more restrictive"
   block:
-      - name: "6.2.13 | L1 | AUDIT | Ensure users' home directories permissions are 750 or more restrictive"
+      - name: "6.2.13 | AUDIT | Ensure users' home directories permissions are 750 or more restrictive"
         stat:
             path: "{{ item }}"
         with_items: "{{ rhel7cis_passwd | selectattr('uid', '>=', 1000) | selectattr('uid', '!=', 65534) | selectattr('dir', '!=', '/') | map(attribute='dir') | list }}"
         register: rhel_07_6_2_13_audit
 
-      - name: "6.2.13 | L1 | AUDIT | Ensure users' home directories permissions are 750 or more restrictive"
+      - name: "6.2.13 | AUDIT | Ensure users' home directories permissions are 750 or more restrictive"
         command: find -H {{ item.0 | quote }} -not -type l -perm /027
         check_mode: false
         register: rhel_07_6_2_13_patch_audit
@@ -318,7 +318,7 @@
         loop_control:
             label: "{{ item.0 }}"
 
-      - name: "6.2.13 | L1 | AUDIT | Ensure users' home directories permissions are 750 or more restrictive"
+      - name: "6.2.13 | AUDIT | Ensure users' home directories permissions are 750 or more restrictive"
         file:
             path: "{{ item.0 }}"
             recurse: yes
@@ -334,7 +334,7 @@
             label: "{{ item.0 }}"
 
       # set default ACLs so the homedir has an effective umask of 0027
-      - name: "6.2.13 | L1 | PATCH | Ensure users' home directories permissions are 750 or more restrictive"
+      - name: "6.2.13 | PATCH | Ensure users' home directories permissions are 750 or more restrictive"
         acl:
             path: "{{ item.0 }}"
             default: yes
@@ -359,15 +359,15 @@
       - patch
       - rule_6.2.13
 
-- name: "6.2.14 | L1 | PATCH | Ensure users' dot files are not group or world-writable"
+- name: "6.2.14 | PATCH | Ensure users' dot files are not group or world-writable"
   block:
-      - name: "6.2.14 | L1 | AUDIT | Ensure users' dot files are not group or world-writable | Check for files"
+      - name: "6.2.14 | AUDIT | Ensure users' dot files are not group or world-writable | Check for files"
         shell: find /home/ -name "\.*" -perm /g+w,o+w
         changed_when: false
         failed_when: false
         register: rhel7cis_6_2_14_audit
 
-      - name: "6.2.14 | L1 | AUDIT | Ensure users' dot files are not group or world-writable | Alert on files found"
+      - name: "6.2.14 | AUDIT | Ensure users' dot files are not group or world-writable | Alert on files found"
         debug:
             msg: "Good news! We have not found any group or world-writable dot files on your sytem"
         failed_when: false
@@ -375,7 +375,7 @@
         when:
             - rhel7cis_6_2_14_audit.stdout is not defined
 
-      - name: "6.2.14 | L1 | PATCH | Ensure users' dot files are not group or world-writable | Changes files if configured"
+      - name: "6.2.14 | PATCH | Ensure users' dot files are not group or world-writable | Changes files if configured"
         file:
             path: '{{ item }}'
             mode: go-w
@@ -390,7 +390,7 @@
       - patch
       - rule_6.2.14
 
-- name: "6.2.15 | L1 | PATCH | Ensure no users have .forward files"
+- name: "6.2.15 | PATCH | Ensure no users have .forward files"
   file:
       state: absent
       dest: "~{{ item }}/.forward"
@@ -402,7 +402,7 @@
       - patch
       - rule_6.2.15
 
-- name: "6.2.16 | L1 | PATCH | Ensure no users have .netrc files"
+- name: "6.2.16 | PATCH | Ensure no users have .netrc files"
   file:
       state: absent
       dest: "~{{ item }}/.netrc"
@@ -414,7 +414,7 @@
       - patch
       - rule_6.2.16
 
-- name: "6.2.17 | L1 | PATCH | Ensure no users have .rhosts files"
+- name: "6.2.17 | PATCH | Ensure no users have .rhosts files"
   file:
       state: absent
       dest: "~{{ item }}/.rhosts"

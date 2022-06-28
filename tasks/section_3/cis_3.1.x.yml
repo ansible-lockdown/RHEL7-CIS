@@ -1,8 +1,8 @@
 ---
 
-- name: "3.1.1 | L2 | PATCH | Disable IPv6 | grub"
+- name: "3.1.1 | PATCH | Disable IPv6 | grub"
   block:
-      - name: "3.1.1 | L2 | PATCH | Disable IPv6 | grub"
+      - name: "3.1.1 | PATCH | Disable IPv6 | grub"
         replace:
             dest: /etc/default/grub
             regexp: '(^GRUB_CMDLINE_LINUX\s*\=\s*)(?:")(.+)(?<!ipv6.disable=1)(?:")'
@@ -10,7 +10,7 @@
         register: grub_ipv6
         notify: grub2cfg
 
-      - name: "3.1.1 | L2 | FACT | Disable IPv6 | grub"
+      - name: "3.1.1 | FACT | Disable IPv6 | grub"
         set_fact:
            change_requires_reboot: true
         when: grub_ipv6.changed
@@ -22,15 +22,15 @@
       - rule_3.1.1
       - patch
 
-- name: "3.1.2| L1 | Ensure wireless interfaces are disabled"
+- name: "3.1.2| Ensure wireless interfaces are disabled"
   block:
-      - name: "3.1.2 | L1 | PATCH | Ensure wireless interfaces are disabled | Check if wifi is enabled"
+      - name: "3.1.2 | PATCH | Ensure wireless interfaces are disabled | Check if wifi is enabled"
         shell: nmcli radio wifi
         register: rhel_07_wifi_enabled
         check_mode: false
         changed_when: rhel_07_wifi_enabled.stdout != "disabled"
 
-      - name: "3.1.2 | L1 | PATCH | Ensure wireless interfaces are disabled | Disable wifi if enabled"
+      - name: "3.1.2 | PATCH | Ensure wireless interfaces are disabled | Disable wifi if enabled"
         command: nmcli radio wifi off
         when: rhel_07_wifi_enabled is changed
 

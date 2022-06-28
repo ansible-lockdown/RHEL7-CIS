@@ -1,8 +1,8 @@
 ---
 
-- name: "5.7 | L1 | PATCH | Ensure access to the su command is restricted"
+- name: "5.7 | PATCH | Ensure access to the su command is restricted"
   block:
-      - name: "5.7 | L1 | PATCH | Ensure access to the su command is restricted | Setting pam_wheel to use_uid"
+      - name: "5.7 | PATCH | Ensure access to the su command is restricted | Setting pam_wheel to use_uid"
         lineinfile:
             state: present
             dest: /etc/pam.d/su
@@ -15,7 +15,7 @@
             - patch
             - rule_5.7
 
-      - name: "5.7 | L1 | PATCH | Ensure access to the su command is restricted | wheel group contains root"
+      - name: "5.7 | PATCH | Ensure access to the su command is restricted | wheel group contains root"
         group:
             name: root
             groups: "{{ rhel7cis_sugroup }}"

@@ -1,5 +1,5 @@
 ---
-- name: "4.1.1.1 | L2 | PATCH | Ensure auditd is installed"
+- name: "4.1.1.1 | PATCH | Ensure auditd is installed"
   package:
       name: ['audit', 'audit-libs']
       state: present
@@ -13,7 +13,7 @@
       - auditd
       - rule_4.1.1.1
 
-- name: "4.1.1.2 | L2 | PATCH | Ensure auditd service is enabled and running"
+- name: "4.1.1.2 | PATCH | Ensure auditd service is enabled and running"
   service:
       name: auditd
       state: started
@@ -28,16 +28,16 @@
       - patch
       - rule_4.1.1.2
 
-- name: "4.1.1.3 | L2 | PATCH | Ensure auditing for processes that start prior to auditd is enabled"
+- name: "4.1.1.3 | PATCH | Ensure auditing for processes that start prior to auditd is enabled"
   block:
-      - name: "4.1.1.3 | L2 | PATCH | Ensure auditing for processes that start prior to auditd is enabled"
+      - name: "4.1.1.3 | PATCH | Ensure auditing for processes that start prior to auditd is enabled"
         replace:
             dest: /etc/default/grub
             regexp: ^(GRUB_CMDLINE_LINUX=)(?:")(?!.*audit=1)(.+)(?:")$
             replace: '\1"\2 audit=1"'
         register: audit_grub
 
-      - name: "4.1.1.3 | L2 | PATCH | Ensure auditing for processes that start prior to auditd is enabled"
+      - name: "4.1.1.3 | PATCH | Ensure auditing for processes that start prior to auditd is enabled"
         set_fact:
            change_requires_reboot: true
         when:

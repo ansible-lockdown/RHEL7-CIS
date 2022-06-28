@@ -1,8 +1,8 @@
 ---
 
-- name: "1.5.1 | L1 | PATCH | Ensure core dumps are restricted"
+- name: "1.5.1 | PATCH | Ensure core dumps are restricted"
   block:
-      - name: "1.5.1 | L1 | PATCH | Ensure core dumps are restricted | Update limits.conf file"
+      - name: "1.5.1 | PATCH | Ensure core dumps are restricted | Update limits.conf file"
         lineinfile:
             state: present
             dest: /etc/security/limits.conf
@@ -10,7 +10,7 @@
             line: '*                hard    core            0'
             insertbefore: '^# End of file'
 
-      - name: "1.5.1 | L1 | PATCH | Ensure core dumps are restricted | Set active kernel parameter"
+      - name: "1.5.1 | PATCH | Ensure core dumps are restricted | Set active kernel parameter"
         sysctl:
             name: fs.suid_dumpable
             value: '0'
@@ -19,7 +19,7 @@
             sysctl_set: yes
             ignoreerrors: yes
 
-      - name: 1.5.1 | L1 | PATCH | Ensure core dumps are restricted | coredump.conf"
+      - name: 1.5.1 | PATCH | Ensure core dumps are restricted | coredump.conf"
         lineinfile:
             dest: /etc/systemd/coredump.conf
             regexp: "{{ item.regex }}"
@@ -37,7 +37,7 @@
       - patch
       - rule_1.5.1
 
-- name: "1.5.2 | L1 | PATCH | Ensure XD/NX support is enabled"
+- name: "1.5.2 | PATCH | Ensure XD/NX support is enabled"
   shell: dmesg|grep -E "NX|XD" | grep " active"
   changed_when: false
   when:
@@ -48,7 +48,7 @@
       - patch
       - rule_1.5.2
 
-- name: "1.5.3 | L1 | PATCH | Ensure address space layout randomization (ASLR) is enabled"
+- name: "1.5.3 | PATCH | Ensure address space layout randomization (ASLR) is enabled"
   sysctl:
       name: kernel.randomize_va_space
       value: '2'
@@ -63,7 +63,7 @@
       - patch
       - rule_1.5.3
 
-- name: "1.5.4 | L1 | PATCH | Ensure prelink is disabled"
+- name: "1.5.4 | PATCH | Ensure prelink is disabled"
   package:
       name: prelink
       state: absent
