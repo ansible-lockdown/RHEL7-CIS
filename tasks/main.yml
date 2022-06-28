@@ -90,6 +90,11 @@
   tags:
       - always
 
+- name: Include OS specific variables
+  include_vars: "{{ ansible_distribution }}.yml"
+  tags:
+      - always
+
 - include: parse_etc_password.yml
   when:
       - rhel7cis_section5 or
