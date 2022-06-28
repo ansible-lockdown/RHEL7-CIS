@@ -53,10 +53,6 @@ run_audit: false
 rhel7cis_selinux_disable: false
 rhel7cis_selinux_state: enforcing
 
-system_is_container: false
-# Place to find the container yml file for your environment - /vars/... This can be adjusted for your requirements.
-container_vars_file: is_container.yml
-
 # Misc. environment variables
 rhel7cis_skip_for_travis: false
 system_is_ec2: false
