@@ -21,7 +21,7 @@
 
       - name: POST | Warning a reboot required but skip option set
         debug:
-            msg: "Warning!! changes have been made that require a reboot to be implemented but skip reboot was set - Can affect compliance check results"
+            msg: "WARNING!! changes have been made that require a reboot to be implemented but skip reboot was set - Can affect compliance check results"
         changed_when: true
         when:
             - change_requires_reboot

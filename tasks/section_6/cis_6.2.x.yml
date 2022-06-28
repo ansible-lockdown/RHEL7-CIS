@@ -51,7 +51,7 @@
 
       - name: "6.2.3 | AUDIT | Ensure all groups in /etc/passwd exist in /etc/group | Print warning about users with invalid GIDs missing GID entries in /etc/group"
         debug:
-            msg: "WARNING: The following users have non-existent GIDs (Groups): {{ passwd_gid_check.stdout_lines | join (', ') }}"
+            msg: "WARNING!! The following users have non-existent GIDs (Groups): {{ passwd_gid_check.stdout_lines | join (', ') }}"
         changed_when: false
         when: passwd_gid_check.stdout is defined
   when:
@@ -76,7 +76,7 @@
 
       - name: "6.2.4  AUDIT | Ensure shadow group is empty | Print no user in shadow group"
         debug:
-            msg: "Warning: The following users are in the shadow group: {{ users_is_shadow_group.stdout_lines }}"
+            msg: "WARNING!! The following users are in the shadow group: {{ users_is_shadow_group.stdout_lines }}"
         when: users_is_shadow_group.stdout is defined
   when:
       - rhel7cis_rule_6_2_4
@@ -100,7 +100,7 @@
 
       - name: "6.2.5 | AUDIT | Ensure no duplicate user names exist | Print warning about users with duplicate User Names"
         debug:
-            msg: "Warning: The following user names are duplicates: {{ user_username_check.stdout_lines }}"
+            msg: "WARNING!! The following user names are duplicates: {{ user_username_check.stdout_lines }}"
         when: user_username_check.stdout is defined
   when:
       - rhel7cis_rule_6_2_5
@@ -125,7 +125,7 @@
 
       - name: "6.2.6 | AUDIT | Ensure no duplicate group names exist | Print warning about users with duplicate group names"
         debug:
-            msg: "Warning: The following group names are duplicates: {{ group_group_check.stdout_lines }}"
+            msg: "WARNING!! The following group names are duplicates: {{ group_group_check.stdout_lines }}"
         when: group_group_check.stdout is not defined
   when:
       - rhel7cis_rule_6_2_6
@@ -149,7 +149,7 @@
 
       - name: "6.2.7 | AUDIT | Ensure no duplicate UIDs exist | Print warning about users with duplicate UIDs"
         debug:
-            msg: "Warning: The following users have UIDs that are duplicates: {{ user_uid_check.stdout_lines }}"
+            msg: "WARNING!! The following users have UIDs that are duplicates: {{ user_uid_check.stdout_lines }}"
         when: user_uid_check.stdout is defined
   when:
       - rhel7cis_rule_6_2_7
@@ -174,7 +174,7 @@
 
       - name: "6.2.8 | AUDIT | Ensure no duplicate GIDs exist | Print warning about users with duplicate GIDs"
         debug:
-            msg: "Warning: The following groups have duplicate GIDs: {{ user_user_check.stdout_lines }}"
+            msg: "WARNING!! The following groups have duplicate GIDs: {{ user_user_check.stdout_lines }}"
         when: user_user_check.stdout is defined
   when:
       - rhel7cis_rule_6_2_8
@@ -263,7 +263,7 @@
 
       - name: "6.2.11 | Audit| Ensure all users' home directories exist | Warning"
         debug:
-            msg: "WARNING! {{ item }} user home directory has been created please ensure any SELINUX settings are applied"
+            msg: "WARNING!! {{ item }} user home directory has been created please ensure any SELINUX settings are applied"
         with_items:
             - "{{ missing_home_dirs }}"
         when: rhel7cis_users_missing_home is changed

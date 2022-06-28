@@ -20,7 +20,7 @@
             - name: "6.1.1 | AUDIT | Audit system file permissions | Message out alert for package descrepancies"
               debug:
                   msg: |
-                      "Warning! You have some package descrepancies issues.
+                      "WARNING!! You have some package descrepancies issues.
                        The file list can be found in {{ rhel7cis_rpm_audit_file }}"
               when: rhel7cis_6_1_1_packages_rpm.stdout|length > 0
 
@@ -186,7 +186,7 @@
 
       - name: "6.1.11 | AUDIT | Ensure no unowned files or directories exist | Displaying any unowned files or directories"
         debug:
-            msg: "Warning - Manual intervention is required -- missing owner on items in {{ item.item.mount }}: {{ item.stdout_lines | join(', ') }}"
+            msg: "WARNING!! Manual intervention is required -- missing owner on items in {{ item.item.mount }}: {{ item.stdout_lines | join(', ') }}"
         when:
             - item.stdout_lines is defined
             - item.stdout_lines | length > 0
@@ -213,7 +213,7 @@
 
       - name: "6.1.12 | AUDIT | Ensure no ungrouped files or directories exist | Displaying all ungrouped files or directories"
         debug:
-            msg: "Warning - Manual intervention is required -- missing group on items in {{ item }}!"
+            msg: "WARNING!! Manual intervention is required -- missing group on items in {{ item }}!"
         changed_when: item | length > 0
         with_items: "{{ rhel_07_6_1_12_audit.results |map(attribute='stdout_lines') }}"
   when:
@@ -244,7 +244,7 @@
 
       - name: "6.1.13 | AUDIT | Audit SUID executables |  Alert SUID executables exist"
         debug:
-            msg: "Warning - Manual intervention is required -- SUID set on items in {{ item.item.mount }}: {{ item.stout_lines | join(', ') }}"
+            msg: "WARNING!! Manual intervention is required -- SUID set on items in {{ item.item.mount }}: {{ item.stout_lines | join(', ') }}"
         with_items: "{{ rhel_07_6_1_13_perms_results.stdout_lines }}"
         when:
             - rhel_07_6_1_13_perms_results.stdout is defined
@@ -276,7 +276,7 @@
 
       - name: "6.1.14 | AUDIT | Audit SGID executables |  Alert SGID executables exist"
         debug:
-            msg: "Warning - Manual intervention is required -- SGID set on items in {{ item.item.mount }}: {{ item.stout_lines | join(', ') }}"
+            msg: "WARNING!! Manual intervention is required -- SGID set on items in {{ item.item.mount }}: {{ item.stout_lines | join(', ') }}"
         with_items: "{{ rhel_07_6_1_14_perms_results.stdout_lines }}"
         when:
             - rhel_07_6_1_14_perms_results.stdout is defined

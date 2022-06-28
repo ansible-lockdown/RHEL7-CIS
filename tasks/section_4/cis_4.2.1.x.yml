@@ -68,7 +68,7 @@
             - { regexp: '^authpriv(.*)$', line: 'auth,authpriv.*                                              /var/log/secure', insertafter: '# # The authpriv file has restricted access.' }
             - { regexp: '^mail\.\*(.*)$', line: 'mail.*                                                  -/var/log/mail', insertafter: '# Log all the mail messages in one place.' }
             - { regexp: '^mail.info(.*)$', line: 'mail.info                                               -/var/log/mail.info', insertafter: '# Log all the mail messages in one place.' }
-            - { regexp: '^mail.warning(.*)$', line: 'mail.warning                                            -/var/log/mail.warning', insertafter: '# Log all the mail messages in one place.' }
+            - { regexp: '^mail.warning(.*)$', line: 'mail.warning                                           -/var/log/mail.warning', insertafter: '# Log all the mail messages in one place.' }
             - { regexp: '^mail.err(.*)$', line: 'mail.err                                                /var/log/mail.err', insertafter: '# Log all the mail messages in one place.' }
             - { regexp: '^news.crit(.*)$', line: 'news.crit                                               -/var/log/news/news.crit', insertafter: '# Save news errors of level crit and higher in a special file.' }
             - { regexp: '^news.err(.*)$', line: 'news.err                                             -/var/log/news/news.err', insertafter: '# Save news errors of level crit and higher in a special file.' }
