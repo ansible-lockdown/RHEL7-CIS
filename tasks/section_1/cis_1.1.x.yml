@@ -380,7 +380,7 @@
             create: yes
             owner: root
             group: root
-            mode: 0640
+            mode: 0600
 
       - name: "1.1.24 | L1 | PATCH | Disable USB Storage | Edit modprobe config"
         modprobe:
