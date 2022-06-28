@@ -345,6 +345,7 @@
 
   when:
       - not rhel7cis_rsyncd_server
+      - git_audit is defined
       - "'rsync' in ansible_facts.packages"
       - rhel7cis_rule_2_2_19
   tags:
