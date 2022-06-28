@@ -79,7 +79,6 @@
   service:
       name: rhnsd
       state: stopped
-      enabled: no
       masked: true
   when:
       - ansible_distribution == "RedHat" and not rhel7cis_rhnsd_required
