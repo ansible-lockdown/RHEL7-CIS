@@ -90,7 +90,7 @@
 
       - name: "5.5.1.5 | AUDIT | Ensure all users last password change date is in the past | Alert on accounts with pw change in the future"
         debug:
-            msg: "Warning! The following accounts have the last PW change date in the future: {{ rhel7cis_5_5_1_5_user_list.stdout_lines }}"
+            msg: "WARNING!! The following accounts have the last PW change date in the future: {{ rhel7cis_5_5_1_5_user_list.stdout_lines }}"
         when:
             - rhel7cis_5_5_1_5_user_list.stdout | length > 0
             - not rhel7cis_futurepwchgdate_autofix

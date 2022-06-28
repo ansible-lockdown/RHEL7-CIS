@@ -76,7 +76,7 @@
       - name: "3.5.2.5 | AUDIT | Ensure an nftables table exists | Alert on no tables"
         debug:
             msg:
-                - "Warning! You currently have no nft tables, please review your setup"
+                - "WARNING!! You currently have no nft tables, please review your setup"
                 - 'Use the command "nft create table inet <table name>" to create a new table'
         when:
             - rhel7cis_3_5_2_5_nft_tables.stdout | length == 0
