@@ -1,13 +1,21 @@
 ---
 
 - name: "1.4.1 | L1 | PATCH | Ensure bootloader password is set"
-  copy:
-      dest: "{{ rhel7cis_bootloader_path }}user.cfg"
-      content: "GRUB2_PASSWORD={{ rhel7cis_bootloader_password_hash }}"
-      owner: root
-      group: root
-      mode: "{% if rhel7cis_legacy_boot %}0600{% else %}0700{% endif %}"
-  notify: grub2cfg
+  block:
+      - name: "1.4.1 | L1 | PATCH | Ensure bootloader password is set"
+        copy:
+            dest: "{{ rhel7cis_bootloader_path }}user.cfg"
+            content: "GRUB2_PASSWORD={{ rhel7cis_bootloader_password_hash }}"
+            owner: root
+            group: root
+            mode: "{% if rhel7cis_legacy_boot %}0600{% else %}0700{% endif %}"
+        register: bootloader_pw
+        notify: grub2cfg
+
+      - name: "1.4.1 | L1 | FACT | Ensure bootloader password is set"
+        set_fact:
+           change_requires_reboot: true
+        when: bootloader_pw
   when:
       - ansible_distribution_version >= '7.2'
       - rhel7cis_set_boot_pass

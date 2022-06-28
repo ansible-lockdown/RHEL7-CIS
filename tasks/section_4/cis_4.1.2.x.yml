@@ -63,6 +63,7 @@
             dest: /etc/default/grub
             regexp: '^GRUB_CMDLINE_LINUX='
             line: 'GRUB_CMDLINE_LINUX="{{ rhel7cis_4_1_2_4_grub_cmdline_linux_settings.stdout }} audit_backlog_limit={{ rhel7cis_audit_backlog_limit }}"'
+        register: grub_backup_new
         notify: grub2cfg
         when: '"audit_backlog_limit" not in rhel7cis_4_1_2_4_grub_cmdline_linux_settings.stdout'
 
@@ -71,8 +72,17 @@
             dest: /etc/default/grub
             regexp: 'audit_backlog_limit=([^\D]+)'
             replace: 'audit_backlog_limit={{ rhel7cis_audit_backlog_limit }}'
+        register: grub_backup_updated
         notify: grub2cfg
         when: '"audit_backlog_limit" in rhel7cis_4_1_2_4_grub_cmdline_linux_settings.stdout'
+
+      - name: "4.1.2.4 | L2 | PATCH | Ensure audit_backlog_limit is sufficient"
+        set_fact:
+           change_requires_reboot: true
+        when:
+            - grub_backup_updated.changed or
+              grub_backup_new.changed
+
   when:
       - rhel7cis_rule_4_1_2_4
   tags:

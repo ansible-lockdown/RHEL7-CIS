@@ -14,7 +14,8 @@ rhel7cis_section6: true
 rhel7cis_os_check: true
 
 # Should always reboot after this number of changes allow this to be automated as part of remediation
-rhel7cis_allow_reboot: false
+skip_reboot: true
+change_requires_reboot: false
 
 ## Python Binary
 ## This is used for python3 Installations where python2 OS modules are used in ansible

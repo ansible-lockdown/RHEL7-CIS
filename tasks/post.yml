@@ -1,7 +1,7 @@
 ---
 # Post tasks
 
-- name: Perform YUM package cleanup
+- name: POST | Perform YUM package cleanup
   package:
       autoremove: true
   changed_when: false
@@ -10,3 +10,31 @@
       - skip_ansible_lint
   vars:
       ansible_python_interpreter: /bin/python
+
+- name: POST | reboot system if changes require it and not skipped
+  block:
+      - name: POST | Reboot system if changes require it and not skipped
+        reboot:
+        when:
+            - change_requires_reboot
+            - not skip_reboot
+
+      - name: POST | Warning a reboot required but skip option set
+        debug:
+            msg: "Warning!! changes have been made that require a reboot to be implemented but skip reboot was set - Can affect compliance check results"
+        changed_when: true
+        when:
+            - change_requires_reboot
+            - skip_reboot
+  tags:
+      - grub
+      - level1-server
+      - level1-workstation
+      - level2-server
+      - level2-workstation
+      - rhel7cis_section1
+      - rhel7cis_section2
+      - rhel7cis_section3
+      - rhel7cis_section4
+      - rhel7cis_section5
+      - rhel7cis_section6
