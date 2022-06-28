@@ -3,7 +3,7 @@
 - name: "Post Audit | Run post_remediation {{ benchmark }} audit"
   shell: "{{ audit_conf_dir }}run_audit.sh -v {{ audit_vars_path }} -o {{ post_audit_outfile }} -g {{ group_names }}"
   environment: "{{ audit_run_script_environment|default({}) }}"
-  changed_when: audit_run_post_remediation.rc == 0
+  changed_when: false
   register: audit_run_post_remediation
   vars:
       warn: false
