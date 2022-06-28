@@ -80,6 +80,7 @@
       - name: "5.5.1.5 | L1 | AUDIT | Ensure all users last password change date is in the past | Get list of users with last changed pw date in the future"
         shell: "cat /etc/shadow | awk -F: '{if($3>{{ rhel7cis_5_5_1_5_current_unix_time.stdout }})print$1}'"
         check_mode: false
+        changed_when: false
         register: rhel7cis_5_5_1_5_user_list
 
       - name: "5.5.1.5 | L1 | AUDIT | Ensure all users last password change date is in the past | Alert no pw change in the future exist"
