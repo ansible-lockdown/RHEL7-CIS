@@ -15,12 +15,20 @@
       ansible_python_interpreter: /bin/python
 
 - name: "1.6.1.2 | L1 | PATCH | Ensure SELinux is not disabled in bootloader configuration"
-  replace:
-      dest: /etc/default/grub
-      regexp: '(selinux|enforcing)\s*=\s*0\s*'
-  register: selinux_grub_patch
-  ignore_errors: yes
-  notify: grub2cfg
+  block:
+      - name: "1.6.1.2 | L1 | PATCH | Ensure SELinux is not disabled in bootloader configuration"
+        replace:
+            dest: /etc/default/grub
+            regexp: '(selinux|enforcing)\s*=\s*0\s*'
+        register: selinux_grub_patch
+        ignore_errors: yes
+        notify: grub2cfg
+
+      - name: "1.6.1.2 | L1 | FACT | Ensure SELinux is not disabled in bootloader configuration"
+        set_fact:
+            change_requires_reboot: true
+        when:
+            - selinux_grub_patch.changed
   when:
       - not rhel7cis_selinux_disable
       - rhel7cis_rule_1_6_1_2
