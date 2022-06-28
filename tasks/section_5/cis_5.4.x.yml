@@ -98,7 +98,7 @@
 
       - name: |
               " 5.4.2 | L1 | PATCH | Ensure lockout for failed password attempts is configured | Copy system/passowrd-auth to system/password-auth-local
-                5.4.3 | L1 | PATCH | Ensure password hashing algorithm is SHA-512"
+                5.4.3 | L1 | PATCH | Ensure password hashing algorithm is SHA-512
                 5.4.4 | L1 | PATCH | Ensure password reuse is limited | Copy system/password-auth to system/password-auth-local"
         copy:
             src: "/etc/pam.d/{{ item }}"
