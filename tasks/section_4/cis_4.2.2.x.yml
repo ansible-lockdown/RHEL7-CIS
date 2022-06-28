@@ -1,6 +1,6 @@
 ---
 
-- name: "4.2.2.1 | L1 | PATCH | Ensure journald is configured to send logs to rsyslog"
+- name: "4.2.2.1 | PATCH | Ensure journald is configured to send logs to rsyslog"
   lineinfile:
       path: /etc/systemd/journald.conf
       regexp: '^[F|f]orward[T|t]o[S|s]yslog='
@@ -14,7 +14,7 @@
       - rule_4.2.2.1
       - journald
 
-- name: "4.2.2.2 | L1 | PATCH | Ensure journald is configured to compress large log files"
+- name: "4.2.2.2 | PATCH | Ensure journald is configured to compress large log files"
   lineinfile:
       path: /etc/systemd/journald.conf
       regexp: '^[C|c]ompress='
@@ -28,7 +28,7 @@
       - rule_4.2.2.2
       - journald
 
-- name: "4.2.2.3 | L1 | PATCH | Ensure journald is configured to write logfiles to persistent disk"
+- name: "4.2.2.3 | PATCH | Ensure journald is configured to write logfiles to persistent disk"
   lineinfile:
       path: /etc/systemd/journald.conf
       regexp: '^[S|s]torage='

@@ -1,8 +1,8 @@
 ---
 
-- name: "1.2.1 | L1 | PATCH | Ensure GPG keys are configured"
+- name: "1.2.1 | PATCH | Ensure GPG keys are configured"
   block:
-      - name: "1.2.1 | L1 | PATCH | Ensure GPG keys are configured"
+      - name: "1.2.1 | PATCH | Ensure GPG keys are configured"
         shell: "PKG=`rpm -qf {{ rpm_gpg_key }}` && rpm -q --queryformat \"%{PACKAGER} %{SIGPGP:pgpsig}\\n\" \"${PKG}\" | grep \"^{{ rpm_packager }}.*Key.ID.{{ rpm_key }}\""
         changed_when: false
   when:
@@ -12,9 +12,9 @@
       - patch
       - rule_1.2.1
 
-- name: "1.2.2 | L1 | AUDIT | Ensure package manager repositories are configured"
+- name: "1.2.2 | AUDIT | Ensure package manager repositories are configured"
   block:
-      - name: "1.2.2 | L1 | AUDIT | Ensure package manager repositories are configured"
+      - name: "1.2.2 | AUDIT | Ensure package manager repositories are configured"
         shell: yum repolist
         changed_when: false
         register: repolist
@@ -24,7 +24,7 @@
         tags:
             - skip_ansible_lint
 
-      - name: "1.2.2 | L1 | AUDIT | Ensure package manager repositories are configured"
+      - name: "1.2.2 | AUDIT | Ensure package manager repositories are configured"
         debug:
             msg:
                 - "Please check against site policy repos listed below match expected:"
@@ -37,16 +37,16 @@
       - rule_1.2.2
       - skip_ansible_lint
 
-- name: "1.2.3 | L1 | PATCH | Ensure gpgcheck is globally activated"
+- name: "1.2.3 | PATCH | Ensure gpgcheck is globally activated"
   block:
-      - name: "1.2.3 | L1 | AUDIT | Ensure gpgcheck is globally activated"
+      - name: "1.2.3 | AUDIT | Ensure gpgcheck is globally activated"
         find:
             paths: /etc/yum.repos.d
             patterns: "*.repo"
         changed_when: false
         register: yum_repos
 
-      - name: "1.2.3 | L1 | PATCH | Ensure gpgcheck is globally activated"
+      - name: "1.2.3 | PATCH | Ensure gpgcheck is globally activated"
         replace:
             path: "{{ item.path }}"
             regexp: "^gpgcheck=0"
@@ -62,7 +62,7 @@
       - rule_1.2.3
 
 
-- name: "1.2.4 | L1 | AUDIT | Ensure Red Hat Subscription Manager connection is configured"
+- name: "1.2.4 | AUDIT | Ensure Red Hat Subscription Manager connection is configured"
   shell: subscription-manager identity
   changed_when: false
   failed_when: false
@@ -75,7 +75,7 @@
       - rule_1.2.4
       - skip_ansible_lint
 
-- name: "1.2.5 | L1 | PATCH | Disable the rhnsd Daemon"
+- name: "1.2.5 | PATCH | Disable the rhnsd Daemon"
   service:
       name: rhnsd
       state: stopped

@@ -1,6 +1,6 @@
 ---
 
-- name: "1.9 | L1 | PATCH | Ensure updates, patches, and additional security software are installed"
+- name: "1.9 | PATCH | Ensure updates, patches, and additional security software are installed"
   package:
       name: "*"
       state: latest

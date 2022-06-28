@@ -1,6 +1,6 @@
 ---
 
-- name: "3.4.1 | L2 | PATCH | Ensure DCCP is disabled"
+- name: "3.4.1 | PATCH | Ensure DCCP is disabled"
   lineinfile:
       dest: /etc/modprobe.d/CIS.conf
       regexp: "^(#)?install dccp(\\s|$)"
@@ -16,7 +16,7 @@
       - patch
       - rule_3.4.1
 
-- name: "3.4.2 | L2 | PATCH | Ensure SCTP is disabled"
+- name: "3.4.2 | PATCH | Ensure SCTP is disabled"
   lineinfile:
       dest: /etc/modprobe.d/CIS.conf
       regexp: "^(#)?install sctp(\\s|$)"

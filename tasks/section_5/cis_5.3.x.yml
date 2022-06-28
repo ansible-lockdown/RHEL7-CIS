@@ -1,6 +1,6 @@
 ---
 
-- name: "5.3.1 | L1 | PATCH | Ensure permissions on /etc/ssh/sshd_config are configured"
+- name: "5.3.1 | PATCH | Ensure permissions on /etc/ssh/sshd_config are configured"
   file:
       dest: /etc/ssh/sshd_config
       state: file
@@ -15,9 +15,9 @@
       - ssh
       - rule_5.3.1
 
-- name: "5.3.2 | L1 | PATCH | Ensure permissions on SSH private host key files are configured"
+- name: "5.3.2 | PATCH | Ensure permissions on SSH private host key files are configured"
   block:
-      - name: "5.3.2 | L1 | AUDIT | Ensure permissions on SSH private host key files are configured"
+      - name: "5.3.2 | AUDIT | Ensure permissions on SSH private host key files are configured"
         find:
             paths:
                 - /etc/ssh
@@ -26,7 +26,7 @@
             file_type: any
         register: rhel_07_5_3_2_priv_results
 
-      - name: "5.3.2 | L1 | AUDIT | Ensure permissions on SSH private host key files are configured"
+      - name: "5.3.2 | AUDIT | Ensure permissions on SSH private host key files are configured"
         file:
             path: "{{ item.path }}"
             owner: root
@@ -43,9 +43,9 @@
       - ssh
       - rule_5.3.2
 
-- name: "5.3.3 | L1 | PATCH | Ensure permissions on SSH public host key files are configured"
+- name: "5.3.3 | PATCH | Ensure permissions on SSH public host key files are configured"
   block:
-      - name: "5.3.3 | L1 | AUDIT | Ensure permissions on SSH public host key files are configured"
+      - name: "5.3.3 | AUDIT | Ensure permissions on SSH public host key files are configured"
         find:
             paths:
                 - /etc/ssh
@@ -54,7 +54,7 @@
             file_type: any
         register: rhel_07_5_3_3_pub_results
 
-      - name: "5.3.3 | L1 | AUDIT | Ensure permissions on SSH public host key files are configured"
+      - name: "5.3.3 | AUDIT | Ensure permissions on SSH public host key files are configured"
         file:
             path: "{{ item.path }}"
             owner: root
@@ -71,9 +71,9 @@
       - ssh
       - rule_5.3.3
 
-- name: "5.3.4 | L1 | PATCH | Ensure SSH access is limited"
+- name: "5.3.4 | PATCH | Ensure SSH access is limited"
   block:
-      - name: "5.3.4 | L1 | PATCH | Ensure SSH access is limited | Add line to sshd_config for allowusers"
+      - name: "5.3.4 | PATCH | Ensure SSH access is limited | Add line to sshd_config for allowusers"
         lineinfile:
             state: present
             dest: /etc/ssh/sshd_config
@@ -86,7 +86,7 @@
         when:
             - "rhel7cis_sshd['allowusers']|default('') | length > 0"
 
-      - name: "5.3.4 | L1 | PATCH | Ensure SSH access is limited | Add line to sshd_config for allowgroups"
+      - name: "5.3.4 | PATCH | Ensure SSH access is limited | Add line to sshd_config for allowgroups"
         lineinfile:
             state: present
             dest: /etc/ssh/sshd_config
@@ -99,7 +99,7 @@
         when:
             - "rhel7cis_sshd['allowgroups']|default('') | length > 0"
 
-      - name: "5.3.4 | L1 | PATCH | Ensure SSH access is limited | Add line to sshd_config for denyusers"
+      - name: "5.3.4 | PATCH | Ensure SSH access is limited | Add line to sshd_config for denyusers"
         lineinfile:
             state: present
             dest: /etc/ssh/sshd_config
@@ -112,7 +112,7 @@
         when:
             - "rhel7cis_sshd['denyusers']|default('') | length > 0"
 
-      - name: "5.3.4 | L1 | PATCH | Ensure SSH access is limited | Add line to sshd_config for denygroups"
+      - name: "5.3.4 | PATCH | Ensure SSH access is limited | Add line to sshd_config for denygroups"
         lineinfile:
             state: present
             dest: /etc/ssh/sshd_config
@@ -132,7 +132,7 @@
       - ssh
       - rule_5.3.4
 
-- name: "5.3.5 | L1 | PATCH | Ensure SSH LogLevel is appropriate"
+- name: "5.3.5 | PATCH | Ensure SSH LogLevel is appropriate"
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
@@ -149,7 +149,7 @@
       - ssh
       - rule_5.3.5
 
-- name: "5.3.6 | L2 | PATCH | Ensure SSH X11 forwarding is disabled"
+- name: "5.3.6 | PATCH | Ensure SSH X11 forwarding is disabled"
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
@@ -166,7 +166,7 @@
       - ssh
       - rule_5.3.6
 
-- name: "5.3.7 | L1 | PATCH | Ensure SSH MaxAuthTries is set to 4 or less"
+- name: "5.3.7 | PATCH | Ensure SSH MaxAuthTries is set to 4 or less"
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
@@ -183,7 +183,7 @@
       - ssh
       - rule_5.3.7
 
-- name: "5.3.8 | L1 | PATCH | Ensure SSH IgnoreRhosts is enabled"
+- name: "5.3.8 | PATCH | Ensure SSH IgnoreRhosts is enabled"
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
@@ -200,7 +200,7 @@
       - ssh
       - rule_5.3.8
 
-- name: "5.3.9 | L1 | PATCH | Ensure SSH HostbasedAuthentication is disabled"
+- name: "5.3.9 | PATCH | Ensure SSH HostbasedAuthentication is disabled"
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
@@ -217,7 +217,7 @@
       - ssh
       - rule_5.3.9
 
-- name: "5.3.10 | L1 | PATCH | Ensure SSH root login is disabled"
+- name: "5.3.10 | PATCH | Ensure SSH root login is disabled"
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
@@ -234,7 +234,7 @@
       - ssh
       - rule_5.3.10
 
-- name: "5.3.11 | L1 | PATCH | Ensure SSH PermitEmptyPasswords is disabled"
+- name: "5.3.11 | PATCH | Ensure SSH PermitEmptyPasswords is disabled"
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
@@ -251,7 +251,7 @@
       - ssh
       - rule_5.3.11
 
-- name: "5.3.12 | L1 | PATCH | Ensure SSH PermitUserEnvironment is disabled"
+- name: "5.3.12 | PATCH | Ensure SSH PermitUserEnvironment is disabled"
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
@@ -268,7 +268,7 @@
       - ssh
       - rule_5.3.12
 
-- name: "5.3.13 | L1 | PATCH | Ensure only strong Ciphers are used"
+- name: "5.3.13 | PATCH | Ensure only strong Ciphers are used"
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
@@ -286,7 +286,7 @@
       - ssh
       - rule_5.3.13
 
-- name: "5.3.14 | L1 | PATCH | Ensure only strong MAC algorithms are used"
+- name: "5.3.14 | PATCH | Ensure only strong MAC algorithms are used"
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
@@ -304,7 +304,7 @@
       - ssh
       - rule_5.3.14
 
-- name: "5.3.15 | L1 | PATCH | Ensure only strong Key Exchange algorithms are used"
+- name: "5.3.15 | PATCH | Ensure only strong Key Exchange algorithms are used"
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
@@ -322,9 +322,9 @@
       - ssh
       - rule_5.3.15
 
-- name: "5.3.16 | L1 | PATCH | Ensure SSH Idle Timeout Interval is configured"
+- name: "5.3.16 | PATCH | Ensure SSH Idle Timeout Interval is configured"
   block:
-      - name: "5.3.16 | L1 | PATCH | Ensure SSH Idle Timeout Interval is configured | Add line in sshd_config for ClientAliveInterval"
+      - name: "5.3.16 | PATCH | Ensure SSH Idle Timeout Interval is configured | Add line in sshd_config for ClientAliveInterval"
         lineinfile:
             state: present
             dest: /etc/ssh/sshd_config
@@ -334,7 +334,7 @@
         notify:
             - restart sshd
 
-      - name: "5.3.16 | L1 | PATCH | Ensure SSH Idle Timeout Interval is configured | Ensure SSH ClientAliveCountMax set to <= 3"
+      - name: "5.3.16 | PATCH | Ensure SSH Idle Timeout Interval is configured | Ensure SSH ClientAliveCountMax set to <= 3"
         lineinfile:
             state: present
             dest: /etc/ssh/sshd_config
@@ -351,7 +351,7 @@
       - ssh
       - rule_5.3.16
 
-- name: "5.3.17 | L1 | PATCH | Ensure SSH LoginGraceTime is set to one minute or less"
+- name: "5.3.17 | PATCH | Ensure SSH LoginGraceTime is set to one minute or less"
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
@@ -368,7 +368,7 @@
       - ssh
       - rule_5.3.17
 
-- name: "5.3.18 | L1 | PATCH | Ensure SSH warning banner is configured"
+- name: "5.3.18 | PATCH | Ensure SSH warning banner is configured"
   lineinfile:
       dest: /etc/ssh/sshd_config
       regexp: '^Banner ((?!/etc/issue.net$)).*$'
@@ -389,7 +389,7 @@
       - ssh
       - rule_5.3.18
 
-- name: "5.3.19 | L1 | PATCH | Ensure SSH PAM is enabled"
+- name: "5.3.19 | PATCH | Ensure SSH PAM is enabled"
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
@@ -406,7 +406,7 @@
       - ssh
       - rule_5.3.19
 
-- name: "5.3.20 | L2 | PATCH | Ensure SSH AllowTcpForwarding is disabled"
+- name: "5.3.20 | PATCH | Ensure SSH AllowTcpForwarding is disabled"
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
@@ -423,7 +423,7 @@
       - ssh
       - rule_5.3.20
 
-- name: "5.3.21 | L1 | PATCH | Ensure SSH MaxStartups is configured"
+- name: "5.3.21 | PATCH | Ensure SSH MaxStartups is configured"
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
@@ -440,7 +440,7 @@
       - ssh
       - rule_5.3.21
 
-- name: "5.3.22 | L1 | PATCH | Ensure SSH MaxSessions is limited"
+- name: "5.3.22 | PATCH | Ensure SSH MaxSessions is limited"
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config

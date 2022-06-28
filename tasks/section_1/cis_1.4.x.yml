@@ -1,8 +1,8 @@
 ---
 
-- name: "1.4.1 | L1 | PATCH | Ensure bootloader password is set"
+- name: "1.4.1 | PATCH | Ensure bootloader password is set"
   block:
-      - name: "1.4.1 | L1 | PATCH | Ensure bootloader password is set"
+      - name: "1.4.1 | PATCH | Ensure bootloader password is set"
         copy:
             dest: "{{ rhel7cis_bootloader_path }}user.cfg"
             content: "GRUB2_PASSWORD={{ rhel7cis_bootloader_password_hash }}"
@@ -12,7 +12,7 @@
         register: bootloader_pw
         notify: grub2cfg
 
-      - name: "1.4.1 | L1 | FACT | Ensure bootloader password is set"
+      - name: "1.4.1 | FACT | Ensure bootloader password is set"
         set_fact:
            change_requires_reboot: true
         when: bootloader_pw
@@ -26,9 +26,9 @@
       - patch
       - rule_1.4.1
 
-- name: "1.4.2 | L1 | PATCH | Ensure permissions on bootloader config are configured"
+- name: "1.4.2 | PATCH | Ensure permissions on bootloader config are configured"
   block:
-      - name: "1.4.2 | L1 | PATCH | Ensure permissions on bootloader config are configured | Update grub config settings"
+      - name: "1.4.2 | PATCH | Ensure permissions on bootloader config are configured | Update grub config settings"
         file:
             path: "{{ rhel7cis_bootloader_path }}grub.cfg"
             owner: root
@@ -37,7 +37,7 @@
         when:
             - rhel7cis_legacy_boot
 
-      - name: "1.4.2 | L1 | PATCH | Ensure permissions on bootloader config are configured | UEFI"
+      - name: "1.4.2 | PATCH | Ensure permissions on bootloader config are configured | UEFI"
         mount:
             name: /boot/efi
             src: "UUID={{ item.uuid }}"
@@ -59,15 +59,15 @@
       - patch
       - rule_1.4.2
 
-- name: "1.4.3 | L1 | PATCH | Ensure authentication required for single user mode"
+- name: "1.4.3 | PATCH | Ensure authentication required for single user mode"
   block:
-      - name: "1.4.3 | L1 | PATCH | Ensure authentication required for single user mode | Emergency service"
+      - name: "1.4.3 | PATCH | Ensure authentication required for single user mode | Emergency service"
         lineinfile:
             dest: /usr/lib/systemd/system/emergency.service
             regexp: '/sbin/sulogin'
             line: 'ExecStart=-/bin/sh -c "/sbin/sulogin; /usr/bin/systemctl --fail --no-block default"'
 
-      - name: "1.4.3 | L1 | PATCH | Ensure authentication required for single user mode | Rescue service"
+      - name: "1.4.3 | PATCH | Ensure authentication required for single user mode | Rescue service"
         lineinfile:
             dest: /usr/lib/systemd/system/rescue.service
             regexp: '/sbin/sulogin'
