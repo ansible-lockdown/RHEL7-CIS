@@ -6,7 +6,7 @@
       state: present
   when:
       - rhel7cis_rule_2_2_1_1
-      - not rhel7cis_system_is_container
+      - not system_is_container
   tags:
       - level1
       - patch
@@ -21,7 +21,7 @@
       enabled: yes
   when:
       - rhel7cis_rule_2_2_1_1
-      - not rhel7cis_system_is_container
+      - not system_is_container
   tags:
       - level1
       - patch
@@ -36,7 +36,7 @@
       - "'ntp' in ansible_facts.packages"
       - rhel7cis_time_synchronization == "chrony"
       - rhel7cis_rule_2_2_1_1
-      - not rhel7cis_system_is_container
+      - not system_is_container
   tags:
       - level1
       - patch
@@ -50,7 +50,7 @@
   when:
       - rhel7cis_time_synchronization == "ntp" and "'chrony' in ansible_facts.packages"
       - rhel7cis_rule_2_2_1_1
-      - not rhel7cis_system_is_container
+      - not system_is_container
   tags:
       - level1
       - patch
@@ -79,7 +79,7 @@
   when:
       - rhel7cis_time_synchronization == "chrony"
       - rhel7cis_rule_2_2_1_2
-      - not rhel7cis_system_is_container
+      - not system_is_container
   tags:
       - level1
       - patch
@@ -109,7 +109,7 @@
   when:
       - rhel7cis_time_synchronization == "ntp"
       - rhel7cis_rule_2_2_1_3
-      - not rhel7cis_system_is_container
+      - not system_is_container
   tags:
       - level1
       - patch
