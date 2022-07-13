@@ -14,8 +14,7 @@ rhel7cis_section6: true
 rhel7cis_os_check: true
 
 # Should always reboot after this number of changes allow this to be automated as part of remediation
-skip_reboot: true
-change_requires_reboot: false
+rhel7cis_allow_reboot: false
 
 ## Python Binary
 ## This is used for python3 Installations where python2 OS modules are used in ansible
@@ -53,10 +52,6 @@ run_audit: false
 # Enable/Disable SELinux
 rhel7cis_selinux_disable: false
 rhel7cis_selinux_state: enforcing
-
-system_is_container: false
-# Place to find the container yml file for your environment - /vars/... This can be adjusted for your requirements.
-container_vars_file: is_container.yml
 
 # Misc. environment variables
 rhel7cis_skip_for_travis: false

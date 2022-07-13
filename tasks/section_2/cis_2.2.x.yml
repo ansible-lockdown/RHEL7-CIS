@@ -1,6 +1,6 @@
 ---
 
-- name: "2.2.2 | L1 | PATCH | Ensure X11 Server components are not installed"
+- name: "2.2.2 | PATCH | Ensure X11 Server components are not installed"
   package:
       state: absent
       name:
@@ -18,7 +18,7 @@
       - patch
       - rule_2.2.2
 
-- name: "2.2.3 | L1 | PATCH | Ensure Avahi Server is not installed | disabled"
+- name: "2.2.3 | PATCH | Ensure Avahi Server is not installed | disabled"
   service:
       name: avahi-daemon
       state: stopped
@@ -35,7 +35,7 @@
       - patch
       - rule_2.2.3
 
-- name: "2.2.4 | L1 | PATCH | Ensure CUPS is not installed"
+- name: "2.2.4 | PATCH | Ensure CUPS is not installed"
   package:
       name: cups
       state: absent
@@ -53,7 +53,7 @@
       - patch
       - rule_2.2.4
 
-- name: "2.2.5 | L1 | PATCH | Ensure DHCP Server is not installed"
+- name: "2.2.5 | PATCH | Ensure DHCP Server is not installed"
   package:
       name: dhcp
       state: absent
@@ -71,7 +71,7 @@
       - patch
       - rule_2.2.5
 
-- name: "2.2.6 | L1 | PATCH | Ensure LDAP server is not installed"
+- name: "2.2.6 | PATCH | Ensure LDAP server is not installed"
   package:
       name: openldap-servers
       state: absent
@@ -89,7 +89,7 @@
       - patch
       - rule_2.2.6
 
-- name: "2.2.7 | L1 | PATCH | Ensure DNS server is not installed"
+- name: "2.2.7 | PATCH | Ensure DNS server is not installed"
   package:
       name: bind
       state: absent
@@ -107,7 +107,7 @@
       - patch
       - rule_2.2.7
 
-- name: "2.2.8 | L1 | PATCH | Ensure FTP server is not installed"
+- name: "2.2.8 | PATCH | Ensure FTP server is not installed"
   package:
       name: vsftpd
       state: absent
@@ -125,7 +125,7 @@
       - patch
       - rule_2.2.8
 
-- name: "2.2.9 | L1 | PATCH | Ensure HTTP server is not installed"
+- name: "2.2.9 | PATCH | Ensure HTTP server is not installed"
   package:
       name: httpd
       state: absent
@@ -143,7 +143,7 @@
       - patch
       - rule_2.2.9
 
-- name: "2.2.10 | L1 | PATCH | Ensure IMAP and POP3 server is not installed"
+- name: "2.2.10 | PATCH | Ensure IMAP and POP3 server is not installed"
   package:
       name: dovecot
       state: absent
@@ -161,7 +161,7 @@
       - patch
       - rule_2.2.10
 
-- name: "2.2.11 | L1 | PATCH | Ensure Samba server is not installed"
+- name: "2.2.11 | PATCH | Ensure Samba server is not installed"
   package:
       name: samba
       state: absent
@@ -179,7 +179,7 @@
       - patch
       - rule_2.2.11
 
-- name: "2.2.12 | L1 | PATCH | Ensure HTTP Proxy server is not installed"
+- name: "2.2.12 | PATCH | Ensure HTTP Proxy server is not installed"
   package:
       name: squid
       state: absent
@@ -197,7 +197,7 @@
       - patch
       - rule_2.2.12
 
-- name: "2.2.13 | L1 | PATCH | Ensure net-snmp is not installed"
+- name: "2.2.13 | PATCH | Ensure net-snmp is not installed"
   package:
       name: net-snmp
       state: absent
@@ -215,7 +215,7 @@
       - patch
       - rule_2.2.13
 
-- name: "2.2.14 | L1 | PATCH | Ensure NIS server is not installed"
+- name: "2.2.14 | PATCH | Ensure NIS server is not installed"
   package:
       name: ypserv
       state: absent
@@ -233,7 +233,7 @@
       - patch
       - rule_2.2.14
 
-- name: "2.2.15 | L1 | PATCH | Ensure telnet-server is not installed"
+- name: "2.2.15 | PATCH | Ensure telnet-server is not installed"
   package:
       name: telnet-server
       state: absent
@@ -251,7 +251,7 @@
       - patch
       - rule_2.2.15
 
-- name: "2.2.16 | L1 | PATCH | Ensure mail transfer agent is configured for local-only mode"
+- name: "2.2.16 | PATCH | Ensure mail transfer agent is configured for local-only mode"
   lineinfile:
       dest: /etc/postfix/main.cf
       regexp: "^(#)?inet_interfaces"
@@ -266,9 +266,9 @@
       - patch
       - rule_2.2.16
 
-- name: "2.2.17 | L1 | PATCH | Ensure nfs-utils is not installed or the nfs-server service is masked"
+- name: "2.2.17 | PATCH | Ensure nfs-utils is not installed or the nfs-server service is masked"
   block:
-      - name: "2.2.17 | L1 | PATCH | Ensure nfs-utils is not installed or the nfs-server service is masked | nfs-utils "
+      - name: "2.2.17 | PATCH | Ensure nfs-utils is not installed or the nfs-server service is masked | nfs-utils "
         package:
             name: nfs-utils
             state: absent
@@ -277,7 +277,7 @@
         when:
             - not rhel7cis_nfs_rpc_server and not rhel7cis_nfs_server
 
-      - name: "2.2.17 | L1 | PATCH | Ensure nfs-utils is not installed or the nfs-server service is masked | nfs-server "
+      - name: "2.2.17 | PATCH | Ensure nfs-utils is not installed or the nfs-server service is masked | nfs-server "
         systemd:
             name: nfs-server
             masked: true
@@ -294,9 +294,9 @@
       - patch
       - rule_2.2.17
 
-- name: "2.2.18 | L1 | PATCH | Ensure rpcbind is not installed or the rpcbind services are masked"
+- name: "2.2.18 | PATCH | Ensure rpcbind is not installed or the rpcbind services are masked"
   block:
-      - name: "2.2.18 | L1 | PATCH | Ensure rpcbind is not installed or the rpcbind services are masked | rpcbind"
+      - name: "2.2.18 | PATCH | Ensure rpcbind is not installed or the rpcbind services are masked | rpcbind"
         package:
             name: rpcbind
             state: absent
@@ -305,14 +305,14 @@
         when:
             - not rhel7cis_nfs_rpc_server and not rhel7cis_rpc_server
 
-      - name: "2.2.18 | L1 | PATCH | Ensure rpcbind is not installed or the rpcbind services are masked | rpcbind-server"
+      - name: "2.2.18 | PATCH | Ensure rpcbind is not installed or the rpcbind services are masked | rpcbind-server"
         systemd:
             name: rpcbind
             masked: true
         when:
             - rhel7cis_nfs_rpc_server and not rhel7cis_rpc_server
 
-      - name: "2.2.18 | L1 | PATCH | Ensure rpcbind is not installed or the rpcbind services are masked | rpcbind-server"
+      - name: "2.2.18 | PATCH | Ensure rpcbind is not installed or the rpcbind services are masked | rpcbind-server"
         systemd:
             name: rpcbind.socket
             masked: true
@@ -329,22 +329,23 @@
       - patch
       - rule_2.2.18
 
-- name: "2.2.19 | L1 | PATCH | Ensure rsync is not installed or the rsyncd services are masked"
+- name: "2.2.19 | PATCH | Ensure rsync is not installed or the rsyncd services are masked"
   block:
-      - name: "2.2.19 | L1 | PATCH | Ensure rsync is not installed or the rsyncd services are masked | pkg removal"
+      - name: "2.2.19 | PATCH | Ensure rsync is not installed or the rsyncd services are masked | pkg removal"
         package:
             name: rsync
             state: absent
         vars:
             ansible_python_interpreter: /bin/python
 
-      - name: "2.2.19 | L1 | PATCH | Ensure rsync is not installed or the rsyncd services are masked | Mask "
+      - name: "2.2.19 | PATCH | Ensure rsync is not installed or the rsyncd services are masked | Mask "
         systemd:
             name: rsyncd
             masked: true
 
   when:
       - not rhel7cis_rsyncd_server
+      - not audit_content == 'git' #Required by git for audit
       - "'rsync' in ansible_facts.packages"
       - rhel7cis_rule_2_2_19
   tags:

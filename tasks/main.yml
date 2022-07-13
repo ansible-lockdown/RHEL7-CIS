@@ -51,6 +51,28 @@
       - always
       - prereqs
 
+- name: Setup rules if container
+  block:
+      - name: Discover and set container variable if required
+        set_fact:
+            system_is_container: true
+
+      - name: Load variable for container
+        include_vars:
+            file: "{{ container_vars_file }}"
+
+      - name: output if discovered is a container
+        debug:
+            msg: system has been discovered as a container
+        when:
+            - system_is_container
+  when:
+      - ansible_connection == 'docker' or
+        ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"]
+  tags:
+      - container_discovery
+      - always
+
 - include: prelim.yml
   tags:
       - prelim_tasks
@@ -65,6 +87,11 @@
 - name: Gather the package facts
   package_facts:
       manager: auto
+  tags:
+      - always
+
+- name: Include OS specific variables
+  include_vars: "{{ ansible_distribution }}.yml"
   tags:
       - always
 
@@ -103,18 +130,13 @@
   tags:
       - rhel7cis_section6
 
+- name: flush handlers
+  meta: flush_handlers
+
 - include: post.yml
   tags:
       - post_tasks
       - always
-
-- name: flush handlers
-  meta: flush_handlers
-
-- name: reboot system
-  reboot:
-  when:
-      - rhel7cis_allow_reboot
 
 - import_tasks: post_remediation_audit.yml
   when:

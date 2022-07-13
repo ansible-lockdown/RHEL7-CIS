@@ -1,6 +1,6 @@
 ---
 
-- name: "4.2.1.1 | L1 | PATCH | Ensure rsyslog is installed"
+- name: "4.2.1.1 | PATCH | Ensure rsyslog is installed"
   package:
       name: "{{ rhel7cis_syslog }}"
       state: present
@@ -13,7 +13,7 @@
       - patch
       - rule_4.2.1.1
 
-- name: "4.2.1.2 | L1 | PATCH | Ensure rsyslog Service is enabled and running"
+- name: "4.2.1.2 | PATCH | Ensure rsyslog Service is enabled and running"
   service:
       name: rsyslog
       enabled: yes
@@ -27,7 +27,7 @@
       - rsyslog
       - rule_4.2.1.2
 
-- name: "4.2.1.3 | L1 | PATCH | Ensure rsyslog default file permissions configured"
+- name: "4.2.1.3 | PATCH | Ensure rsyslog default file permissions configured"
   lineinfile:
       dest: /etc/rsyslog.conf
       regexp: '^\$FileCreateMode'
@@ -40,15 +40,15 @@
       - patch
       - rule_4.2.1.3
 
-- name: "4.2.1.4 | L1 | PATCH | Ensure logging is configured"
+- name: "4.2.1.4 | PATCH | Ensure logging is configured"
   block:
-      - name: "4.2.1.4 | L1 | AUDIT | Ensure logging is configured | rsyslog current config message out"
+      - name: "4.2.1.4 | AUDIT | Ensure logging is configured | rsyslog current config message out"
         shell: cat /etc/rsyslog.conf
         changed_when: false
         failed_when: false
         register: rhel_07_4_2_1_4_audit
 
-      - name: "4.2.1.4 | L1 | PATCH | Ensure logging is configured | Debug out rsyslog settings"
+      - name: "4.2.1.4 | PATCH | Ensure logging is configured | Debug out rsyslog settings"
         debug:
             msg:
                 - "These are the current logging configurations for rsyslog, please review:"
@@ -56,7 +56,7 @@
         when:
             - not rhel7cis_rsyslog_ansiblemanaged
 
-      - name: "4.2.1.4 | L1 | PATCH | Ensure logging is configured | Set logging settings lineinfile"
+      - name: "4.2.1.4 | PATCH | Ensure logging is configured | Set logging settings lineinfile"
         lineinfile:
             path: /etc/rsyslog.conf
             state: present
@@ -79,7 +79,7 @@
         when:
             - rhel7cis_rsyslog_ansiblemanaged
 
-      - name: "4.2.1.4 | L1 | PATCH | Ensure logging is configured | Misc. log setting"
+      - name: "4.2.1.4 | PATCH | Ensure logging is configured | Misc. log setting"
         blockinfile:
             path: /etc/rsyslog.conf
             state: present
@@ -94,7 +94,7 @@
         when:
             - rhel7cis_rsyslog_ansiblemanaged
 
-      - name: "4.2.1.4 | L1 | PATCH | Ensure logging is configured | Local log settings"
+      - name: "4.2.1.4 | PATCH | Ensure logging is configured | Local log settings"
         blockinfile:
             path: /etc/rsyslog.conf
             state: present
@@ -115,7 +115,7 @@
       - rsyslog
       - rule_4.2.1.4
 
-- name: "4.2.1.5 | L1 | PATCH | Ensure rsyslog is configured to send logs to a remote log host"
+- name: "4.2.1.5 | PATCH | Ensure rsyslog is configured to send logs to a remote log host"
   blockinfile:
       path: /etc/rsyslog.conf
       state: present
@@ -137,9 +137,9 @@
       - rule_4.2.1.5
       - rsyslog
 
-- name: "4.2.1.6 | L1 | PATCH | Ensure remote rsyslog messages are only accepted on designated log hosts."
+- name: "4.2.1.6 | PATCH | Ensure remote rsyslog messages are only accepted on designated log hosts."
   block:
-      - name: "4.2.1.6 | L1 | PATCH | Ensure remote rsyslog messages are only accepted on designated log hosts. | When not log host"
+      - name: "4.2.1.6 | PATCH | Ensure remote rsyslog messages are only accepted on designated log hosts. | When not log host"
         replace:
             path: /etc/rsyslog.conf
             regexp: '({{ item }})'
@@ -151,7 +151,7 @@
         when:
             - not rhel7cis_system_is_log_server
 
-      - name: "4.2.1.6 | L1 | PATCH | Ensure remote rsyslog messages are only accepted on designated log hosts. | When log host"
+      - name: "4.2.1.6 | PATCH | Ensure remote rsyslog messages are only accepted on designated log hosts. | When log host"
         replace:
             path: /etc/rsyslog.conf
             regexp: '^#(.*{{ item }}.*)'

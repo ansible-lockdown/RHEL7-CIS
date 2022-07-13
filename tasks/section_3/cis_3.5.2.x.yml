@@ -1,6 +1,6 @@
 ---
 
-- name: "3.5.2.1 | L1 | PATCH | Ensure nftables is installed"
+- name: "3.5.2.1 | PATCH | Ensure nftables is installed"
   package:
       name: nftables
       state: present
@@ -14,7 +14,7 @@
       - patch
       - rule_3.5.2.1
 
-- name: "3.5.2.2 | L1 | PATCH | Ensure firewalld is either not installed or masked with nftables"
+- name: "3.5.2.2 | PATCH | Ensure firewalld is either not installed or masked with nftables"
   package:
       name: firewalld
       state: absent
@@ -28,7 +28,7 @@
       - patch
       - rule_3.5.2.2
 
-- name: "3.5.2.3 | L1 | PATCH | Ensure iptables-services not installed with nftables"
+- name: "3.5.2.3 | PATCH | Ensure iptables-services not installed with nftables"
   package:
       name: iptables-services
       state: absent
@@ -42,12 +42,12 @@
       - patch
       - rule_3.5.2.3
 
-- name: "3.5.2.4 | L1 | PATCH | Ensure iptables are flushed with nftables"
+- name: "3.5.2.4 | PATCH | Ensure iptables are flushed with nftables"
   block:
-      - name: "3.5.2.4 | L1 | PATCH | Ensure iptables are flushed with nftables| Flush IPv4 tables"
+      - name: "3.5.2.4 | PATCH | Ensure iptables are flushed with nftables| Flush IPv4 tables"
         command: iptables -F
 
-      - name: "3.5.2.4 | L1 | PATCH | Ensure iptables are flushed with nftables | Flush IPv6 tables"
+      - name: "3.5.2.4 | PATCH | Ensure iptables are flushed with nftables | Flush IPv6 tables"
         command: ip6tables -F
         when:
             - rhel7cis_ipv6_required
@@ -59,13 +59,13 @@
       - patch
       - rule_3.5.2.4
 
-- name: "3.5.2.5 | L1 | PATCH | Ensure an nftables table exists"
+- name: "3.5.2.5 | PATCH | Ensure an nftables table exists"
   block:
-      - name: "3.5.2.5 | L1 | AUDIT | Ensure an nftables table exists | Check for tables"
+      - name: "3.5.2.5 | AUDIT | Ensure an nftables table exists | Check for tables"
         command: nft list tables
         register: rhel7cis_3_5_2_5_nft_tables
 
-      - name: "3.5.2.5 | L1 | AUDIT | Ensure an nftables table exists | Show existing tables"
+      - name: "3.5.2.5 | AUDIT | Ensure an nftables table exists | Show existing tables"
         debug:
             msg:
                 - "Below are the current nft tables, please review"
@@ -73,16 +73,16 @@
         when:
             - rhel7cis_3_5_2_5_nft_tables.stdout | length > 0
 
-      - name: "3.5.2.5 | L1 | AUDIT | Ensure an nftables table exists | Alert on no tables"
+      - name: "3.5.2.5 | AUDIT | Ensure an nftables table exists | Alert on no tables"
         debug:
             msg:
-                - "Warning! You currently have no nft tables, please review your setup"
+                - "WARNING!! You currently have no nft tables, please review your setup"
                 - 'Use the command "nft create table inet <table name>" to create a new table'
         when:
             - rhel7cis_3_5_2_5_nft_tables.stdout | length == 0
             - not rhel7cis_nft_tables_autoNewTable
 
-      - name: "3.5.2.5 | L1 | PATCH | Ensure an nftables table exists | Create table if needed"
+      - name: "3.5.2.5 | PATCH | Ensure an nftables table exists | Create table if needed"
         command: nft create table inet "{{ rhel7cis_nft_tables_tableName }}"
         failed_when: false
         when:
@@ -94,21 +94,21 @@
       - patch
       - rule_3.5.2.5
 
-- name: "3.5.2.6 | L1 | PATCH | Ensure nftables base chains exist"
+- name: "3.5.2.6 | PATCH | Ensure nftables base chains exist"
   block:
-      - name: "3.5.2.6 | L1 | AUDIT | Ensure nftables base chains exist | Get current chains for INPUT"
+      - name: "3.5.2.6 | AUDIT | Ensure nftables base chains exist | Get current chains for INPUT"
         shell: nft list ruleset | grep 'hook input'
         register: rhel7cis_3_5_2_6_input_chains
 
-      - name: "3.5.2.6 | L1 | AUDIT | Ensure nftables base chains exist | Get current chains for FORWARD"
+      - name: "3.5.2.6 | AUDIT | Ensure nftables base chains exist | Get current chains for FORWARD"
         shell: nft list ruleset | grep 'hook forward'
         register: rhel7cis_3_5_2_6_forward_chains
 
-      - name: "3.5.2.6 | L1 | AUDIT | Ensure nftables base chains exist | Get current chains for OUTPUT"
+      - name: "3.5.2.6 | AUDIT | Ensure nftables base chains exist | Get current chains for OUTPUT"
         shell: nft list ruleset | grep 'hook output'
         register: rhel7cis_3_5_2_6_output_chains
 
-      - name: "3.5.2.6 | L1 | AUDIT | Ensure nftables base chains exist | Display chains for review"
+      - name: "3.5.2.6 | AUDIT | Ensure nftables base chains exist | Display chains for review"
         debug:
             msg:
                 - "Below are the current INPUT chains"
@@ -120,7 +120,7 @@
         when:
             - not rhel7cis_nft_tables_autoChainCreate
 
-      - name: "3.5.2.6 | L1 | PATCH | Ensure nftables base chains exist | Create chains if needed"
+      - name: "3.5.2.6 | PATCH | Ensure nftables base chains exist | Create chains if needed"
         command: "{{ item }}"
         failed_when: false
         with_items:
@@ -137,37 +137,37 @@
       - patch
       - rule_3.5.2.6
 
-- name: "3.5.2.7 | L1 | PATCH | Ensure nftables loopback traffic is configured"
+- name: "3.5.2.7 | PATCH | Ensure nftables loopback traffic is configured"
   block:
-      - name: "3.5.2.7 | L1 | AUDIT | Ensure nftables loopback traffic is configured | Gather iif lo accept existence"
+      - name: "3.5.2.7 | AUDIT | Ensure nftables loopback traffic is configured | Gather iif lo accept existence"
         shell: nft list ruleset | awk '/hook input/,/}/' | grep 'iif "lo" accept'
         changed_when: false
         failed_when: false
         register: rhel7cis_3_5_2_7_iiflo
 
-      - name: "3.5.2.7 | L1 | AUDIT | Ensure nftables loopback traffic is configured | Gather ip saddr existence"
+      - name: "3.5.2.7 | AUDIT | Ensure nftables loopback traffic is configured | Gather ip saddr existence"
         shell: nft list ruleset | awk '/hook input/,/}/' | grep 'ip saddr'
         changed_when: false
         failed_when: false
         register: rhel7cis_3_5_2_7_ipsaddr
 
-      - name: "3.5.2.7 | L1 | AUDIT | Ensure nftables loopback traffic is configured | Gather ip6 saddr existence"
+      - name: "3.5.2.7 | AUDIT | Ensure nftables loopback traffic is configured | Gather ip6 saddr existence"
         shell: nft list ruleset | awk '/hook input/,/}/' | grep 'ip6 saddr'
         changed_when: false
         failed_when: false
         register: rhel7cis_3_5_2_7_ip6saddr
 
-      - name: "3.5.2.7 | L1 | PATCH | Ensure nftables loopback traffic is configured | Set iif lo accept rule"
+      - name: "3.5.2.7 | PATCH | Ensure nftables loopback traffic is configured | Set iif lo accept rule"
         command: nft add rule inet "{{ rhel7cis_nft_tables_tableName }}" input iif lo accept
         when:
             - '"iif \"lo\" accept" not in rhel7cis_3_5_2_7_iiflo.stdout'
 
-      - name: "3.5.2.7 | L1 | PATCH | Ensure nftables loopback traffic is configured | Set ip sddr rule"
+      - name: "3.5.2.7 | PATCH | Ensure nftables loopback traffic is configured | Set ip sddr rule"
         command: nft add rule inet "{{ rhel7cis_nft_tables_tableName }}" input ip saddr 127.0.0.0/8 counter drop
         when:
             - '"ip saddr 127.0.0.0/8 counter packets 0 bytes 0 drop" not in rhel7cis_3_5_2_7_ipsaddr.stdout'
 
-      - name: "3.5.2.7 | L1 | PATCH | Ensure nftables loopback traffic is configured | Set ip6 saddr rule"
+      - name: "3.5.2.7 | PATCH | Ensure nftables loopback traffic is configured | Set ip6 saddr rule"
         command: nft add rule inet "{{ rhel7cis_nft_tables_tableName }}" input ip6 saddr ::1 counter drop
         when:
             - '"ip6 saddr ::1 counter packets 0 bytes 0 drop" not in rhel7cis_3_5_2_7_ip6saddr.stdout'
@@ -178,51 +178,51 @@
       - patch
       - rule_3.5.2.7
 
-- name: "3.5.2.8 | L1 | PATCH | Ensure nftables outbound and established connections are configured"
+- name: "3.5.2.8 | PATCH | Ensure nftables outbound and established connections are configured"
   block:
-      - name: "3.5.2.8 | L1 | AUDIT | Ensure nftables outbound and established connections are configured | Gather incoming connection rules"
+      - name: "3.5.2.8 | AUDIT | Ensure nftables outbound and established connections are configured | Gather incoming connection rules"
         shell: nft list ruleset | awk '/hook input/,/}/' | grep -E 'ip protocol (tcp|udp|icmp) ct state'
         changed_when: false
         failed_when: false
         register: rhel7cis_3_5_2_8_inconnectionrule
 
-      - name: "3.5.2.8 | L1 | AUDIT | Ensure nftables outbound and established connections are configured | Gather outbound connection rules"
+      - name: "3.5.2.8 | AUDIT | Ensure nftables outbound and established connections are configured | Gather outbound connection rules"
         shell: nft list ruleset | awk '/hook output/,/}/' | grep -E 'ip protocol (tcp|udp|icmp) ct state'
         changed_when: false
         failed_when: false
         register: rhel7cis_3_5_2_8_outconnectionrule
 
-      - name: "3.5.2.8 | L1 | PATCH | Ensure nftables outbound and established connections are configured | Add input tcp established accpet policy"
+      - name: "3.5.2.8 | PATCH | Ensure nftables outbound and established connections are configured | Add input tcp established accpet policy"
         command: nft add rule inet "{{ rhel7cis_nft_tables_tableName }}" input ip protocol tcp ct state established accept
         become: true
         when:
             - '"ip protocol tcp ct state established accept" not in rhel7cis_3_5_2_8_inconnectionrule.stdout'
 
-      - name: "3.5.2.8 | L1 | PATCH | Ensure nftables outbound and established connections are configured | Add input udp established accpet policy"
+      - name: "3.5.2.8 | PATCH | Ensure nftables outbound and established connections are configured | Add input udp established accpet policy"
         command: nft add rule inet "{{ rhel7cis_nft_tables_tableName }}" input ip protocol udp ct state established accept
         become: true
         when:
             - '"ip protocol udp ct state established accept" not in rhel7cis_3_5_2_8_inconnectionrule.stdout'
 
-      - name: "3.5.2.8 | L1 | PATCH | Ensure nftables outbound and established connections are configured | Add input icmp established accpet policy"
+      - name: "3.5.2.8 | PATCH | Ensure nftables outbound and established connections are configured | Add input icmp established accpet policy"
         command: nft add rule inet "{{ rhel7cis_nft_tables_tableName }}" input ip protocol icmp ct state established accept
         become: true
         when:
             - '"ip protocol icmp ct state established accept" not in rhel7cis_3_5_2_8_inconnectionrule.stdout'
 
-      - name: "3.5.2.8 | L1 | PATCH | Ensure nftables outbound and established connections are configured | Add output tcp new, related, established accpet policy"
+      - name: "3.5.2.8 | PATCH | Ensure nftables outbound and established connections are configured | Add output tcp new, related, established accpet policy"
         command: nft add rule inet "{{ rhel7cis_nft_tables_tableName }}" output ip protocol tcp ct state new,related,established accept
         become: true
         when:
             - '"ip protocol tcp ct state established,related,new accept" not in rhel7cis_3_5_2_8_outconnectionrule.stdout'
 
-      - name: "3.5.2.8 | L1 | PATCH | Ensure nftables outbound and established connections are configured | Add output udp new, related, established accpet policy"
+      - name: "3.5.2.8 | PATCH | Ensure nftables outbound and established connections are configured | Add output udp new, related, established accpet policy"
         command: nft add rule inet "{{ rhel7cis_nft_tables_tableName }}" output ip protocol udp ct state new,related,established accept
         become: true
         when:
             - '"ip protocol udp ct state established,related,new accept" not in rhel7cis_3_5_2_8_outconnectionrule.stdout'
 
-      - name: "3.5.2.8 | L1 | PATCH | Ensure nftables outbound and established connections are configured | Add output icmp new, related, established accpet policy"
+      - name: "3.5.2.8 | PATCH | Ensure nftables outbound and established connections are configured | Add output icmp new, related, established accpet policy"
         command: nft add rule inet "{{ rhel7cis_nft_tables_tableName }}" output ip protocol icmp ct state new,related,established accept
         become: true
         when:
@@ -234,55 +234,55 @@
       - patch
       - rule_3.5.2.8
 
-- name: "3.5.2.9 | L1 | PATCH | Ensure nftables default deny firewall policy"
+- name: "3.5.2.9 | PATCH | Ensure nftables default deny firewall policy"
   block:
-      - name: "3.5.2.9 | L1 | AUDIT | Ensure nftables default deny firewall policy | Check for hook input deny policy"
+      - name: "3.5.2.9 | AUDIT | Ensure nftables default deny firewall policy | Check for hook input deny policy"
         shell: nft list table inet "{{ rhel7cis_nft_tables_tableName }}" | grep 'hook input'
         become: true
         failed_when: false
         changed_when: false
         register: rhel7cis_3_5_2_9_inputpolicy
 
-      - name: "3.5.2.9 | L1 | AUDIT | Ensure nftables default deny firewall policy | Check for hook forward deny policy"
+      - name: "3.5.2.9 | AUDIT | Ensure nftables default deny firewall policy | Check for hook forward deny policy"
         shell: nft list table inet "{{ rhel7cis_nft_tables_tableName }}" | grep 'hook forward'
         become: true
         failed_when: false
         changed_when: false
         register: rhel7cis_3_5_2_9_forwardpolicy
 
-      - name: "3.5.2.9 | L1 | AUDIT | Ensure nftables default deny firewall policy | Check for hook output deny policy"
+      - name: "3.5.2.9 | AUDIT | Ensure nftables default deny firewall policy | Check for hook output deny policy"
         shell: nft list table inet "{{ rhel7cis_nft_tables_tableName }}" | grep 'hook output'
         become: true
         failed_when: false
         changed_when: false
         register: rhel7cis_3_5_2_9_outputpolicy
 
-      - name: "3.5.2.9 | L1 | AUDIT | Ensure nftables default deny firewall policy | Check for SSH allow"
+      - name: "3.5.2.9 | AUDIT | Ensure nftables default deny firewall policy | Check for SSH allow"
         shell: nft list table inet "{{ rhel7cis_nft_tables_tableName }}" | grep 'ssh'
         become: true
         failed_when: false
         changed_when: false
         register: rhel7cis_3_5_2_9_sshallowcheck
 
-      - name: "3.5.2.9 | L1 | PATCH | Ensure nftables default deny firewall policy | Enable SSH traffic"
+      - name: "3.5.2.9 | PATCH | Ensure nftables default deny firewall policy | Enable SSH traffic"
         command: nft add rule inet "{{ rhel7cis_nft_tables_tableName }}" input tcp dport ssh accept
         become: true
         when:
             - '"tcp dport ssh accept" not in rhel7cis_3_5_2_9_sshallowcheck.stdout'
 
-      - name: "3.5.2.9 | L1 | PATCH | Ensure nftables default deny firewall policy | Set hook input deny policy"
+      - name: "3.5.2.9 | PATCH | Ensure nftables default deny firewall policy | Set hook input deny policy"
         command: nft chain inet "{{ rhel7cis_nft_tables_tableName }}" input { policy drop \; }
         become: true
         when:
             - '"type filter hook input priority 0; policy drop;" not in rhel7cis_3_5_2_9_inputpolicy.stdout'
 
-      - name: "3.5.2.9 | L1 | PATCH | EEnsure nftables default deny firewall policy | Create hook forward deny policy"
+      - name: "3.5.2.9 | PATCH | EEnsure nftables default deny firewall policy | Create hook forward deny policy"
         command: nft chain inet "{{ rhel7cis_nft_tables_tableName }}" forward { policy drop \; }
         become: true
         when:
             - '"type filter hook forward priority 0; policy drop;" not in rhel7cis_3_5_2_9_forwardpolicy.stdout'
 
-      - name: "3.5.2.9 | L1 | PATCH | Ensure nftables default deny firewall policy | Create hook output deny policy"
+      - name: "3.5.2.9 | PATCH | Ensure nftables default deny firewall policy | Create hook output deny policy"
         command: nft chain inet "{{ rhel7cis_nft_tables_tableName }}" output { policy drop \; }
         become: true
         when:
@@ -294,7 +294,7 @@
       - patch
       - rule_3.5.2.9
 
-- name: "3.5.2.10 | L1 | PATCH | Ensure nftables service is enabled"
+- name: "3.5.2.10 | PATCH | Ensure nftables service is enabled"
   systemd:
       name: nftables
       enabled: yes
@@ -306,7 +306,7 @@
       - patch
       - rule_3.5.2.10
 
-- name: "3.5.2.11 | L1 | PATCH | Ensure nftables rules are permanent"
+- name: "3.5.2.11 | PATCH | Ensure nftables rules are permanent"
   lineinfile:
       path: /etc/sysconfig/nftables.conf
       state: present

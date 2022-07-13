@@ -19,12 +19,14 @@
         package:
             name: git
             state: present
+        register: git_audit
         when: ansible_distribution_major_version == '8'
 
       - name: Pre Audit Setup | Install git (rh7 python2)
         package:
             name: git
             state: present
+        register: git_audit
         vars:
             ansible_python_interpreter: "{{ python2_bin }}"
         when: ansible_distribution_major_version == '7'
@@ -80,7 +82,7 @@
 - name: "Pre Audit | Run pre_remediation {{ benchmark }} audit"
   shell: "{{ audit_conf_dir }}run_audit.sh -v {{ audit_vars_path }} -o {{ pre_audit_outfile }} -g {{ group_names }}"
   environment: "{{ audit_run_script_environment|default({}) }}"
-  changed_when: audit_run_pre_remediation.rc == 0
+  changed_when: false
   register: audit_run_pre_remediation
   vars:
       warn: false

@@ -1,7 +1,7 @@
 ---
-- name: "3.2.1 | L1 | PATCH | Ensure IP forwarding is disabled | IPv4"
+- name: "3.2.1 | PATCH | Ensure IP forwarding is disabled | IPv4"
   block:
-      - name: "3.2.1 | L1 | PATCH | Ensure IP forwarding is disabled | IPv4"
+      - name: "3.2.1 | PATCH | Ensure IP forwarding is disabled | IPv4"
         sysctl:
             name: net.ipv4.ip_forward
             value: '0'
@@ -11,7 +11,7 @@
         notify:
             - sysctl flush ipv4 route table
 
-      - name: "3.2.1 | L1 | PATCH | Ensure IP forwarding is disabled IPv6"
+      - name: "3.2.1 | PATCH | Ensure IP forwarding is disabled IPv6"
         sysctl:
             name: net.ipv6.conf.all.forwarding
             value: '0'
@@ -31,7 +31,7 @@
       - patch
       - rule_3.2.1
 
-- name: "3.2.2 | L1 | PATCH | Ensure packet redirect sending is disabled"
+- name: "3.2.2 | PATCH | Ensure packet redirect sending is disabled"
   sysctl:
       name: '{{ item.name }}'
       value: '{{ item.value }}'

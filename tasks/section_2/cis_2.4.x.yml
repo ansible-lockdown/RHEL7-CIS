@@ -1,6 +1,6 @@
 ---
 
-- name: "2.4 | L1 | Ensure nonessential services are removed or masked (Manual)"
+- name: "2.4 | Ensure nonessential services are removed or masked (Manual)"
   debug:
       msg: "<----- not required"
   when:
