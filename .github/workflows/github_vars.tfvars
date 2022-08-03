@@ -4,6 +4,7 @@
 // 
 
 namespace         = "github_actions"
+environment       = "github_test_pipeline"
 
 // Matching pair name found in AWS for keypairs PEM key
 ami_key_pair_name = "github_actions"

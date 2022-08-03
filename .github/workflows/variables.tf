@@ -47,6 +47,11 @@ variable "namespace" {
   type        = string
 }
 
+variable "environment" {
+  description = "Env Name used across all tags"
+  type        = string
+}
+
 // taken from github_vars.tfvars &
 
 variable "main_vpc_cidr" {
