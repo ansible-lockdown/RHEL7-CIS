@@ -27,6 +27,7 @@ resource "aws_subnet" "publicsubnets" {
 
 resource "aws_subnet" "Main" {
   vpc_id =  aws_vpc.Main.id
+  availability_zone = var.availability_zone
   cidr_block = var.private_subnets
   tags = {
     Environment = "${var.environment}"
