@@ -49,6 +49,7 @@ resource "aws_security_group" "github_actions" {
 
 resource "aws_instance" "testing_vm" {
   ami                         = var.ami_id
+  availability_zone           = var.availability_zone
   associate_public_ip_address = true
   key_name                    = var.ami_key_pair_name # This is the key as known in the ec2 key_pairs
   instance_type               = var.instance_type
