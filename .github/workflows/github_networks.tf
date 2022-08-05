@@ -36,6 +36,7 @@ resource "aws_subnet" "Main" {
 
 resource "aws_route_table" "PublicRT" {
    vpc_id =  aws_vpc.Main.id
+   availability_zone = var.availability_zone
    route {
    cidr_block = "0.0.0.0/0"
    gateway_id = aws_internet_gateway.IGW.id
