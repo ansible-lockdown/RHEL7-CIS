@@ -6,6 +6,12 @@ variable "aws_region" {
   type        = string
 }
 
+variable "availability_zone" {
+  description = "List of availability zone in the region"
+  default     = "us-east-1b"
+  type        = string
+}
+
 variable "instance_type" {
   description = "EC2 Instance Type"
   default     = "t3.micro"

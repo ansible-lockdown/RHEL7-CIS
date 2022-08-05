@@ -18,6 +18,7 @@ resource "aws_internet_gateway" "IGW" {
 resource "aws_subnet" "publicsubnets" {
   vpc_id =  aws_vpc.Main.id
   cidr_block = var.public_subnets
+  availability_zone = var.availability_zone
   tags = {
     Environment = "${var.environment}"
     Name = "${var.namespace}-pubsub"
