@@ -74,3 +74,4 @@ variable "private_subnets" {
   description = "private subnet cidr block"
   type        = string
 }
+
