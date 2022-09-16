@@ -5,7 +5,7 @@
       dest: /etc/modprobe.d/CIS.conf
       regexp: "^(#)?install dccp(\\s|$)"
       line: "install dccp /bin/true"
-      create: yes
+      create: true
       owner: root
       group: root
       mode: 0600
@@ -21,7 +21,7 @@
       dest: /etc/modprobe.d/CIS.conf
       regexp: "^(#)?install sctp(\\s|$)"
       line: "install sctp /bin/true"
-      create: yes
+      create: true
       owner: root
       group: root
       mode: 0600

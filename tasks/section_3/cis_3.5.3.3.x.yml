@@ -6,7 +6,7 @@
         iptables:
             action: append
             chain: INPUT
-            in_interface: lo 
+            in_interface: lo
             jump: ACCEPT
             ip_version: ipv6
 
@@ -172,9 +172,9 @@
 
 - name: "3.5.3.3.6 | Ensure ip6tables is enabled and running"
   service:
-    name: ip6tables
-    state: started
-    enabled: true
+      name: ip6tables
+      state: started
+      enabled: true
   when:
       - rhel7cis_rule_3_5_3_3_6
   tags:

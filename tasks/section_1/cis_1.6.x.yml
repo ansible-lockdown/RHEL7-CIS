@@ -21,7 +21,7 @@
             dest: /etc/default/grub
             regexp: '(selinux|enforcing)\s*=\s*0\s*'
         register: selinux_grub_patch
-        ignore_errors: yes
+        ignore_errors: true  # noqa ignore-errors
         notify: grub2cfg
 
       - name: "1.6.1.2 | FACT | Ensure SELinux is not disabled in bootloader configuration"

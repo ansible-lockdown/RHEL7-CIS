@@ -22,9 +22,9 @@
       - name: "4.2.4 | AUDIT | Ensure logrotate is configured | output list"
         debug:
             msg:
-            - WARNING!! The following files need to confirm with site requirements
-            - /etc/logrotate.conf
-            - "{{ log_rotate.files | map(attribute='path') | list }}"
+                - WARNING!! The following files need to confirm with site requirements
+                - /etc/logrotate.conf
+                - "{{ log_rotate.files | map(attribute='path') | list }}"
         when: log_rotate.matched > 0
   when:
       - rhel7cis_rule_4_2_4

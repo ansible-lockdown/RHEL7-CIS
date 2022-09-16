@@ -16,6 +16,9 @@
               copy:
                   dest: "{{ rhel7cis_rpm_audit_file }}"
                   content: "{{ rhel7cis_6_1_1_packages_rpm.stdout }}"
+                  owner: root
+                  group: root
+                  mode: 0640
 
             - name: "6.1.1 | AUDIT | Audit system file permissions | Message out alert for package descrepancies"
               debug:
@@ -215,7 +218,7 @@
         debug:
             msg: "WARNING!! Manual intervention is required -- missing group on items in {{ item }}!"
         changed_when: item | length > 0
-        with_items: "{{ rhel_07_6_1_12_audit.results |map(attribute='stdout_lines') }}"
+        with_items: "{{ rhel_07_6_1_12_audit.results | map(attribute='stdout_lines') }}"
   when:
       - rhel7cis_rule_6_1_12
   tags:

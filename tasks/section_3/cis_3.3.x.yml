@@ -5,10 +5,10 @@
         sysctl:
             name: '{{ item.name }}'
             value: '{{ item.value }}'
-            sysctl_set: yes
+            sysctl_set: true
             state: present
-            reload: yes
-            ignoreerrors: yes
+            reload: true
+            ignoreerrors: true
         with_items:
             - { name: net.ipv4.conf.all.accept_source_route, value: 0 }
             - { name: net.ipv4.conf.default.accept_source_route, value: 0 }
@@ -19,10 +19,10 @@
         sysctl:
             name: '{{ item.name }}'
             value: '{{ item.value }}'
-            sysctl_set: yes
+            sysctl_set: true
             state: present
-            reload: yes
-            ignoreerrors: yes
+            reload: true
+            ignoreerrors: true
         with_items:
             - { name: net.ipv6.conf.all.accept_source_route, value: 0 }
             - { name: net.ipv6.conf.default.accept_source_route, value: 0 }
@@ -44,10 +44,10 @@
         sysctl:
             name: '{{ item.name }}'
             value: '{{ item.value }}'
-            sysctl_set: yes
+            sysctl_set: true
             state: present
-            reload: yes
-            ignoreerrors: yes
+            reload: true
+            ignoreerrors: true
         with_items:
             - { name: net.ipv4.conf.all.accept_redirects, value: 0 }
             - { name: net.ipv4.conf.default.accept_redirects, value: 0 }
@@ -58,10 +58,10 @@
         sysctl:
             name: '{{ item.name }}'
             value: '{{ item.value }}'
-            sysctl_set: yes
+            sysctl_set: true
             state: present
-            reload: yes
-            ignoreerrors: yes
+            reload: true
+            ignoreerrors: true
         with_items:
             - { name: net.ipv6.conf.all.accept_redirects, value: 0 }
             - { name: net.ipv6.conf.default.accept_redirects, value: 0 }
@@ -81,10 +81,10 @@
   sysctl:
       name: '{{ item.name }}'
       value: '{{ item.value }}'
-      sysctl_set: yes
+      sysctl_set: true
       state: present
-      reload: yes
-      ignoreerrors: yes
+      reload: true
+      ignoreerrors: true
   with_items:
       - { name: net.ipv4.conf.all.secure_redirects, value: 0 }
       - { name: net.ipv4.conf.default.secure_redirects, value: 0 }
@@ -102,10 +102,10 @@
   sysctl:
       name: '{{ item.name }}'
       value: '{{ item.value }}'
-      sysctl_set: yes
+      sysctl_set: true
       state: present
-      reload: yes
-      ignoreerrors: yes
+      reload: true
+      ignoreerrors: true
   with_items:
       - { name: net.ipv4.conf.all.log_martians, value: 1 }
       - { name: net.ipv4.conf.default.log_martians, value: 1 }
@@ -124,8 +124,8 @@
       name: net.ipv4.icmp_echo_ignore_broadcasts
       value: '1'
       state: present
-      reload: yes
-      ignoreerrors: yes
+      reload: true
+      ignoreerrors: true
   notify:
       - sysctl flush ipv4 route table
   when:
@@ -141,8 +141,8 @@
       name: net.ipv4.icmp_ignore_bogus_error_responses
       value: '1'
       state: present
-      reload: yes
-      ignoreerrors: yes
+      reload: true
+      ignoreerrors: true
   notify:
       - sysctl flush ipv4 route table
   when:
@@ -157,10 +157,10 @@
   sysctl:
       name: '{{ item.name }}'
       value: '{{ item.value }}'
-      sysctl_set: yes
+      sysctl_set: true
       state: present
-      reload: yes
-      ignoreerrors: yes
+      reload: true
+      ignoreerrors: true
   with_items:
       - { name: net.ipv4.conf.all.rp_filter, value: 1 }
       - { name: net.ipv4.conf.default.rp_filter, value: 1 }
@@ -179,8 +179,8 @@
       name: net.ipv4.tcp_syncookies
       value: '1'
       state: present
-      reload: yes
-      ignoreerrors: yes
+      reload: true
+      ignoreerrors: true
   notify:
       - sysctl flush ipv4 route table
   when:
@@ -195,10 +195,10 @@
   sysctl:
       name: '{{ item.name }}'
       value: '{{ item.value }}'
-      sysctl_set: yes
+      sysctl_set: true
       state: present
-      reload: yes
-      ignoreerrors: yes
+      reload: true
+      ignoreerrors: true
   with_items:
       - { name: net.ipv6.conf.all.accept_ra, value: 0 }
       - { name: net.ipv6.conf.default.accept_ra, value: 0 }

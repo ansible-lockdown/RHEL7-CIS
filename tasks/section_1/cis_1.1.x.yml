@@ -131,7 +131,7 @@
 
 - name: "1.1.10 | AUDIT | Ensure separate partition exists for {{ required_mount }} | skips if mount absent"
   block:
-      - name: "1.1.10 | AUDIT | Ensure separate partition exists for {{ required_mount }}| Absent"
+      - name: "1.1.10 | AUDIT | Ensure separate partition exists for {{ required_mount }} | Absent"
         debug:
             msg: "WARNING!! {{ required_mount }} doesn't exist. This is a manual task"
         register: var_mount_absent
@@ -213,7 +213,7 @@
 
 - name: "1.1.15 | AUDIT | Ensure separate partition exists for /var/log  | skips if mount absent"
   block:
-      - name: "1.1.15 | AUDIT | Ensure separate partition exists for {{ required_mount }}| Absent"
+      - name: "1.1.15 | AUDIT | Ensure separate partition exists for {{ required_mount }} | Absent"
         debug:
             msg: "WARNING!! {{ required_mount }} doesn't exist. This is a manual task"
         register: var_log_mount_absent
@@ -240,7 +240,7 @@
 
 - name: "1.1.16 | AUDIT | Ensure separate partition exists for /var/log/audit | skips if mount absent"
   block:
-      - name: "1.1.16 | AUDIT | Ensure separate partition exists for {{ required_mount }}| Absent"
+      - name: "1.1.16 | AUDIT | Ensure separate partition exists for {{ required_mount }} | Absent"
         debug:
             msg: "WARNING!! {{ required_mount }} doesn't exist. This is a manual task"
         register: var_log_audit_mount_absent
@@ -267,7 +267,7 @@
 
 - name: "1.1.17 | AUDIT | Ensure separate partition exists for /home"
   block:
-      - name: "1.1.17 | AUDIT | Ensure separate partition exists for {{ required_mount }}| Absent"
+      - name: "1.1.17 | AUDIT | Ensure separate partition exists for {{ required_mount }} | Absent"
         debug:
             msg: "WARNING!! {{ required_mount }} doesn't exist. This is a manual task"
         register: home_mount_absent
@@ -340,7 +340,7 @@
 - name: "1.1.22 | PATCH | Ensure sticky bit is set on all world-writable directories"
   shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d -perm -0002 2>/dev/null | xargs chmod a+t
   args:
-      warn: no
+      warn: false
   changed_when: false
   failed_when: false
   when:
@@ -357,7 +357,7 @@
 - name: "1.1.23 | PATCH | Disable Automounting"
   service:
       name: autofs
-      enabled: no
+      enabled: false
   when:
       - not rhel7cis_allow_autofs
       - "'autofs' in ansible_facts.packages"
@@ -377,7 +377,7 @@
             dest: /etc/modprobe.d/CIS.conf
             regexp: "^(#)?install usb-storage(\\s|$)"
             line: "install usb-storage /bin/true"
-            create: yes
+            create: true
             owner: root
             group: root
             mode: 0600

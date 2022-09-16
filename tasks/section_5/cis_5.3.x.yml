@@ -372,8 +372,8 @@
   lineinfile:
       dest: /etc/ssh/sshd_config
       regexp: '^Banner ((?!/etc/issue.net$)).*$'
-      line: "{{ item.line|default(omit) }}"
-      insertafter: "{{ item.after|default(omit)}}"
+      line: "{{ item.line | default (omit) }}"
+      insertafter: "{{ item.after | default(omit) }}"
       state: "{{ item.state }}"
       validate: /usr/sbin/sshd -T -C user=root -C host="$(hostname)" -C addr="$(grep $(hostname) /etc/hosts | awk '{print $1}')" -f %s
   with_items:

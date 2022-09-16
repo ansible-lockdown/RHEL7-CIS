@@ -12,7 +12,7 @@
 
       - name: "3.1.1 | FACT | Disable IPv6 | grub"
         set_fact:
-           change_requires_reboot: true
+            change_requires_reboot: true
         when: grub_ipv6.changed
   when:
       - not rhel7cis_ipv6_required

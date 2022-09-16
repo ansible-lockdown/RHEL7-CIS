@@ -66,7 +66,7 @@
             dest: "/etc/pam.d/{{ item }}"
             state: present
             line: "account     required      pam_faillock.so"
-            firstmatch: yes
+            firstmatch: true
             regexp: '^\s*account\s+required\s+pam_faillock.so\s*'
             insertbefore: '^#?account ?'
         loop:
@@ -103,7 +103,7 @@
         copy:
             src: "/etc/pam.d/{{ item }}"
             dest: "/etc/pam.d/{{ item }}-local"
-            remote_src: yes
+            remote_src: true
             owner: root
             group: root
             mode: '0644'
@@ -118,7 +118,7 @@
             src: "/etc/pam.d/{{ item }}-local"
             dest: "/etc/pam.d/{{ item }}"
             state: link
-            force: yes
+            force: true
         loop:
             - "system-auth"
             - "password-auth"

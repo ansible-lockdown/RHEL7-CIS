@@ -22,7 +22,7 @@
   service:
       name: avahi-daemon
       state: stopped
-      enabled: no
+      enabled: false
   when:
       - not rhel7cis_avahi_server
       - "'avahi' in ansible_facts.packages"
@@ -345,7 +345,7 @@
 
   when:
       - not rhel7cis_rsyncd_server
-      - not audit_content == 'git' #Required by git for audit
+      - not audit_content == 'git'  # Required by git for audit
       - "'rsync' in ansible_facts.packages"
       - rhel7cis_rule_2_2_19
   tags:

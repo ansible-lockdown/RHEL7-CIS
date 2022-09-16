@@ -37,7 +37,7 @@
             dest: "{{ audit_conf_dir }}"
             version: "{{ audit_git_version }}"
   when:
-  - audit_content == 'git'
+      - audit_content == 'git'
 
 - name: Pre Audit Setup | copy to audit content files to server
   copy:
@@ -51,6 +51,9 @@
   get_url:
       url: "{{ audit_files_url }}"
       dest: "{{ audit_conf_dir }}"
+      owner: root
+      group: root
+      mode: 0755
   when:
       - audit_content == 'get_url'
 
@@ -60,14 +63,14 @@
         stat:
             path: "{{ audit_bin }}"
         register: goss_available
-      
+
       - name: Pre Audit Setup | If audit ensure goss is available
         assert:
             msg: "Audit has been selected: unable to find goss binary at {{ audit_bin }}"
-        when: 
+        when:
             - not goss_available.stat.exists
   when:
-  - run_audit
+      - run_audit
 
 - name: Pre Audit Setup | Copy ansible default vars values to test audit
   template:
@@ -78,10 +81,10 @@
       - run_audit
   tags:
       - goss_template
-  
+
 - name: "Pre Audit | Run pre_remediation {{ benchmark }} audit"
   shell: "{{ audit_conf_dir }}run_audit.sh -v {{ audit_vars_path }} -o {{ pre_audit_outfile }} -g {{ group_names }}"
-  environment: "{{ audit_run_script_environment|default({}) }}"
+  environment: "{{ audit_run_script_environment | default({}) }}"
   changed_when: false
   register: audit_run_pre_remediation
   vars:
@@ -92,11 +95,11 @@
       - name: "capture data {{ pre_audit_outfile }}"
         command: "cat {{ pre_audit_outfile }}"
         register: pre_audit
-        changed_when: false 
-        
+        changed_when: false
+
       - name: Pre Audit | Capture pre-audit result
-        set_fact: 
-            pre_audit_summary: "{{ pre_audit.stdout | from_json |json_query(summary) }}"
+        set_fact:
+            pre_audit_summary: "{{ pre_audit.stdout | from_json | json_query(summary) }}"
         vars:
             summary: 'summary."summary-line"'
   when:

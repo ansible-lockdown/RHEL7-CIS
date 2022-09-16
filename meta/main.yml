@@ -22,7 +22,7 @@ galaxy_info:
         - complianceascode
         - rhel7
 collections:
-  - community.general
-  - community.crypto
-  - ansible.posix
+    - community.general
+    - community.crypto
+    - ansible.posix
 dependencies: []

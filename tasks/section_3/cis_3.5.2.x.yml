@@ -297,7 +297,7 @@
 - name: "3.5.2.10 | PATCH | Ensure nftables service is enabled"
   systemd:
       name: nftables
-      enabled: yes
+      enabled: true
   become: true
   when:
       - rhel7cis_rule_3_5_2_10

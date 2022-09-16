@@ -1,6 +1,9 @@
 parseable: true
 quiet: true
 skip_list:
+  - 'schema'
+  - 'no-changed-when'
+  - 'fqcn-builtins'
   - '204'
   - '305'
   - '303'
