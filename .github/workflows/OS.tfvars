@@ -5,5 +5,5 @@ ami_username  = "centos"
 ami_user_home = "/home/centos"
 instance_tags = {
   Name        = "RHEL7-CIS"
-  Environment = "ockdown_github_repo_workflow "
+  Environment = "Lockdown_github_repo_workflow "
 }
