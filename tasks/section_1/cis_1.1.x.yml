@@ -138,6 +138,7 @@
         changed_when: var_mount_absent.skipped is undefined
         when:
             - required_mount not in mount_names
+
       - name: "1.1.10 | AUDIT | Ensure separate partition exists for {{ required_mount }} | Present"
         debug:
             msg: "Congratulations: {{ required_mount }} exists."
@@ -165,6 +166,7 @@
         changed_when: var_tmp_mount_absent.skipped is undefined
         when:
             - required_mount not in mount_names
+
       - name: "1.1.11 | AUDIT | Ensure separate partition exists for {{ required_mount }} | Present"
         debug:
             msg: "Congratulations: {{ required_mount }} exists."
@@ -247,6 +249,7 @@
         changed_when: var_log_audit_mount_absent.skipped is undefined
         when:
             - required_mount not in mount_names
+
       - name: "1.1.16 | AUDIT | Ensure separate partition exists for {{ required_mount }} | Present"
         debug:
             msg: "Congratulations: {{ required_mount }} exists."
@@ -274,6 +277,7 @@
         changed_when: home_mount_absent.skipped is undefined
         when:
             - required_mount not in mount_names
+
       - name: "1.1.17 | AUDIT | Ensure separate partition exists for {{ required_mount }} | Present"
         debug:
             msg: "Congratulations: {{ required_mount }} exists."
