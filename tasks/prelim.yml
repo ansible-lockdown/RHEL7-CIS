@@ -13,7 +13,7 @@
   changed_when: false
   check_mode: false
   tags:
-  - skip_ansible_lint
+      - skip_ansible_lint
 
 - name: "PRELIM | Gather UID 0 accounts other than root"
   shell: "cat /etc/passwd | awk -F: '($3 == 0 && $1 != \"root\") {i++;print $1 } END {exit i}'"
@@ -21,7 +21,7 @@
   changed_when: false
   check_mode: false
   tags:
-  - skip_ansible_lint
+      - skip_ansible_lint
 
 - name: "PRELIM | Check whether machine is UEFI-based"
   stat:
@@ -36,16 +36,16 @@
             rhel7cis_bootloader_path: /boot/efi/EFI/redhat/
             rhel7cis_legacy_boot: false
         when:
-        - rhel7cis_efi_boot.stat.exists
-        - ansible_distribution != 'CentOS'  # Note: rhel & OEL both use redhat path
+            - rhel7cis_efi_boot.stat.exists
+            - ansible_distribution != 'CentOS'  # Note: rhel & OEL both use redhat path
 
       - name: "PRELIM | set fact if UEFI boot | CentOS "
         set_fact:
             rhel7cis_bootloader_path: /boot/efi/EFI/centos/
             rhel7cis_legacy_boot: false
         when:
-        - rhel7cis_efi_boot.stat.exists
-        - ansible_distribution == 'CentOS'
+            - rhel7cis_efi_boot.stat.exists
+            - ansible_distribution == 'CentOS'
 
       - name: "PRELIM | set if not UEFI boot"
         set_fact:
@@ -56,8 +56,8 @@
       - name: output bootloader and efi state
         debug:
             msg:
-            - "bootloader path set to {{ rhel7cis_bootloader_path }}"
-            - "legacy boot equals {{ rhel7cis_legacy_boot }}"
+                - "bootloader path set to {{ rhel7cis_bootloader_path }}"
+                - "legacy boot equals {{ rhel7cis_legacy_boot }}"
 
 - name: "PRELIM | Section 1.1 | Create list of mount points"
   set_fact:
@@ -68,7 +68,7 @@
       name: libselinux
       state: present
   when:
-  - not rhel7cis_selinux_disable
+      - not rhel7cis_selinux_disable
   vars:
       ansible_python_interpreter: /bin/python
 

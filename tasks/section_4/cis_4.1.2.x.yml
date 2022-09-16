@@ -78,7 +78,7 @@
 
       - name: "4.1.2.4 | PATCH | Ensure audit_backlog_limit is sufficient"
         set_fact:
-           change_requires_reboot: true
+            change_requires_reboot: true
         when:
             - grub_backup_updated.changed or
               grub_backup_new.changed

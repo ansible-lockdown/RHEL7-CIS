@@ -98,7 +98,7 @@
   block:
       - name: "3.5.1.7 | AUDIT | Ensure firewalld drops unnecessary services and ports | Get list of services and ports"
         shell: "firewall-cmd --get-active-zones | awk '!/:/ {print $1}' | while read ZN; do firewall-cmd --list-all --zone=$ZN; done"
-        changed_when: no
+        changed_when: false
         check_mode: false
         register: rhel7cis_3_5_1_7_servicesport
 

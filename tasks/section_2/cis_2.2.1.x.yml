@@ -18,7 +18,7 @@
   service:
       name: "{{ rhel7cis_time_synchronization }}d"
       state: started
-      enabled: yes
+      enabled: true
   when:
       - rhel7cis_rule_2_2_1_1
       - not system_is_container
@@ -31,7 +31,7 @@
   service:
       name: ntpd
       state: stopped
-      enabled: no
+      enabled: false
   when:
       - "'ntp' in ansible_facts.packages"
       - rhel7cis_time_synchronization == "chrony"
@@ -46,7 +46,7 @@
   service:
       name: chronyd
       state: stopped
-      enabled: no
+      enabled: false
   when:
       - rhel7cis_time_synchronization == "ntp" and "'chrony' in ansible_facts.packages"
       - rhel7cis_rule_2_2_1_1
@@ -72,7 +72,7 @@
             regexp: "^(#)?OPTIONS"
             line: "OPTIONS=\"-u chrony\""
             state: present
-            create: yes
+            create: true
             owner: root
             group: root
             mode: 0640

@@ -6,8 +6,8 @@
             name: net.ipv4.ip_forward
             value: '0'
             state: present
-            reload: yes
-            ignoreerrors: yes
+            reload: true
+            ignoreerrors: true
         notify:
             - sysctl flush ipv4 route table
 
@@ -16,8 +16,8 @@
             name: net.ipv6.conf.all.forwarding
             value: '0'
             state: present
-            reload: yes
-            ignoreerrors: yes
+            reload: true
+            ignoreerrors: true
         notify:
             - sysctl flush ipv6 route table
         when:
@@ -35,10 +35,10 @@
   sysctl:
       name: '{{ item.name }}'
       value: '{{ item.value }}'
-      sysctl_set: yes
+      sysctl_set: true
       state: present
-      reload: yes
-      ignoreerrors: yes
+      reload: true
+      ignoreerrors: true
   with_items:
       - { name: net.ipv4.conf.all.send_redirects, value: 0 }
       - { name: net.ipv4.conf.default.send_redirects, value: 0 }

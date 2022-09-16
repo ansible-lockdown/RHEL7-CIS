@@ -5,7 +5,7 @@
   package:
       autoremove: true
   changed_when: false
-  ignore_errors: yes
+  ignore_errors: true  # noqa ignore-errors
   tags:
       - skip_ansible_lint
   vars:

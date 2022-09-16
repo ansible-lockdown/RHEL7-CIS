@@ -15,16 +15,16 @@
             name: fs.suid_dumpable
             value: '0'
             state: present
-            reload: yes
-            sysctl_set: yes
-            ignoreerrors: yes
+            reload: true
+            sysctl_set: true
+            ignoreerrors: true
 
       - name: 1.5.1 | PATCH | Ensure core dumps are restricted | coredump.conf"
         lineinfile:
             dest: /etc/systemd/coredump.conf
             regexp: "{{ item.regex }}"
             line: "{{ item.line }}"
-            create: yes
+            create: true
             mode: 0644
         loop:
             - { regex: '^Storage', line: 'Storage=none' }
@@ -53,9 +53,9 @@
       name: kernel.randomize_va_space
       value: '2'
       state: present
-      reload: yes
-      sysctl_set: yes
-      ignoreerrors: yes
+      reload: true
+      sysctl_set: true
+      ignoreerrors: true
   when:
       - rhel7cis_rule_1_5_3
   tags:

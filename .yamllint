@@ -1,6 +1,8 @@
+---
 ignore: |
   tests/
   molecule/
+  .github/
   .gitlab-ci.yml
   *molecule.yml
 
@@ -8,7 +10,7 @@ extends: default
 
 rules:
   indentation:
-    # Requiring 2 space indentation
+    # Requiring 4 space indentation
     spaces: 4
     # Requiring consistent indentation within a file, either indented or not
     indent-sequences: consistent
@@ -19,4 +21,15 @@ rules:
   brackets:
     max-spaces-inside: 1
     level: error
+  indentation:
+    indent-sequences: consistent
+    level: error
   line-length: disable
+  key-duplicates: enable
+  new-line-at-end-of-file: enable
+  new-lines:
+    type: unix
+  trailing-spaces: enable
+  truthy:
+    allowed-values: ['true', 'false']
+    check-keys: false

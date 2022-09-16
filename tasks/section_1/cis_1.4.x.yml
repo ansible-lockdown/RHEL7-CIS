@@ -14,7 +14,7 @@
 
       - name: "1.4.1 | FACT | Ensure bootloader password is set"
         set_fact:
-           change_requires_reboot: true
+            change_requires_reboot: true
         when: bootloader_pw
   when:
       - ansible_distribution_version >= '7.2'

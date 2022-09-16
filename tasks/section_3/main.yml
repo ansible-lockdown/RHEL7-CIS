@@ -22,16 +22,16 @@
 - name: "SECTION | 3.5.2 | Configure nftables"
   include_tasks: cis_3.5.2.x.yml
   when:
-  - rhel7cis_firewall == "nftables"
+      - rhel7cis_firewall == "nftables"
   tags:
       - nftables
 
 - name: "SECTION | 3.5.3.x.x | Configure iptables"
   block:
-    - name: "SECTION | 3.5.3.1.x | Configure iptables"
-      include_tasks: cis_3.5.3.1.x.yml
-    - name: "SECTION | 3.5.3.2.x | Configure iptables"
-      include_tasks: cis_3.5.3.2.x.yml
+      - name: "SECTION | 3.5.3.1.x | Configure iptables"
+        include_tasks: cis_3.5.3.1.x.yml
+      - name: "SECTION | 3.5.3.2.x | Configure iptables"
+        include_tasks: cis_3.5.3.2.x.yml
   when:
       - rhel7cis_firewall == "iptables"
   tags:

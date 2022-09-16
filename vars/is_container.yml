@@ -400,10 +400,10 @@ rhel7cis_aide_cron:
 rhel7cis_selinux_pol: targeted
 
 # Whether or not to run tasks related to auditing/patching the desktop environment
-rhel7cis_gui: no
+rhel7cis_gui: false
 
 # Set to 'true' if X Windows is needed in your environment
-rhel7cis_xwindows_required: no
+rhel7cis_xwindows_required: false
 
 rhel7cis_openldap_clients_required: false
 rhel7cis_telnet_required: false
@@ -503,7 +503,7 @@ rhel7cis_pam_faillock:
     attempts: 5
     interval: 900
     unlock_time: 900
-    fail_for_root: no
+    fail_for_root: no  # noqa yaml[truthy]
     remember: 5
     pwhash: sha512
 rhel7cis_inactivelock:
@@ -527,7 +527,7 @@ rhel7cis_vartmp:
     source: /tmp
     fstype: none
     opts: "defaults,nodev,nosuid,noexec,bind"
-    enabled: no
+    enabled: false
 
 # Interactive user UID starting point
 rhel7cis_rule_5_4_2_min_uid: 1000

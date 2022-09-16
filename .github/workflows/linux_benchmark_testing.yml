@@ -73,7 +73,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: terraform apply -var-file "OS.tfvars" -var-file "github_vars.tfvars" --auto-approve -input=false
+        run: terraform apply -var-file="github_vars.tfvars" -var-file="OS.tfvars" --auto-approve -input=false
 
 ## Debug Section
       - name: DEBUG - Show Ansible hostfile
@@ -117,4 +117,4 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: terraform destroy -var-file "OS.tfvars" -var-file "github_vars.tfvars" --auto-approve -input=false
+        run: terraform destroy -var-file="github_vars.tfvars" -var-file="OS.tfvars" --auto-approve -input=false

@@ -5,22 +5,22 @@
   sysctl:
       name: net.ipv4.route.flush
       value: '1'
-      sysctl_set: yes
+      sysctl_set: true
   when: ansible_virtualization_type != "docker"
 
 - name: sysctl flush ipv6 route table
   sysctl:
       name: net.ipv6.route.flush
       value: '1'
-      sysctl_set: yes
+      sysctl_set: true
   when: ansible_virtualization_type != "docker"
 
 - name: systemd restart tmp.mount
   systemd:
       name: tmp.mount
-      daemon_reload: yes
-      enabled: yes
-      masked: no
+      daemon_reload: true
+      enabled: true
+      masked: false
       state: reloaded
 
 - name: remount tmp
@@ -41,9 +41,9 @@
 - name: systemd restart var-tmp.mount
   systemd:
       name: var-tmp.mount
-      daemon_reload: yes
-      enabled: yes
-      masked: no
+      daemon_reload: true
+      enabled: true
+      masked: false
       state: reloaded
 
 - name: remount home
@@ -83,7 +83,7 @@
   check_mode: false
   failed_when: false
   args:
-      warn: no
+      warn: false
   when:
       - not rhel7cis_skip_for_travis
   tags:

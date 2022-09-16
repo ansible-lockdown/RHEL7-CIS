@@ -16,7 +16,7 @@
 - name: "4.2.1.2 | PATCH | Ensure rsyslog Service is enabled and running"
   service:
       name: rsyslog
-      enabled: yes
+      enabled: true
       state: started
   when:
       - rhel7cis_rule_4_2_1_2
