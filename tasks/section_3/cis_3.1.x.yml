@@ -18,7 +18,8 @@
       - not rhel7cis_ipv6_required
       - rhel7cis_rule_3_1_1
   tags:
-      - level2
+      - level2-server
+      - level2-workstation
       - rule_3.1.1
       - patch
 
@@ -38,6 +39,6 @@
       - rhel7cis_rule_3_1_2
       - "'NetworkManager' in ansible_facts.packages"
   tags:
-      - level1
-      - level2
+      - level1-server
+      - level2-workstation
       - rule_3.1.2

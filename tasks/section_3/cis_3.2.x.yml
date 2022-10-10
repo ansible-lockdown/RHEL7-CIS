@@ -26,7 +26,8 @@
       - not rhel7cis_is_router
       - rhel7cis_rule_3_2_1
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - sysctl
       - patch
       - rule_3.2.1
@@ -48,7 +49,8 @@
       - not rhel7cis_is_router
       - rhel7cis_rule_3_2_2
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - sysctl
       - patch
       - rule_3.2.2

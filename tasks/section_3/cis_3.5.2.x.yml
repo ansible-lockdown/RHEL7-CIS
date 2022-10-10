@@ -10,7 +10,8 @@
       - "'nftables' not in ansible_facts.packages"
       - rhel7cis_rule_3_5_2_1
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_3.5.2.1
 
@@ -24,7 +25,8 @@
       - "'firewalld' in ansible_facts.packages"
       - rhel7cis_rule_3_5_2_2
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_3.5.2.2
 
@@ -38,7 +40,8 @@
       - "'iptables-services' in ansible_facts.packages"
       - rhel7cis_rule_3_5_2_3
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_3.5.2.3
 
@@ -55,7 +58,8 @@
       - rhel7cis_firewall != "iptables"
       - rhel7cis_rule_3_5_2_4
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_3.5.2.4
 
@@ -90,7 +94,8 @@
   when:
       - rhel7cis_rule_3_5_2_5
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_3.5.2.5
 
@@ -133,7 +138,8 @@
       - rhel7cis_rule_3_5_2_6
   tags:
       - skip_ansible_lint
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_3.5.2.6
 
@@ -174,7 +180,8 @@
   when:
       - rhel7cis_rule_3.5.2.7
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_3.5.2.7
 
@@ -230,7 +237,8 @@
   when:
       - rhel7cis_rule_3_5_2_8
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_3.5.2.8
 
@@ -290,7 +298,8 @@
   when:
       - rhel7cis_rule_3_5_2_9
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_3.5.2.9
 
@@ -316,6 +325,7 @@
   when:
       - rhel7cis_rule_3_5_2_11
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_3.5.2.11
