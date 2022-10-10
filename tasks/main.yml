@@ -46,7 +46,8 @@
   tags:
       - rule_5.6
 
-- include: check_prereqs.yml
+- name: Import prereq checks
+  import_tasks: check_prereqs.yml
   tags:
       - always
       - prereqs
@@ -73,12 +74,14 @@
       - container_discovery
       - always
 
-- include: prelim.yml
+- name: Import preliminary tasks
+  import_tasks: prelim.yml
   tags:
       - prelim_tasks
       - always
 
-- import_tasks: pre_remediation_audit.yml
+- name: Import pre remediation audit
+  import_tasks: pre_remediation_audit.yml
   when:
       - run_audit
   tags:
@@ -95,37 +98,44 @@
   tags:
       - always
 
-- include: parse_etc_password.yml
+- name: Run parse etc password for user variables
+  import_tasks: parse_etc_password.yml
   when:
       - rhel7cis_section5 or
         rhel7cis_section6
 
-- include: section_1/main.yml
+- name: Import section 1 tasks
+  import_tasks: section_1/main.yml
   when: rhel7cis_section1
   tags:
       - rhel7cis_section1
 
-- include: section_2/main.yml
+- name: Import section 2 tasks
+  import_tasks: section_2/main.yml
   tags:
       - rhel7cis_section2
   when: rhel7cis_section2
 
-- include: section_3/main.yml
+- name: Import section 3 tasks
+  import_tasks: section_3/main.yml
   when: rhel7cis_section3
   tags:
       - rhel7cis_section3
 
-- include: section_4/main.yml
+- name: Import section 4 tasks
+  import_tasks: section_4/main.yml
   when: rhel7cis_section4
   tags:
       - rhel7cis_section4
 
-- include: section_5/main.yml
+- name: Import section 5 tasks
+  import_tasks: section_5/main.yml
   when: rhel7cis_section5
   tags:
       - rhel7cis_section5
 
-- include: section_6/main.yml
+- name: Import section 6 tasks
+  import_tasks: section_6/main.yml
   when: rhel7cis_section6
   tags:
       - rhel7cis_section6
@@ -133,12 +143,13 @@
 - name: flush handlers
   meta: flush_handlers
 
-- include: post.yml
+- import_tasks: post.yml
   tags:
       - post_tasks
       - always
 
-- import_tasks: post_remediation_audit.yml
+- name: Import post remediation task
+  import_tasks: post_remediation_audit.yml
   when:
       - run_audit
   tags:
