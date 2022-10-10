@@ -23,7 +23,6 @@
   tags:
       - level1-server
       - level1-workstation
-      - scored
       - audit
       - mounts
       - rule_1.1.2
@@ -100,7 +99,6 @@
   tags:
       - level1-server
       - level1-workstation
-      - scored
       - patch
       - mounts
       - rule_1.1.6
@@ -123,7 +121,6 @@
   tags:
       - level1-server
       - level1-workstation
-      - scored
       - patch
       - mounts
       - rule_1.1.7
@@ -153,7 +150,6 @@
   tags:
       - level2-server
       - level2-workstation
-      - scored
       - audit
       - mounts
       - rule_1.1.10
@@ -181,7 +177,6 @@
   tags:
       - level2-server
       - level2-workstation
-      - scored
       - audit
       - mounts
       - rule_1.1.11
@@ -209,7 +204,6 @@
   tags:
       - level1-server
       - level1-workstation
-      - scored
       - patch
       - mounts
       - skip_ansible_lint
@@ -235,7 +229,6 @@
   tags:
       - level2-server
       - level2-workstation
-      - scored
       - audit
       - mounts
       - rule_1.1.15
@@ -263,7 +256,6 @@
   tags:
       - level2-server
       - level2-workstation
-      - scored
       - audit
       - mounts
       - rule_1.1.16
@@ -292,7 +284,6 @@
   tags:
       - level2-server
       - level2-workstation
-      - scored
       - audit
       - mounts
       - rule_1.1.17
@@ -315,7 +306,6 @@
   tags:
       - level1-server
       - level1-workstation
-      - scored
       - patch
       - mounts
       - rule_1.1.18
@@ -335,7 +325,6 @@
   tags:
       - level1-server
       - level1-workstation
-      - notscored
       - audit
       - mounts
       - rule_1.1.19
