@@ -10,7 +10,8 @@
   when:
       - rhel7cis_rule_4_1_2_1
   tags:
-      - level2
+      - level2-server
+      - level2-workstation
       - auditd
       - patch
       - rule_4.1.2.1
@@ -25,7 +26,8 @@
   when:
       - rhel7cis_rule_4_1_2_2
   tags:
-      - level2
+      - level2-server
+      - level2-workstation
       - auditd
       - patch
       - rule_4.1.2.2
@@ -44,7 +46,8 @@
   when:
       - rhel7cis_rule_4_1_2_3
   tags:
-      - level2
+      - level2-server
+      - level2-workstation
       - auditd
       - patch
       - rule_4.1.2.3
@@ -86,7 +89,8 @@
   when:
       - rhel7cis_rule_4_1_2_4
   tags:
-      - level2
+      - level2-server
+      - level2-workstation
       - grub
       - patch
       - rule_4.1.2.4
@@ -102,7 +106,8 @@
   when:
       - rhel7cis_rule_4_1_3
   tags:
-      - level2
+      - level2-server
+      - level2-workstation
       - auditd
       - patch
       - rule_4.1.3
@@ -118,7 +123,8 @@
   when:
       - rhel7cis_rule_4_1_4
   tags:
-      - level2
+      - level2-server
+      - level2-workstation
       - auditd
       - patch
       - rule_4.1.4
@@ -134,7 +140,8 @@
   when:
       - rhel7cis_rule_4_1_5
   tags:
-      - level2
+      - level2-server
+      - level2-workstation
       - auditd
       - patch
       - rule_4.1.5
@@ -150,7 +157,8 @@
   when:
       - rhel7cis_rule_4_1_6
   tags:
-      - level2
+      - level2-server
+      - level2-workstation
       - auditd
       - patch
       - rule_4.1.6
@@ -176,7 +184,8 @@
   when:
       - rhel7cis_rule_4_1_7
   tags:
-      - level2
+      - level2-server
+      - level2-workstation
       - auditd
       - patch
       - rule_4.1.7
@@ -192,7 +201,8 @@
   when:
       - rhel7cis_rule_4_1_8
   tags:
-      - level2
+      - level2-server
+      - level2-workstation
       - auditd
       - patch
       - rule_4.1.8
@@ -208,7 +218,8 @@
   when:
       - rhel7cis_rule_4_1_9
   tags:
-      - level2
+      - level2-server
+      - level2-workstation
       - auditd
       - patch
       - automated
@@ -225,7 +236,8 @@
   when:
       - rhel7cis_rule_4_1_10
   tags:
-      - level2
+      - level2-server
+      - level2-workstation
       - auditd
       - patch
       - rule_4.1.10
@@ -249,7 +261,8 @@
   when:
       - rhel7cis_rule_4_1_11
   tags:
-      - level2
+      - level2-server
+      - level2-workstation
       - auditd
       - patch
       - rule_4.1.11
@@ -265,7 +278,8 @@
   when:
       - rhel7cis_rule_4_1_12
   tags:
-      - level2
+      - level2-server
+      - level2-workstation
       - auditd
       - patch
       - automated
@@ -282,7 +296,8 @@
   when:
       - rhel7cis_rule_4_1_13
   tags:
-      - level2
+      - level2-server
+      - level2-workstation
       - auditd
       - patch
       - rule_4.1.13
@@ -298,7 +313,8 @@
   when:
       - rhel7cis_rule_4_1_14
   tags:
-      - level2
+      - level2-server
+      - level2-workstation
       - auditd
       - patch
       - rule_4.1.14
@@ -314,7 +330,8 @@
   when:
       - rhel7cis_rule_4_1_15
   tags:
-      - level2
+      - level2-server
+      - level2-workstation
       - auditd
       - patch
       - rule_4.1.15
@@ -330,7 +347,8 @@
   when:
       - rhel7cis_rule_4_1_16
   tags:
-      - level2
+      - level2-server
+      - level2-workstation
       - auditd
       - patch
       - rule_4.1.16
@@ -346,7 +364,8 @@
   when:
       - rhel7cis_rule_4_1_17
   tags:
-      - level2
+      - level2-server
+      - level2-workstation
       - auditd
       - patch
       - rule_4.1.17
