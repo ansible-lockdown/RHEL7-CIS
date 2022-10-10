@@ -600,14 +600,14 @@ audit_local_copy: "some path to copy from"
 audit_files_url: "some url maybe s3?"
 
 # Where the goss audit configuration will be stored
-audit_files: "/var/tmp/{{ benchmark }}-Audit/"
+audit_files: "/opt/{{ benchmark }}-Audit/"
 
 ## Goss configuration information
 # Where the goss configs and outputs are stored
-audit_out_dir: '/var/tmp'
+audit_out_dir: '/opt'
 audit_conf_dir: "{{ audit_out_dir }}/{{ benchmark }}-Audit/"
-pre_audit_outfile: "{{ audit_out_dir }}/{{ ansible_hostname }}_pre_scan_{{ ansible_date_time.epoch }}.{{ audit_format }}"
-post_audit_outfile: "{{ audit_out_dir }}/{{ ansible_hostname }}_post_scan_{{ ansible_date_time.epoch }}.{{ audit_format }}"
+pre_audit_outfile: "{{ audit_out_dir }}/{{ ansible_hostname }}-{{ benchmark }}_pre_scan_{{ ansible_date_time.epoch }}.{{ audit_format }}"
+post_audit_outfile: "{{ audit_out_dir }}/{{ ansible_hostname }}-{{ benchmark }}_post_scan_{{ ansible_date_time.epoch }}.{{ audit_format }}"
 
 ## The following should not need changing
 goss_file: "{{ audit_conf_dir }}goss.yml"
