@@ -12,7 +12,8 @@
   when:
       - rhel7cis_rule_5_4_1
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_5.4.1
 
@@ -127,7 +128,8 @@
       - rhel7cis_rule_5_4_3
       - rhel7cis_rule_5_4_4
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_5.4.2
       - rule_5.4.4
