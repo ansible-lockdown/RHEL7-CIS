@@ -36,7 +36,8 @@
   when:
       - rhel7cis_rule_5_5_2
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_5.5.2
 

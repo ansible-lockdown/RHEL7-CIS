@@ -8,7 +8,8 @@
       - not rhel7cis_selinux_disable
       - rhel7cis_rule_1_6_1_1
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_1.6.1.1
   vars:
@@ -49,7 +50,8 @@
       - rhel7cis_rule_1_6_1_3
       - rhel7cis_rule_1_6_1_4
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - selinux
       - patch
       - rule_1.6.1.3

@@ -311,7 +311,8 @@
   when:
       - rhel7cis_rule_3_5_2_10
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_3.5.2.10
 

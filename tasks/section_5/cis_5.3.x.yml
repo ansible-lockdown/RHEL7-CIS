@@ -166,7 +166,8 @@
   when:
       - rhel7cis_rule_5_3_6
   tags:
-      - level2
+      - level2-server
+      - level1-workstation
       - patch
       - ssh
       - rule_5.3.6
