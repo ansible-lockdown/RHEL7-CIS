@@ -34,7 +34,8 @@
   when:
       - rhel7cis_rule_6_1_1
   tags:
-      - level2
+      - level2-server
+      - level2-workstation
       - patch
       - rule_6.1.1
 
@@ -47,7 +48,8 @@
   when:
       - rhel7cis_rule_6_1_2
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_6.1.2
 
@@ -60,7 +62,8 @@
   when:
       - rhel7cis_rule_6_1_3
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_6.1.3
 
@@ -73,7 +76,8 @@
   when:
       - rhel7cis_rule_6_1_4
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_6.1.4
 
@@ -86,7 +90,8 @@
   when:
       - rhel7cis_rule_6_1_5
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_6.1.5
 
@@ -99,7 +104,8 @@
   when:
       - rhel7cis_rule_6_1_6
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_6.1.6
 
@@ -112,7 +118,8 @@
   when:
       - rhel7cis_rule_6_1_7
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_6.1.7
 
@@ -125,7 +132,8 @@
   when:
       - rhel7cis_rule_6_1_8
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_6.1.8
 
@@ -138,7 +146,8 @@
   when:
       - rhel7cis_rule_6_1_9
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_6.1.9
 
@@ -170,7 +179,8 @@
   when:
       - rhel7cis_rule_6_1_10
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_6.1.10
 
@@ -197,7 +207,8 @@
   when:
       - rhel7cis_rule_6_1_11
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_6.1.11
 
@@ -222,7 +233,8 @@
   when:
       - rhel7cis_rule_6_1_12
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_6.1.12
 
@@ -254,7 +266,8 @@
   when:
       - rhel7cis_rule_6_1_13
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_6.1.13
 
@@ -286,6 +299,7 @@
   when:
       - rhel7cis_rule_6_1_14
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_6.1.14
