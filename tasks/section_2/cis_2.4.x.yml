@@ -6,6 +6,6 @@
   when:
       - rhel7cis_rule_2_4
   tags:
-      - level1
-      - notscored
+      - level1-server
+      - level1-workstation
       - rule_2.4
