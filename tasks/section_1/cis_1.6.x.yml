@@ -33,7 +33,8 @@
       - not rhel7cis_selinux_disable
       - rhel7cis_rule_1_6_1_2
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_1.6.1.2
 
@@ -64,7 +65,8 @@
       - not rhel7cis_selinux_state == "permissive"
       - rhel7cis_rule_1_6_1_5
   tags:
-      - level2
+      - level2-server
+      - level2-workstation
       - selinux
       - patch
       - rule_1.6.1.5
@@ -90,7 +92,8 @@
   when:
       - rhel7cis_rule_1_6_1_6
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - audit
       - rule_1.6.1.6
 
@@ -101,7 +104,8 @@
   when:
       - rhel7cis_rule_1_6_1_7
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - selinux
       - patch
       - rule_1.6.1.7
@@ -115,7 +119,8 @@
   when:
       - rhel7cis_rule_1_6_1_8
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_1.6.1.8
   vars:

@@ -10,7 +10,8 @@
   when:
       - rhel7cis_rule_1_7_1
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - banner
       - patch
       - rule_1.7.1
@@ -25,7 +26,8 @@
   when:
       - rhel7cis_rule_1_7_2
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - banner
       - patch
       - rule_1.7.2
@@ -40,7 +42,8 @@
   when:
       - rhel7cis_rule_1_7_3
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - banner
       - patch
       - rule_1.7.3
@@ -55,7 +58,8 @@
   when:
       - rhel7cis_rule_1_7_4
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - perms
       - patch
       - rule_1.7.4
@@ -70,7 +74,8 @@
   when:
       - rhel7cis_rule_1_7_5
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - perms
       - patch
       - rule_1.7.5
@@ -85,7 +90,8 @@
   when:
       - rhel7cis_rule_1_7_6
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - perms
       - patch
       - rule_1.7.6

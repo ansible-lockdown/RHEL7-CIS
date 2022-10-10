@@ -71,7 +71,8 @@
         rhel7cis_rule_1_1_4 or
         rhel7cis_rule_1_1_5
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_1.1.3
       - rule_1.1.4

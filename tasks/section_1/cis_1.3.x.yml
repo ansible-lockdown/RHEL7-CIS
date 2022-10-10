@@ -19,7 +19,8 @@
       - rhel7cis_config_aide
       - rhel7cis_rule_1_3_1
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - aide
       - patch
       - rule_1.3.1
@@ -38,7 +39,8 @@
   when:
       - rhel7cis_rule_1_3_2
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - aide
       - file_integrity
       - patch

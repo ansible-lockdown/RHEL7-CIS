@@ -18,7 +18,8 @@
       - rhel7cis_rule_1_8_1
   tags:
       - rule_1.8.1
-      - level_1
+      - level1-server
+      - level1-workstation
 
 - name: 1.8.2 | PATCH | Ensure GDM login banner is configured
   block:
@@ -57,7 +58,8 @@
       - rhel7cis_rule_1_8_2
   tags:
       - rule_1.8.2
-      - level_1
+      - level1-server
+      - level1-workstation
 
 - name: 1.8.3 | PATCH | Ensure last logged in user display is disabled | banner
   block:
@@ -95,12 +97,13 @@
       - rhel7cis_rule_1_8_3
   tags:
       - rule_1.8.3
-      - level_1
+      - level1-server
+      - level1-workstation
 
 - name: 1.8.4 | PATCH | Ensure XDCMP is not enabled
   lineinfile:
       path: /etc/gdm/custom.conf
-      regexp: ^Enable=true
+      regexp: ^Enable(\s|)=(\s|)true
       state: absent
       create: true
       owner: root
@@ -112,3 +115,5 @@
       - rhel7cis_rule_1_8_4
   tags:
       - rule_1.8.4
+      - level1-server
+      - level1-workstation
