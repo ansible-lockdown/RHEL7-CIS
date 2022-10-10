@@ -222,7 +222,6 @@
       - level2-workstation
       - auditd
       - patch
-      - automated
       - rule_4.1.9
 
 - name: "4.1.10 | PATCH | Ensure unsuccessful unauthorized file access attempts are collected"
@@ -282,7 +281,6 @@
       - level2-workstation
       - auditd
       - patch
-      - automated
       - rule_4.1.12
 
 - name: "4.1.13 | PATCH | Ensure file deletion events by users are collected"
