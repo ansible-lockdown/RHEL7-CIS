@@ -8,7 +8,8 @@
   when:
       - rhel7cis_rule_1_2_1
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_1.2.1
 
@@ -32,7 +33,8 @@
   when:
       - rhel7cis_rule_1_2_2
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - audit
       - rule_1.2.2
       - skip_ansible_lint
@@ -57,33 +59,7 @@
   when:
       - rhel7cis_rule_1_2_3
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_1.2.3
-
-
-- name: "1.2.4 | AUDIT | Ensure Red Hat Subscription Manager connection is configured"
-  shell: subscription-manager identity
-  changed_when: false
-  failed_when: false
-  when:
-      - ansible_distribution == "RedHat"
-      - rhel7cis_rule_1_2_4
-  tags:
-      - level1
-      - patch
-      - rule_1.2.4
-      - skip_ansible_lint
-
-- name: "1.2.5 | PATCH | Disable the rhnsd Daemon"
-  service:
-      name: rhnsd
-      state: stopped
-      masked: true
-  when:
-      - ansible_distribution == "RedHat" and not rhel7cis_rhnsd_required
-      - rhel7cis_rule_1_2_5
-  tags:
-      - level1
-      - patch
-      - rule_1.2.5
