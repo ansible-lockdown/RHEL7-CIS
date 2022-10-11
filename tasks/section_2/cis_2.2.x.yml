@@ -12,8 +12,8 @@
       - not rhel7cis_xwindows_required
       - rhel7cis_rule_2_2_2
   tags:
-      - level1
-      - scored
+      - level1-server
+      - level1-workstation
       - xwindows
       - patch
       - rule_2.2.2
@@ -28,8 +28,8 @@
       - "'avahi' in ansible_facts.packages"
       - rhel7cis_rule_2_2_3
   tags:
-      - level1
-      - scored
+      - level1-server
+      - level1-workstation
       - avahi
       - services
       - patch
@@ -46,8 +46,8 @@
       - "'cups' in ansible_facts.packages"
       - rhel7cis_rule_2_2_4
   tags:
-      - level1
-      - scored
+      - level1-server
+      - level1-workstation
       - cups
       - services
       - patch
@@ -64,8 +64,8 @@
       - "'dhcp' in ansible_facts.packages"
       - rhel7cis_rule_2_2_5
   tags:
-      - level1
-      - scored
+      - level1-server
+      - level1-workstation
       - dhcp
       - services
       - patch
@@ -82,8 +82,8 @@
       - "'openldap-servers' in ansible_facts.packages"
       - rhel7cis_rule_2_2_6
   tags:
-      - level1
-      - scored
+      - level1-server
+      - level1-workstation
       - ldap
       - services
       - patch
@@ -100,8 +100,8 @@
       - "'bind' in ansible_facts.packages"
       - rhel7cis_rule_2_2_7
   tags:
-      - level1
-      - scored
+      - level1-server
+      - level1-workstation
       - dns
       - services
       - patch
@@ -118,8 +118,8 @@
       - "'vsftpd' in ansible_facts.packages"
       - rhel7cis_rule_2_2_8
   tags:
-      - level1
-      - scored
+      - level1-server
+      - level1-workstation
       - ftp
       - services
       - patch
@@ -136,9 +136,9 @@
       - "'httpd' in ansible_facts.packages"
       - rhel7cis_rule_2_2_9
   tags:
-      - level1
-      - scored
-      - ldap
+      - level1-server
+      - level1-workstation
+      - httpd
       - services
       - patch
       - rule_2.2.9
@@ -154,8 +154,8 @@
       - "'dovecot' in ansible_facts.packages"
       - rhel7cis_rule_2_2_10
   tags:
-      - level1
-      - scored
+      - level1-server
+      - level1-workstation
       - dovecot
       - services
       - patch
@@ -172,8 +172,8 @@
       - "'samba' in ansible_facts.packages"
       - rhel7cis_rule_2_2_11
   tags:
-      - level1
-      - scored
+      - level1-server
+      - level1-workstation
       - samba
       - services
       - patch
@@ -190,8 +190,8 @@
       - "'squid' in ansible_facts.packages"
       - rhel7cis_rule_2_2_12
   tags:
-      - level1
-      - scored
+      - level1-server
+      - level1-workstation
       - squid
       - services
       - patch
@@ -208,8 +208,8 @@
       - "'net-snmp' in ansible_facts.packages"
       - rhel7cis_rule_2_2_13
   tags:
-      - level1
-      - scored
+      - level1-server
+      - level1-workstation
       - squid
       - services
       - patch
@@ -226,8 +226,8 @@
       - "'ypserv' in ansible_facts.packages"
       - rhel7cis_rule_2_2_14
   tags:
-      - level1
-      - scored
+      - level1-server
+      - level1-workstation
       - nis
       - services
       - patch
@@ -244,8 +244,8 @@
       - "'telnet-server' in ansible_facts.packages"
       - rhel7cis_rule_2.2_15
   tags:
-      - level1
-      - scored
+      - level1-server
+      - level1-workstation
       - telnet
       - services
       - patch
@@ -262,7 +262,8 @@
       - "'postfix' in ansible_facts.packages"
       - rhel7cis_rule_2_2_16
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_2.2.16
 
@@ -287,8 +288,8 @@
       - "'nfs-utils' in ansible_facts.packages"
       - rhel7cis_rule_2_2_17
   tags:
-      - level1
-      - scored
+      - level1-server
+      - level1-workstation
       - nfs
       - services
       - patch
@@ -322,8 +323,8 @@
       - "'rpcbind' in ansible_facts.packages"
       - rhel7cis_rule_2_2_18
   tags:
-      - level1
-      - scored
+      - level1-server
+      - level1-workstation
       - rpc
       - services
       - patch
@@ -349,8 +350,8 @@
       - "'rsync' in ansible_facts.packages"
       - rhel7cis_rule_2_2_19
   tags:
-      - level1
-      - scored
+      - level1-server
+      - level1-workstation
       - rsync
       - services
       - patch

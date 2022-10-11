@@ -32,7 +32,8 @@
   when:
       - rhel7cis_rule_1_5_1
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - sysctl
       - patch
       - rule_1.5.1
@@ -44,7 +45,8 @@
       - rhel7cis_rule_1_5_2
   tags:
       - skip_ansible_lint
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_1.5.2
 
@@ -59,7 +61,8 @@
   when:
       - rhel7cis_rule_1_5_3
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_1.5.3
 
@@ -70,7 +73,8 @@
   when:
       - rhel7cis_rule_1_5_4
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_1.5.4
   vars:

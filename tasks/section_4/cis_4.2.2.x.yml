@@ -8,9 +8,9 @@
   when:
       - rhel7cis_rule_4_2_2_1
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
-      - manual
       - rule_4.2.2.1
       - journald
 
@@ -22,9 +22,9 @@
   when:
       - rhel7cis_rule_4_2_2_2
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
-      - automated
       - rule_4.2.2.2
       - journald
 
@@ -36,8 +36,8 @@
   when:
       - rhel7cis_rule_4_2_2_3
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
-      - automated
       - rule_4.2.2.3
       - journald

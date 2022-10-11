@@ -6,11 +6,12 @@ galaxy_info:
     company: "MindPoint Group"
     license: MIT
     min_ansible_version: 2.9.0
+    namespace: mindpointgroup
     role_name: rhel7_cis
     platforms:
         - name: EL
-    versions:
-        - "7"
+          versions:
+              - "7"
     galaxy_tags:
         - system
         - security

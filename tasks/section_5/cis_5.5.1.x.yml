@@ -9,7 +9,8 @@
   when:
       - rhel7cis_rule_5_5_1_1
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_5.5.1.1
 
@@ -22,7 +23,8 @@
   when:
       - rhel7cis_rule_5_5_1_2
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_5.5.1.2
 
@@ -35,7 +37,8 @@
   when:
       - rhel7cis_rule_5_5_1_3
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_5.5.1.3
 
@@ -49,7 +52,7 @@
             state: present
 
       - name: "5.5.1.4 | AUDIT | Ensure inactive password lock is 30 days or less | Getting user list"
-        shell: "egrep ^[^:]+:[^\\!*] /etc/shadow | awk -F: '{print $1 \",\" $7}' | egrep -v  ',\\d|,[1-2][0-9]|,30|{{ rhel7cis_inactive_whitelist | join('|') }}' | cut -d , -f1"
+        shell: "egrep ^[A-Za-z0-9][^:]+:[^\\!*] /etc/shadow | awk -F: '{print $1 \",\" $7}' | egrep -v  ',\\d|,[1-2][0-9]|,30|{{ rhel7cis_inactive_whitelist | join('|') }}' | cut -d , -f1"
         changed_when: false
         check_mode: false
         register: rhel_07_5_5_1_4_audit
@@ -63,7 +66,8 @@
   when:
       - rhel7cis_rule_5_5_1_4
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_5.5.1.4
 
@@ -104,6 +108,7 @@
   when:
       - rhel7cis_rule_5_5_1_5
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_5.5.1.5

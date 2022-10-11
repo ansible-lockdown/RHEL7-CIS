@@ -27,12 +27,11 @@
   tags:
       - level1-server
       - level1-workstation
-      - automated
       - patch
       - rule_3.5.3.2.1
       - iptables
 
-- name: "MANUAL | 3.5.3.2.2 | PATCH | Ensure iptables outbound and established connections are configured"
+- name: "3.5.3.2.2 | PATCH | Ensure iptables outbound and established connections are configured"
   iptables:
       action: append
       chain: '{{ item.chain }}'
@@ -52,7 +51,6 @@
   tags:
       - level1-server
       - level1-workstation
-      - manual
       - patch
       - rule_3.5.3.2.2
       - iptables
@@ -87,7 +85,6 @@
   tags:
       - level1-server
       - level1-workstation
-      - automated
       - audit
       - rule_3.5.3.2.3
       - iptables
@@ -130,7 +127,6 @@
   tags:
       - level1-server
       - level1-workstation
-      - automated
       - patch
       - rule_3.5.3.2.4
       - iptables
@@ -152,7 +148,6 @@
   tags:
       - level1-server
       - level1-workstation
-      - automated
       - patch
       - rule_3.5.3.2.5
       - iptables
@@ -167,7 +162,6 @@
   tags:
       - level1-server
       - level1-workstation
-      - automated
       - patch
       - rule_3.5.3.2.6
       - iptables

@@ -23,6 +23,18 @@ This role was developed against a clean install of the Operating System. If you 
 
 To use release version please point to main branch and relevant release for the cis benchmark you wish to work with.
 
+## Matching security Level for CIS
+
+It is possible to to only run level 1 or level 2 controls for CIS.
+This is managed using tags:
+
+- level1_server
+- level1_workstation
+- level2_server
+- level2_workstation
+
+The control found in defaults main also need to reflect this as this control the testing thet takes place if you are using the audit component.
+
 ## Coming from a previous release
 
 CIS release always contains changes, it is highly recommended to review the new references and available variables. This have changed significantly since ansible-lockdown initial release.

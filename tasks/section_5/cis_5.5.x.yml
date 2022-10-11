@@ -36,7 +36,8 @@
   when:
       - rhel7cis_rule_5_5_2
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_5.5.2
 
@@ -47,7 +48,8 @@
   when:
       - rhel7cis_rule_5_5_3
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_5.5.3
 
@@ -71,7 +73,8 @@
   when:
       - rhel7cis_rule_5_5_4
   tags:
-      - level2
+      - level1-server
+      - level1-workstation
       - patch
       - rule_5.5.4
 
@@ -91,6 +94,7 @@
   when:
       - rhel7cis_rule_5_5_5
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_5.5.5

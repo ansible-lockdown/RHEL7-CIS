@@ -11,8 +11,8 @@
       - "'ypbind' in ansible_facts.packages"
       - rhel7cis_rule_2_3_1
   tags:
-      - level1
-      - scored
+      - level1-server
+      - level1-workstation
       - nis
       - patch
       - rule_2.3.1
@@ -28,8 +28,8 @@
       - "'rsh' in ansible_facts.packages"
       - rhel7cis_rule_2_3_2
   tags:
-      - level1
-      - scored
+      - level1-server
+      - level1-workstation
       - rsh
       - patch
       - rule_2.3.2
@@ -45,8 +45,8 @@
       - "'talk' in ansible_facts.packages"
       - rhel7cis_rule_2_3_3
   tags:
-      - level1
-      - scored
+      - level1-server
+      - level1-workstation
       - talk
       - patch
       - rule_2.3.3
@@ -62,8 +62,8 @@
       - not rhel7cis_telnet_required
       - rhel7cis_rule_2_3_4
   tags:
-      - level1
-      - scored
+      - level1-server
+      - level1-workstation
       - telnet
       - patch
       - rule_2.3.4
@@ -79,8 +79,8 @@
       - "'openldap-clients' in ansible_facts.packages"
       - rhel7cis_rule_2_3_5
   tags:
-      - level1
-      - scored
+      - level1-server
+      - level1-workstation
       - ldap_client
       - patch
       - rule_2.3.5

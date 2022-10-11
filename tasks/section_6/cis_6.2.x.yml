@@ -18,7 +18,8 @@
   when:
       - rhel7cis_rule_6_2_1
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_6.2.1
 
@@ -31,7 +32,8 @@
       - empty_password_accounts.rc
       - rhel7cis_rule_6_2_2
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_6.2.2
 
@@ -57,7 +59,8 @@
   when:
       - rhel7cis_rule_6_2_3
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_6.2.3
 
@@ -81,7 +84,8 @@
   when:
       - rhel7cis_rule_6_2_4
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_6.2.4
 
@@ -105,7 +109,8 @@
   when:
       - rhel7cis_rule_6_2_5
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_6.2.5
 
@@ -130,7 +135,8 @@
   when:
       - rhel7cis_rule_6_2_6
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_6.2.6
 
@@ -154,7 +160,8 @@
   when:
       - rhel7cis_rule_6_2_7
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_6.2.7
 
@@ -179,7 +186,8 @@
   when:
       - rhel7cis_rule_6_2_8
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_6.2.8
 
@@ -192,7 +200,8 @@
       - uid_zero_accounts_except_root.rc
       - rhel7cis_rule_6_2_9
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_6.2.9
 
@@ -237,7 +246,8 @@
   when:
       - rhel7cis_rule_6_2_10
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_6.2.10
 
@@ -276,7 +286,8 @@
   when:
       - rhel7cis_rule_6_2_11
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_6.2.11
 
@@ -292,7 +303,8 @@
       - rhel7cis_rule_6_2_12
   tags:
       - skip_ansible_lint
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_6.2.12
 
@@ -305,7 +317,7 @@
         register: rhel_07_6_2_13_audit
 
       - name: "6.2.13 | AUDIT | Ensure users' home directories permissions are 750 or more restrictive"
-        command: find -H {{ item.0 | quote }} -not -type l -perm /027
+        command: find -P {{ item.0 | quote }} -not -type l -perm /027
         check_mode: false
         register: rhel_07_6_2_13_patch_audit
         changed_when: rhel_07_6_2_13_patch_audit.stdout != ""
@@ -323,6 +335,7 @@
             path: "{{ item.0 }}"
             recurse: true
             mode: a-st,g-w,o-rwx
+            follow: false
         register: rhel_07_6_2_13_patch
         when:
             - not ansible_check_mode
@@ -340,6 +353,7 @@
             default: true
             state: present
             recursive: true
+            follow: false
             etype: "{{ item.1.etype }}"
             permissions: "{{ item.1.mode }}"
         when:
@@ -355,7 +369,8 @@
   when:
       - rhel7cis_rule_6_2_13
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_6.2.13
 
@@ -386,7 +401,8 @@
   when:
       - rhel7cis_rule_6_2_14
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_6.2.14
 
@@ -398,7 +414,8 @@
   when:
       - rhel7cis_rule_6_2_15
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_6.2.15
 
@@ -410,7 +427,8 @@
   when:
       - rhel7cis_rule_6_2_16
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_6.2.16
 
@@ -422,6 +440,7 @@
   when:
       - rhel7cis_rule_6_2_17
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_6.2.17

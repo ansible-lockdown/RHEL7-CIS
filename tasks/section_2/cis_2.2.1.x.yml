@@ -8,7 +8,8 @@
       - rhel7cis_rule_2_2_1_1
       - not system_is_container
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_2.2.1.1
   vars:
@@ -23,7 +24,8 @@
       - rhel7cis_rule_2_2_1_1
       - not system_is_container
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_2.2.1.1
 
@@ -38,7 +40,8 @@
       - rhel7cis_rule_2_2_1_1
       - not system_is_container
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_2.2.1.1
 
@@ -52,7 +55,8 @@
       - rhel7cis_rule_2_2_1_1
       - not system_is_container
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_2.2.1.1
 
@@ -81,7 +85,8 @@
       - rhel7cis_rule_2_2_1_2
       - not system_is_container
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_2.2.1.2
 
@@ -111,6 +116,7 @@
       - rhel7cis_rule_2_2_1_3
       - not system_is_container
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_2.2.1.3

@@ -8,7 +8,8 @@
       - rhel7cis_rule_1_9
       - not system_is_ec2
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_1.9
       - skip_ansible_lint

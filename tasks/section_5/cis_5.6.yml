@@ -16,6 +16,7 @@
   when:
       - rhel7cis_rule_5_6
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - audit
       - rule_5.6

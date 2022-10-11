@@ -30,7 +30,6 @@
   tags:
       - level1-server
       - level1-workstation
-      - automated
       - patch
       - rule_3.5.3.3.1
       - iptables
@@ -57,7 +56,6 @@
   tags:
       - level1-server
       - level1-workstation
-      - manual
       - patch
       - rule_3.5.3.3.2
       - iptables
@@ -93,7 +91,6 @@
   tags:
       - level1-server
       - level1-workstation
-      - automated
       - audit
       - rule_3.5.3.3.3
       - iptables
@@ -141,7 +138,6 @@
   tags:
       - level1-server
       - level1-workstation
-      - automated
       - patch
       - rule_3.5.3.3.4
       - iptables
@@ -164,7 +160,6 @@
   tags:
       - level1-server
       - level1-workstation
-      - automated
       - patch
       - rule_3.5.3.3.5
       - iptables
@@ -180,7 +175,6 @@
   tags:
       - level1-server
       - level1-workstation
-      - automated
       - patch
       - rule_3.5.3.3.6
       - iptables

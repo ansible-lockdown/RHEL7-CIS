@@ -10,7 +10,8 @@
   when:
       - rhel7cis_rule_5_3_1
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - ssh
       - rule_5.3.1
@@ -38,7 +39,8 @@
   when:
       - rhel7cis_rule_5_3_2
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - ssh
       - rule_5.3.2
@@ -66,7 +68,8 @@
   when:
       - rhel7cis_rule_5_3_3
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - ssh
       - rule_5.3.3
@@ -127,7 +130,8 @@
   when:
       - rhel7cis_rule_5_3_4
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - ssh
       - rule_5.3.4
@@ -144,7 +148,8 @@
   when:
       - rhel7cis_rule_5_3_5
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - ssh
       - rule_5.3.5
@@ -161,7 +166,8 @@
   when:
       - rhel7cis_rule_5_3_6
   tags:
-      - level2
+      - level2-server
+      - level1-workstation
       - patch
       - ssh
       - rule_5.3.6
@@ -178,7 +184,8 @@
   when:
       - rhel7cis_rule_5_3_7
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - ssh
       - rule_5.3.7
@@ -195,7 +202,8 @@
   when:
       - rhel7cis_rule_5_3_8
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - ssh
       - rule_5.3.8
@@ -212,7 +220,8 @@
   when:
       - rhel7cis_rule_5_3_9
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - ssh
       - rule_5.3.9
@@ -229,7 +238,8 @@
   when:
       - rhel7cis_rule_5_3_10
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - ssh
       - rule_5.3.10
@@ -246,7 +256,8 @@
   when:
       - rhel7cis_rule_5_3_11
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - ssh
       - rule_5.3.11
@@ -263,7 +274,8 @@
   when:
       - rhel7cis_rule_5_3_12
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - ssh
       - rule_5.3.12
@@ -281,7 +293,8 @@
   when:
       - rhel7cis_rule_5_3_13
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - ssh
       - rule_5.3.13
@@ -299,7 +312,8 @@
   when:
       - rhel7cis_rule_5_3_14
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - ssh
       - rule_5.3.14
@@ -317,7 +331,8 @@
   when:
       - rhel7cis_rule_5_3_15
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - ssh
       - rule_5.3.15
@@ -346,7 +361,8 @@
   when:
       - rhel7cis_rule_5_3_16
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - ssh
       - rule_5.3.16
@@ -363,7 +379,8 @@
   when:
       - rhel7cis_rule_5_3_17
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - ssh
       - rule_5.3.17
@@ -384,7 +401,8 @@
   when:
       - rhel7cis_rule_5_3_18
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - ssh
       - rule_5.3.18
@@ -401,7 +419,8 @@
   when:
       - rhel7cis_rule_5_3_19
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - ssh
       - rule_5.3.19
@@ -418,7 +437,8 @@
   when:
       - rhel7cis_rule_5_3_20
   tags:
-      - level2
+      - level2-server
+      - level2-workstation
       - patch
       - ssh
       - rule_5.3.20
@@ -435,7 +455,8 @@
   when:
       - rhel7cis_rule_5_3_21
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - ssh
       - rule_5.3.21
@@ -452,7 +473,8 @@
   when:
       - rhel7cis_rule_5_3_22
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - ssh
       - rule_5.3.22
