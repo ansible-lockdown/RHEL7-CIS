@@ -4,7 +4,7 @@
   block:
       - name: "1.4.1 | PATCH | Ensure bootloader password is set"
         copy:
-            dest: "{{ rhel7cis_bootloader_path }}user.cfg"
+            dest: "{{ rhel7cis_bootloader_path }}user.cfg"  # noqa template-instead-of-copy
             content: "GRUB2_PASSWORD={{ rhel7cis_bootloader_password_hash }}"
             owner: root
             group: root

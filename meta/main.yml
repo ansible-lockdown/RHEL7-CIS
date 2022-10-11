@@ -11,7 +11,7 @@ galaxy_info:
     platforms:
         - name: EL
           versions:
-               - "7"
+              - 7
     galaxy_tags:
         - system
         - security

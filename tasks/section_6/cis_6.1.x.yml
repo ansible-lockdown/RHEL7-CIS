@@ -14,7 +14,7 @@
         block:
             - name: "6.1.1 | AUDIT | Audit system file permissions | Add file discrepancy list to system"
               copy:
-                  dest: "{{ rhel7cis_rpm_audit_file }}"
+                  dest: "{{ rhel7cis_rpm_audit_file }}"  # noqa template-instead-of-copy
                   content: "{{ rhel7cis_6_1_1_packages_rpm.stdout }}"
                   owner: root
                   group: root
