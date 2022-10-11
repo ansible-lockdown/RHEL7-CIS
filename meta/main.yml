@@ -10,8 +10,8 @@ galaxy_info:
     role_name: rhel7_cis
     platforms:
         - name: EL
-    versions:
-        - "7"
+          versions:
+               - "7"
     galaxy_tags:
         - system
         - security
