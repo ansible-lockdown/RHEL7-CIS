@@ -1,0 +1,9 @@
+---
+# OS Specific Settings
+
+rpm_gpg_key: /etc/pki/rpm-gpg/RPM-GPG-KEY-oracle
+rpm_packager: "(none)"
+
+# found on https://linux.oracle.com/security/gpg/
+
+rpm_key: "72f97b74ec551f03"
