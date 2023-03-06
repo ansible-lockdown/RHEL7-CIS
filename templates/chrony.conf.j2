@@ -48,6 +48,13 @@ logdir /var/log/chrony
 
 maxupdateskew 100.0
 
+{% if rhel7cis_chrony_makestep is defined %}
+# makestep added via automation
+# It overrides the skew to jump the clock time
+# BE WARNED: Certain software will be seriously affected by such jumps in the system time. (That is the reason why chronyd uses slewing normally.)
+makestep {{ rhel7cis_chrony_makestep }}
+{% endif %}
+
 # Dump measurements when daemon exits.
 
 dumponexit
