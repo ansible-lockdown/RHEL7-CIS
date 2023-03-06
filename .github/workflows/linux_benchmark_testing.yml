@@ -26,7 +26,7 @@ jobs:
       runs-on: ubuntu-latest
 
       steps:
-          - uses: actions/first-interaction@v1.1.0
+          - uses: actions/first-interaction@main
             with:
                 repo-token: ${{ secrets.GITHUB_TOKEN }}
                 pr-message: |-
@@ -44,7 +44,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, 
       # so your job can access it
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
@@ -81,18 +81,9 @@ jobs:
         working-directory: .github/workflows
         run: cat hosts.yml
 
-# Centos 7 images take a while to come up insert sleep or playbook fails
+# Aws deployments taking a while to come up insert sleep or playbook fails
 
-      - name: Check if test os is rhel7
-        working-directory: .github/workflows
-        id: test_os
-        run: >-
-          echo "::set-output name=RHEL7::$(
-          grep -c RHEL7 OS.tfvars
-          )"
-
-      - name: if RHEL7 - Sleep for 60 seconds
-        if: steps.test_os.outputs.RHEL7 >= 1
+      - name: Sleep for 60 seconds
         run: sleep 60s
         shell: bash
 
