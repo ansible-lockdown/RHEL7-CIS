@@ -506,7 +506,7 @@ rhel7cis_pam_faillock:
     attempts: 5
     interval: 900
     unlock_time: 900
-    fail_for_root: no  # noqa yaml[truthy]
+    fail_for_root: 'no'
     remember: 5
     pwhash: sha512
 rhel7cis_inactivelock:
