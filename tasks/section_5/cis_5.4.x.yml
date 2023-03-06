@@ -18,11 +18,11 @@
       - rule_5.4.1
 
 - name: |
-        " 5.4.2 | PATCH | Ensure lockout for failed password attempts is configured
-          5.4.3 | PATCH | Ensure password hashing algorithm is SHA-512
-          5.4.4 | PATCH | Ensure password reuse is limited"
+        "5.4.2 | PATCH | Ensure lockout for failed password attempts is configured
+         5.4.3 | PATCH | Ensure password hashing algorithm is SHA-512
+         5.4.4 | PATCH | Ensure password reuse is limited"
   block:
-      - name: " 5.4.2 | PATCH | Ensure lockout for failed password attempts is configured | Add deny count and unlock time for preauth"
+      - name: "5.4.2 | PATCH | Ensure lockout for failed password attempts is configured | Add deny count and unlock time for preauth"
         lineinfile:
             dest: "/etc/pam.d/{{ item }}"
             state: present
@@ -32,7 +32,7 @@
             - "system-auth"
             - "password-auth"
 
-      - name: " 5.4.2 | PATCH | Ensure lockout for failed password attempts is configured | Add success and default settings to pam_unix.so"
+      - name: "5.4.2 | PATCH | Ensure lockout for failed password attempts is configured | Add success and default settings to pam_unix.so"
         lineinfile:
             dest: "/etc/pam.d/{{ item }}"
             state: present
@@ -42,7 +42,7 @@
             - "system-auth"
             - "password-auth"
 
-      - name: " 5.4.2 | PATCH | Ensure lockout for failed password attempts is configured | Add default, deny count, and unlock times for authfail"
+      - name: "5.4.2 | PATCH | Ensure lockout for failed password attempts is configured | Add default, deny count, and unlock times for authfail"
         lineinfile:
             dest: "/etc/pam.d/{{ item }}"
             state: present
@@ -52,7 +52,7 @@
             - "system-auth"
             - "password-auth"
 
-      - name: " 5.4.2 | PATCH | Ensure lockout for failed password attempts is configured | Add deny count and unlock times to authsucc"
+      - name: "5.4.2 | PATCH | Ensure lockout for failed password attempts is configured | Add deny count and unlock times to authsucc"
         lineinfile:
             dest: "/etc/pam.d/{{ item }}"
             state: present
@@ -74,7 +74,7 @@
             - "system-auth"
             - "password-auth"
 
-      - name: " 5.4.3 | PATCH | Ensure password hashing algorithm is SHA-512 | add sha512 settings"
+      - name: "5.4.3 | PATCH | Ensure password hashing algorithm is SHA-512 | add sha512 settings"
         lineinfile:
             dest: "/etc/pam.d/{{ item }}"
             state: present
@@ -84,7 +84,7 @@
             - "system-auth"
             - "password-auth"
 
-      - name: " 5.4.4 | PATCH | Ensure password reuse is limited | add remember settings"
+      - name: "5.4.4 | PATCH | Ensure password reuse is limited | add remember settings"
         lineinfile:
             dest: "/etc/pam.d/{{ item }}"
             state: present
@@ -98,9 +98,9 @@
       # With the steps below you will score five (5) points lower due to false positive results
 
       - name: |
-              " 5.4.2 | PATCH | Ensure lockout for failed password attempts is configured | Copy system/passowrd-auth to system/password-auth-local
-                5.4.3 | PATCH | Ensure password hashing algorithm is SHA-512
-                5.4.4 | PATCH | Ensure password reuse is limited | Copy system/password-auth to system/password-auth-local"
+              "5.4.2 | PATCH | Ensure lockout for failed password attempts is configured | Copy system/passowrd-auth to system/password-auth-local
+               5.4.3 | PATCH | Ensure password hashing algorithm is SHA-512
+               5.4.4 | PATCH | Ensure password reuse is limited | Copy system/password-auth to system/password-auth-local"
         copy:
             src: "/etc/pam.d/{{ item }}"
             dest: "/etc/pam.d/{{ item }}-local"
@@ -113,8 +113,8 @@
             - "password-auth"
 
       - name: |
-              " 5.4.2 | PATCH | Ensure lockout for failed password attempts is configured | Setup symbolic link
-                5.4.4 | PATCH | Ensure password reuse is limited | Setup symbolic link"
+              "5.4.2 | PATCH | Ensure lockout for failed password attempts is configured | Setup symbolic link
+               5.4.4 | PATCH | Ensure password reuse is limited | Setup symbolic link"
         file:
             src: "/etc/pam.d/{{ item }}-local"
             dest: "/etc/pam.d/{{ item }}"
