@@ -21,7 +21,10 @@ galaxy_info:
         - compliance
         - redhat
         - complianceascode
-        - rhel7
+        - rhel
+        - oel
+        - centos
+        
 collections:
     - community.general
     - community.crypto
