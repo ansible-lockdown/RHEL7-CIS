@@ -1,0 +1,9 @@
+---
+# OS Specific Settings
+
+rpm_gpg_key: /etc/pki/rpm-gpg/RPM-GPG-KEY-{{ ansible_distribution | lower }}-release
+rpm_packager: "Red Hat, Inc"
+
+# found on https://access.redhat.com/security/team/key/
+
+rpm_key: "199e2f91fd431d51"

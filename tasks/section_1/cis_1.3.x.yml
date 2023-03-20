@@ -1,32 +1,33 @@
 ---
 
-- name: "1.3.1 | L1 | PATCH | Ensure AIDE is installed"
+- name: "1.3.1 | PATCH | Ensure AIDE is installed"
   block:
-      - name: "1.3.1 | L1 | PATCH | Ensure AIDE is installed | Install"
+      - name: "1.3.1 | PATCH | Ensure AIDE is installed | Install"
         package:
             name: aide
             state: installed
 
-      - name: "1.3.1 | L1 | PATCH | Ensure AIDE is installed | started"
+      - name: "1.3.1 | PATCH | Ensure AIDE is installed | started"
         shell: /usr/sbin/aide --init -B 'database_out=file:/var/lib/aide/aide.db.gz'
         args:
             creates: /var/lib/aide/aide.db.gz
-        changed_when: no
-        failed_when: no
-        async: 45
+        changed_when: false
+        failed_when: false
+        async: "{{ ansible_check_mode | ternary(0, 45) }}"
         poll: 0
   when:
       - rhel7cis_config_aide
       - rhel7cis_rule_1_3_1
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - aide
       - patch
       - rule_1.3.1
   vars:
       ansible_python_interpreter: /bin/python
 
-- name: "1.3.2 | L1 | PATCH | Ensure filesystem integrity is regularly checked | cron"
+- name: "1.3.2 | PATCH | Ensure filesystem integrity is regularly checked | cron"
   cron:
       name: Run AIDE integrity check
       minute: "{{ rhel7cis_aide_cron['aide_minute'] | default('0') }}"
@@ -38,7 +39,8 @@
   when:
       - rhel7cis_rule_1_3_2
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - aide
       - file_integrity
       - patch

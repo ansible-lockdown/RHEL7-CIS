@@ -17,23 +17,25 @@
   block:
       - name: Pre Audit Setup | Install git (rh8 python3)
         package:
-          name: git
-          state: present
+            name: git
+            state: present
+        register: git_audit
         when: ansible_distribution_major_version == '8'
-      
+
       - name: Pre Audit Setup | Install git (rh7 python2)
         package:
-          name: git
-          state: present
+            name: git
+            state: present
+        register: git_audit
         vars:
-          ansible_python_interpreter: "{{ python2_bin }}"
+            ansible_python_interpreter: "{{ python2_bin }}"
         when: ansible_distribution_major_version == '7'
 
       - name: Pre Audit Setup | retrieve audit content files from git
         git:
-          repo: "{{ audit_file_git }}"
-          dest: "{{ audit_conf_dir }}"
-          version: "{{ audit_git_version }}"
+            repo: "{{ audit_file_git }}"
+            dest: "{{ audit_conf_dir }}"
+            version: "{{ audit_git_version }}"
   when:
       - audit_content == 'git'
 
@@ -49,6 +51,9 @@
   get_url:
       url: "{{ audit_files_url }}"
       dest: "{{ audit_conf_dir }}"
+      owner: root
+      group: root
+      mode: 0755
   when:
       - audit_content == 'get_url'
 
@@ -56,14 +61,14 @@
   block:
       - name: Pre Audit Setup | Check for goss file
         stat:
-          path: "{{ audit_bin }}"
+            path: "{{ audit_bin }}"
         register: goss_available
-      
+
       - name: Pre Audit Setup | If audit ensure goss is available
         assert:
-          msg: "Audit has been selected: unable to find goss binary at {{ audit_bin }}"
-        when: 
-        - not goss_available.stat.exists
+            msg: "Audit has been selected: unable to find goss binary at {{ audit_bin }}"
+        when:
+            - not goss_available.stat.exists
   when:
       - run_audit
 
@@ -76,9 +81,12 @@
       - run_audit
   tags:
       - goss_template
-  
+
 - name: "Pre Audit | Run pre_remediation {{ benchmark }} audit"
-  shell: "{{ audit_conf_dir }}/run_audit.sh -v {{ audit_vars_path }} -o {{ pre_audit_outfile }} -g {{ group_names }}"
+  shell: "{{ audit_conf_dir }}run_audit.sh -v {{ audit_vars_path }} -o {{ pre_audit_outfile }} -g {{ group_names }}"
+  environment: "{{ audit_run_script_environment | default({}) }}"
+  changed_when: false
+  register: audit_run_pre_remediation
   vars:
       warn: false
 
@@ -87,11 +95,11 @@
       - name: "capture data {{ pre_audit_outfile }}"
         command: "cat {{ pre_audit_outfile }}"
         register: pre_audit
-        changed_when: false 
-        
+        changed_when: false
+
       - name: Pre Audit | Capture pre-audit result
-        set_fact: 
-            pre_audit_summary: "{{ pre_audit.stdout | from_json |json_query(summary) }}"
+        set_fact:
+            pre_audit_summary: "{{ pre_audit.stdout | from_json | json_query(summary) }}"
         vars:
             summary: 'summary."summary-line"'
   when:
@@ -99,13 +107,13 @@
 
 - name: Pre Audit | Capture audit data if documentation format
   block:
-    - name: "capture data {{ pre_audit_outfile }}"
-      command: "tail -2 {{ pre_audit_outfile }}"
-      register: pre_audit
-      changed_when: false
+      - name: "capture data {{ pre_audit_outfile }}"
+        command: "tail -2 {{ pre_audit_outfile }}"
+        register: pre_audit
+        changed_when: false
 
-    - name: Pre Audit | Capture pre-audit result
-      set_fact:
-          pre_audit_summary: "{{ pre_audit.stdout_lines }}"
+      - name: Pre Audit | Capture pre-audit result
+        set_fact:
+            pre_audit_summary: "{{ pre_audit.stdout_lines }}"
   when:
-    - audit_format == "documentation"
+      - audit_format == "documentation"

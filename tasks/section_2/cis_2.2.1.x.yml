@@ -1,64 +1,68 @@
 ---
 
-- name: "2.2.1.1 | L1 | PATCH | Ensure time synchronization is in use | service install"
+- name: "2.2.1.1 | PATCH | Ensure time synchronization is in use | service install"
   package:
       name: "{{ rhel7cis_time_synchronization }}"
       state: present
   when:
       - rhel7cis_rule_2_2_1_1
-      - not rhel7cis_system_is_container
+      - not system_is_container
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_2.2.1.1
   vars:
       ansible_python_interpreter: /bin/python
 
-- name: "2.2.1.1 | L1 | PATCH | Ensure time synchronization is in use | service start"
+- name: "2.2.1.1 | PATCH | Ensure time synchronization is in use | service start"
   service:
       name: "{{ rhel7cis_time_synchronization }}d"
       state: started
-      enabled: yes
+      enabled: true
   when:
       - rhel7cis_rule_2_2_1_1
-      - not rhel7cis_system_is_container
+      - not system_is_container
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_2.2.1.1
 
-- name: "2.2.1.1 | L1 | PATCH | Ensure time synchronization is in use - service stop ntp"
+- name: "2.2.1.1 | PATCH | Ensure time synchronization is in use - service stop ntp"
   service:
       name: ntpd
       state: stopped
-      enabled: no
+      enabled: false
   when:
       - "'ntp' in ansible_facts.packages"
       - rhel7cis_time_synchronization == "chrony"
       - rhel7cis_rule_2_2_1_1
-      - not rhel7cis_system_is_container
+      - not system_is_container
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_2.2.1.1
 
-- name: "2.2.1.1 | L1 | PATCH | Ensure time synchronization is in use - service stop chrony"
+- name: "2.2.1.1 | PATCH | Ensure time synchronization is in use - service stop chrony"
   service:
       name: chronyd
       state: stopped
-      enabled: no
+      enabled: false
   when:
       - rhel7cis_time_synchronization == "ntp" and "'chrony' in ansible_facts.packages"
       - rhel7cis_rule_2_2_1_1
-      - not rhel7cis_system_is_container
+      - not system_is_container
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_2.2.1.1
 
-- name: "2.2.1.2 | L1 | PATCH | Ensure chrony is configured"
+- name: "2.2.1.2 | PATCH | Ensure chrony is configured"
   block:
-      - name: "2.2.1.2 | L1 | PATCH | Ensure chrony is configured | modify /etc/chrony.conf"
+      - name: "2.2.1.2 | PATCH | Ensure chrony is configured | modify /etc/chrony.conf"
         template:
             src: chrony.conf.j2
             dest: /etc/chrony.conf
@@ -66,28 +70,29 @@
             group: root
             mode: 0644
 
-      - name: "2.2.1.2 | L1 | PATCH | Ensure chrony is configured | modify /etc/sysconfig/chronyd"
+      - name: "2.2.1.2 | PATCH | Ensure chrony is configured | modify /etc/sysconfig/chronyd"
         lineinfile:
             dest: /etc/sysconfig/chronyd
             regexp: "^(#)?OPTIONS"
             line: "OPTIONS=\"-u chrony\""
             state: present
-            create: yes
+            create: true
             owner: root
             group: root
             mode: 0640
   when:
       - rhel7cis_time_synchronization == "chrony"
       - rhel7cis_rule_2_2_1_2
-      - not rhel7cis_system_is_container
+      - not system_is_container
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_2.2.1.2
 
-- name: "2.2.1.3 | L1 | PATCH | Ensure ntp is configured"
+- name: "2.2.1.3 | PATCH | Ensure ntp is configured"
   block:
-      - name: "2.2.1.3 | L1 | PATCH | Ensure ntp is configured | modify /etc/ntp.conf"
+      - name: "2.2.1.3 | PATCH | Ensure ntp is configured | modify /etc/ntp.conf"
         template:
             src: ntp.conf.j2
             dest: /etc/ntp.conf
@@ -95,13 +100,13 @@
             group: root
             mode: 0644
 
-      - name: "2.2.1.3 | L1 | PATCH | Ensure ntp is configured | modify /etc/sysconfig/ntpd"
+      - name: "2.2.1.3 | PATCH | Ensure ntp is configured | modify /etc/sysconfig/ntpd"
         lineinfile:
             dest: /etc/sysconfig/ntpd
             regexp: "^(#)?OPTIONS"
             line: "OPTIONS=\"-u ntp:ntp\""
 
-      - name: "2.2.1.3 | L1 | PATCH | Ensure ntp is configured | modify /usr/lib/systemd/system/ntpd.service"
+      - name: "2.2.1.3 | PATCH | Ensure ntp is configured | modify /usr/lib/systemd/system/ntpd.service"
         lineinfile:
             dest: /usr/lib/systemd/system/ntpd.service
             regexp: "^(#)?ExecStart"
@@ -109,8 +114,9 @@
   when:
       - rhel7cis_time_synchronization == "ntp"
       - rhel7cis_rule_2_2_1_3
-      - not rhel7cis_system_is_container
+      - not system_is_container
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_2.2.1.3

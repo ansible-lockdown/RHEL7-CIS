@@ -1,6 +1,6 @@
 ---
 
-- name: "3.5.3.1.1 | L1 | PATCH | Ensure iptables packages are installed"
+- name: "3.5.3.1.1 | PATCH | Ensure iptables packages are installed"
   package:
       name: "{{ item }}"
       state: present
@@ -10,14 +10,16 @@
   vars:
       ansible_python_interpreter: /bin/python
   when:
-      - "'iptables' not in ansible_facts.packages"
+      - "'iptables' not in ansible_facts.packages or
+        'iptables-services' not in ansible_facts.packages"
       - rhel7cis_rule_3_5_3_1_1
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
-      - rule_3.5.3.1
+      - rule_3.5.3.1.1
 
-- name: "3.5.3.1.2 | L1 | PATCH | Ensure nftables is not installed with iptables"
+- name: "3.5.3.1.2 | PATCH | Ensure nftables is not installed with iptables"
   package:
       name: nftables
       state: absent
@@ -27,11 +29,12 @@
       - "'nftables' in ansible_facts.packages"
       - rhel7cis_rule_3_5_3_1_2
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
-      - rule_3.5.3.2
+      - rule_3.5.3.1.2
 
-- name: "3.5.3.1.3 | L1 | PATCH | Ensure firewalld is either not installed or masked with iptables"
+- name: "3.5.3.1.3 | PATCH | Ensure firewalld is either not installed or masked with iptables"
   package:
       name: firewalld
       state: absent
@@ -41,6 +44,7 @@
       - "'firewalld' in ansible_facts.packages"
       - rhel7cis_rule_3_5_3_1_3
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
-      - rule_3.5.3.3
+      - rule_3.5.3.1.3

@@ -1,13 +1,14 @@
 ---
 
-- name: "5.5.2 | L1 | PATCH | Ensure system accounts are secured"
+- name: "5.5.2 | PATCH | Ensure system accounts are secured"
   block:
-      - name: "5.5.2 | L1 | PATCH | Ensure system accounts are secured | Set nologin"
+      - name: "5.5.2 | PATCH | Ensure system accounts are secured | Set nologin"
         user:
             name: "{{ item.id }}"
             shell: /usr/sbin/nologin
         loop: "{{ rhel7cis_passwd }}"
-        become: true
+        loop_control:
+            label: "{{ item.id }}"
         when:
             - item.id != "root"
             - item.id != "sync"
@@ -17,12 +18,13 @@
             - item.shell != "      /bin/false"
             - item.shell != "      /usr/sbin/nologin"
 
-      - name: "5.5.2 | L1 | PATCH | Ensure system accounts are secured | Lock accounts"
+      - name: "5.5.2 | PATCH | Ensure system accounts are secured | Lock accounts"
         user:
             name: "{{ item.id }}"
             password_lock: true
         loop: "{{ rhel7cis_passwd }}"
-        become: true
+        loop_control:
+            label: "{{ item.id }}"
         when:
             - item.id != "halt"
             - item.id != "shutdown"
@@ -34,24 +36,26 @@
   when:
       - rhel7cis_rule_5_5_2
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_5.5.2
 
-- name: "5.5.3 | L1 | PATCH | Ensure default group for the root account is GID 0"
+- name: "5.5.3 | PATCH | Ensure default group for the root account is GID 0"
   shell: usermod -g 0 root
-  changed_when: no
-  failed_when: no
+  changed_when: false
+  failed_when: false
   when:
       - rhel7cis_rule_5_5_3
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_5.5.3
 
-- name: "5.5.4 | L1 | PATCH | Ensure default user shell timeout is configured"
+- name: "5.5.4 | PATCH | Ensure default user shell timeout is configured"
   blockinfile:
-      create: yes
+      create: true
       mode: 0644
       dest: "{{ item.dest }}"
       state: "{{ item.state }}"
@@ -69,19 +73,20 @@
   when:
       - rhel7cis_rule_5_5_4
   tags:
-      - level2
+      - level1-server
+      - level1-workstation
       - patch
       - rule_5.5.4
 
-- name: "5.5.5 | L1 | PATCH | Ensure default user umask is configured"
+- name: "5.5.5 | PATCH | Ensure default user umask is configured"
   block:
-      - name: "5.5.5 | L1 | PATCH | Ensure default user umask is configured | Set umask for /etc/bashrc"
+      - name: "5.5.5 | PATCH | Ensure default user umask is configured | Set umask for /etc/bashrc"
         replace:
             path: /etc/bashrc
             regexp: '(^\s+umask) 0[012][0-6]'
             replace: '\1 027'
 
-      - name: "5.5.5 | L1 | PATCH | Ensure default user umask is configured | Set umask for /etc/profile"
+      - name: "5.5.5 | PATCH | Ensure default user umask is configured | Set umask for /etc/profile"
         replace:
             path: /etc/profile
             regexp: '(^\s+umask) 0[012][0-6]'
@@ -89,6 +94,7 @@
   when:
       - rhel7cis_rule_5_5_5
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_5.5.5

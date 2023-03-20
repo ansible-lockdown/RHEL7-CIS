@@ -1,14 +1,14 @@
 ---
 
-- name: 1.8.1 | L2 | PATCH | Ensure GNOME Display Manager is removed
+- name: 1.8.1 | PATCH | Ensure GNOME Display Manager is removed
   block:
-      - name: 1.8.1 | L2 | AUDIT | Ensure GNOME Display Manager is removed | check runlevel
+      - name: 1.8.1 | AUDIT | Ensure GNOME Display Manager is removed | check runlevel
         fail:
             msg: "System is at runlevel 5 and GDM is installed this can only be removed at Lvl <= 3"
         when:
             - ansible_env.SHLVL > 3
 
-      - name: 1.8.1 | L2 | AUDIT | Ensure GNOME Display Manager is removed | Remove package
+      - name: 1.8.1 | AUDIT | Ensure GNOME Display Manager is removed | Remove package
         package:
             name: gdm
             state: absent
@@ -18,11 +18,12 @@
       - rhel7cis_rule_1_8_1
   tags:
       - rule_1.8.1
-      - level_1
+      - level1-server
+      - level1-workstation
 
-- name: 1.8.2 | L1 | PATCH | Ensure GDM login banner is configured
+- name: 1.8.2 | PATCH | Ensure GDM login banner is configured
   block:
-      - name: 1.8.2 | L1 | PATCH | Ensure GDM login banner is configured | gdm profile
+      - name: 1.8.2 | PATCH | Ensure GDM login banner is configured | gdm profile
         lineinfile:
             path: /etc/dconf/profile/gdm
             regexp: "^{{ item.regexp }}"
@@ -37,7 +38,7 @@
             - {regexp: 'system-db', line: 'system-db:gdm' }
             - {regexp: 'file-db', line: 'file-db:/usr/share/gdm/greeter-dconf-defaults' }
 
-      - name: 1.8.2 | L1 | PATCH | Ensure GDM login banner is configured | banner
+      - name: 1.8.2 | PATCH | Ensure GDM login banner is configured | banner
         lineinfile:
             path: /etc/dconf/db/gdm.d/01-banner-message
             regexp: "^{{ item.regexp }}"
@@ -57,11 +58,12 @@
       - rhel7cis_rule_1_8_2
   tags:
       - rule_1.8.2
-      - level_1
+      - level1-server
+      - level1-workstation
 
-- name: 1.8.3 | L1 | PATCH | Ensure last logged in user display is disabled | banner
+- name: 1.8.3 | PATCH | Ensure last logged in user display is disabled | banner
   block:
-      - name: 1.8.3 | L1 | PATCH | Ensure last logged in user display is disabled | gdm profile
+      - name: 1.8.3 | PATCH | Ensure last logged in user display is disabled | gdm profile
         lineinfile:
             path: /etc/dconf/profile/gdm
             regexp: "^{{ item.regexp }}"
@@ -76,7 +78,7 @@
             - {regexp: 'system-db', line: 'system-db:gdm' }
             - {regexp: 'file-db', line: 'file-db:/usr/share/gdm/greeter-dconf-defaults' }
 
-      - name: 1.8.3 | L1 | PATCH | Ensure last logged in user display is disabled | login screen
+      - name: 1.8.3 | PATCH | Ensure last logged in user display is disabled | login screen
         lineinfile:
             path: /etc/dconf/db/gdm.d/00-login-screen
             regexp: "^{{ item.regexp }}"
@@ -95,12 +97,13 @@
       - rhel7cis_rule_1_8_3
   tags:
       - rule_1.8.3
-      - level_1
+      - level1-server
+      - level1-workstation
 
-- name: 1.8.4 | L1 | PATCH | Ensure XDCMP is not enabled
+- name: 1.8.4 | PATCH | Ensure XDCMP is not enabled
   lineinfile:
       path: /etc/gdm/custom.conf
-      regexp: ^Enable=true
+      regexp: ^Enable(\s|)=(\s|)true
       state: absent
       create: true
       owner: root
@@ -112,3 +115,5 @@
       - rhel7cis_rule_1_8_4
   tags:
       - rule_1.8.4
+      - level1-server
+      - level1-workstation

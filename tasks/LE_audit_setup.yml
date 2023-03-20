@@ -11,7 +11,7 @@
   when:
       - get_goss_file == 'download'
 
-- name: copy goss binary
+- name: Copy goss binary
   copy:
       src: "{{ copy_goss_from_path }}"
       dest: "{{ audit_bin }}"

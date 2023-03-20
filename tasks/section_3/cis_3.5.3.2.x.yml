@@ -1,0 +1,167 @@
+---
+
+- name: "3.5.3.2.1 | PATCH | Ensure iptables loopback traffic is configured"
+  block:
+      - name: "3.5.3.2.1 | PATCH | Ensure iptables loopback traffic is configured | INPUT loopback ACCEPT"
+        iptables:
+            action: append
+            chain: INPUT
+            in_interface: lo
+            jump: ACCEPT
+
+      - name: "3.5.3.2.1 | PATCH | Ensure iptables loopback traffic is configured | OUTPUT loopback ACCEPT"
+        iptables:
+            action: append
+            chain: OUTPUT
+            out_interface: lo
+            jump: ACCEPT
+
+      - name: "3.5.3.2.1 | PATCH | Ensure iptables loopback traffic is configured | OUTPUT loopback ACCEPT"
+        iptables:
+            action: append
+            chain: INPUT
+            source: 127.0.0.0/8
+            jump: DROP
+  when:
+      - rhel7cis_rule_3_5_3_2_1
+  tags:
+      - level1-server
+      - level1-workstation
+      - patch
+      - rule_3.5.3.2.1
+      - iptables
+
+- name: "3.5.3.2.2 | PATCH | Ensure iptables outbound and established connections are configured"
+  iptables:
+      action: append
+      chain: '{{ item.chain }}'
+      protocol: '{{ item.protocol }}'
+      match: state
+      ctstate: '{{ item.ctstate }}'
+      jump: ACCEPT
+  with_items:
+      - { chain: OUTPUT, protocol: tcp, ctstate: 'NEW,ESTABLISHED' }
+      - { chain: OUTPUT, protocol: udp, ctstate: 'NEW,ESTABLISHED' }
+      - { chain: OUTPUT, protocol: icmp, ctstate: 'NEW,ESTABLISHED' }
+      - { chain: INPUT, protocol: tcp, ctstate: 'ESTABLISHED' }
+      - { chain: INPUT, protocol: udp, ctstate: 'ESTABLISHED' }
+      - { chain: INPUT, protocol: icmp, ctstate: 'ESTABLISHED' }
+  when:
+      - rhel7cis_rule_3_5_3_2_2
+  tags:
+      - level1-server
+      - level1-workstation
+      - patch
+      - rule_3.5.3.2.2
+      - iptables
+
+- name: "3.5.3.2.3 | AUDIT | Ensure iptables firewall rules exist for all open ports"
+  block:
+      - name: "3.5.3.2.3 | AUDIT | Ensure iptables firewall rules exist for all open ports | Get list of open ports"
+        command: ss -4tuln
+        changed_when: false
+        failed_when: false
+        check_mode: false
+        register: rhel7cis_3_5_3_2_3_open_ports
+
+      - name: "3.5.3.2.3 | AUDIT | Ensure iptables firewall rules exist for all open ports | Get list of rules"
+        command: iptables -L INPUT -v -n
+        changed_when: false
+        failed_when: false
+        check_mode: false
+        register: rhel7cis_3_5_3_2_3_current_rules
+
+      - name: "3.5.3.2.3 | AUDIT | Ensure iptables firewall rules exist for all open ports | Alert about settings"
+        debug:
+            msg:
+                - "ALERT!!!!Below is the list the open ports and current rules"
+                - "Please create a rule for any open port that does not have a current rule"
+                - "Open Ports:"
+                - "{{ rhel7cis_3_5_3_2_3_open_ports.stdout_lines }}"
+                - "Current Rules:"
+                - "{{ rhel7cis_3_5_3_2_3_current_rules.stdout_lines }}"
+  when:
+      - rhel7cis_rule_3_5_3_2_3
+  tags:
+      - level1-server
+      - level1-workstation
+      - audit
+      - rule_3.5.3.2.3
+      - iptables
+
+- name: "3.5.3.2.4 | PATCH | Ensure iptables default deny firewall policy"
+  block:
+      - name: "3.5.3.2.4 | PATCH | Ensure iptables default deny firewall policy | Configure SSH to be allowed in"
+        iptables:
+            chain: INPUT
+            protocol: tcp
+            destination_port: 22
+            jump: ACCEPT
+            ctstate: 'NEW,ESTABLISHED'
+
+      - name: "3.5.3.2.4 | PATCH | Ensure iptables default deny firewall policy | Configure SSH to be allowed out"
+        iptables:
+            chain: OUTPUT
+            protocol: tcp
+            source_port: 22
+            jump: ACCEPT
+            ctstate: 'NEW,ESTABLISHED'
+
+      - name: "3.5.3.2.4 | PATCH | Ensure iptables default deny firewall policy | Enable apt traffic"
+        iptables:
+            chain: INPUT
+            ctstate: 'ESTABLISHED'
+            jump: ACCEPT
+
+      - name: "3.5.3.2.4 | PATCH | Ensure iptables default deny firewall policy | Set drop items"
+        iptables:
+            policy: DROP
+            chain: "{{ item }}"
+        with_items:
+            - INPUT
+            - FORWARD
+            - OUTPUT
+  when:
+      - rhel7cis_rule_3_5_3_2_4
+      - not system_is_ec2
+  tags:
+      - level1-server
+      - level1-workstation
+      - patch
+      - rule_3.5.3.2.4
+      - iptables
+
+- name: "3.5.3.2.5 | Ensure iptables rules are saved "
+  block:
+      - name: "3.5.3.2.5 | Ensure iptables rules are saved "
+        shell: service iptables save
+        changed_when: rhel7cis_iptables_save.rc == 0
+        failed_when: rhel7cis_iptables_save.rc != 0
+        register: rhel7cis_iptables_save
+  when:
+      - rhel7cis_save_iptables_cis_rules
+      - rhel7cis_rule_3_5_3_2_1 or
+        rhel7cis_rule_3_5_3_2_2 or
+        rhel7cis_rule_3_5_3_2_3 or
+        rhel7cis_rule_3_5_3_2_4 or
+        rhel7cis_rule_3_5_3_2_5
+  tags:
+      - level1-server
+      - level1-workstation
+      - patch
+      - rule_3.5.3.2.5
+      - iptables
+
+- name: "3.5.3.2.6 | Ensure iptables is enabled and running"
+  service:
+      name: iptables
+      state: started
+      enabled: true
+  when:
+      - rhel7cis_rule_3_5_3_2_6
+  tags:
+      - level1-server
+      - level1-workstation
+      - patch
+      - rule_3.5.3.2.6
+      - iptables

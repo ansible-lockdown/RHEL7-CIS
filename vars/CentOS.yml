@@ -1,0 +1,6 @@
+---
+# OS Specific Settings
+
+rpm_gpg_key: /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+rpm_packager: "CentOS BuildSystem"
+rpm_key: "24c6a8a7f4a80eb5"  # found on https://www.centos.org/keys/

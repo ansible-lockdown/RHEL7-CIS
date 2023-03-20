@@ -1,6 +1,6 @@
 ---
 
-- name: "1.7.1 | L1 | PATCH | Ensure message of the day is configured properly"
+- name: "1.7.1 | PATCH | Ensure message of the day is configured properly"
   template:
       src: etc/motd.j2
       dest: /etc/motd
@@ -10,12 +10,13 @@
   when:
       - rhel7cis_rule_1_7_1
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - banner
       - patch
       - rule_1.7.1
 
-- name: "1.7.2 | L1 | PATCH | Ensure local login warning banner is configured properly"
+- name: "1.7.2 | PATCH | Ensure local login warning banner is configured properly"
   template:
       src: etc/issue.j2
       dest: /etc/issue
@@ -25,12 +26,13 @@
   when:
       - rhel7cis_rule_1_7_2
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - banner
       - patch
       - rule_1.7.2
 
-- name: "1.7.3 | L1 | PATCH | Ensure remote login warning banner is configured properly"
+- name: "1.7.3 | PATCH | Ensure remote login warning banner is configured properly"
   template:
       src: etc/issue.net.j2
       dest: /etc/issue.net
@@ -40,12 +42,13 @@
   when:
       - rhel7cis_rule_1_7_3
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - banner
       - patch
       - rule_1.7.3
 
-- name: "1.7.4 | L1 | PATCH | Ensure permissions on /etc/motd are configured"
+- name: "1.7.4 | PATCH | Ensure permissions on /etc/motd are configured"
   file:
       dest: /etc/motd
       state: file
@@ -55,12 +58,13 @@
   when:
       - rhel7cis_rule_1_7_4
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - perms
       - patch
       - rule_1.7.4
 
-- name: "1.7.5 | L1 | PATCH | Ensure permissions on /etc/issue are configured"
+- name: "1.7.5 | PATCH | Ensure permissions on /etc/issue are configured"
   file:
       dest: /etc/issue
       state: file
@@ -70,12 +74,13 @@
   when:
       - rhel7cis_rule_1_7_5
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - perms
       - patch
       - rule_1.7.5
 
-- name: "1.7.6 | L1 | PATCH | Ensure permissions on /etc/issue.net are configured"
+- name: "1.7.6 | PATCH | Ensure permissions on /etc/issue.net are configured"
   file:
       dest: /etc/issue.net
       state: file
@@ -85,7 +90,8 @@
   when:
       - rhel7cis_rule_1_7_6
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - perms
       - patch
       - rule_1.7.6

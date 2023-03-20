@@ -1,6 +1,6 @@
 ---
 
-- name: "5.4.1 | L1 | PATCH | Ensure password creation requirements are configured"
+- name: "5.4.1 | PATCH | Ensure password creation requirements are configured"
   lineinfile:
       state: present
       dest: "/etc/security/pwquality.conf"
@@ -12,16 +12,17 @@
   when:
       - rhel7cis_rule_5_4_1
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_5.4.1
 
 - name: |
-        " 5.4.2 | L1 | PATCH | Ensure lockout for failed password attempts is configured
-          5.4.3 | L1 | PATCH | Ensure password hashing algorithm is SHA-512
-          5.4.4 | L1 | PATCH | Ensure password reuse is limited"
+        "5.4.2 | PATCH | Ensure lockout for failed password attempts is configured
+         5.4.3 | PATCH | Ensure password hashing algorithm is SHA-512
+         5.4.4 | PATCH | Ensure password reuse is limited"
   block:
-      - name: " 5.4.2 | L1 | PATCH | Ensure lockout for failed password attempts is configured | Add deny count and unlock time for preauth"
+      - name: "5.4.2 | PATCH | Ensure lockout for failed password attempts is configured | Add deny count and unlock time for preauth"
         lineinfile:
             dest: "/etc/pam.d/{{ item }}"
             state: present
@@ -31,7 +32,7 @@
             - "system-auth"
             - "password-auth"
 
-      - name: " 5.4.2 | L1 | PATCH | Ensure lockout for failed password attempts is configured | Add success and default settings to pam_unix.so"
+      - name: "5.4.2 | PATCH | Ensure lockout for failed password attempts is configured | Add success and default settings to pam_unix.so"
         lineinfile:
             dest: "/etc/pam.d/{{ item }}"
             state: present
@@ -41,7 +42,7 @@
             - "system-auth"
             - "password-auth"
 
-      - name: " 5.4.2 | L1 | PATCH | Ensure lockout for failed password attempts is configured | Add default, deny count, and unlock times for authfail"
+      - name: "5.4.2 | PATCH | Ensure lockout for failed password attempts is configured | Add default, deny count, and unlock times for authfail"
         lineinfile:
             dest: "/etc/pam.d/{{ item }}"
             state: present
@@ -51,7 +52,7 @@
             - "system-auth"
             - "password-auth"
 
-      - name: " 5.4.2 | L1 | PATCH | Ensure lockout for failed password attempts is configured | Add deny count and unlock times to authsucc"
+      - name: "5.4.2 | PATCH | Ensure lockout for failed password attempts is configured | Add deny count and unlock times to authsucc"
         lineinfile:
             dest: "/etc/pam.d/{{ item }}"
             state: present
@@ -61,19 +62,19 @@
             - "system-auth"
             - "password-auth"
 
-      - name: "SCORED | 5.4.2 | PATCH | Ensure lockout for failed password attempts is configured | Activate deny count and unlock times to failed password"
+      - name: "5.4.2 | PATCH | Ensure lockout for failed password attempts is configured | Activate deny count and unlock times to failed password"
         lineinfile:
             dest: "/etc/pam.d/{{ item }}"
             state: present
             line: "account     required      pam_faillock.so"
-            firstmatch: yes
+            firstmatch: true
             regexp: '^\s*account\s+required\s+pam_faillock.so\s*'
             insertbefore: '^#?account ?'
         loop:
             - "system-auth"
             - "password-auth"
 
-      - name: " 5.4.3 | L1 | PATCH | Ensure password hashing algorithm is SHA-512 | add sha512 settings"
+      - name: "5.4.3 | PATCH | Ensure password hashing algorithm is SHA-512 | add sha512 settings"
         lineinfile:
             dest: "/etc/pam.d/{{ item }}"
             state: present
@@ -83,7 +84,7 @@
             - "system-auth"
             - "password-auth"
 
-      - name: " 5.4.4 | L1 | PATCH | Ensure password reuse is limited | add remember settings"
+      - name: "5.4.4 | PATCH | Ensure password reuse is limited | add remember settings"
         lineinfile:
             dest: "/etc/pam.d/{{ item }}"
             state: present
@@ -97,13 +98,13 @@
       # With the steps below you will score five (5) points lower due to false positive results
 
       - name: |
-              " 5.4.2 | L1 | PATCH | Ensure lockout for failed password attempts is configured | Copy system/passowrd-auth to system/password-auth-local
-                5.4.3 | L1 | PATCH | Ensure password hashing algorithm is SHA-512"
-                5.4.4 | L1 | PATCH | Ensure password reuse is limited | Copy system/password-auth to system/password-auth-local"
+              "5.4.2 | PATCH | Ensure lockout for failed password attempts is configured | Copy system/passowrd-auth to system/password-auth-local
+               5.4.3 | PATCH | Ensure password hashing algorithm is SHA-512
+               5.4.4 | PATCH | Ensure password reuse is limited | Copy system/password-auth to system/password-auth-local"
         copy:
             src: "/etc/pam.d/{{ item }}"
             dest: "/etc/pam.d/{{ item }}-local"
-            remote_src: yes
+            remote_src: true
             owner: root
             group: root
             mode: '0644'
@@ -112,13 +113,13 @@
             - "password-auth"
 
       - name: |
-              " 5.4.2 | L1 | PATCH | Ensure lockout for failed password attempts is configured | Setup symbolic link
-                5.4.4 | L1 | PATCH | Ensure password reuse is limited | Setup symbolic link"
+              "5.4.2 | PATCH | Ensure lockout for failed password attempts is configured | Setup symbolic link
+               5.4.4 | PATCH | Ensure password reuse is limited | Setup symbolic link"
         file:
             src: "/etc/pam.d/{{ item }}-local"
             dest: "/etc/pam.d/{{ item }}"
             state: link
-            force: yes
+            force: true
         loop:
             - "system-auth"
             - "password-auth"
@@ -127,7 +128,8 @@
       - rhel7cis_rule_5_4_3
       - rhel7cis_rule_5_4_4
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - patch
       - rule_5.4.2
       - rule_5.4.4

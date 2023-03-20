@@ -1,5 +1,13 @@
 # release CIS RedHat Enterprise Linux 7 Benchmark v3.0.1 - 09-21-2020
 
+## 1.0.4
+
+- Oracle alignment now works and tested with oracle7.9
+- audit alignment benchmark version used to test against
+- goss audit version updated
+- lint file update
+- workflow updates
+
 ## Whats new 1.0.0
 
 - New auditing tool all controlled via defaults main. run on host using [goss](https://github.com/aelsabbahy/goss)
