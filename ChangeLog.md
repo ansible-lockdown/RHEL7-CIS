@@ -1,12 +1,22 @@
 # release CIS RedHat Enterprise Linux 7 Benchmark v3.0.1 - 09-21-2020
 
-## 1.0.4
+## 1.1.2
+
+- update to yamllint
+- update linting
+- update to galaxy workflow
+
+## 1.1.1
 
 - Oracle alignment now works and tested with oracle7.9
 - audit alignment benchmark version used to test against
 - goss audit version updated
 - lint file update
 - workflow updates
+
+## Major 1.1
+
+- Upgrade to CIS 3.1.1
 
 ## Whats new 1.0.0
 
@@ -18,10 +28,6 @@
 - Grub password no longer created using passlib needs to be supplied as variable
   - assert has been created if rule still enabled and password not changed
 - Use of the packages facts module
-
-## Major 1.1
-
-- Upgrade to CIS 3.1.1
 
 ### Highlights
 
