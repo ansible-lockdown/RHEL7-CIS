@@ -1,4 +1,5 @@
 ---
+
 # rhel7cis_notauto will auto install intrusive items
 rhel7cis_notauto: false
 
@@ -19,7 +20,6 @@ rhel7cis_allow_reboot: false
 ## Python Binary
 ## This is used for python3 Installations where python2 OS modules are used in ansible
 python2_bin: /bin/python2.7
-
 
 ## Benchmark name used by audting control role
 # The audit variable found at the base
@@ -47,7 +47,6 @@ run_audit: false
 
 ### End Goss enablements ####
 #### Detailed settings found at the end of this document ####
-
 
 # Enable/Disable SELinux
 rhel7cis_selinux_disable: false

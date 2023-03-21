@@ -165,7 +165,6 @@
       - patch
       - rule_6.2.7
 
-
 - name: "6.2.8 | PATCH | Ensure no duplicate GIDs exist"
   block:
       - name: "6.2.8 | AUDIT | Ensure no duplicate GIDs exist | Check for duplicate GIDs"
