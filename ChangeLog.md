@@ -5,6 +5,7 @@
 - update to yamllint
 - update linting
 - update to galaxy workflow
+- rule 2.2.1.1 moved to block
 
 ## 1.1.1
 
