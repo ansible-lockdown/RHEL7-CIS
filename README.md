@@ -10,7 +10,7 @@
 
 ![Main Build Status](https://img.shields.io/github/actions/workflow/status/ansible-lockdown/rhel7-cis/linux_benchmark_testing.yml?label=Main%20Build%20Status)
 ![Main Release Date](https://img.shields.io/github/release-date/ansible-lockdown/rhel7-cis?label=Main%20Release%20Date)
-![Release](https://img.shields.io/github/v/tag/ansible-lockdown/rhel7-cis?label=Tag&&color=dark%20green)
+![Release](https://img.shields.io/github/v/tag/ansible-lockdown/rhel7-cis?label=Release%20Tag&&color=dark%20green)
 
 ![Issues Open](https://img.shields.io/github/issues-raw/ansible-lockdown/rhel7-cis?label=Open%20Issues)
 ![Issues Closed](https://img.shields.io/github/issues-closed-raw/ansible-lockdown/rhel7-cis?label=Closed%20Issues)
