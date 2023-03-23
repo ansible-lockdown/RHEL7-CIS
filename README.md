@@ -1,17 +1,47 @@
 # RHEL 7 CIS
 
-![Build Status](https://img.shields.io/github/workflow/status/ansible-lockdown/RHEL7-CIS/CommunityToDevel?label=Devel%20Build%20Status&style=plastic)
-![Build Status](https://img.shields.io/github/workflow/status/ansible-lockdown/RHEL7-CIS/DevelToMain?label=Main%20Build%20Status&style=plastic)
-![Release](https://img.shields.io/github/v/release/ansible-lockdown/RHEL7-CIS?style=plastic)
+## Configure a RHEL/Centos 7 machine to be [CIS](https://www.cisecurity.org/cis-benchmarks/) compliant
 
-Configure RHEL/Centos 7 machine to be [CIS](https://www.cisecurity.org/cis-benchmarks/) compliant
-Untested on OEL
+### Based on [CIS RedHat Enterprise Linux 7 Benchmark v3.1.1 - 05-21-2021 ](https://www.cisecurity.org/cis-benchmarks/)
 
-Based on [CIS RedHat Enterprise Linux 7 Benchmark v3.1.1 - 05-21-2021 ](https://www.cisecurity.org/cis-benchmarks/)
+---
 
-## Join us
+![Org Stars](https://img.shields.io/github/stars/ansible-lockdown?label=Org%20Stars&style=social)
+![Stars](https://img.shields.io/github/stars/ansible-lockdown/rhel7-cis?label=Repo%20Stars&style=social)
+![Forks](https://img.shields.io/github/forks/ansible-lockdown/rhel7-cis?style=social)
+![followers](https://img.shields.io/github/followers/ansible-lockdown?style=social)
+[![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/AnsibleLockdown.svg?style=social&label=Follow%20%40AnsibleLockdown)](https://twitter.com/AnsibleLockdown)
 
-On our [Discord Server](https://discord.gg/JFxpSgPFEJ) to ask questions, discuss features, or just chat with other Ansible-Lockdown users
+![Ansible Galaxy Quality](https://img.shields.io/ansible/quality/56324?label=Quality&&logo=ansible)
+![Discord Badge](https://img.shields.io/discord/925818806838919229?logo=discord)
+
+![Devel Build Status](https://img.shields.io/github/actions/workflow/status/ansible-lockdown/rhel7-cis/linux_benchmark_testing.yml?label=Devel%20Build%20Status)
+![Devel Commits](https://img.shields.io/github/commit-activity/m/ansible-lockdown/rhel7-cis/devel?color=dark%20green&label=Devel%20Branch%20commits)
+
+![Release Branch](https://img.shields.io/badge/Release%20Branch-Main-brightgreen) 
+![Main Build Status](https://img.shields.io/github/actions/workflow/status/ansible-lockdown/rhel7-cis/linux_benchmark_testing.yml?label=Build%20Status)
+![Main Release Date](https://img.shields.io/github/release-date/ansible-lockdown/rhel7-cis?label=Release%20Date)
+![Release Tag](https://img.shields.io/github/v/tag/ansible-lockdown/rhel7-cis?label=Release%20Tag&&color=success)
+
+![Issues Open](https://img.shields.io/github/issues-raw/ansible-lockdown/rhel7-cis?label=Open%20Issues)
+![Issues Closed](https://img.shields.io/github/issues-closed-raw/ansible-lockdown/rhel7-cis?label=Closed%20Issues&&color=success)
+![Pull Requests](https://img.shields.io/github/issues-pr/ansible-lockdown/rhel7-cis?label=Pull%20Requests)
+
+![License](https://img.shields.io/github/license/ansible-lockdown/rhel7-cis?label=License)
+
+---
+
+## Looking for support?
+
+[Lockdown Enterprise](https://www.lockdownenterprise.com#GH_AL_RH7_cis)
+
+[Ansible support](https://www.mindpointgroup.com/cybersecurity-products/ansible-counselor#GH_AL_RH7_cis)
+
+### Community
+
+On our [Discord Server](https://discord.io/ansible-lockdown) to ask questions, discuss features, or just chat with other Ansible-Lockdown users
+
+---
 
 ## Caution(s)
 
@@ -23,7 +53,9 @@ This role was developed against a clean install of the Operating System. If you 
 
 To use release version please point to main branch and relevant release for the cis benchmark you wish to work with.
 
-## Matching security Level for CIS
+---
+
+## Matching a security Level for CIS
 
 It is possible to to only run level 1 or level 2 controls for CIS.
 This is managed using tags:
@@ -48,19 +80,16 @@ This can be turned on or off within the defaults/main.yml file with the variable
 
 This is a much quicker, very lightweight, checking (where possible) config compliance and live/running settings.
 
-A new form of auditing has been developed, by using a small (12MB) go binary called [goss](https://github.com/aelsabbahy/goss) along with the relevant configurations to check. Without the need for infrastructure or other tooling.
+A new form of auditing has been developed, by using a small (12MB) go binary called [goss](https://github.com/goss-org/goss) along with the relevant configurations to check. Without the need for infrastructure or other tooling.
 This audit will not only check the config has the correct setting but aims to capture if it is running with that configuration also trying to remove [false positives](https://www.mindpointgroup.com/blog/is-compliance-scanning-still-relevant/) in the process.
-
-Refer to [RHEL7-CIS-Audit](https://github.com/ansible-lockdown/RHEL7-CIS-Audit).
 
 ## Documentation
 
-- [Getting Started](https://www.lockdownenterprise.com/docs/getting-started-with-lockdown)
-- [Customizing Roles](https://www.lockdownenterprise.com/docs/customizing-lockdown-enterprise)
-- [Per-Host Configuration](https://www.lockdownenterprise.com/docs/per-host-lockdown-enterprise-configuration)
-- [Getting the Most Out of the Role](https://www.lockdownenterprise.com/docs/get-the-most-out-of-lockdown-enterprise)
-- [Wiki](https://github.com/ansible-lockdown/RHEL7-CIS/wiki)
-- [Repo GitHub Page](https://ansible-lockdown.github.io/RHEL7-CIS/)
+- [Read The Docs](https://ansible-lockdown.readthedocs.io/en/latest/)
+- [Getting Started](https://www.lockdownenterprise.com/docs/getting-started-with-lockdown#GH_AL_RH7_cis)
+- [Customizing Roles](https://www.lockdownenterprise.com/docs/customizing-lockdown-enterprise#GH_AL_RH7_cis)
+- [Per-Host Configuration](https://www.lockdownenterprise.com/docs/per-host-lockdown-enterprise-configuration#GH_AL_RH7_cis)
+- [Getting the Most Out of the Role](https://www.lockdownenterprise.com/docs/get-the-most-out-of-lockdown-enterprise#GH_AL_RH7_cis)
 
 ## Requirements
 
@@ -73,7 +102,7 @@ Refer to [RHEL7-CIS-Audit](https://github.com/ansible-lockdown/RHEL7-CIS-Audit).
   - [Tower User Guide](https://docs.ansible.com/ansible-tower/latest/html/userguide/index.html)
   - [Ansible Community Info](https://docs.ansible.com/ansible/latest/community/index.html)
 - Functioning Ansible and/or Tower Installed, configured, and running. This includes all of the base Ansible/Tower configurations, needed packages installed, and infrastructure setup.
-- Please read through the tasks in this role to gain an understanding of what each control is doing. Some of the tasks are disruptive and can have unintended consiquences in a live production system. Also familiarize yourself with the variables in the defaults/main.yml file or the [Main Variables Wiki Page](https://github.com/ansible-lockdown/RHEL7-CIS/wiki/Main-Variables).
+- Please read through the tasks in this role to gain an understanding of what each control is doing. Some of the tasks are disruptive and can have unintended consiquences in a live production system. Also familiarize yourself with the variables in the defaults/main.yml file.
 
 **Technical Dependencies:**
 
@@ -85,7 +114,7 @@ Refer to [RHEL7-CIS-Audit](https://github.com/ansible-lockdown/RHEL7-CIS-Audit).
 
 ## Role Variables
 
-This role is designed that the end user should not have to edit the tasks themselves. All customizing should be done via the defaults/main.yml file or with extra vars within the project, job, workflow, etc. These variables can be found [here](https://github.com/ansible-lockdown/RHEL7-CIS/wiki/Main-Variables) in the Main Variables Wiki page. All variables are listed there along with descriptions.
+This role is designed that the end user should not have to edit the tasks themselves. All customizing should be done via the defaults/main.yml file or with extra vars within the project, job, workflow, etc.
 
 ## Tags
 
@@ -104,37 +133,7 @@ Below is an example of the tag section from a control within this role. Using th
       - rule_2.2.4
 ```
 
-## Example Audit Summary
-
-The audit when run from ansible also uses all the specific variables, so will test relevant variables based on host configuration settings.
-This is based on a vagrant image, based upon a pre-configured image for filesystem layout etc. e.g. No Gui or firewall.
-Note: More tests are run during audit as we are checking config and running state.
-
-```sh
-TASK [RHEL7-CIS : Show Audit Summary] ******************************************************************************************************************************************************************************
-******
-ok: [cent7_efi] => {
-    "msg": [
-        "The pre remediation results are: Count: 380, Failed: 121, Duration: 10.399s.",
-        "The post remediation results are: Count: 380, Failed: 10, Duration: 12.324s.",
-        "Full breakdown can be found in /var/tmp",
-        ""
-    ]
-}
-
-PLAY RECAP ******************************************************************************************************************************************************************************************************************
-******
-cent7_efi                  : ok=274  changed=143  unreachable=0    failed=0    skipped=140  rescued=0    ignored=0  
-
-```
-
-## Branches
-
-- **devel** - This is the default branch and the working development branch. Community pull requests will pull into this branch
-- **main** - This is the release branch
-- **reports** - This is a protected branch for our scoring reports, no code should ever go here
-- **gh-pages** - This is the github pages branch
-- **all other branches** - Individual community member branches
+ member branches
 
 ## Community Contribution
 
@@ -153,15 +152,6 @@ uses:
 - ansible collections - pulls in the latest version based on requirements file
 - runs the audit using the devel branch
 - This is an automated test that occurs on pull requests into devel
-
-## Support
-
-This is a community project at its core and will be managed as such.
-
-If you would are interested in dedicated support to assist or provide bespoke setups
-
-- [Ansible Counselor](https://www.mindpointgroup.com/products/ansible-counselor-on-demand-ansible-services-and-consulting/)
-- [Try us out](https://engage.mindpointgroup.com/try-ansible-counselor)
 
 ## Credits
 

@@ -1,57 +1,37 @@
 ---
 
-- name: "2.2.1.1 | PATCH | Ensure time synchronization is in use | service install"
-  package:
-      name: "{{ rhel7cis_time_synchronization }}"
-      state: present
-  when:
-      - rhel7cis_rule_2_2_1_1
-      - not system_is_container
-  tags:
-      - level1-server
-      - level1-workstation
-      - patch
-      - rule_2.2.1.1
+- name: "2.2.1.1 | PATCH | Ensure time synchronization is in use"
+  block:
+      - name: "2.2.1.1 | PATCH | Ensure time synchronization is in use | service install"
+        package:
+            name: "{{ rhel7cis_time_synchronization }}"
+            state: present
+
+      - name: "2.2.1.1 | PATCH | Ensure time synchronization is in use | service start"
+        service:
+            name: "{{ rhel7cis_time_synchronization }}d"
+            state: started
+            enabled: true
+
+      - name: "2.2.1.1 | PATCH | Ensure time synchronization is in use - service stop ntp"
+        service:
+            name: ntpd
+            state: stopped
+            enabled: false
+        when:
+            - "'ntp' in ansible_facts.packages"
+            - rhel7cis_time_synchronization == "chrony"
+
+      - name: "2.2.1.1 | PATCH | Ensure time synchronization is in use - service stop chrony"
+        service:
+            name: chronyd
+            state: stopped
+            enabled: false
+        when:
+            - rhel7cis_time_synchronization == "ntp" and "'chrony' in ansible_facts.packages"
   vars:
       ansible_python_interpreter: /bin/python
-
-- name: "2.2.1.1 | PATCH | Ensure time synchronization is in use | service start"
-  service:
-      name: "{{ rhel7cis_time_synchronization }}d"
-      state: started
-      enabled: true
   when:
-      - rhel7cis_rule_2_2_1_1
-      - not system_is_container
-  tags:
-      - level1-server
-      - level1-workstation
-      - patch
-      - rule_2.2.1.1
-
-- name: "2.2.1.1 | PATCH | Ensure time synchronization is in use - service stop ntp"
-  service:
-      name: ntpd
-      state: stopped
-      enabled: false
-  when:
-      - "'ntp' in ansible_facts.packages"
-      - rhel7cis_time_synchronization == "chrony"
-      - rhel7cis_rule_2_2_1_1
-      - not system_is_container
-  tags:
-      - level1-server
-      - level1-workstation
-      - patch
-      - rule_2.2.1.1
-
-- name: "2.2.1.1 | PATCH | Ensure time synchronization is in use - service stop chrony"
-  service:
-      name: chronyd
-      state: stopped
-      enabled: false
-  when:
-      - rhel7cis_time_synchronization == "ntp" and "'chrony' in ansible_facts.packages"
       - rhel7cis_rule_2_2_1_1
       - not system_is_container
   tags:
