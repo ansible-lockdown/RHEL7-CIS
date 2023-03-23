@@ -28,6 +28,8 @@
 
 [![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/AnsibleLockdown.svg?style=social&label=Follow%20%40AnsibleLockdown)](https://twitter.com/AnsibleLockdown)
 
+![Discord Badge](https://img.shields.io/discord/925818806838919229?logo=discord)
+
 ---
 
 ## Looking for support?
