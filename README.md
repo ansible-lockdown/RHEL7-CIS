@@ -11,12 +11,15 @@
 ![Forks](https://img.shields.io/github/forks/ansible-lockdown/rhel7-cis?style=social)
 ![followers](https://img.shields.io/github/followers/ansible-lockdown?style=social)
 
+[![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/AnsibleLockdown.svg?style=social&label=Follow%20%40AnsibleLockdown)](https://twitter.com/AnsibleLockdown) ![Discord Badge](https://img.shields.io/discord/925818806838919229?logo=discord)
+
 ![Devel Build Status](https://img.shields.io/github/actions/workflow/status/ansible-lockdown/rhel7-cis/linux_benchmark_testing.yml?label=Devel%20Build%20Status)
 ![Devel Commits](https://img.shields.io/github/commit-activity/m/ansible-lockdown/rhel7-cis/devel?color=dark%20green&label=Devel%20Branch%20commits)
 
-![Main Build Status](https://img.shields.io/github/actions/workflow/status/ansible-lockdown/rhel7-cis/linux_benchmark_testing.yml?label=Main%20Build%20Status)
-![Main Release Date](https://img.shields.io/github/release-date/ansible-lockdown/rhel7-cis?label=Main%20Release%20Date)
-![Release](https://img.shields.io/github/v/tag/ansible-lockdown/rhel7-cis?label=Release%20Tag&&color=dark%20green)
+![Release Branch](https://img.shields.io/badge/Release%20Branch-Main-brightgreen) 
+![Main Build Status](https://img.shields.io/github/actions/workflow/status/ansible-lockdown/rhel7-cis/linux_benchmark_testing.yml?label=Build%20Status)
+![Main Release Date](https://img.shields.io/github/release-date/ansible-lockdown/rhel7-cis?label=Release%20Date)
+![Release Tag](https://img.shields.io/github/v/tag/ansible-lockdown/rhel7-cis?label=Release%20Tag&&color=dark%20green)
 
 ![Issues Open](https://img.shields.io/github/issues-raw/ansible-lockdown/rhel7-cis?label=Open%20Issues)
 ![Issues Closed](https://img.shields.io/github/issues-closed-raw/ansible-lockdown/rhel7-cis?label=Closed%20Issues)
@@ -26,10 +29,6 @@
 
 ![Ansible Galaxy Quality](https://img.shields.io/ansible/quality/56324?label=Quality&&logo=ansible)
 
-[![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/AnsibleLockdown.svg?style=social&label=Follow%20%40AnsibleLockdown)](https://twitter.com/AnsibleLockdown)
-
-![Discord Badge](https://img.shields.io/discord/925818806838919229?logo=discord)
-
 ---
 
 ## Looking for support?
@@ -38,9 +37,11 @@
 
 [Ansible support](https://www.mindpointgroup.com/cybersecurity-products/ansible-counselor#GH_AL_RH7_cis)
 
-## Community
+### Community
 
 On our [Discord Server](https://discord.io/ansible-lockdown) to ask questions, discuss features, or just chat with other Ansible-Lockdown users
+
+---
 
 ## Caution(s)
 
@@ -52,7 +53,9 @@ This role was developed against a clean install of the Operating System. If you 
 
 To use release version please point to main branch and relevant release for the cis benchmark you wish to work with.
 
-## Matching security Level for CIS
+---
+
+## Matching a security Level for CIS
 
 It is possible to to only run level 1 or level 2 controls for CIS.
 This is managed using tags:
