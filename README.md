@@ -18,9 +18,14 @@
 
 ![License](https://img.shields.io/github/license/ansible-lockdown/rhel7-cis?label=License)
 
-Configure RHEL/Centos 7 machine to be [CIS](https://www.cisecurity.org/cis-benchmarks/) compliant
+[![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/AnsibleLockdown.svg?style=social&label=Follow%20%40AnsibleLockdown)](https://twitter.com/AnsibleLockdown)
 
-Based on [CIS RedHat Enterprise Linux 7 Benchmark v3.1.1 - 05-21-2021 ](https://www.cisecurity.org/cis-benchmarks/)
+---
+## Configure a RHEL/Centos 7 machine to be [CIS](https://www.cisecurity.org/cis-benchmarks/) compliant
+
+### Based on [CIS RedHat Enterprise Linux 7 Benchmark v3.1.1 - 05-21-2021 ](https://www.cisecurity.org/cis-benchmarks/)
+
+
 
 ## Looking for support?
 
