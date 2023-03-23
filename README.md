@@ -18,7 +18,8 @@
 
 ![License](https://img.shields.io/github/license/ansible-lockdown/rhel7-cis?label=License)
 
-![Ansible Galaxy Quality](https://img.shields.io/ansible/quality/56324?label=Ansible%20Galaxy%20Quality)
+![Ansible Galaxy Quality](https://img.shields.io/ansible/quality/56324?label=Quality&&logo=ansible)
+
 [![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/AnsibleLockdown.svg?style=social&label=Follow%20%40AnsibleLockdown)](https://twitter.com/AnsibleLockdown)
 
 ---
