@@ -1,7 +1,7 @@
 ---
 
 - name: "5.4.1 | PATCH | Ensure password creation requirements are configured"
-  lineinfile:
+  ansible.builtin.lineinfile:
       state: present
       dest: "/etc/security/pwquality.conf"
       regexp: '^{{ item.key }}'
@@ -23,7 +23,7 @@
          5.4.4 | PATCH | Ensure password reuse is limited"
   block:
       - name: "5.4.2 | PATCH | Ensure lockout for failed password attempts is configured | Add deny count and unlock time for preauth"
-        lineinfile:
+        ansible.builtin.lineinfile:
             dest: "/etc/pam.d/{{ item }}"
             state: present
             line: "auth        required      pam_faillock.so preauth audit silent deny={{ rhel7cis_pam_faillock.attempts }}{{ (rhel7cis_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}unlock_time={{ rhel7cis_pam_faillock.unlock_time }}"
@@ -33,7 +33,7 @@
             - "password-auth"
 
       - name: "5.4.2 | PATCH | Ensure lockout for failed password attempts is configured | Add success and default settings to pam_unix.so"
-        lineinfile:
+        ansible.builtin.lineinfile:
             dest: "/etc/pam.d/{{ item }}"
             state: present
             line: "auth        [success=1 default=bad] pam_unix.so"
@@ -43,7 +43,7 @@
             - "password-auth"
 
       - name: "5.4.2 | PATCH | Ensure lockout for failed password attempts is configured | Add default, deny count, and unlock times for authfail"
-        lineinfile:
+        ansible.builtin.lineinfile:
             dest: "/etc/pam.d/{{ item }}"
             state: present
             line: "auth        [default=die] pam_faillock.so authfail audit deny={{ rhel7cis_pam_faillock.attempts }}{{ (rhel7cis_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}unlock_time={{ rhel7cis_pam_faillock.unlock_time }}"
@@ -53,7 +53,7 @@
             - "password-auth"
 
       - name: "5.4.2 | PATCH | Ensure lockout for failed password attempts is configured | Add deny count and unlock times to authsucc"
-        lineinfile:
+        ansible.builtin.lineinfile:
             dest: "/etc/pam.d/{{ item }}"
             state: present
             line: "auth        sufficient    pam_faillock.so authsucc audit deny={{ rhel7cis_pam_faillock.attempts }}{{ (rhel7cis_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}unlock_time={{ rhel7cis_pam_faillock.unlock_time }}"
@@ -63,7 +63,7 @@
             - "password-auth"
 
       - name: "5.4.2 | PATCH | Ensure lockout for failed password attempts is configured | Activate deny count and unlock times to failed password"
-        lineinfile:
+        ansible.builtin.lineinfile:
             dest: "/etc/pam.d/{{ item }}"
             state: present
             line: "account     required      pam_faillock.so"
@@ -75,7 +75,7 @@
             - "password-auth"
 
       - name: "5.4.3 | PATCH | Ensure password hashing algorithm is SHA-512 | add sha512 settings"
-        lineinfile:
+        ansible.builtin.lineinfile:
             dest: "/etc/pam.d/{{ item }}"
             state: present
             line: "password    sufficient    pam_unix.so {{ rhel7cis_pam_faillock.pwhash }} shadow nullok try_first_pass use_authtok"
@@ -85,7 +85,7 @@
             - "password-auth"
 
       - name: "5.4.4 | PATCH | Ensure password reuse is limited | add remember settings"
-        lineinfile:
+        ansible.builtin.lineinfile:
             dest: "/etc/pam.d/{{ item }}"
             state: present
             line: "password    required    pam_pwhistory.so remember={{ rhel7cis_pam_faillock.remember }}"
@@ -101,7 +101,7 @@
               "5.4.2 | PATCH | Ensure lockout for failed password attempts is configured | Copy system/passowrd-auth to system/password-auth-local
                5.4.3 | PATCH | Ensure password hashing algorithm is SHA-512
                5.4.4 | PATCH | Ensure password reuse is limited | Copy system/password-auth to system/password-auth-local"
-        copy:
+        ansible.builtin.copy:
             src: "/etc/pam.d/{{ item }}"
             dest: "/etc/pam.d/{{ item }}-local"
             remote_src: true
@@ -115,7 +115,7 @@
       - name: |
               "5.4.2 | PATCH | Ensure lockout for failed password attempts is configured | Setup symbolic link
                5.4.4 | PATCH | Ensure password reuse is limited | Setup symbolic link"
-        file:
+        ansible.builtin.file:
             src: "/etc/pam.d/{{ item }}-local"
             dest: "/etc/pam.d/{{ item }}"
             state: link

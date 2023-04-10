@@ -7,6 +7,7 @@
 - update to galaxy workflow
 - rule 2.2.1.1 moved to block
 - readme update and badges
+- full module names added
 
 ## 1.1.1
 

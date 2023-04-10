@@ -1,7 +1,7 @@
 ---
 
 - name: "1.6.1.1 | PATCH | Ensure SELinux is installed"
-  package:
+  ansible.builtin.package:
       name: libselinux
       state: present
   when:
@@ -18,7 +18,7 @@
 - name: "1.6.1.2 | PATCH | Ensure SELinux is not disabled in bootloader configuration"
   block:
       - name: "1.6.1.2 | PATCH | Ensure SELinux is not disabled in bootloader configuration"
-        replace:
+        ansible.builtin.replace:
             dest: /etc/default/grub
             regexp: '(selinux|enforcing)\s*=\s*0\s*'
         register: selinux_grub_patch
@@ -26,7 +26,7 @@
         notify: grub2cfg
 
       - name: "1.6.1.2 | FACT | Ensure SELinux is not disabled in bootloader configuration"
-        set_fact:
+        ansible.builtin.set_fact:
             change_requires_reboot: true
         when:
             - selinux_grub_patch.changed
@@ -41,7 +41,7 @@
 
 - name: "1.6.1.3 | PATCH | Ensure SELinux policy is configured\n
          1.6.1.4 | PATCH | Ensure the SELinux state is enforcing or permissive"
-  selinux:
+  ansible.posix.selinux:
       conf: /etc/selinux/config
       policy: "{{ rhel7cis_selinux_pol }}"
       state: "{{ rhel7cis_selinux_state }}"
@@ -58,7 +58,7 @@
       - rule_1.6.1.4
 
 - name: "1.6.1.5 | PATCH | Ensure the SELinux state is enforcing"
-  selinux:
+  ansible.posix.selinux:
       conf: /etc/selinux/config
       policy: "{{ rhel7cis_selinux_pol }}"
       state: enforcing
@@ -76,19 +76,19 @@
 - name: "1.6.1.6 | AUDIT | Ensure no unconfined daemons exist"
   block:
       - name: "1.6.1.6 | AUDIT | Ensure no unconfined daemons exist | Find the unconfined daemons"
-        shell: ps -eZ | egrep "initrc" | egrep -vw "tr|ps|egrep|bash|awk" | tr ':' ' ' | awk '{ print $NF }'
+        ansible.builtin.shell: ps -eZ | egrep "initrc" | egrep -vw "tr|ps|egrep|bash|awk" | tr ':' ' ' | awk '{ print $NF }'
         failed_when: false
         changed_when: false
         check_mode: false
         register: rhelcis_1_6_1_6_unconf_daemons
 
       - name: "1.6.1.6 | AUDIT | Ensure no unconfined daemons exist | Message on no unconfined daemones"
-        debug:
+        ansible.builtin.debug:
             msg: "Good News! There are no unconfined daemons found on your system"
         when: rhelcis_1_6_1_6_unconf_daemons.stdout | length == 0
 
       - name: "1.6.1.6 | AUDIT | Ensure no unconfined daemons exist | Message on unconfined daemones"
-        debug:
+        ansible.builtin.debug:
             msg: "WARNING!! You have unconfined daemons: {{ rhelcis_1_6_1_6_unconf_daemons.stdout_lines }}"
         when: rhelcis_1_6_1_6_unconf_daemons.stdout | length > 0
   when:
@@ -100,7 +100,7 @@
       - rule_1.6.1.6
 
 - name: "1.6.1.7 | PATCH | Ensure SETroubleshoot is not installed"
-  package:
+  ansible.builtin.package:
       name: setroubleshoot
       state: absent
   when:
@@ -115,7 +115,7 @@
       ansible_python_interpreter: /bin/python
 
 - name: "1.6.1.8 | PATCH | Ensure the MCS Translation Service (mcstrans) is not installed"
-  package:
+  ansible.builtin.package:
       name: mcstrans
       state: absent
   when:

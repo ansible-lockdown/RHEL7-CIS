@@ -1,7 +1,7 @@
 ---
 
 - name: "3.5.1.1 | PATCH | Ensure FirewallD is installed"
-  package:
+  ansible.builtin.package:
       name: firewalld
       state: present
   vars:
@@ -16,7 +16,7 @@
       - rule_3.5.1.1
 
 - name: "3.5.1.2 | PATCH | Ensure iptables-services not installed with firewalld"
-  package:
+  ansible.builtin.package:
       name: iptables-services
       state: absent
   vars:
@@ -31,7 +31,7 @@
       - rule_3.5.1.2
 
 - name: "3.5.1.3 | PATCH | Ensure iptables-services not installed with firewalld"
-  package:
+  ansible.builtin.package:
       name: nftables
       state: absent
   vars:
@@ -46,7 +46,7 @@
       - rule_3.5.1.3
 
 - name: "3.5.1.4 | PATCH | Ensure firewalld service is enabled and running"
-  systemd:
+  ansible.builtin.systemd:
       name: firewalld
       state: started
       enabled: true
@@ -62,13 +62,13 @@
 - name: "3.5.1.5 | PATCH | Ensure firewalld default zone is set"
   block:
       - name: "3.5.1.5 | AUDIT | Ensure default zone is set"
-        command: firewall-cmd --get-default-zone
+        ansible.builtin.command: firewall-cmd --get-default-zone
         changed_when: false
         check_mode: false
         register: current_default_zone
 
       - name: "3.5.1.5 | PATCH | Ensure default zone is set"
-        command: firewall-cmd --set-default-zone="{{ rhel7cis_default_zone }}"
+        ansible.builtin.command: firewall-cmd --set-default-zone="{{ rhel7cis_default_zone }}"
         when:
             - current_default_zone.stdout != rhel7cis_default_zone
   when:
@@ -82,13 +82,13 @@
 - name: "3.5.1.6 | AUDIT | Ensure network interfaces are assigned to appropriate zone"
   block:
       - name: "3.5.1.6 | AUDIT | Ensure network interfaces are assigned to appropriate zone | Get list of interfaces and policies"
-        shell: "nmcli -t connection show | awk -F: '{ if($4){print $4} }' | while read INT; do firewall-cmd --get-active-zones | grep -B1 $INT; done"
+        ansible.builtin.shell: "nmcli -t connection show | awk -F: '{ if($4){print $4} }' | while read INT; do firewall-cmd --get-active-zones | grep -B1 $INT; done"
         changed_when: false
         check_mode: false
         register: rhel7cis_3_5_1_6_interfacepolicy
 
       - name: "3.5.1.6 | AUDIT | Ensure network interfaces are assigned to appropriate zone | Get list of interfaces and policies | Show the interface to policy"
-        debug:
+        ansible.builtin.debug:
             msg:
                 - "The items below are the policies tied to the interfaces, please correct as needed"
                 - "{{ rhel7cis_3_5_1_6_interfacepolicy.stdout_lines }}"
@@ -103,13 +103,13 @@
 - name: "3.5.1.7 | AUDIT | Ensure firewalld drops unnecessary services and ports"
   block:
       - name: "3.5.1.7 | AUDIT | Ensure firewalld drops unnecessary services and ports | Get list of services and ports"
-        shell: "firewall-cmd --get-active-zones | awk '!/:/ {print $1}' | while read ZN; do firewall-cmd --list-all --zone=$ZN; done"
+        ansible.builtin.shell: "firewall-cmd --get-active-zones | awk '!/:/ {print $1}' | while read ZN; do firewall-cmd --list-all --zone=$ZN; done"
         changed_when: false
         check_mode: false
         register: rhel7cis_3_5_1_7_servicesport
 
       - name: "3.5.1.7 | AUDIT | Ensure firewalld drops unnecessary services and ports | Show services and ports"
-        debug:
+        ansible.builtin.debug:
             msg:
                 - "The items below are the services and ports that are accepted, please correct as needed"
                 - "{{ rhel7cis_3_5_1_7_servicesport.stdout_lines }}"

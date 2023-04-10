@@ -54,7 +54,7 @@
       - rule_5.5.3
 
 - name: "5.5.4 | PATCH | Ensure default user shell timeout is configured"
-  blockinfile:
+  ansible.builtin.blockinfile:
       create: true
       mode: 0644
       dest: "{{ item.dest }}"
@@ -81,13 +81,13 @@
 - name: "5.5.5 | PATCH | Ensure default user umask is configured"
   block:
       - name: "5.5.5 | PATCH | Ensure default user umask is configured | Set umask for /etc/bashrc"
-        replace:
+        ansible.builtin.replace:
             path: /etc/bashrc
             regexp: '(^\s+umask) 0[012][0-6]'
             replace: '\1 027'
 
       - name: "5.5.5 | PATCH | Ensure default user umask is configured | Set umask for /etc/profile"
-        replace:
+        ansible.builtin.replace:
             path: /etc/profile
             regexp: '(^\s+umask) 0[012][0-6]'
             replace: '\1 027'

@@ -3,7 +3,7 @@
 - name: "3.5.3.3.1 | PATCH | Ensure ip6tables loopback traffic is configured"
   block:
       - name: "3.5.3.3.1 | PATCH | Ensure ip6tables loopback traffic is configured | INPUT loopback ACCEPT"
-        iptables:
+        ansible.builtin.iptables:
             action: append
             chain: INPUT
             in_interface: lo
@@ -11,7 +11,7 @@
             ip_version: ipv6
 
       - name: "3.5.3.3.1 | PATCH | Ensure ip6tables loopback traffic is configured | OUTPUT loopback ACCEPT"
-        iptables:
+        ansible.builtin.iptables:
             action: append
             chain: OUTPUT
             out_interface: lo
@@ -19,7 +19,7 @@
             ip_version: ipv6
 
       - name: "3.5.3.3.1 | PATCH | Ensure ip6tables loopback traffic is configured | OUTPUT loopback ACCEPT"
-        iptables:
+        ansible.builtin.iptables:
             action: append
             chain: INPUT
             source: ::1
@@ -36,7 +36,7 @@
       - ip6tables
 
 - name: "3.5.3.3.2 | PATCH | Ensure ip6tables outbound and established connections are configured"
-  iptables:
+  ansible.builtin.iptables:
       action: append
       chain: '{{ item.chain }}'
       protocol: '{{ item.protocol }}'
@@ -64,21 +64,21 @@
 - name: "3.5.3.3.3 | AUDIT | Ensure ip6tables firewall rules exist for all open ports"
   block:
       - name: "3.5.3.3.3 | AUDIT | Ensure ip6tables firewall rules exist for all open ports | Get list of open ports"
-        command: ss -6tuln
+        ansible.builtin.command: ss -6tuln
         changed_when: false
         failed_when: false
         check_mode: false
         register: rhel7cis_3_5_3_3_3_open_ports
 
       - name: "3.5.3.3.3 | AUDIT | Ensure ip6tables firewall rules exist for all open ports | Get list of rules"
-        command: ip6tables -L INPUT -v -n
+        ansible.builtin.command: ip6tables -L INPUT -v -n
         changed_when: false
         failed_when: false
         check_mode: false
         register: rhel7cis_3_5_3_3_3_current_rules
 
       - name: "3.5.3.3.3 | AUDIT | Ensure ip6tables firewall rules exist for all open ports | Alert about settings"
-        debug:
+        ansible.builtin.debug:
             msg:
                 - "ALERT!!!!Below is the list the open ports and current rules"
                 - "Please create a rule for any open port that does not have a current rule"
@@ -99,7 +99,7 @@
 - name: "3.5.3.3.4 | PATCH | Ensure ip6tables default deny firewall policy"
   block:
       - name: "3.5.3.3.4 | PATCH | Ensure ip6tables default deny firewall policy | Configure SSH to be allowed in"
-        iptables:
+        ansible.builtin.iptables:
             chain: INPUT
             protocol: tcp
             destination_port: 22
@@ -108,7 +108,7 @@
             ip_version: ipv6
 
       - name: "3.5.3.3.4 | PATCH | Ensure ip6tables default deny firewall policy | Configure SSH to be allowed out"
-        iptables:
+        ansible.builtin.iptables:
             chain: OUTPUT
             protocol: tcp
             source_port: 22
@@ -117,14 +117,14 @@
             ip_version: ipv6
 
       - name: "3.5.3.3.4 | PATCH | Ensure ip6tables default deny firewall policy | Enable apt traffic"
-        iptables:
+        ansible.builtin.iptables:
             chain: INPUT
             ctstate: 'ESTABLISHED'
             jump: ACCEPT
             ip_version: ipv6
 
       - name: "3.5.3.3.4 | PATCH | Ensure ip6tables default deny firewall policy | Set drop items"
-        iptables:
+        ansible.builtin.iptables:
             policy: DROP
             chain: "{{ item }}"
             ip_version: ipv6
@@ -146,7 +146,7 @@
 - name: "3.5.3.3.5 | Ensure ip6tables rules are saved "
   block:
       - name: "3.5.3.3.5 | Ensure ip6tables rules are saved "
-        shell: service ip6tables save
+        ansible.builtin.shell: service ip6tables save
         changed_when: rhel7cis_ip6tables_save.rc == 0
         failed_when: rhel7cis_ip6tables_save.rc != 0
         register: rhel7cis_ip6tables_save
@@ -166,7 +166,7 @@
       - ip6tables
 
 - name: "3.5.3.3.6 | Ensure ip6tables is enabled and running"
-  service:
+  ansible.builtin.service:
       name: ip6tables
       state: started
       enabled: true

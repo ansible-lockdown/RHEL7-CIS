@@ -1,7 +1,7 @@
 ---
 
 - name: "4.2.3 | PATCH | Ensure permissions on all logfiles are configured"
-  command: find /var/log -type f -exec chmod g-wx,o-rwx "{}" +
+  ansible.builtin.command: find /var/log -type f -exec chmod g-wx,o-rwx "{}" +
   changed_when: false
   failed_when: false
   when:
@@ -15,12 +15,12 @@
 - name: "4.2.4 | AUDIT | Ensure logrotate is configured"
   block:
       - name: "4.2.4 | AUDIT | Ensure logrotate is configured"
-        find:
+        ansible.builtin.find:
             paths: /etc/logrotate.d/
         register: log_rotate
 
       - name: "4.2.4 | AUDIT | Ensure logrotate is configured | output list"
-        debug:
+        ansible.builtin.debug:
             msg:
                 - WARNING!! The following files need to confirm with site requirements
                 - /etc/logrotate.conf

@@ -5,7 +5,7 @@ name: linux_benchmark_pipeline
 # Controls when the action will run.
 # Triggers the workflow on push or pull request
 # events but only for the devel branch
-on:
+on:  # yamllint disable-line rule:truthy
   pull_request_target:
     types: [opened, reopened, synchronize]
     branches:

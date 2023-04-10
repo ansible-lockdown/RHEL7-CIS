@@ -1,7 +1,7 @@
 ---
 
 - name: "2.4 | Ensure nonessential services are removed or masked (Manual)"
-  debug:
+  ansible.builtin.debug:
       msg: "<----- not required"
   when:
       - rhel7cis_rule_2_4

@@ -1,7 +1,7 @@
 ---
 
 - name: "5.2.1 | PATCH | Ensure sudo is installed"
-  package:
+  ansible.builtin.package:
       name: sudo
       state: present
   become: true
@@ -17,7 +17,7 @@
       ansible_python_interpreter: /bin/python
 
 - name: "5.2.2 | AUDIT | Ensure sudo commands use pty"
-  lineinfile:
+  ansible.builtin.lineinfile:
       dest: /etc/sudoers
       regexp: '^Defaults    use_pty'
       line: 'Defaults    use_pty'
@@ -34,7 +34,7 @@
       - rule_5.2.2
 
 - name: "5.2.3 | PATCH | Ensure sudo log file exists"
-  lineinfile:
+  ansible.builtin.lineinfile:
       dest: /etc/sudoers
       regexp: '^Defaults    logfile="{{ rhel7cis_varlog_location }}"'
       line: 'Defaults    logfile="{{ rhel7cis_varlog_location }}"'

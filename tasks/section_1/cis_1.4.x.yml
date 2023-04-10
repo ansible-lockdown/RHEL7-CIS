@@ -3,7 +3,7 @@
 - name: "1.4.1 | PATCH | Ensure bootloader password is set"
   block:
       - name: "1.4.1 | PATCH | Ensure bootloader password is set"
-        copy:
+        ansible.builtin.copy:
             dest: "{{ rhel7cis_bootloader_path }}user.cfg"  # noqa template-instead-of-copy
             content: "GRUB2_PASSWORD={{ rhel7cis_bootloader_password_hash }}"
             owner: root
@@ -13,7 +13,7 @@
         notify: grub2cfg
 
       - name: "1.4.1 | FACT | Ensure bootloader password is set"
-        set_fact:
+        ansible.builtin.set_fact:
             change_requires_reboot: true
         when: bootloader_pw
   when:
@@ -30,7 +30,7 @@
 - name: "1.4.2 | PATCH | Ensure permissions on bootloader config are configured"
   block:
       - name: "1.4.2 | PATCH | Ensure permissions on bootloader config are configured | Update grub config settings"
-        file:
+        ansible.builtin.file:
             path: "{{ rhel7cis_bootloader_path }}grub.cfg"
             owner: root
             group: root
@@ -39,7 +39,7 @@
             - rhel7cis_legacy_boot
 
       - name: "1.4.2 | PATCH | Ensure permissions on bootloader config are configured | UEFI"
-        mount:
+        ansible.posix.mount:
             name: /boot/efi
             src: "UUID={{ item.uuid }}"
             fstype: vfat
@@ -64,13 +64,13 @@
 - name: "1.4.3 | PATCH | Ensure authentication required for single user mode"
   block:
       - name: "1.4.3 | PATCH | Ensure authentication required for single user mode | Emergency service"
-        lineinfile:
+        ansible.builtin.lineinfile:
             dest: /usr/lib/systemd/system/emergency.service
             regexp: '/sbin/sulogin'
             line: 'ExecStart=-/bin/sh -c "/sbin/sulogin; /usr/bin/systemctl --fail --no-block default"'
 
       - name: "1.4.3 | PATCH | Ensure authentication required for single user mode | Rescue service"
-        lineinfile:
+        ansible.builtin.lineinfile:
             dest: /usr/lib/systemd/system/rescue.service
             regexp: '/sbin/sulogin'
             line: 'ExecStart=-/bin/sh -c "/sbin/sulogin; /usr/bin/systemctl --fail --no-block default"'
