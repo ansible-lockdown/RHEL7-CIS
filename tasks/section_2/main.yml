@@ -1,16 +1,16 @@
 ---
 
 - name: "SECTION | 2.1 | inetd Services"
-  import_tasks: cis_2.1.x.yml
+  ansible.builtin.import_tasks: cis_2.1.x.yml
 
 - name: "SECTION | 2.2.1 | Time Synchronization"
-  import_tasks: cis_2.2.1.x.yml
+  ansible.builtin.import_tasks: cis_2.2.1.x.yml
 
 - name: "SECTION | 2.2 | Special Purpose Services"
-  import_tasks: cis_2.2.x.yml
+  ansible.builtin.import_tasks: cis_2.2.x.yml
 
 - name: "SECTION | 2.3 | Service Clients"
-  import_tasks: cis_2.3.x.yml
+  ansible.builtin.import_tasks: cis_2.3.x.yml
 
 - name: "SECTION | 2.4 | Nonessential Services"
-  import_tasks: cis_2.4.x.yml
+  ansible.builtin.import_tasks: cis_2.4.x.yml

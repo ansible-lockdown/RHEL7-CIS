@@ -3,7 +3,7 @@
 - name: "1.2.1 | PATCH | Ensure GPG keys are configured"
   block:
       - name: "1.2.1 | PATCH | Ensure GPG keys are configured"
-        shell: "PKG=`rpm -qf {{ rpm_gpg_key }}` && rpm -q --queryformat \"%{PACKAGER} %{SIGPGP:pgpsig}\\n\" \"${PKG}\" | grep \"^{{ rpm_packager }}.*Key.ID.{{ rpm_key }}\""
+        ansible.builtin.shell: "PKG=`rpm -qf {{ rpm_gpg_key }}` && rpm -q --queryformat \"%{PACKAGER} %{SIGPGP:pgpsig}\\n\" \"${PKG}\" | grep \"^{{ rpm_packager }}.*Key.ID.{{ rpm_key }}\""
         changed_when: false
   when:
       - rhel7cis_rule_1_2_1
@@ -16,7 +16,7 @@
 - name: "1.2.2 | AUDIT | Ensure package manager repositories are configured"
   block:
       - name: "1.2.2 | AUDIT | Ensure package manager repositories are configured"
-        shell: yum repolist
+        ansible.builtin.shell: yum repolist
         changed_when: false
         register: repolist
         check_mode: false
@@ -26,7 +26,7 @@
             - skip_ansible_lint
 
       - name: "1.2.2 | AUDIT | Ensure package manager repositories are configured"
-        debug:
+        ansible.builtin.debug:
             msg:
                 - "Please check against site policy repos listed below match expected:"
                 - "{{ repolist.stdout_lines }}"
@@ -42,14 +42,14 @@
 - name: "1.2.3 | PATCH | Ensure gpgcheck is globally activated"
   block:
       - name: "1.2.3 | AUDIT | Ensure gpgcheck is globally activated"
-        find:
+        ansible.builtin.find:
             paths: /etc/yum.repos.d
             patterns: "*.repo"
         changed_when: false
         register: yum_repos
 
       - name: "1.2.3 | PATCH | Ensure gpgcheck is globally activated"
-        replace:
+        ansible.builtin.replace:
             path: "{{ item.path }}"
             regexp: "^gpgcheck=0"
             replace: "gpgcheck=1"

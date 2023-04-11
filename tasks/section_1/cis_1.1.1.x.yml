@@ -3,7 +3,7 @@
 - name: "1.1.1.1 | PATCH | Ensure mounting of cramfs filesystems is disabled "
   block:
       - name: "1.1.1.1 | PATCH | Ensure mounting of cramfs filesystems is disabled | Edit modprobe config"
-        lineinfile:
+        ansible.builtin.lineinfile:
             dest: /etc/modprobe.d/CIS.conf
             regexp: "^(#)?install cramfs(\\s|$)"
             line: "install cramfs /bin/true"
@@ -11,7 +11,7 @@
             mode: '0600'
 
       - name: "1.1.1.1 | PATCH | Remove cramfs module"
-        modprobe:
+        community.general.modprobe:
             name: cramfs
             state: absent
   when:
@@ -27,7 +27,7 @@
 - name: "1.1.1.2 | PATCH | Ensure mounting of squashfs filesystems is disabled"
   block:
       - name: "1.1.1.2 | PATCH | Ensure mounting of squashfs filesystems is disabled | Edit modprobe config "
-        lineinfile:
+        ansible.builtin.lineinfile:
             dest: /etc/modprobe.d/CIS.conf
             regexp: "^(#)?install squashfs(\\s|$)"
             line: "install squashfs /bin/true"
@@ -35,7 +35,7 @@
             mode: '0600'
 
       - name: "1.1.1.2 | PATCH | Remove squashfs module | rmmod"
-        modprobe:
+        community.general.modprobe:
             name: squashfs
             state: absent
   when:
@@ -51,7 +51,7 @@
 - name: "1.1.1.3 | PATCH | Ensure mounting of udf filesystems is disabled"
   block:
       - name: "1.1.1.3 | PATCH | Ensure mounting of udf filesystems is disabled | Edit modprobe config"
-        lineinfile:
+        ansible.builtin.lineinfile:
             dest: /etc/modprobe.d/CIS.conf
             regexp: "^(#)?install udf(\\s|$)"
             line: "install udf /bin/true"
@@ -59,7 +59,7 @@
             mode: '0600'
 
       - name: "1.1.1.3 | PATCH | Remove udf module | rmmod "
-        modprobe:
+        community.general.modprobe:
             name: udf
             state: absent
   when:

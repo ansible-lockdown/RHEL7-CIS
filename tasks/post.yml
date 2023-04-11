@@ -2,7 +2,7 @@
 # Post tasks
 
 - name: POST | Perform YUM package cleanup
-  package:
+  ansible.builtin.package:
       autoremove: true
   changed_when: false
   ignore_errors: true  # noqa ignore-errors
@@ -14,13 +14,13 @@
 - name: POST | reboot system if changes require it and not skipped
   block:
       - name: POST | Reboot system if changes require it and not skipped
-        reboot:
+        ansible.builtin.reboot:
         when:
             - change_requires_reboot
             - not skip_reboot
 
       - name: POST | Warning a reboot required but skip option set
-        debug:
+        ansible.builtin.debug:
             msg: "WARNING!! changes have been made that require a reboot to be implemented but skip reboot was set - Can affect compliance check results"
         changed_when: true
         when:

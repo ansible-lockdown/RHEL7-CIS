@@ -1,7 +1,7 @@
 ---
 
 - name: "Post Audit | Run post_remediation {{ benchmark }} audit"
-  shell: "{{ audit_conf_dir }}run_audit.sh -v {{ audit_vars_path }} -o {{ post_audit_outfile }} -g {{ group_names }}"
+  ansible.builtin.shell: "{{ audit_conf_dir }}run_audit.sh -v {{ audit_vars_path }} -o {{ post_audit_outfile }} -g {{ group_names }}"
   environment: "{{ audit_run_script_environment | default({}) }}"
   changed_when: false
   register: audit_run_post_remediation
@@ -9,7 +9,7 @@
       warn: false
 
 - name: Post Audit | ensure audit files readable by users
-  file:
+  ansible.builtin.file:
       path: "{{ item }}"
       mode: 0644
       state: file
@@ -20,12 +20,12 @@
 - name: Post Audit | Capture audit data if json format
   block:
       - name: "capture data {{ post_audit_outfile }}"
-        command: "cat {{ post_audit_outfile }}"
+        ansible.builtin.command: "cat {{ post_audit_outfile }}"
         register: post_audit
         changed_when: false
 
       - name: Capture post-audit result
-        set_fact:
+        ansible.builtin.set_fact:
             post_audit_summary: "{{ post_audit.stdout | from_json | json_query(summary) }}"
         vars:
             summary: 'summary."summary-line"'
@@ -35,12 +35,12 @@
 - name: Post Audit | Capture audit data if documentation format
   block:
       - name: "Post Audit | capture data {{ post_audit_outfile }}"
-        command: "tail -2 {{ post_audit_outfile }}"
+        ansible.builtin.command: "tail -2 {{ post_audit_outfile }}"
         register: post_audit
         changed_when: false
 
       - name: Post Audit | Capture post-audit result
-        set_fact:
+        ansible.builtin.set_fact:
             post_audit_summary: "{{ post_audit.stdout_lines }}"
   when:
       - audit_format == "documentation"

@@ -1,16 +1,16 @@
 ---
 
 - name: "SECTION | 4.1| Configure System Accounting (auditd)"
-  import_tasks: cis_4.1.1.x.yml
+  ansible.builtin.import_tasks: cis_4.1.1.x.yml
 
 - name: "SECTION | 4.1.2.x| Configure Data Retention"
-  import_tasks: cis_4.1.2.x.yml
+  ansible.builtin.import_tasks: cis_4.1.2.x.yml
 
 - name: "SECTION | 4.2.x| Configure Logging"
-  import_tasks: cis_4.2.1.x.yml
+  ansible.builtin.import_tasks: cis_4.2.1.x.yml
 
 - name: "SECTION | 4.2.2.x| Configure journald"
-  import_tasks: cis_4.2.2.x.yml
+  ansible.builtin.import_tasks: cis_4.2.2.x.yml
 
 - name: "SECTION | 4.2.x | logfile configuration"
-  import_tasks: cis_4.2.x.yml
+  ansible.builtin.import_tasks: cis_4.2.x.yml

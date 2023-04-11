@@ -2,7 +2,7 @@
 - name: "3.2.1 | PATCH | Ensure IP forwarding is disabled | IPv4"
   block:
       - name: "3.2.1 | PATCH | Ensure IP forwarding is disabled | IPv4"
-        sysctl:
+        ansible.posix.sysctl:
             name: net.ipv4.ip_forward
             value: '0'
             state: present
@@ -12,7 +12,7 @@
             - sysctl flush ipv4 route table
 
       - name: "3.2.1 | PATCH | Ensure IP forwarding is disabled IPv6"
-        sysctl:
+        ansible.posix.sysctl:
             name: net.ipv6.conf.all.forwarding
             value: '0'
             state: present
@@ -33,7 +33,7 @@
       - rule_3.2.1
 
 - name: "3.2.2 | PATCH | Ensure packet redirect sending is disabled"
-  sysctl:
+  ansible.posix.sysctl:
       name: '{{ item.name }}'
       value: '{{ item.value }}'
       sysctl_set: true

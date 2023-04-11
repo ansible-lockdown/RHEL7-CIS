@@ -3,21 +3,21 @@
 - name: "3.5.3.2.1 | PATCH | Ensure iptables loopback traffic is configured"
   block:
       - name: "3.5.3.2.1 | PATCH | Ensure iptables loopback traffic is configured | INPUT loopback ACCEPT"
-        iptables:
+        ansible.builtin.iptables:
             action: append
             chain: INPUT
             in_interface: lo
             jump: ACCEPT
 
       - name: "3.5.3.2.1 | PATCH | Ensure iptables loopback traffic is configured | OUTPUT loopback ACCEPT"
-        iptables:
+        ansible.builtin.iptables:
             action: append
             chain: OUTPUT
             out_interface: lo
             jump: ACCEPT
 
       - name: "3.5.3.2.1 | PATCH | Ensure iptables loopback traffic is configured | OUTPUT loopback ACCEPT"
-        iptables:
+        ansible.builtin.iptables:
             action: append
             chain: INPUT
             source: 127.0.0.0/8
@@ -32,7 +32,7 @@
       - iptables
 
 - name: "3.5.3.2.2 | PATCH | Ensure iptables outbound and established connections are configured"
-  iptables:
+  ansible.builtin.iptables:
       action: append
       chain: '{{ item.chain }}'
       protocol: '{{ item.protocol }}'
@@ -58,21 +58,21 @@
 - name: "3.5.3.2.3 | AUDIT | Ensure iptables firewall rules exist for all open ports"
   block:
       - name: "3.5.3.2.3 | AUDIT | Ensure iptables firewall rules exist for all open ports | Get list of open ports"
-        command: ss -4tuln
+        ansible.builtin.command: ss -4tuln
         changed_when: false
         failed_when: false
         check_mode: false
         register: rhel7cis_3_5_3_2_3_open_ports
 
       - name: "3.5.3.2.3 | AUDIT | Ensure iptables firewall rules exist for all open ports | Get list of rules"
-        command: iptables -L INPUT -v -n
+        ansible.builtin.command: iptables -L INPUT -v -n
         changed_when: false
         failed_when: false
         check_mode: false
         register: rhel7cis_3_5_3_2_3_current_rules
 
       - name: "3.5.3.2.3 | AUDIT | Ensure iptables firewall rules exist for all open ports | Alert about settings"
-        debug:
+        ansible.builtin.debug:
             msg:
                 - "ALERT!!!!Below is the list the open ports and current rules"
                 - "Please create a rule for any open port that does not have a current rule"
@@ -92,7 +92,7 @@
 - name: "3.5.3.2.4 | PATCH | Ensure iptables default deny firewall policy"
   block:
       - name: "3.5.3.2.4 | PATCH | Ensure iptables default deny firewall policy | Configure SSH to be allowed in"
-        iptables:
+        ansible.builtin.iptables:
             chain: INPUT
             protocol: tcp
             destination_port: 22
@@ -100,7 +100,7 @@
             ctstate: 'NEW,ESTABLISHED'
 
       - name: "3.5.3.2.4 | PATCH | Ensure iptables default deny firewall policy | Configure SSH to be allowed out"
-        iptables:
+        ansible.builtin.iptables:
             chain: OUTPUT
             protocol: tcp
             source_port: 22
@@ -108,13 +108,13 @@
             ctstate: 'NEW,ESTABLISHED'
 
       - name: "3.5.3.2.4 | PATCH | Ensure iptables default deny firewall policy | Enable apt traffic"
-        iptables:
+        ansible.builtin.iptables:
             chain: INPUT
             ctstate: 'ESTABLISHED'
             jump: ACCEPT
 
       - name: "3.5.3.2.4 | PATCH | Ensure iptables default deny firewall policy | Set drop items"
-        iptables:
+        ansible.builtin.iptables:
             policy: DROP
             chain: "{{ item }}"
         with_items:
@@ -134,7 +134,7 @@
 - name: "3.5.3.2.5 | Ensure iptables rules are saved "
   block:
       - name: "3.5.3.2.5 | Ensure iptables rules are saved "
-        shell: service iptables save
+        ansible.builtin.shell: service iptables save
         changed_when: rhel7cis_iptables_save.rc == 0
         failed_when: rhel7cis_iptables_save.rc != 0
         register: rhel7cis_iptables_save
@@ -153,7 +153,7 @@
       - iptables
 
 - name: "3.5.3.2.6 | Ensure iptables is enabled and running"
-  service:
+  ansible.builtin.service:
       name: iptables
       state: started
       enabled: true

@@ -1,7 +1,7 @@
 ---
 
 - name: "3.4.1 | PATCH | Ensure DCCP is disabled"
-  lineinfile:
+  ansible.builtin.lineinfile:
       dest: /etc/modprobe.d/CIS.conf
       regexp: "^(#)?install dccp(\\s|$)"
       line: "install dccp /bin/true"
@@ -18,7 +18,7 @@
       - rule_3.4.1
 
 - name: "3.4.2 | PATCH | Ensure SCTP is disabled"
-  lineinfile:
+  ansible.builtin.lineinfile:
       dest: /etc/modprobe.d/CIS.conf
       regexp: "^(#)?install sctp(\\s|$)"
       line: "install sctp /bin/true"

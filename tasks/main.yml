@@ -1,7 +1,7 @@
 ---
 # tasks file for RHEL7-CIS
 - name: Check OS version and family
-  fail:
+  ansible.builtin.fail:
       msg: "This role can only be run against RHEL 7. {{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported."
   when:
       - ansible_os_family == 'RedHat'
@@ -11,14 +11,14 @@
       - always
 
 - name: Check ansible version
-  fail:
+  ansible.builtin.fail:
       msg: You must use ansible 2.9 or greater
   when: not ansible_version.full is version_compare('2.9', '>=')
   tags:
       - always
 
 - name: Check rhel7cis_bootloader_password_hash variable has been changed
-  assert:
+  ansible.builtin.assert:
       that: rhel7cis_bootloader_password_hash != 'grub.pbkdf2.sha512.changethispart'
       msg: "This role will not be able to run single user password commands as  rhel7cis_bootloader_password_hash variable has not been set"
   when:
@@ -29,7 +29,7 @@
 - name: "check sugroup exists if used"
   block:
       - name: "Check su group exists if defined"
-        command: grep -w "{{ rhel7cis_sugroup }}" /etc/group
+        ansible.builtin.command: grep -w "{{ rhel7cis_sugroup }}" /etc/group
         register: sugroup_exists
         changed_when: false
         failed_when: sugroup_exists.rc >= 2
@@ -37,7 +37,7 @@
             - skip_ansible_lint
 
       - name: Check sugroup if defined exists before continuing
-        assert:
+        ansible.builtin.assert:
             that: sugroup_exists.rc == 0
             msg: "The variable rhel7cis_sugroup is defined but does not exist please rectify"
   when:
@@ -47,7 +47,7 @@
       - rule_5.6
 
 - name: Import prereq checks
-  import_tasks: check_prereqs.yml
+  ansible.builtin.import_tasks: check_prereqs.yml
   tags:
       - always
       - prereqs
@@ -55,15 +55,15 @@
 - name: Setup rules if container
   block:
       - name: Discover and set container variable if required
-        set_fact:
+        ansible.builtin.set_fact:
             system_is_container: true
 
       - name: Load variable for container
-        include_vars:
+        ansible.builtin.include_vars:
             file: "{{ container_vars_file }}"
 
       - name: output if discovered is a container
-        debug:
+        ansible.builtin.debug:
             msg: system has been discovered as a container
         when:
             - system_is_container
@@ -75,88 +75,89 @@
       - always
 
 - name: Import preliminary tasks
-  import_tasks: prelim.yml
+  ansible.builtin.import_tasks: prelim.yml
   tags:
       - prelim_tasks
       - always
 
 - name: Import pre remediation audit
-  import_tasks: pre_remediation_audit.yml
+  ansible.builtin.import_tasks: pre_remediation_audit.yml
   when:
       - run_audit
   tags:
       - run_audit
 
 - name: Gather the package facts
-  package_facts:
+  ansible.builtin.package_facts:
       manager: auto
   tags:
       - always
 
 - name: Include OS specific variables
-  include_vars: "{{ ansible_distribution }}.yml"
+  ansible.builtin.include_vars: "{{ ansible_distribution }}.yml"
   tags:
       - always
 
 - name: Run parse etc password for user variables
-  import_tasks: parse_etc_password.yml
+  ansible.builtin.import_tasks: parse_etc_password.yml
   when:
       - rhel7cis_section5 or
         rhel7cis_section6
 
 - name: Import section 1 tasks
-  import_tasks: section_1/main.yml
+  ansible.builtin.import_tasks: section_1/main.yml
   when: rhel7cis_section1
   tags:
       - rhel7cis_section1
 
 - name: Import section 2 tasks
-  import_tasks: section_2/main.yml
+  ansible.builtin.import_tasks: section_2/main.yml
   tags:
       - rhel7cis_section2
   when: rhel7cis_section2
 
 - name: Import section 3 tasks
-  import_tasks: section_3/main.yml
+  ansible.builtin.import_tasks: section_3/main.yml
   when: rhel7cis_section3
   tags:
       - rhel7cis_section3
 
 - name: Import section 4 tasks
-  import_tasks: section_4/main.yml
+  ansible.builtin.import_tasks: section_4/main.yml
   when: rhel7cis_section4
   tags:
       - rhel7cis_section4
 
 - name: Import section 5 tasks
-  import_tasks: section_5/main.yml
+  ansible.builtin.import_tasks: section_5/main.yml
   when: rhel7cis_section5
   tags:
       - rhel7cis_section5
 
 - name: Import section 6 tasks
-  import_tasks: section_6/main.yml
+  ansible.builtin.import_tasks: section_6/main.yml
   when: rhel7cis_section6
   tags:
       - rhel7cis_section6
 
 - name: flush handlers
-  meta: flush_handlers
+  ansible.builtin.meta: flush_handlers
 
-- import_tasks: post.yml
+- name: Post Task
+  ansible.builtin.import_tasks: post.yml
   tags:
       - post_tasks
       - always
 
 - name: Import post remediation task
-  import_tasks: post_remediation_audit.yml
+  ansible.builtin.import_tasks: post_remediation_audit.yml
   when:
       - run_audit
   tags:
       - run_audit
 
 - name: Show Audit Summary
-  debug:
+  ansible.builtin.debug:
       msg: "{{ audit_results.split('\n') }}"
   when:
       - run_audit

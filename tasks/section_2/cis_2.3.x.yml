@@ -1,7 +1,7 @@
 ---
 
 - name: "2.3.1 | PATCH | Ensure NIS client is not installed"
-  package:
+  ansible.builtin.package:
       name: ypbind
       state: absent
   vars:
@@ -18,7 +18,7 @@
       - rule_2.3.1
 
 - name: "2.3.2 | PATCH | Ensure rsh client is not installed"
-  package:
+  ansible.builtin.package:
       name: rsh
       state: absent
   vars:
@@ -35,7 +35,7 @@
       - rule_2.3.2
 
 - name: "2.3.3 | PATCH | Ensure talk client is not installed"
-  package:
+  ansible.builtin.package:
       name: talk
       state: absent
   vars:
@@ -52,7 +52,7 @@
       - rule_2.3.3
 
 - name: "2.3.4 | PATCH | Ensure telnet client is not installed"
-  package:
+  ansible.builtin.package:
       name: telnet
       state: absent
   vars:
@@ -69,7 +69,7 @@
       - rule_2.3.4
 
 - name: "2.3.5 | PATCH | Ensure LDAP client is not installed"
-  package:
+  ansible.builtin.package:
       name: openldap-clients
       state: absent
   vars:
