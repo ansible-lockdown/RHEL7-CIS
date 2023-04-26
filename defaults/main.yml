@@ -102,6 +102,8 @@ rhel7cis_rule_1_1_24: true
 rhel7cis_rule_1_2_1: true
 rhel7cis_rule_1_2_2: true
 rhel7cis_rule_1_2_3: true
+rhel7cis_rule_1_2_4: true
+rhel7cis_rule_1_2_5: true
 rhel7cis_rule_1_3_1: true
 rhel7cis_rule_1_3_2: true
 rhel7cis_rule_1_4_1: true

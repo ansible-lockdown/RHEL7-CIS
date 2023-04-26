@@ -1,5 +1,10 @@
 # release CIS RedHat Enterprise Linux 7 Benchmark v3.0.1 - 09-21-2020
 
+# 1.1.3
+
+- [#313](https://github.com/ansible-lockdown/RHEL7-CIS/issues/313)
+  thanks to @xiranlyu and community member Tony(whozzyourdaddy)
+
 ## 1.1.2
 
 - update to yamllint
