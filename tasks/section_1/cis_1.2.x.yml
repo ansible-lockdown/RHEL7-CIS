@@ -63,3 +63,31 @@
       - level1-workstation
       - patch
       - rule_1.2.3
+
+- name: "1.2.4 | AUDIT | Ensure Red Hat Subscription Manager connection is configured"
+  ansible.builtin.shell: subscription-manager identity
+  changed_when: false
+  failed_when: false
+  when:
+      - ansible_distribution == "RedHat"
+      - rhel7cis_rule_1_2_4
+  tags:
+      - level1-server
+      - level1-workstation
+      - patch
+      - rule_1.2.4
+
+- name: "1.2.5 | PATCH | Disable the rhnsd Daemon"
+  ansible.builtin.service:
+      name: rhnsd
+      state: stopped
+      enabled: false
+      masked: true
+  when:
+      - ansible_distribution == "RedHat" and not rhel7cis_rhnsd_required
+      - rhel7cis_rule_1_2_5
+  tags:
+      - level1-server
+      - level1-workstation
+      - patch
+      - rule_1.2.5
