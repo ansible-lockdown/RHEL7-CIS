@@ -233,12 +233,12 @@
                 - "The following paths have a dot in the path: {{ dot_in_path.stdout_lines }}"
 
       - name: "6.2.10 | PATCH | Ensure root PATH Integrity | Determine rights and owner"
-        ansible.builtin.file: >
-            path='{{ item }}'
-            follow=yes
-            state=directory
-            owner=root
-            mode='o-w,g-w'
+        ansible.builtin.file:
+            path: '{{ item }}'
+            follow: true
+            state: directory
+            owner: root
+            mode: 'o-w,g-w'
         loop: "{{ dot_in_path.stdout_lines }}"
   when:
       - rhel7cis_rule_6_2_10
@@ -266,14 +266,14 @@
         ansible.builtin.shell: "mkhomedir_helper {{ item }}"
         with_items:
             - "{{ missing_home_dirs }}"
-        when: rhel7cis_users_missing_home is changed
+        when: rhel7cis_users_missing_home is changed  # noqa: no-handler
 
       - name: "6.2.11 | Audit| Ensure all users' home directories exist | Warning"
         ansible.builtin.debug:
             msg: "WARNING!! {{ item }} user home directory has been created please ensure any SELINUX settings are applied"
         with_items:
             - "{{ missing_home_dirs }}"
-        when: rhel7cis_users_missing_home is changed
+        when: rhel7cis_users_missing_home is changed  # noqa: no-handler
 
   vars:
       ld_regex: >-

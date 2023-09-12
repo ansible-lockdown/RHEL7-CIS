@@ -31,21 +31,14 @@
       - rule_4.1.1.2
 
 - name: "4.1.1.3 | PATCH | Ensure auditing for processes that start prior to auditd is enabled"
-  block:
-      - name: "4.1.1.3 | PATCH | Ensure auditing for processes that start prior to auditd is enabled"
-        ansible.builtin.replace:
-            dest: /etc/default/grub
-            regexp: ^(GRUB_CMDLINE_LINUX=)(?:")(?!.*audit=1)(.+)(?:")$
-            replace: '\1"\2 audit=1"'
-        register: audit_grub
-        notify: grub2cfg
-
-      - name: "4.1.1.3 | PATCH | Ensure auditing for processes that start prior to auditd is enabled"
-        ansible.builtin.set_fact:
-            change_requires_reboot: true
-        when:
-            - audit_grub.changed
-
+  ansible.builtin.replace:
+      dest: /etc/default/grub
+      regexp: ^(GRUB_CMDLINE_LINUX=)(?:")(?!.*audit=1)(.+)(?:")$
+      replace: '\1"\2 audit=1"'
+  register: audit_grub
+  notify:
+      - grub2cfg
+      - reboot_required
   when:
       - rhel7cis_rule_4_1_1_3
   tags:

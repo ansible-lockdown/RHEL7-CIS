@@ -51,6 +51,10 @@
       name: firewalld
       state: restarted
 
+- name: reboot_required
+  ansible.builtin.set_fact:
+      change_requires_reboot: true
+
 - name: restart xinetd
   ansible.builtin.service:
       name: xinetd
