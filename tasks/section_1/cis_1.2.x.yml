@@ -20,10 +20,6 @@
         changed_when: false
         register: repolist
         check_mode: false
-        args:
-            warn: false
-        tags:
-            - skip_ansible_lint
 
       - name: "1.2.2 | AUDIT | Ensure package manager repositories are configured"
         ansible.builtin.debug:

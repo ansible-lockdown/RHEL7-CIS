@@ -5,8 +5,6 @@
   environment: "{{ audit_run_script_environment | default({}) }}"
   changed_when: false
   register: audit_run_post_remediation
-  vars:
-      warn: false
 
 - name: Post Audit | ensure audit files readable by users
   ansible.builtin.file:

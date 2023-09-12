@@ -5,8 +5,6 @@
       - name: "6.2.1 | PATCH | Ensure accounts in /etc/passwd use shadow passwords"
         ansible.builtin.shell: sed -e 's/^\([a-zA-Z0-9_]*\):[^:]*:/\1:x:/' -i /etc/passwd
         loop: "{{ rhel7cis_passwd | selectattr('password', '!=', 'x') | list }}"
-        args:
-            warn: false
         register: rhel7_6_2_1_shadow
         when:
             - rhel7cis_passwd | selectattr('password', '!=', 'x')
