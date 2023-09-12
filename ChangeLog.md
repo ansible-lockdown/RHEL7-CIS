@@ -8,6 +8,8 @@
   thanks to @dankxylese
 - [#316](https://github.com/ansible-lockdown/RHEL7-CIS/issues/316)
   thanks to I-am-Mos
+- readme update
+- workflow update
 
 ## 1.1.3
 
