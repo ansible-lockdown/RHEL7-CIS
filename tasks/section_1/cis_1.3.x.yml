@@ -30,7 +30,7 @@
 - name: "1.3.2 | PATCH | Ensure filesystem integrity is regularly checked | cron"
   ansible.builtin.cron:
       name: Run AIDE integrity check
-      file: "{{ rhel7cis_aide_cron['cron_file'] }}"
+      cron_file: "{{ rhel7cis_aide_cron['cron_file'] }}"
       user: "{{ rhel7cis_aide_cron['cron_user'] }}"
       minute: "{{ rhel7cis_aide_cron['aide_minute'] | default('0') }}"
       hour: "{{ rhel7cis_aide_cron['aide_hour'] | default('5') }}"
