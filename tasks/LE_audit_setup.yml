@@ -1,7 +1,7 @@
 ---
 
 - name: Download goss binary
-  get_url:
+  ansible.builtin.get_url:
       url: "{{ goss_url }}"
       dest: "{{ audit_bin }}"
       owner: root
@@ -12,7 +12,7 @@
       - get_goss_file == 'download'
 
 - name: Copy goss binary
-  copy:
+  ansible.builtin.copy:
       src: "{{ copy_goss_from_path }}"
       dest: "{{ audit_bin }}"
       mode: 0555

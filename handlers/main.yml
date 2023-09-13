@@ -2,21 +2,21 @@
 # handlers file for RHEL7-CIS
 
 - name: sysctl flush ipv4 route table
-  sysctl:
+  ansible.posix.sysctl:
       name: net.ipv4.route.flush
       value: '1'
       sysctl_set: true
   when: ansible_virtualization_type != "docker"
 
 - name: sysctl flush ipv6 route table
-  sysctl:
+  ansible.posix.sysctl:
       name: net.ipv6.route.flush
       value: '1'
       sysctl_set: true
   when: ansible_virtualization_type != "docker"
 
 - name: systemd restart tmp.mount
-  systemd:
+  ansible.builtin.systemd:
       name: tmp.mount
       daemon_reload: true
       enabled: true
@@ -24,22 +24,16 @@
       state: reloaded
 
 - name: remount tmp
-  command: mount -o remount /tmp
-  args:
-      warn: false
+  ansible.builtin.command: mount -o remount /tmp
 
 - name: remount dev_shm
-  command: mount -o remount /dev/shm
-  args:
-      warn: false
+  ansible.builtin.command: mount -o remount /dev/shm
 
 - name: remount var_tmp
-  command: mount -o remount /var/tmp
-  args:
-      warn: false
+  ansible.builtin.command: mount -o remount /var/tmp
 
 - name: systemd restart var-tmp.mount
-  systemd:
+  ansible.builtin.systemd:
       name: var-tmp.mount
       daemon_reload: true
       enabled: true
@@ -47,57 +41,57 @@
       state: reloaded
 
 - name: remount home
-  command: mount -o remount /home
-  args:
-      warn: false
+  ansible.builtin.command: mount -o remount /home
 
 - name: update dconf
-  command: dconf update
+  ansible.builtin.command: dconf update
 
 - name: restart firewalld
-  service:
+  ansible.builtin.service:
       name: firewalld
       state: restarted
 
+- name: reboot_required
+  ansible.builtin.set_fact:
+      change_requires_reboot: true
+
 - name: restart xinetd
-  service:
+  ansible.builtin.service:
       name: xinetd
       state: restarted
 
 - name: restart sshd
-  service:
+  ansible.builtin.service:
       name: sshd
       state: restarted
 
 - name: restart postfix
-  service:
+  ansible.builtin.service:
       name: postfix
       state: restarted
 
 - name: reload dconf
-  command: dconf update
+  ansible.builtin.command: dconf update
 
 - name: restart auditd
-  command: /sbin/service auditd restart
+  ansible.builtin.command: /sbin/service auditd restart
   changed_when: false
   check_mode: false
   failed_when: false
-  args:
-      warn: false
   when:
       - not rhel7cis_skip_for_travis
   tags:
       - skip_ansible_lint
 
 - name: grub2cfg
-  command: /sbin/grub2-mkconfig -o "{{ rhel7cis_bootloader_path }}grub.cfg"
+  ansible.builtin.command: /sbin/grub2-mkconfig -o "{{ rhel7cis_bootloader_path }}grub.cfg"
 
 - name: restart rsyslog
-  service:
+  ansible.builtin.service:
       name: rsyslog
       state: restarted
 
 - name: restart syslog-ng
-  service:
+  ansible.builtin.service:
       name: syslog-ng
       state: restarted

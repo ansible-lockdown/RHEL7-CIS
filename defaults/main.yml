@@ -21,7 +21,6 @@ change_requires_reboot: false
 ## This is used for python3 Installations where python2 OS modules are used in ansible
 python2_bin: /bin/python2.7
 
-
 ## Benchmark name used by audting control role
 # The audit variable found at the base
 benchmark: RHEL7-CIS
@@ -49,7 +48,6 @@ run_audit: false
 
 ### End Goss enablements ####
 #### Detailed settings found at the end of this document ####
-
 
 # Enable/Disable SELinux
 rhel7cis_selinux_disable: false
@@ -104,6 +102,8 @@ rhel7cis_rule_1_1_24: true
 rhel7cis_rule_1_2_1: true
 rhel7cis_rule_1_2_2: true
 rhel7cis_rule_1_2_3: true
+rhel7cis_rule_1_2_4: true
+rhel7cis_rule_1_2_5: true
 rhel7cis_rule_1_3_1: true
 rhel7cis_rule_1_3_2: true
 rhel7cis_rule_1_4_1: true
@@ -445,11 +445,11 @@ rhel7cis_firewall_services:
 # NFT firewall
 # not tested but added example for clarity - This will break connections
 # If the tables dont exist automatically create the tablename below
-rhel7cis_nft_tables_autoNewTable: false
+rhel7cis_nft_tables_autoNewTable: false  # noqa: var-naming[pattern]
 # create chain if doesnt exist
-rhel7cis_nft_tables_autoChainCreate: false
+rhel7cis_nft_tables_autoChainCreate: false  # noqa: var-naming[pattern]
 # create a table called
-rhel7cis_nft_tables_tableName: filter
+rhel7cis_nft_tables_tableName: filter  # noqa: var-naming[pattern]
 
 # 3.5.3.x.x iptables
 rhel7cis_save_iptables_cis_rules: true
@@ -574,8 +574,8 @@ audit_run_script_environment:
 
 ### Goss binary settings ###
 goss_version:
-    release: v0.3.21
-    checksum: 'sha256:9a9200779603acf0353d2c0e85ae46e083596c10838eaf4ee050c924678e4fe3'
+    release: v0.3.23
+    checksum: 'sha256:9e9f24e25f86d6adf2e669a9ffbe8c3d7b9b439f5f877500dea02ba837e10e4d'
 audit_bin_path: /usr/local/bin/
 audit_bin: "{{ audit_bin_path }}goss"
 audit_format: json

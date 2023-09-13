@@ -1,7 +1,7 @@
 ---
 
 - name: "2.2.2 | PATCH | Ensure X11 Server components are not installed"
-  package:
+  ansible.builtin.package:
       state: absent
       name:
           - "@X Window System"
@@ -19,7 +19,7 @@
       - rule_2.2.2
 
 - name: "2.2.3 | PATCH | Ensure Avahi Server is not installed | disabled"
-  service:
+  ansible.builtin.service:
       name: avahi-daemon
       state: stopped
       enabled: false
@@ -36,7 +36,7 @@
       - rule_2.2.3
 
 - name: "2.2.4 | PATCH | Ensure CUPS is not installed"
-  package:
+  ansible.builtin.package:
       name: cups
       state: absent
   vars:
@@ -54,7 +54,7 @@
       - rule_2.2.4
 
 - name: "2.2.5 | PATCH | Ensure DHCP Server is not installed"
-  package:
+  ansible.builtin.package:
       name: dhcp
       state: absent
   vars:
@@ -72,7 +72,7 @@
       - rule_2.2.5
 
 - name: "2.2.6 | PATCH | Ensure LDAP server is not installed"
-  package:
+  ansible.builtin.package:
       name: openldap-servers
       state: absent
   vars:
@@ -90,7 +90,7 @@
       - rule_2.2.6
 
 - name: "2.2.7 | PATCH | Ensure DNS server is not installed"
-  package:
+  ansible.builtin.package:
       name: bind
       state: absent
   vars:
@@ -108,7 +108,7 @@
       - rule_2.2.7
 
 - name: "2.2.8 | PATCH | Ensure FTP server is not installed"
-  package:
+  ansible.builtin.package:
       name: vsftpd
       state: absent
   vars:
@@ -126,7 +126,7 @@
       - rule_2.2.8
 
 - name: "2.2.9 | PATCH | Ensure HTTP server is not installed"
-  package:
+  ansible.builtin.package:
       name: httpd
       state: absent
   vars:
@@ -144,7 +144,7 @@
       - rule_2.2.9
 
 - name: "2.2.10 | PATCH | Ensure IMAP and POP3 server is not installed"
-  package:
+  ansible.builtin.package:
       name: dovecot
       state: absent
   vars:
@@ -162,7 +162,7 @@
       - rule_2.2.10
 
 - name: "2.2.11 | PATCH | Ensure Samba server is not installed"
-  package:
+  ansible.builtin.package:
       name: samba
       state: absent
   vars:
@@ -180,7 +180,7 @@
       - rule_2.2.11
 
 - name: "2.2.12 | PATCH | Ensure HTTP Proxy server is not installed"
-  package:
+  ansible.builtin.package:
       name: squid
       state: absent
   vars:
@@ -198,7 +198,7 @@
       - rule_2.2.12
 
 - name: "2.2.13 | PATCH | Ensure net-snmp is not installed"
-  package:
+  ansible.builtin.package:
       name: net-snmp
       state: absent
   vars:
@@ -216,7 +216,7 @@
       - rule_2.2.13
 
 - name: "2.2.14 | PATCH | Ensure NIS server is not installed"
-  package:
+  ansible.builtin.package:
       name: ypserv
       state: absent
   vars:
@@ -234,7 +234,7 @@
       - rule_2.2.14
 
 - name: "2.2.15 | PATCH | Ensure telnet-server is not installed"
-  package:
+  ansible.builtin.package:
       name: telnet-server
       state: absent
   vars:
@@ -252,7 +252,7 @@
       - rule_2.2.15
 
 - name: "2.2.16 | PATCH | Ensure mail transfer agent is configured for local-only mode"
-  lineinfile:
+  ansible.builtin.lineinfile:
       dest: /etc/postfix/main.cf
       regexp: "^(#)?inet_interfaces"
       line: "inet_interfaces = loopback-only"
@@ -270,7 +270,7 @@
 - name: "2.2.17 | PATCH | Ensure nfs-utils is not installed or the nfs-server service is masked"
   block:
       - name: "2.2.17 | PATCH | Ensure nfs-utils is not installed or the nfs-server service is masked | nfs-utils "
-        package:
+        ansible.builtin.package:
             name: nfs-utils
             state: absent
         vars:
@@ -279,7 +279,7 @@
             - not rhel7cis_nfs_rpc_server and not rhel7cis_nfs_server
 
       - name: "2.2.17 | PATCH | Ensure nfs-utils is not installed or the nfs-server service is masked | nfs-server "
-        systemd:
+        ansible.builtin.systemd:
             name: nfs-server
             masked: true
         when:
@@ -298,7 +298,7 @@
 - name: "2.2.18 | PATCH | Ensure rpcbind is not installed or the rpcbind services are masked"
   block:
       - name: "2.2.18 | PATCH | Ensure rpcbind is not installed or the rpcbind services are masked | rpcbind"
-        package:
+        ansible.builtin.package:
             name: rpcbind
             state: absent
         vars:
@@ -307,14 +307,14 @@
             - not rhel7cis_nfs_rpc_server and not rhel7cis_rpc_server
 
       - name: "2.2.18 | PATCH | Ensure rpcbind is not installed or the rpcbind services are masked | rpcbind-server"
-        systemd:
+        ansible.builtin.systemd:
             name: rpcbind
             masked: true
         when:
             - rhel7cis_nfs_rpc_server and not rhel7cis_rpc_server
 
       - name: "2.2.18 | PATCH | Ensure rpcbind is not installed or the rpcbind services are masked | rpcbind-server"
-        systemd:
+        ansible.builtin.systemd:
             name: rpcbind.socket
             masked: true
         when:
@@ -333,14 +333,14 @@
 - name: "2.2.19 | PATCH | Ensure rsync is not installed or the rsyncd services are masked"
   block:
       - name: "2.2.19 | PATCH | Ensure rsync is not installed or the rsyncd services are masked | pkg removal"
-        package:
+        ansible.builtin.package:
             name: rsync
             state: absent
         vars:
             ansible_python_interpreter: /bin/python
 
       - name: "2.2.19 | PATCH | Ensure rsync is not installed or the rsyncd services are masked | Mask "
-        systemd:
+        ansible.builtin.systemd:
             name: rsyncd
             masked: true
 

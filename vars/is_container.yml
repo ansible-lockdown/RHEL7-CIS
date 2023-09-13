@@ -1,4 +1,5 @@
 ---
+
 # rhel7cis_notauto will auto install intrusive items
 rhel7cis_notauto: false
 
@@ -19,7 +20,6 @@ rhel7cis_allow_reboot: false
 ## Python Binary
 ## This is used for python3 Installations where python2 OS modules are used in ansible
 python2_bin: /bin/python2.7
-
 
 ## Benchmark name used by audting control role
 # The audit variable found at the base
@@ -47,7 +47,6 @@ run_audit: false
 
 ### End Goss enablements ####
 #### Detailed settings found at the end of this document ####
-
 
 # Enable/Disable SELinux
 rhel7cis_selinux_disable: false
@@ -441,11 +440,11 @@ rhel7cis_firewall_services:
 # NFT firewall
 # not tested but added example for clarity - This will break connections
 # If the tables dont exist automatically create the tablename below
-rhel7cis_nft_tables_autoNewTable: false
+rhel7cis_nft_tables_autoNewTable: false  # noqa: var-naming[pattern]
 # create chain if doesnt exist
-rhel7cis_nft_tables_autoChainCreate: false
+rhel7cis_nft_tables_autoChainCreate: false  # noqa: var-naming[pattern]
 # create a table called
-rhel7cis_nft_tables_tableName: filter
+rhel7cis_nft_tables_tableName: filter  # noqa: var-naming[pattern]
 
 # 3.5.3.x.x iptables
 rhel7cis_save_iptables_cis_rules: true

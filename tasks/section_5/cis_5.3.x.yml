@@ -1,7 +1,7 @@
 ---
 
 - name: "5.3.1 | PATCH | Ensure permissions on /etc/ssh/sshd_config are configured"
-  file:
+  ansible.builtin.file:
       dest: /etc/ssh/sshd_config
       state: file
       owner: root
@@ -19,7 +19,7 @@
 - name: "5.3.2 | PATCH | Ensure permissions on SSH private host key files are configured"
   block:
       - name: "5.3.2 | AUDIT | Ensure permissions on SSH private host key files are configured"
-        find:
+        ansible.builtin.find:
             paths:
                 - /etc/ssh
             patterns: 'ssh_host_*_key'
@@ -28,7 +28,7 @@
         register: rhel_07_5_3_2_priv_results
 
       - name: "5.3.2 | AUDIT | Ensure permissions on SSH private host key files are configured"
-        file:
+        ansible.builtin.file:
             path: "{{ item.path }}"
             owner: root
             group: root
@@ -48,7 +48,7 @@
 - name: "5.3.3 | PATCH | Ensure permissions on SSH public host key files are configured"
   block:
       - name: "5.3.3 | AUDIT | Ensure permissions on SSH public host key files are configured"
-        find:
+        ansible.builtin.find:
             paths:
                 - /etc/ssh
             patterns: 'ssh_host_*_key'
@@ -57,7 +57,7 @@
         register: rhel_07_5_3_3_pub_results
 
       - name: "5.3.3 | AUDIT | Ensure permissions on SSH public host key files are configured"
-        file:
+        ansible.builtin.file:
             path: "{{ item.path }}"
             owner: root
             group: root
@@ -77,7 +77,7 @@
 - name: "5.3.4 | PATCH | Ensure SSH access is limited"
   block:
       - name: "5.3.4 | PATCH | Ensure SSH access is limited | Add line to sshd_config for allowusers"
-        lineinfile:
+        ansible.builtin.lineinfile:
             state: present
             dest: /etc/ssh/sshd_config
             regexp: "^AllowUsers"
@@ -90,7 +90,7 @@
             - "rhel7cis_sshd['allowusers']|default('') | length > 0"
 
       - name: "5.3.4 | PATCH | Ensure SSH access is limited | Add line to sshd_config for allowgroups"
-        lineinfile:
+        ansible.builtin.lineinfile:
             state: present
             dest: /etc/ssh/sshd_config
             regexp: "^AllowGroups"
@@ -103,7 +103,7 @@
             - "rhel7cis_sshd['allowgroups']|default('') | length > 0"
 
       - name: "5.3.4 | PATCH | Ensure SSH access is limited | Add line to sshd_config for denyusers"
-        lineinfile:
+        ansible.builtin.lineinfile:
             state: present
             dest: /etc/ssh/sshd_config
             regexp: "^DenyUsers"
@@ -116,7 +116,7 @@
             - "rhel7cis_sshd['denyusers']|default('') | length > 0"
 
       - name: "5.3.4 | PATCH | Ensure SSH access is limited | Add line to sshd_config for denygroups"
-        lineinfile:
+        ansible.builtin.lineinfile:
             state: present
             dest: /etc/ssh/sshd_config
             regexp: "^DenyGroups"
@@ -137,7 +137,7 @@
       - rule_5.3.4
 
 - name: "5.3.5 | PATCH | Ensure SSH LogLevel is appropriate"
-  lineinfile:
+  ansible.builtin.lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
       regexp: "^#LogLevel|^LogLevel"
@@ -155,7 +155,7 @@
       - rule_5.3.5
 
 - name: "5.3.6 | PATCH | Ensure SSH X11 forwarding is disabled"
-  lineinfile:
+  ansible.builtin.lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
       regexp: "^#X11Forwarding|^X11Forwarding"
@@ -173,7 +173,7 @@
       - rule_5.3.6
 
 - name: "5.3.7 | PATCH | Ensure SSH MaxAuthTries is set to 4 or less"
-  lineinfile:
+  ansible.builtin.lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
       regexp: '^(#)?MaxAuthTries \d'
@@ -191,7 +191,7 @@
       - rule_5.3.7
 
 - name: "5.3.8 | PATCH | Ensure SSH IgnoreRhosts is enabled"
-  lineinfile:
+  ansible.builtin.lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
       regexp: "^#IgnoreRhosts|^IgnoreRhosts"
@@ -209,7 +209,7 @@
       - rule_5.3.8
 
 - name: "5.3.9 | PATCH | Ensure SSH HostbasedAuthentication is disabled"
-  lineinfile:
+  ansible.builtin.lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
       regexp: "^#HostbasedAuthentication|^HostbasedAuthentication"
@@ -227,7 +227,7 @@
       - rule_5.3.9
 
 - name: "5.3.10 | PATCH | Ensure SSH root login is disabled"
-  lineinfile:
+  ansible.builtin.lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
       regexp: "^#PermitRootLogin|^PermitRootLogin"
@@ -245,7 +245,7 @@
       - rule_5.3.10
 
 - name: "5.3.11 | PATCH | Ensure SSH PermitEmptyPasswords is disabled"
-  lineinfile:
+  ansible.builtin.lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
       regexp: "^#PermitEmptyPasswords|^PermitEmptyPasswords"
@@ -263,7 +263,7 @@
       - rule_5.3.11
 
 - name: "5.3.12 | PATCH | Ensure SSH PermitUserEnvironment is disabled"
-  lineinfile:
+  ansible.builtin.lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
       regexp: "^#PermitUserEnvironment|^PermitUserEnvironment"
@@ -281,7 +281,7 @@
       - rule_5.3.12
 
 - name: "5.3.13 | PATCH | Ensure only strong Ciphers are used"
-  lineinfile:
+  ansible.builtin.lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
       regexp: '^Ciphers'
@@ -300,7 +300,7 @@
       - rule_5.3.13
 
 - name: "5.3.14 | PATCH | Ensure only strong MAC algorithms are used"
-  lineinfile:
+  ansible.builtin.lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
       regexp: '^MACs'
@@ -319,7 +319,7 @@
       - rule_5.3.14
 
 - name: "5.3.15 | PATCH | Ensure only strong Key Exchange algorithms are used"
-  lineinfile:
+  ansible.builtin.lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
       regexp: '^KexAlgorithms'
@@ -340,7 +340,7 @@
 - name: "5.3.16 | PATCH | Ensure SSH Idle Timeout Interval is configured"
   block:
       - name: "5.3.16 | PATCH | Ensure SSH Idle Timeout Interval is configured | Add line in sshd_config for ClientAliveInterval"
-        lineinfile:
+        ansible.builtin.lineinfile:
             state: present
             dest: /etc/ssh/sshd_config
             regexp: "^#ClientAliveInterval|^ClientAliveInterval"
@@ -350,7 +350,7 @@
             - restart sshd
 
       - name: "5.3.16 | PATCH | Ensure SSH Idle Timeout Interval is configured | Ensure SSH ClientAliveCountMax set to <= 3"
-        lineinfile:
+        ansible.builtin.lineinfile:
             state: present
             dest: /etc/ssh/sshd_config
             regexp: "^#ClientAliveCountMax|^ClientAliveCountMax"
@@ -368,7 +368,7 @@
       - rule_5.3.16
 
 - name: "5.3.17 | PATCH | Ensure SSH LoginGraceTime is set to one minute or less"
-  lineinfile:
+  ansible.builtin.lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
       regexp: "^#LoginGraceTime|^LoginGraceTime"
@@ -386,7 +386,7 @@
       - rule_5.3.17
 
 - name: "5.3.18 | PATCH | Ensure SSH warning banner is configured"
-  lineinfile:
+  ansible.builtin.lineinfile:
       dest: /etc/ssh/sshd_config
       regexp: '^Banner ((?!/etc/issue.net$)).*$'
       line: "{{ item.line | default (omit) }}"
@@ -408,7 +408,7 @@
       - rule_5.3.18
 
 - name: "5.3.19 | PATCH | Ensure SSH PAM is enabled"
-  lineinfile:
+  ansible.builtin.lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
       regexp: "^#UsePAM|^UsePAM"
@@ -426,7 +426,7 @@
       - rule_5.3.19
 
 - name: "5.3.20 | PATCH | Ensure SSH AllowTcpForwarding is disabled"
-  lineinfile:
+  ansible.builtin.lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
       regexp: "^#AllowTcpForwarding|^AllowTcpForwarding"
@@ -444,7 +444,7 @@
       - rule_5.3.20
 
 - name: "5.3.21 | PATCH | Ensure SSH MaxStartups is configured"
-  lineinfile:
+  ansible.builtin.lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
       regexp: "^#MaxStartups|^MaxStartups"
@@ -462,7 +462,7 @@
       - rule_5.3.21
 
 - name: "5.3.22 | PATCH | Ensure SSH MaxSessions is limited"
-  lineinfile:
+  ansible.builtin.lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
       regexp: "^#MaxSessions|^MaxSessions"

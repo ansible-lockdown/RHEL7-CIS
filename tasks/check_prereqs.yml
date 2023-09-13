@@ -1,7 +1,7 @@
 ---
 
 - name: "PREREQ | Check required packages installed | Python2"
-  package:
+  ansible.builtin.package:
       list: "{{ item }}"
       state: present
   loop:
@@ -14,15 +14,13 @@
 - name: "PREREQ | Add the required packages | Python 3"
   block:
       - name: Check if python36-rpm package installed
-        command: rpm -q python36-rpm
+        ansible.builtin.command: rpm -q python36-rpm
         register: python36_rpm_present
         failed_when: ( python36_rpm_present.rc not in [ 0, 1 ] )
         changed_when: false
-        args:
-            warn: false
 
       - name: Add the EPEL repository required for the python36-rpm pkg
-        package:
+        ansible.builtin.package:
             name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
             state: present
         register: epel_installed
@@ -30,7 +28,7 @@
             - python36_rpm_present.rc != '0'
 
       - name: "PREREQ | Check required packages installed | Python3 "
-        package:
+        ansible.builtin.package:
             name: "{{ item }}"
             state: present
         register: python3reqs_installed
@@ -39,8 +37,8 @@
             - libselinux-python3
 
       - name: Disable Epel repo if installed earlier
-        command: yum-config-manager disable epel
-        when: epel_installed.changed
+        ansible.builtin.command: yum-config-manager disable epel
+        when: epel_installed.changed  # noqa: no-handler
   when:
       - ( ansible_python.version.major == 3  and ansible_python.version.minor == 6 )
   vars:

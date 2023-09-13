@@ -1,12 +1,41 @@
 # release CIS RedHat Enterprise Linux 7 Benchmark v3.0.1 - 09-21-2020
 
-## 1.0.4
+## 1.1.4
+
+- update lint
+- files relinted
+- [#315](https://github.com/ansible-lockdown/RHEL7-CIS/issues/315)
+  thanks to @dankxylese
+- [#316](https://github.com/ansible-lockdown/RHEL7-CIS/issues/316)
+  thanks to I-am-Mos
+- readme update
+- workflow update
+
+## 1.1.3
+
+- [#313](https://github.com/ansible-lockdown/RHEL7-CIS/issues/313)
+  thanks to @xiranlyu and community member Tony(whozzyourdaddy)
+
+## 1.1.2
+
+- update to yamllint
+- update linting
+- update to galaxy workflow
+- rule 2.2.1.1 moved to block
+- readme update and badges
+- full module names added
+
+## 1.1.1
 
 - Oracle alignment now works and tested with oracle7.9
 - audit alignment benchmark version used to test against
 - goss audit version updated
 - lint file update
 - workflow updates
+
+## Major 1.1
+
+- Upgrade to CIS 3.1.1
 
 ## Whats new 1.0.0
 
@@ -18,10 +47,6 @@
 - Grub password no longer created using passlib needs to be supplied as variable
   - assert has been created if rule still enabled and password not changed
 - Use of the packages facts module
-
-## Major 1.1
-
-- Upgrade to CIS 3.1.1
 
 ### Highlights
 

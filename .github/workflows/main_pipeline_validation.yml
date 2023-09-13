@@ -1,0 +1,127 @@
+---
+
+    name: Main pipeline
+
+    on: # yamllint disable-line rule:truthy
+      pull_request_target:
+          types: [opened, reopened, synchronize]
+          branches:
+              - main
+          paths:
+              - '**.yml'
+              - '**.sh'
+              - '**.j2'
+              - '**.ps1'
+              - '**.cfg'
+
+    # A workflow run is made up of one or more jobs
+    # that can run sequentially or in parallel
+    jobs:
+
+        # This workflow contains a single job which tests the playbook
+        playbook-test:
+          # The type of runner that the job will run on
+          runs-on: ubuntu-latest
+          env:
+            ENABLE_DEBUG: ${{ vars.ENABLE_DEBUG }}
+            # Imported as a variable by terraform
+            TF_VAR_repository: ${{ github.event.repository.name }}
+          defaults:
+            run:
+              shell: bash
+              working-directory: .github/workflows/github_linux_IaC
+
+          steps:
+            - name: Clone ${{ github.event.repository.name }}
+              uses: actions/checkout@v3
+              with:
+                ref: ${{ github.event.pull_request.head.sha }}
+
+            # Pull in terraform code for linux servers
+            - name: Clone github IaC plan
+              uses: actions/checkout@v3
+              with:
+                repository: ansible-lockdown/github_linux_IaC
+                path: .github/workflows/github_linux_IaC
+
+            - name: Add_ssh_key
+              working-directory: .github/workflows
+              env:
+                  SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+                  PRIVATE_KEY: "${{ secrets.SSH_PRV_KEY }}"
+              run: |
+                mkdir .ssh
+                chmod 700 .ssh
+                echo $PRIVATE_KEY > .ssh/github_actions.pem
+                chmod 600 .ssh/github_actions.pem
+
+            - name: DEBUG - Show IaC files
+              if: env.ENABLE_DEBUG == 'true'
+              run: |
+                echo "OSVAR = $OSVAR"
+                echo "benchmark_type = $benchmark_type"
+                pwd
+                ls
+              env:
+                # Imported from github variables this is used to load the relvent OS.tfvars file
+                OSVAR: ${{ vars.OSVAR }}
+                benchmark_type: ${{ vars.BENCHMARK_TYPE }}
+
+            - name: Terraform_Init
+              id: init
+              run: terraform init
+              env:
+                # Imported from github variables this is used to load the relvent OS.tfvars file
+                OSVAR: ${{ vars.OSVAR }}
+                TF_VAR_benchmark_type: ${{ vars.BENCHMARK_TYPE }}
+
+            - name: Terraform_Validate
+              id: validate
+              run: terraform validate
+              env:
+                # Imported from github variables this is used to load the relvent OS.tfvars file
+                OSVAR: ${{ vars.OSVAR }}
+                TF_VAR_benchmark_type: ${{ vars.BENCHMARK_TYPE }}
+
+            - name: Terraform_Apply
+              id: apply
+              env:
+                AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                OSVAR: ${{ vars.OSVAR }}
+                TF_VAR_benchmark_type: ${{ vars.BENCHMARK_TYPE }}
+              run: terraform apply -var-file "github_vars.tfvars" -var-file "${OSVAR}.tfvars" --auto-approve -input=false
+
+  ## Debug Section
+            - name: DEBUG - Show Ansible hostfile
+              if: env.ENABLE_DEBUG == 'true'
+              run: cat hosts.yml
+
+      # Aws deployments taking a while to come up insert sleep or playbook fails
+
+            - name: Sleep for 60 seconds
+              run: sleep 60s
+
+          # Run the ansible playbook
+            - name: Run_Ansible_Playbook
+              uses: arillso/action.playbook@master
+              with:
+                playbook: site.yml
+                inventory: .github/workflows/github_linux_IaC/hosts.yml
+                galaxy_file: collections/requirements.yml
+                private_key: ${{ secrets.SSH_PRV_KEY }}
+        #          verbose: 3
+              env:
+                ANSIBLE_HOST_KEY_CHECKING: "false"
+                ANSIBLE_DEPRECATION_WARNINGS: "false"
+
+          # Remove test system - User secrets to keep if necessary
+
+            - name: Terraform_Destroy
+              if: always() && env.ENABLE_DEBUG == 'false'
+              env:
+                AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                OSVAR: ${{ vars.OSVAR }}
+                TF_VAR_benchmark_type: ${{ vars.BENCHMARK_TYPE }}
+              run: terraform destroy -var-file "github_vars.tfvars" -var-file "${OSVAR}.tfvars" --auto-approve -input=false
