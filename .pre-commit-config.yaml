@@ -1,0 +1,67 @@
+---
+##### CI for use by github no need for action to be added
+##### Inherited
+ci:
+    autofix_prs: false
+    skip: [detect-aws-credentials, ansible-lint ]
+
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v3.2.0
+  hooks:
+  # Safety
+  - id: detect-aws-credentials
+  - id: detect-private-key
+
+  # git checks
+  - id: check-merge-conflict
+  - id: check-added-large-files
+  - id: check-case-conflict
+
+  # General checks
+  - id: trailing-whitespace
+    name: Trim Trailing Whitespace
+    description: This hook trims trailing whitespace.
+    entry: trailing-whitespace-fixer
+    language: python
+    types: [text]
+    args: [--markdown-linebreak-ext=md]
+  - id: end-of-file-fixer
+
+# Scan for passwords
+- repo: https://github.com/Yelp/detect-secrets
+  rev: v1.4.0
+  hooks:
+  - id: detect-secrets
+    args: [ '--baseline', '.config/.secrets.baseline' ]
+    exclude: .config/.gitleaks-report.json
+
+- repo: https://github.com/gitleaks/gitleaks
+  rev: v8.17.0
+  hooks:
+  - id: gitleaks
+    args: ['--baseline-path', '.config/.gitleaks-report.json']
+
+- repo: https://github.com/ansible-community/ansible-lint
+  rev: v6.17.2
+  hooks:
+  - id: ansible-lint
+    name: Ansible-lint
+    description: This hook runs ansible-lint.
+    entry: python3 -m ansiblelint --force-color site.yml -c .ansible-lint
+    language: python
+    # do not pass files to ansible-lint, see:
+    # https://github.com/ansible/ansible-lint/issues/611
+    pass_filenames: false
+    always_run: true
+    additional_dependencies:
+    # https://github.com/pre-commit/pre-commit/issues/1526
+    # If you want to use specific version of ansible-core or ansible, feel
+    # free to override `additional_dependencies` in your own hook config
+    # file.
+    - ansible-core>=2.10.1
+
+- repo: https://github.com/adrienverge/yamllint.git
+  rev: v1.32.0  # or higher tag
+  hooks:
+  - id: yamllint
