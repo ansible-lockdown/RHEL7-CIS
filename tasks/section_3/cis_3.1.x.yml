@@ -1,19 +1,15 @@
 ---
 
 - name: "3.1.1 | PATCH | Disable IPv6 | grub"
-  block:
-      - name: "3.1.1 | PATCH | Disable IPv6 | grub"
-        ansible.builtin.replace:
-            dest: /etc/default/grub
-            regexp: '(^GRUB_CMDLINE_LINUX\s*\=\s*)(?:")(.+)(?<!ipv6.disable=1)(?:")'
-            replace: '\1"\2 ipv6.disable=1"'
-        register: grub_ipv6
-        notify: grub2cfg
+  ansible.builtin.replace:
+      dest: /etc/default/grub
+      regexp: '(^GRUB_CMDLINE_LINUX\s*\=\s*)(?:")(.+)(?<!ipv6.disable=1)(?:")'
+      replace: '\1"\2 ipv6.disable=1"'
+  register: grub_ipv6
+  notify:
+      - grub2cfg
+      - reboot_required
 
-      - name: "3.1.1 | FACT | Disable IPv6 | grub"
-        ansible.builtin.set_fact:
-            change_requires_reboot: true
-        when: grub_ipv6.changed
   when:
       - not rhel7cis_ipv6_required
       - rhel7cis_rule_3_1_1
@@ -33,7 +29,7 @@
 
       - name: "3.1.2 | PATCH | Ensure wireless interfaces are disabled | Disable wifi if enabled"
         ansible.builtin.command: nmcli radio wifi off
-        when: rhel_07_wifi_enabled is changed
+        when: rhel_07_wifi_enabled is changed  # noqa: no-handler
 
   when:
       - rhel7cis_rule_3_1_2

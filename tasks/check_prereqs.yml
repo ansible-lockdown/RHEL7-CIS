@@ -18,8 +18,6 @@
         register: python36_rpm_present
         failed_when: ( python36_rpm_present.rc not in [ 0, 1 ] )
         changed_when: false
-        args:
-            warn: false
 
       - name: Add the EPEL repository required for the python36-rpm pkg
         ansible.builtin.package:
@@ -40,7 +38,7 @@
 
       - name: Disable Epel repo if installed earlier
         ansible.builtin.command: yum-config-manager disable epel
-        when: epel_installed.changed
+        when: epel_installed.changed  # noqa: no-handler
   when:
       - ( ansible_python.version.major == 3  and ansible_python.version.minor == 6 )
   vars:

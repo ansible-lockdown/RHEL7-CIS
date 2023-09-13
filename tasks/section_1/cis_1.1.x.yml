@@ -333,8 +333,6 @@
 
 - name: "1.1.22 | PATCH | Ensure sticky bit is set on all world-writable directories"
   ansible.builtin.shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d -perm -0002 2>/dev/null | xargs chmod a+t
-  args:
-      warn: false
   changed_when: false
   failed_when: false
   when:

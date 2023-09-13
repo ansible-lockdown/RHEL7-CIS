@@ -87,8 +87,6 @@
   environment: "{{ audit_run_script_environment | default({}) }}"
   changed_when: false
   register: audit_run_pre_remediation
-  vars:
-      warn: false
 
 - name: Pre Audit | Capture audit data if json format
   block:
