@@ -153,6 +153,22 @@ uses:
 - runs the audit using the devel branch
 - This is an automated test that occurs on pull requests into devel
 
+## Local Testing
+
+- Ansible
+
+  - ansible-base 2.10.17 - python 3.8
+  - ansible-core 2.13.4  - python 3.10
+  - ansible-core 2.15.1  - python 3.11
+
+## Added Extras
+
+- [pre-commit](https://pre-commit.com) can be tested and can be run from within the directory
+
+```sh
+pre-commit run
+```
+
 ## Credits
 
 This repo originated from work done by [Sam Doran](https://github.com/samdoran/ansible-role-stig)
