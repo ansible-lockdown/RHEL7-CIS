@@ -74,7 +74,7 @@
       - rule_1.2.4
 
 - name: "1.2.5 | PATCH | Disable the rhnsd Daemon"
-  ansible.builtin.service:
+  ansible.builtin.systemd:
       name: rhnsd
       state: stopped
       enabled: false
