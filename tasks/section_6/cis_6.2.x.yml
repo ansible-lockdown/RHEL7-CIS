@@ -10,7 +10,7 @@
             - rhel7cis_passwd | selectattr('password', '!=', 'x')
 
       - name: "6.2.1 | PATCH | Ensure accounts in /etc/passwd use shadow passwords | Good News"
-        debug:
+        ansible.builtin.debug:
             msg: "Good News!!  No Unshadowed passwords have been found"
         when: rhel7_6_2_1_shadow is not changed
   when:
