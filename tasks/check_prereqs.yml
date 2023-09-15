@@ -2,7 +2,7 @@
 
 - name: "PREREQ | Check required packages installed | Python2"
   ansible.builtin.package:
-      list: "{{ item }}"
+      name: "{{ item }}"
       state: present
   loop:
       - rpm-python
