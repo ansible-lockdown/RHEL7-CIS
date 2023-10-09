@@ -6,4 +6,4 @@ rpm_packager: "(none)"
 
 # found on https://linux.oracle.com/security/gpg/
 
-rpm_key: "72f97b74ec551f03"
+rpm_key: "72f97b74ec551f03"  # pragma: allowlist secret
