@@ -7,7 +7,7 @@ ci:
 
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v3.2.0
+  rev: v4.5.0
   hooks:
   # Safety
   - id: detect-aws-credentials
@@ -37,13 +37,13 @@ repos:
     exclude: .config/.gitleaks-report.json
 
 - repo: https://github.com/gitleaks/gitleaks
-  rev: v8.17.0
+  rev: v8.18.1
   hooks:
   - id: gitleaks
     args: ['--baseline-path', '.config/.gitleaks-report.json']
 
 - repo: https://github.com/ansible-community/ansible-lint
-  rev: v6.17.2
+  rev: v6.22.1
   hooks:
   - id: ansible-lint
     name: Ansible-lint
@@ -62,6 +62,6 @@ repos:
     - ansible-core>=2.10.1
 
 - repo: https://github.com/adrienverge/yamllint.git
-  rev: v1.32.0  # or higher tag
+  rev: v1.33.0  # or higher tag
   hooks:
   - id: yamllint
