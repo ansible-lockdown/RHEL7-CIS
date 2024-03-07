@@ -37,13 +37,13 @@ repos:
     exclude: .config/.gitleaks-report.json
 
 - repo: https://github.com/gitleaks/gitleaks
-  rev: v8.18.1
+  rev: v8.18.2
   hooks:
   - id: gitleaks
     args: ['--baseline-path', '.config/.gitleaks-report.json']
 
 - repo: https://github.com/ansible-community/ansible-lint
-  rev: v6.22.2
+  rev: v24.2.0
   hooks:
   - id: ansible-lint
     name: Ansible-lint
@@ -62,6 +62,6 @@ repos:
     - ansible-core>=2.10.1
 
 - repo: https://github.com/adrienverge/yamllint.git
-  rev: v1.33.0  # or higher tag
+  rev: v1.35.1  # or higher tag
   hooks:
   - id: yamllint
