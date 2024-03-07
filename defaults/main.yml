@@ -26,25 +26,46 @@ python2_bin: /bin/python2.7
 benchmark: RHEL7-CIS
 benchmark_version: v3.1.1
 
-#### Basic external goss audit enablement settings ####
-#### Precise details - per setting can be found at the bottom of this file ####
+##########################################
+### Goss is required on the remote host ###
+## Refer to vars/auditd.yml for any other settings ##
 
-### Goss is required on the remote host
+# Allow audit to setup the requirements including installing git (if option chosen and downloading and adding goss binary to system)
 setup_audit: false
-# How to retrive goss
+
+# enable audits to run - this runs the audit and get the latest content
+run_audit: false
+
+# Only run Audit do not remediate
+audit_only: false
+# As part of audit_only
+# This will enable files to be copied back to control node
+fetch_audit_files: false
+# Path to copy the files to will create dir structure
+audit_capture_files_dir: /some/location to copy to on control node
+
+# How to retrieve audit binary
 # Options are copy or download - detailed settings at the bottom of this file
 # you will need to access to either github or the file already dowmloaded
-get_goss_file: download
+get_audit_binary_method: download
+
+## if get_audit_binary_method - copy the following needs to be updated for your environment
+## it is expected that it will be copied from somewhere accessible to the control node
+## e.g copy from ansible control node to remote host
+audit_bin_copy_location: /some/accessible/path
 
 # how to get audit files onto host options
-# options are git/copy/get_url
+# options are git/copy/get_url other e.g. if you wish to run from already downloaded conf
 audit_content: git
 
-# Timeout for those cmds that take longer to run where timeout set
-audit_cmd_timeout: 30000
+# archive or copy:
+audit_conf_copy: "some path to copy from"
 
-# enable audits to run - this  runs the audit and get the latest content
-run_audit: false
+# get_url:
+audit_files_url: "some url maybe s3?"
+
+# Run heavy tests - some tests can have more impact on a system enabling these can have greater impact on a system
+audit_run_heavy_tests: true
 
 ### End Goss enablements ####
 #### Detailed settings found at the end of this document ####
@@ -565,55 +586,3 @@ rhel7cis_dotperm_ansiblemanaged: true
 
 # RHEL-07-6.2.18 Clear users from shadow group
 rhel7cis_remove_shadow_grp_usrs: true
-
-#### Goss Configuration Settings ####
-audit_run_script_environment:
-    AUDIT_BIN: "{{ audit_bin }}"
-    AUDIT_FILE: 'goss.yml'
-    AUDIT_CONTENT_LOCATION: "{{ audit_out_dir }}"
-
-### Goss binary settings ###
-goss_version:
-    release: v0.3.23
-    checksum: 'sha256:9e9f24e25f86d6adf2e669a9ffbe8c3d7b9b439f5f877500dea02ba837e10e4d'
-audit_bin_path: /usr/local/bin/
-audit_bin: "{{ audit_bin_path }}goss"
-audit_format: json
-
-# if get_goss_file == download change accordingly
-goss_url: "https://github.com/goss-org/goss/releases/download/{{ goss_version.release }}/goss-linux-amd64"
-
-## if get_goss_file - copy the following needs to be updated for your environment
-## it is expected that it will be copied from somewhere accessible to the control node
-## e.g copy from ansible control node to remote host
-copy_goss_from_path: /some/accessible/path
-
-### Goss Audit Benchmark file ###
-## managed by the control audit_content
-# git
-audit_file_git: "https://github.com/ansible-lockdown/{{ benchmark }}-Audit.git"
-audit_git_version: "benchmark_{{ benchmark_version }}"
-
-# copy:
-audit_local_copy: "some path to copy from"
-
-# get_url:
-audit_files_url: "some url maybe s3?"
-
-# Where the goss audit configuration will be stored
-audit_files: "/opt/{{ benchmark }}-Audit/"
-
-## Goss configuration information
-# Where the goss configs and outputs are stored
-audit_out_dir: '/opt'
-audit_conf_dir: "{{ audit_out_dir }}/{{ benchmark }}-Audit/"
-pre_audit_outfile: "{{ audit_out_dir }}/{{ ansible_hostname }}-{{ benchmark }}_pre_scan_{{ ansible_date_time.epoch }}.{{ audit_format }}"
-post_audit_outfile: "{{ audit_out_dir }}/{{ ansible_hostname }}-{{ benchmark }}_post_scan_{{ ansible_date_time.epoch }}.{{ audit_format }}"
-
-## The following should not need changing
-goss_file: "{{ audit_conf_dir }}goss.yml"
-audit_vars_path: "{{ audit_conf_dir  }}/vars/{{ ansible_hostname }}.yml"
-audit_results: |
-      The pre remediation results are: {{ pre_audit_summary }}.
-      The post remediation results are: {{ post_audit_summary }}.
-      Full breakdown can be found in {{ audit_out_dir }}
