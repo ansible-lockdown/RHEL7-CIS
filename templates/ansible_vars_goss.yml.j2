@@ -24,7 +24,7 @@ rhel7cis_selinux_state: {{ rhel7cis_selinux_state }}
 rhel7cis_level1: true
 rhel7cis_level2: true
 # to enable rules that may have IO impact on a system e.g. full filesystem scans or CPU heavy
-run_heavy_tests: true
+run_heavy_tests: {{ audit_run_heavy_tests }}
 
 rhel7cis_legacy_boot: {{ rhel7cis_legacy_boot }}
 

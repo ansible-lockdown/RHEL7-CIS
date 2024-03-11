@@ -1,25 +1,33 @@
 ---
 
 - name: "SECTION | 5.1 | Configure time-based job schedulers"
-  ansible.builtin.import_tasks: cis_5.1.x.yml
+  ansible.builtin.import_tasks:
+      file: cis_5.1.x.yml
 
 - name: "SECTION | 5.2 | Configure Sudo"
-  ansible.builtin.import_tasks: cis_5.2.x.yml
+  ansible.builtin.import_tasks:
+      file: cis_5.2.x.yml
 
 - name: "SECTION | 5.3 | Configure SSH Server"
-  ansible.builtin.import_tasks: cis_5.3.x.yml
+  ansible.builtin.import_tasks:
+      file: cis_5.3.x.yml
 
 - name: "SECTION | 5.4 | Configure PAM"
-  ansible.builtin.import_tasks: cis_5.4.x.yml
+  ansible.builtin.import_tasks:
+      file: cis_5.4.x.yml
 
 - name: "SECTION | 5.5.1 | Set Shadow Password Suite Parameters"
-  ansible.builtin.import_tasks: cis_5.5.1.x.yml
+  ansible.builtin.import_tasks:
+      file: cis_5.5.1.x.yml
 
 - name: "SECTION | 5.5 | User Accounts and Environment"
-  ansible.builtin.import_tasks: cis_5.5.x.yml
+  ansible.builtin.import_tasks:
+      file: cis_5.5.x.yml
 
 - name: "SECTION | 5.6 | User Accounts and Environment"
-  ansible.builtin.import_tasks: cis_5.6.yml
+  ansible.builtin.import_tasks:
+      file: cis_5.6.yml
 
 - name: "SECTION | 5.7 | User Accounts and Environment"
-  ansible.builtin.import_tasks: cis_5.7.yml
+  ansible.builtin.import_tasks:
+      file: cis_5.7.yml
