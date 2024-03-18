@@ -1,0 +1,57 @@
+---
+
+- name: "1.1.2.3.1 | AUDIT | Ensure separate partition exists for /home"
+  when:
+      - rhel7cis_rule_1_1_2_3_1
+      - "'/home' not in mount_names"
+  tags:
+      - level2-server
+      - level2-workstation
+      - automated
+      - audit
+      - mounts
+      - rule_1.1.2.3.1
+      - NIST800-53R5_CM-7
+      - skip_ansible_lint
+  vars:
+      warn_control_id: '1.1.2.3.1'
+      required_mount: '/home'
+  block:
+      - name: "1.1.2.3.1 | AUDIT | Ensure separate partition exists for /home | Warn if partition is absent"
+        ansible.builtin.debug:
+            msg: "Warning!! {{ required_mount }} doesn't exist. This is a manual task"
+        register: home_mount_absent
+        changed_when: home_mount_absent.skipped is undefined
+
+      - name: "1.1.2.3.1 | AUDIT | Ensure separate partition exists for /home | Present"
+        ansible.builtin.import_tasks: warning_facts.yml
+
+# skips if mount is absent
+- name: |
+    "1.1.2.3.2 | PATCH | Ensure nodev option set on /home partition
+     1.1.2.3.3 | PATCH | Ensure nosuid option set on /home partition
+  when:
+      - "'/home' in mount_names"
+      - item.mount == "/home"
+      - rhel7cis_rule_1_1_2_3_2 or
+        rhel7cis_rule_1_1_2_3_3
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - mounts
+      - rule_1.1.2.3.2
+      - rule_1.1.2.3.3
+      - NIST800-53R5_AC-3
+      - NIST800-53R5_MP-2
+  notify: Change_requires_reboot
+  ansible.posix.mount:
+      name: /home
+      src: "{{ item.device }}"
+      fstype: "{{ item.fstype }}"
+      state: present
+      opts: defaults,{% if rhel7cis_rule_1_1_2_3_2 %}nodev,{% endif %}{% if rhel7cis_rule_1_1_2_3_3 %}nosuid{% endif %}
+  loop: "{{ ansible_facts.mounts }}"
+  loop_control:
+      label: "{{ item.device }}"

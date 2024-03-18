@@ -1,0 +1,58 @@
+---
+
+- name: "1.1.2.4.1 | AUDIT | Ensure separate partition exists for /var"
+  block:
+      - name: "1.1.2.4.1 | AUDIT | Ensure separate partition exists for /var | Warn if partition is absent"
+        ansible.builtin.debug:
+            msg: "Warning!! {{ required_mount }} doesn't exist. This is a manual task"
+        register: var_mount_absent
+        changed_when: var_mount_absent.skipped is undefined
+
+      - name: "1.1.2.4.1 | AUDIT | Ensure separate partition exists for /var | Present"
+        ansible.builtin.import_tasks:
+            file: warning_facts.yml
+  vars:
+      warn_control_id: '1.1.2.4.1'
+      required_mount: '/var'
+  when:
+      - "'/var' not in mount_names"
+      - rhel7cis_rule_1_1_2_4_1
+  tags:
+      - level2-server
+      - level2-workstation
+      - automated
+      - patch
+      - mounts
+      - NIST800-53R5_CM-7
+      - rule_1.1.2.4.1
+
+# skips if mount is absent
+- name: |
+          "1.1.2.4.2 | PATCH | Ensure nodev option set on /var partition"
+          "1.1.2.4.3 | PATCH | Ensure nosuid option set on /var partition"
+  when:
+      - "'/var' in mount_names"
+      - item.mount == "/var"
+      - rhel7cis_rule_1_1_2_4_2 or
+        rhel7cis_rule_1_1_2_4_3
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - mounts
+      - skip_ansible_lint
+      - rule_1.1.2.4.2
+      - rule_1.1.2.4.3
+      - NIST800-53R5_AC-3
+      - NIST800-53R5_MP-2
+  notify: Change_requires_reboot
+  ansible.posix.mount:
+      name: /var
+      src: "{{ item.device }}"
+      fstype: "{{ item.fstype }}"
+      state: present
+      opts: defaults,{% if rhel7cis_rule_1_1_2_4_2 %}nodev,{% endif %}{% if rhel7cis_rule_1_1_2_4_3 %}nosuid{% endif %}
+  loop: "{{ ansible_facts.mounts }}"
+  loop_control:
+      label: "{{ item.device }}"

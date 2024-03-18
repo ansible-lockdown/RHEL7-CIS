@@ -1,81 +1,154 @@
 ---
 
-- name: "1.5.1 | PATCH | Ensure core dumps are restricted"
-  block:
-      - name: "1.5.1 | PATCH | Ensure core dumps are restricted | Update limits.conf file"
-        ansible.builtin.lineinfile:
-            state: present
-            dest: /etc/security/limits.conf
-            regexp: '^#?\\*.*core'
-            line: '*                hard    core            0'
-            insertbefore: '^# End of file'
-
-      - name: "1.5.1 | PATCH | Ensure core dumps are restricted | Set active kernel parameter"
-        ansible.posix.sysctl:
-            name: fs.suid_dumpable
-            value: '0'
-            state: present
-            reload: true
-            sysctl_set: true
-            ignoreerrors: true
-
-      - name: 1.5.1 | PATCH | Ensure core dumps are restricted | coredump.conf"
-        ansible.builtin.lineinfile:
-            dest: /etc/systemd/coredump.conf
-            regexp: "{{ item.regex }}"
-            line: "{{ item.line }}"
-            create: true
-            mode: 0644
-        loop:
-            - { regex: '^Storage', line: 'Storage=none' }
-            - { regex: '^ProcessSizeMax', line: 'ProcessSizeMax=0' }
+- name: "1.5.1.1 | PATCH | Ensure SELinux is installed"
   when:
-      - rhel7cis_rule_1_5_1
+      - rhel7cis_rule_1_5_1_1
   tags:
       - level1-server
       - level1-workstation
-      - sysctl
+      - automated
       - patch
-      - rule_1.5.1
-
-- name: "1.5.2 | PATCH | Ensure XD/NX support is enabled"
-  ansible.builtin.shell: dmesg|grep -E "NX|XD" | grep " active"
-  changed_when: false
-  when:
-      - rhel7cis_rule_1_5_2
-  tags:
-      - skip_ansible_lint
-      - level1-server
-      - level1-workstation
-      - patch
-      - rule_1.5.2
-
-- name: "1.5.3 | PATCH | Ensure address space layout randomization (ASLR) is enabled"
-  ansible.posix.sysctl:
-      name: kernel.randomize_va_space
-      value: '2'
-      state: present
-      reload: true
-      sysctl_set: true
-      ignoreerrors: true
-  when:
-      - rhel7cis_rule_1_5_3
-  tags:
-      - level1-server
-      - level1-workstation
-      - patch
-      - rule_1.5.3
-
-- name: "1.5.4 | PATCH | Ensure prelink is disabled"
+      - NIST800-53R5_AC-3
+      - NIST800-53R5_MP-2
+      - rule_1.5.1.1
   ansible.builtin.package:
-      name: prelink
+      name: libselinux
+      state: present
+
+- name: "1.5.1.2 | PATCH | Ensure SELinux is not disabled in bootloader configuration"
+  when:
+      - rhel7cis_rule_1_5_1_2
+  tags:
+      - level1-server
+      - level1-workstation
+      - patch
+      - NIST800-53R5_AC-3
+      - NIST800-53R5_MP-2
+      - rule_1.5.1.2
+  notify: Rebuild_grub
+  ansible.builtin.replace:
+      path: /etc/default/grub
+      regexp: '(selinux|enforcing)\s*=\s*0\s*'
+      replace: ''
+  register: selinux_grub_patch
+  ignore_errors: true  # noqa ignore-errors
+
+# State set to enforcing because control 1.5.1.5 requires enforcing to be set
+- name: "1.5.1.3 | PATCH | Ensure SELinux policy is configured"
+  when:
+      - rhel7cis_rule_1_5_1_3
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - selinux
+      - patch
+      - NIST800-53R5_AC-3
+      - NIST800-53R5_MP-2
+      - rule_1.5.1.3
+  notify: Change_requires_reboot
+  ansible.posix.selinux:
+      conf: /etc/selinux/config
+      policy: "{{ rhel7cis_selinux_policy }}"
+      state: "{{ rhel7cis_selinux_state }}"
+
+# State set to enforcing because control 1.6.1.5 requires enforcing to be set
+- name: "1.5.1.4 | PATCH | Ensure the SELinux mode is not disabled"
+  when:
+      - rhel7cis_rule_1_5_1_4
+  tags:
+      - level1-server
+      - level1-workstation
+      - auotmated
+      - selinux
+      - patch
+      - NIST800-53R5_AC-3
+      - NIST800-53R5_MP-2
+      - rule_1.5.1.4
+  ansible.posix.selinux:
+      conf: /etc/selinux/config
+      policy: "{{ rhel7cis_selinux_policy }}"
+      state: "{{ rhel7cis_selinux_state }}"
+
+- name: "1.5.1.5 | PATCH | Ensure the SELinux state is enforcing"
+  when:
+      - rhel7cis_rule_1_5_1_5
+  tags:
+      - level2-server
+      - level2-workstation
+      - automated
+      - selinux
+      - patch
+      - NIST800-53R5_AC-3
+      - NIST800-53R5_MP-2
+      - rule_1.5.1.5
+  ansible.posix.selinux:
+      conf: /etc/selinux/config
+      policy: "{{ rhel7cis_selinux_policy }}"
+      state: enforcing
+
+- name: "1.5.1.6 | AUDIT | Ensure no unconfined services exist"
+  when:
+      - rhel7cis_rule_1_5_1_6
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - audit
+      - services
+      - NIST800-53R5_AC-3
+      - NIST800-53R5_MP-2
+      - rule_1.5.1.6
+  vars:
+      warn_control_id: '1.5.1.6'
+  block:
+      - name: "1.5.1.6 | AUDIT | Ensure no unconfined services exist | Find the unconfined services"
+        ansible.builtin.shell: ps -eZ | grep unconfined_service_t | egrep -vw "tr|ps|egrep|bash|awk" | tr ':' ' ' | awk '{ print $NF }'
+        register: rhel7cis_1_5_1_6_unconf_services
+        failed_when: false
+        changed_when: false
+
+      - name: "1.5.1.6 | WARN | Ensure no unconfined services exist | Message on unconfined services"
+        when:
+            - rhel7cis_1_5_1_6_unconf_services is defined
+            - rhel7cis_1_5_1_6_unconf_services.stdout | length > 0
+        ansible.builtin.debug:
+            msg: "Warning!! You have unconfined services: {{ rhel7cis_1_5_1_6_unconf_services.stdout_lines }}"
+
+      - name: "1.5.1.6 | WARN | Ensure no unconfined services exist | warning count"
+        when:
+            - rhel7cis_1_5_1_6_unconf_services is defined
+            - rhel7cis_1_5_1_6_unconf_services.stdout | length > 0
+        ansible.builtin.import_tasks:
+            file: warning_facts.yml
+
+- name: "1.5.1.7 | PATCH | Ensure the MCS Translation Service (mcstrans) is not installed"
+  when:
+      - rhel7cis_rule_1_5_1_7
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - NIST800-53R5_AC-3
+      - NIST800-53R5_MP-2
+      - rule_1.5.1.7
+  ansible.builtin.package:
+      name: mcstrans
+      state: absent
+
+- name: "1.5.1.8 | PATCH | Ensure SETroubleshoot is not installed"
+  ansible.builtin.package:
+      name: setroubleshoot
       state: absent
   when:
-      - rhel7cis_rule_1_5_4
+      - rhel7cis_rule_1_5_1_8
+      - "'setroubleshoot' in ansible_facts.packages"
   tags:
       - level1-server
-      - level1-workstation
+      - automated
+      - selinux
       - patch
-      - rule_1.5.4
-  vars:
-      ansible_python_interpreter: /bin/python
+      - NIST800-53R5_AC-3
+      - NIST800-53R5_MP-2
+      - rule_1.5.1.8

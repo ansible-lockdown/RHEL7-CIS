@@ -1,0 +1,56 @@
+---
+
+- name: "1.1.2.2.1 | PATCH | Ensure /dev/shm is a separate partition"
+  when:
+      - rhel7cis_rule_1_1_2_2_1
+      - "'/tmp' not in mount_names"
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - audit
+      - mounts
+      - NIST800-53R5_CM-7
+      - rule_1.1.2.2.1
+  vars:
+      warn_control_id: '1.1.2.2.1'
+      required_mount: '/dev/shm'
+  block:
+
+      - name: "1.1.2.2.1 | PATCH | Ensure /dev/shm is a separate partition | Absent"
+        when: rhel7cis_dev_shm_present is undefined
+        ansible.builtin.debug:
+            msg: "Warning!! {{ required_mount }} is not mounted on a separate partition"
+
+      - name: "1.1.2.2.1 | PATCH | Ensure /dev/shm is a separate partition | Present"
+        when: rhel7cis_dev_shm_present is undefined
+        ansible.builtin.import_tasks:
+            file: warning_facts.yml
+
+- name: |
+         "1.1.2.2.2 | PATCH | Ensure nodev option set on /dev/shm partition
+          1.1.2.2.3 | PATCH | Ensure nosuid option set on /dev/shm partition
+          1.1.2.2.4 | PATCH | Ensure noexec option set on /dev/shm partition"
+  when:
+      - rhel7cis_dev_shm_present is defined
+      - rhel7cis_rule_1_1_2_2_2 or
+        rhel7cis_rule_1_1_2_2_3 or
+        rhel7cis_rule_1_1_2_2_4
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - mounts
+      - NIST800-53R5_AC-3
+      - NIST800-53R5_MP-2
+      - rule_1.1.2.2.1
+      - rule_1.1.2.2.2
+      - rule_1.1.2.2.3
+  notify: Change_requires_reboot
+  ansible.posix.mount:
+      name: /dev/shm
+      src: tmpfs
+      fstype: tmpfs
+      state: mounted
+      opts: defaults,{% if rhel7cis_rule_1_1_2_2_2 %}nodev,{% endif %}{% if rhel7cis_rule_1_1_2_2_3 %}nosuid,{% endif %}{% if rhel7cis_rule_1_1_2_2_4 %}noexec{% endif %}

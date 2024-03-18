@@ -1,83 +1,71 @@
 ---
 
-- name: "1.4.1 | PATCH | Ensure bootloader password is set"
-  block:
-      - name: "1.4.1 | PATCH | Ensure bootloader password is set"
-        ansible.builtin.copy:
-            dest: "{{ rhel7cis_bootloader_path }}user.cfg"  # noqa template-instead-of-copy
-            content: "GRUB2_PASSWORD={{ rhel7cis_bootloader_password_hash }}"
-            owner: root
-            group: root
-            mode: "{% if rhel7cis_legacy_boot %}0600{% else %}0700{% endif %}"
-        register: bootloader_pw
-        notify: grub2cfg
-
-      - name: "1.4.1 | FACT | Ensure bootloader password is set"
-        ansible.builtin.set_fact:
-            change_requires_reboot: true
-        when: bootloader_pw
+- name: "1.4.1 | PATCH | Ensure address space layout randomization (ASLR) is enabled"
   when:
-      - ansible_distribution_version >= '7.2'
-      - rhel7cis_set_boot_pass
       - rhel7cis_rule_1_4_1
   tags:
       - level1-server
       - level1-workstation
-      - grub
+      - automated
       - patch
+      - sysctl
+      - NIST800-53R5_CM-6
       - rule_1.4.1
+  ansible.posix.sysctl:
+      name: kernel.randomize_va_space
+      value: '2'
+      reload: true
+      sysctl_file: /etc/sysctl.d/60-kernel_sysctl.conf
+      sysctl_set: true
+      ignoreerrors: true
 
-- name: "1.4.2 | PATCH | Ensure permissions on bootloader config are configured"
-  block:
-      - name: "1.4.2 | PATCH | Ensure permissions on bootloader config are configured | Update grub config settings"
-        ansible.builtin.file:
-            path: "{{ rhel7cis_bootloader_path }}grub.cfg"
-            owner: root
-            group: root
-            mode: 0600
-        when:
-            - rhel7cis_legacy_boot
-
-      - name: "1.4.2 | PATCH | Ensure permissions on bootloader config are configured | UEFI"
-        ansible.posix.mount:
-            name: /boot/efi
-            src: "UUID={{ item.uuid }}"
-            fstype: vfat
-            state: present
-            opts: defaults,umask=0027,fmask=0077,uid=0,gid=0
-            passno: '0'
-        loop: "{{ ansible_mounts }}"
-        loop_control:
-            label: "{{ item.mount }}"
-        when:
-            - not rhel7cis_legacy_boot
-            - item.mount == "/boot/efi"
+- name: "1.4.2 | PATCH | Ensure ptrace_scope is restricted"
   when:
       - rhel7cis_rule_1_4_2
   tags:
       - level1-server
       - level1-workstation
-      - grub
+      - automated
       - patch
+      - sysctl
+      - NIST800-53R5_CM-6
       - rule_1.4.2
+  ansible.posix.sysctl:
+      name: kernel.yama.ptrace_scope
+      value: '1'
+      reload: true
+      sysctl_file: /etc/sysctl.d/60-kernel_sysctl.conf
+      sysctl_set: true
+      ignoreerrors: true
 
-- name: "1.4.3 | PATCH | Ensure authentication required for single user mode"
-  block:
-      - name: "1.4.3 | PATCH | Ensure authentication required for single user mode | Emergency service"
-        ansible.builtin.lineinfile:
-            dest: /usr/lib/systemd/system/emergency.service
-            regexp: '/sbin/sulogin'
-            line: 'ExecStart=-/bin/sh -c "/sbin/sulogin; /usr/bin/systemctl --fail --no-block default"'
-
-      - name: "1.4.3 | PATCH | Ensure authentication required for single user mode | Rescue service"
-        ansible.builtin.lineinfile:
-            dest: /usr/lib/systemd/system/rescue.service
-            regexp: '/sbin/sulogin'
-            line: 'ExecStart=-/bin/sh -c "/sbin/sulogin; /usr/bin/systemctl --fail --no-block default"'
-  when:
-      - rhel7cis_rule_1_4_3
+- name: "1.4.3 | PATCH | Ensure core dump backtraces are disabled"
   tags:
       - level1-server
       - level1-workstation
+      - automated
       - patch
+      - sysctl
+      - NIST800-53R5_CM-6
       - rule_1.4.3
+  ansible.builtin.lineinfile:
+      path: /etc/systemd/coredump.conf
+      regexp: 'ProcessSizeMax='
+      line: 'ProcessSizeMax=0'
+  when:
+      - rhel7cis_rule_1_4_3
+
+- name: "1.4.4 | PATCH | Ensure core dump storage is disabled"
+  when:
+      - rhel7cis_rule_1_4_4
+      - systemd_coredump.stat.exists
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - rule_1.4.4
+  notify: Systemd_daemon_reload
+  ansible.builtin.lineinfile:
+      path: /etc/systemd/coredump.conf
+      regexp: 'Storage='
+      line: 'Storage=none'

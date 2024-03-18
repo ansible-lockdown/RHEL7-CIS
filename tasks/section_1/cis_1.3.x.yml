@@ -1,49 +1,71 @@
 ---
 
-- name: "1.3.1 | PATCH | Ensure AIDE is installed"
-  block:
-      - name: "1.3.1 | PATCH | Ensure AIDE is installed | Install"
-        ansible.builtin.package:
-            name: aide
-            state: installed
-
-      - name: "1.3.1 | PATCH | Ensure AIDE is installed | started"
-        ansible.builtin.shell: /usr/sbin/aide --init -B 'database_out=file:/var/lib/aide/aide.db.gz'
-        args:
-            creates: /var/lib/aide/aide.db.gz
-        changed_when: false
-        failed_when: false
-        async: "{{ ansible_check_mode | ternary(0, 45) }}"
-        poll: 0
+- name: "1.3.1 | PATCH | Ensure bootloader password is set"
+  ansible.builtin.copy:
+      dest: "{{ rhel7cis_boot_path }}user.cfg"  # noqa template-instead-of-copy
+      content: "GRUB2_PASSWORD={{ rhel7cis_bootloader_password_hash }}"
+      owner: root
+      group: root
+      mode: '0600'
+  notify: Rebuild_grub
   when:
-      - rhel7cis_config_aide
+      - rhel7cis_set_boot_pass
       - rhel7cis_rule_1_3_1
   tags:
       - level1-server
       - level1-workstation
-      - aide
+      - automated
+      - grub
       - patch
+      - NIST800-53R5_AC-3
+      - NIST800-53R5_MP-2
       - rule_1.3.1
-  vars:
-      ansible_python_interpreter: /bin/python
 
-- name: "1.3.2 | PATCH | Ensure filesystem integrity is regularly checked | cron"
-  ansible.builtin.cron:
-      name: Run AIDE integrity check
-      cron_file: "{{ rhel7cis_aide_cron['cron_file'] }}"
-      user: "{{ rhel7cis_aide_cron['cron_user'] }}"
-      minute: "{{ rhel7cis_aide_cron['aide_minute'] | default('0') }}"
-      hour: "{{ rhel7cis_aide_cron['aide_hour'] | default('5') }}"
-      day: "{{ rhel7cis_aide_cron['aide_day'] | default('*') }}"
-      month: "{{ rhel7cis_aide_cron['aide_month'] | default('*') }}"
-      weekday: "{{ rhel7cis_aide_cron['aide_weekday'] | default('*') }}"
-      job: "{{ rhel7cis_aide_cron['aide_job'] }}"
+- name: "1.3.2 | PATCH | Ensure permissions on bootloader config are configured"
   when:
       - rhel7cis_rule_1_3_2
+      - grub_cfg.stat.exists
+      - grub_cfg.stat.islnk
   tags:
       - level1-server
       - level1-workstation
-      - aide
-      - file_integrity
+      - automated
+      - grub
       - patch
+      - NIST800-53R5_AC-3
+      - NIST800-53R5_MP-2
       - rule_1.3.2
+  block:
+      - name: "1.3.2 | PATCH | Ensure permissions on bootloader config are configured | BIOS"
+        when: rhel7cis_legacy_boot
+        ansible.builtin.file:
+            path: "{{ rhel7cis_boot_path }}"
+            owner: root
+            group: root
+            mode: '0600'
+            recurse: true
+
+      - name: "1.3.2 | PATCH | Ensure permissions on bootloader config are configured | EFI"
+        when: not rhel7cis_legacy_boot
+        ansible.builtin.file:
+            path: "{{ rhel7cis_boot_path }}"
+            owner: root
+            group: root
+            mode: '0700'
+            recurse: true
+
+      - name: "1.3.2 | PATCH | Ensure permissions on bootloader config are configured | UEFI"
+        when:
+            - not rhel7cis_legacy_boot
+            - item.mount == "/boot/efi"
+        notify: Change_requires_reboot
+        ansible.posix.mount:
+            name: /boot/efi
+            src: "UUID={{ item.uuid }}"
+            fstype: vfat
+            state: present
+            opts: defaults,umask=0027,fmask=0077,uid=0,gid=0
+            passno: '0'
+        loop: "{{ ansible_facts.mounts }}"
+        loop_control:
+            label: "{{ item.mount }}"
