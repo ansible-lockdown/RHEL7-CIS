@@ -1,7 +1,9 @@
 ---
 
 - name: "SECTION | 6.1 | System File Permissions"
-  ansible.builtin.import_tasks: cis_6.1.x.yml
+  ansible.builtin.import_tasks:
+      file: cis_6.1.x.yml
 
 - name: "SECTION | 6.2 | User and Group Settings"
-  ansible.builtin.import_tasks: cis_6.2.x.yml
+  ansible.builtin.import_tasks:
+      file: cis_6.2.x.yml

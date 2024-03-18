@@ -1,0 +1,30 @@
+---
+
+- name: Audit_Only | Create local Directories for hosts
+  ansible.builtin.file:
+      mode: '0755'
+      path: "{{ audit_capture_files_dir }}/{{ inventory_hostname }}"
+      recurse: true
+      state: directory
+  when: fetch_audit_files
+  delegate_to: localhost
+  become: false
+
+- name: Audit_only | Get audits from systems and put in group dir
+  ansible.builtin.fetch:
+      dest: "{{ audit_capture_files_dir }}/{{ inventory_hostname }}/"
+      flat: true
+      mode: '0644'
+      src: "{{ pre_audit_outfile }}"
+  when: fetch_audit_files
+
+- name: Audit_only | Show Audit Summary
+  when:
+      - audit_only
+  ansible.builtin.debug:
+      msg: "The Audit results are: {{ pre_audit_summary }}."
+
+- name: Audit_only | Stop Playbook Audit Only selected
+  when:
+      - audit_only
+  ansible.builtin.meta: end_play

@@ -1,0 +1,39 @@
+---
+
+# Timeout for those cmds that take longer to run where timeout set
+audit_cmd_timeout: 120000
+
+# if get_audit_binary_method == download change accordingly
+audit_bin_url: "https://github.com/goss-org/goss/releases/download/{{ audit_bin_version.release }}/goss-linux-"
+
+### Goss Audit Benchmark file ###
+## managed by the control audit_content
+# git
+audit_file_git: "https://github.com/ansible-lockdown/{{ benchmark }}-Audit.git"
+audit_git_version: "benchmark_{{ benchmark_version }}"
+
+## Goss configuration information
+# Where the goss configs and outputs are stored
+audit_out_dir: '/opt'
+# Where the goss audit configuration will be stored
+audit_conf_dir: "{{ audit_out_dir }}/{{ benchmark }}-Audit"
+
+# If changed these can affect other products
+pre_audit_outfile: "{{ audit_out_dir }}/{{ ansible_facts.hostname }}-{{ benchmark }}-{{ benchmark_version }}_pre_scan_{{ ansible_facts.date_time.epoch }}.{{ audit_format }}"
+post_audit_outfile: "{{ audit_out_dir }}/{{ ansible_facts.hostname }}-{{ benchmark }}-{{ benchmark_version }}_post_scan_{{ ansible_facts.date_time.epoch }}.{{ audit_format }}"
+
+## The following should not need changing
+
+### Audit binary settings ###
+audit_bin_version:
+    release: v0.3.23
+    AMD64_checksum: 'sha256:9e9f24e25f86d6adf2e669a9ffbe8c3d7b9b439f5f877500dea02ba837e10e4d'
+audit_bin_path: /usr/local/bin/
+audit_bin: "{{ audit_bin_path }}goss"
+audit_format: json
+
+audit_vars_path: "{{ audit_conf_dir }}/vars/{{ ansible_facts.hostname }}.yml"
+audit_results: |
+      The pre remediation results are: {{ pre_audit_summary }}.
+      The post remediation results are: {{ post_audit_summary }}.
+      Full breakdown can be found in {{ audit_out_dir }}

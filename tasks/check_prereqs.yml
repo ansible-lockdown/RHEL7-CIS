@@ -2,11 +2,10 @@
 
 - name: "PREREQ | Check required packages installed | Python2"
   ansible.builtin.package:
-      list: "{{ item }}"
+      name:
+          - rpm-python
+          - libselinux-python
       state: present
-  loop:
-      - rpm-python
-      - libselinux-python
   when: ansible_python.version.major == 2
   vars:
       ansible_python_interpreter: "{{ python2_bin }}"

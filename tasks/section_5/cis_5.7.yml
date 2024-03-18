@@ -10,7 +10,7 @@
             line: 'auth            required        pam_wheel.so use_uid {% if rhel7cis_sugroup is defined %}group={{ rhel7cis_sugroup }}{% endif %}'
 
       - name: "5.7 | PATCH | Ensure access to the su command is restricted | wheel group contains root"
-        ansible.builtin.group:
+        ansible.builtin.user:
             name: root
             groups: "{{ rhel7cis_sugroup }}"
         when:

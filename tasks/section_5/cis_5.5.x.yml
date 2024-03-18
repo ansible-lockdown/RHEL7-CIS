@@ -3,7 +3,7 @@
 - name: "5.5.2 | PATCH | Ensure system accounts are secured"
   block:
       - name: "5.5.2 | PATCH | Ensure system accounts are secured | Set nologin"
-        user:
+        ansible.builtin.user:
             name: "{{ item.id }}"
             shell: /usr/sbin/nologin
         loop: "{{ rhel7cis_passwd }}"
@@ -19,7 +19,7 @@
             - item.shell != "      /usr/sbin/nologin"
 
       - name: "5.5.2 | PATCH | Ensure system accounts are secured | Lock accounts"
-        user:
+        ansible.builtin.user:
             name: "{{ item.id }}"
             password_lock: true
         loop: "{{ rhel7cis_passwd }}"
@@ -42,7 +42,7 @@
       - rule_5.5.2
 
 - name: "5.5.3 | PATCH | Ensure default group for the root account is GID 0"
-  shell: usermod -g 0 root
+  ansible.builtin.shell: usermod -g 0 root
   changed_when: false
   failed_when: false
   when:

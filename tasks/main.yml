@@ -19,8 +19,8 @@
 
 - name: Check rhel7cis_bootloader_password_hash variable has been changed
   ansible.builtin.assert:
-      that: rhel7cis_bootloader_password_hash != 'grub.pbkdf2.sha512.changethispart'
-      msg: "This role will not be able to run single user password commands as  rhel7cis_bootloader_password_hash variable has not been set"
+      that: rhel7cis_bootloader_password_hash != 'grub.pbkdf2.sha512.changethispart'  # pragma: allowlist secret
+      msg: "This role will not be able to run single user password commands as  rhel7cis_bootloader_password_hash variable has not been set"  # pragma: allowlist secret
   when:
       - ansible_distribution_version >= '7.2'
       - rhel7cis_set_boot_pass
@@ -47,7 +47,8 @@
       - rule_5.6
 
 - name: Import prereq checks
-  ansible.builtin.import_tasks: check_prereqs.yml
+  ansible.builtin.import_tasks:
+      file: check_prereqs.yml
   tags:
       - always
       - prereqs
@@ -75,15 +76,28 @@
       - always
 
 - name: Import preliminary tasks
-  ansible.builtin.import_tasks: prelim.yml
+  ansible.builtin.import_tasks:
+      file: prelim.yml
   tags:
       - prelim_tasks
       - always
 
-- name: Import pre remediation audit
-  ansible.builtin.import_tasks: pre_remediation_audit.yml
+- name: Include audit specific variables
+  ansible.builtin.include_vars:
+      file: audit.yml
   when:
+      - run_audit or audit_only
+      - setup_audit
+  tags:
+      - setup_audit
       - run_audit
+
+- name: Include pre-remediation audit tasks
+  ansible.builtin.import_tasks:
+      file: pre_remediation_audit.yml
+  when:
+      - run_audit or audit_only
+      - setup_audit
   tags:
       - run_audit
 
@@ -94,48 +108,56 @@
       - always
 
 - name: Include OS specific variables
-  ansible.builtin.include_vars: "{{ ansible_distribution }}.yml"
+  ansible.builtin.include_vars:
+      file: "{{ ansible_distribution }}.yml"
   tags:
       - always
 
 - name: Run parse etc password for user variables
-  ansible.builtin.import_tasks: parse_etc_password.yml
+  ansible.builtin.import_tasks:
+      file: parse_etc_password.yml
   when:
       - rhel7cis_section5 or
         rhel7cis_section6
 
 - name: Import section 1 tasks
-  ansible.builtin.import_tasks: section_1/main.yml
+  ansible.builtin.import_tasks:
+      file: section_1/main.yml
   when: rhel7cis_section1
   tags:
       - rhel7cis_section1
 
 - name: Import section 2 tasks
-  ansible.builtin.import_tasks: section_2/main.yml
+  ansible.builtin.import_tasks:
+      file: section_2/main.yml
   tags:
       - rhel7cis_section2
   when: rhel7cis_section2
 
 - name: Import section 3 tasks
-  ansible.builtin.import_tasks: section_3/main.yml
+  ansible.builtin.import_tasks:
+      file: section_3/main.yml
   when: rhel7cis_section3
   tags:
       - rhel7cis_section3
 
 - name: Import section 4 tasks
-  ansible.builtin.import_tasks: section_4/main.yml
+  ansible.builtin.import_tasks:
+      file: section_4/main.yml
   when: rhel7cis_section4
   tags:
       - rhel7cis_section4
 
 - name: Import section 5 tasks
-  ansible.builtin.import_tasks: section_5/main.yml
+  ansible.builtin.import_tasks:
+      file: section_5/main.yml
   when: rhel7cis_section5
   tags:
       - rhel7cis_section5
 
 - name: Import section 6 tasks
-  ansible.builtin.import_tasks: section_6/main.yml
+  ansible.builtin.import_tasks:
+      file: section_6/main.yml
   when: rhel7cis_section6
   tags:
       - rhel7cis_section6
@@ -144,16 +166,16 @@
   ansible.builtin.meta: flush_handlers
 
 - name: Post Task
-  ansible.builtin.import_tasks: post.yml
+  ansible.builtin.import_tasks:
+      file: post.yml
   tags:
       - post_tasks
       - always
 
-- name: Import post remediation task
-  ansible.builtin.import_tasks: post_remediation_audit.yml
+- name: Run post audit
+  ansible.builtin.import_tasks:
+      file: post_remediation_audit.yml
   when:
-      - run_audit
-  tags:
       - run_audit
 
 - name: Show Audit Summary
