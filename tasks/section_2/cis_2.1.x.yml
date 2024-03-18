@@ -1,16 +1,52 @@
 ---
 
-- name: "2.1.1 | PATCH | Ensure xinetd is not installed"
-  ansible.builtin.package:
-      name: xinetd
-      state: absent
-  vars:
-      ansible_python_interpreter: /bin/python
+- name: "2.1.1 | PATCH | Ensure time synchronization is in use"
   when:
-      - ("'xinetd' in ansible_facts.packages") and not rhel7cis_xinetd_required
       - rhel7cis_rule_2_1_1
+      - not system_is_container
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - rule_2.1.1
+  ansible.builtin.package:
+      name: "{{ rhel7cis_time_synchronization }}"
+      state: present
+
+- name: "2.1.2 | PATCH | Ensure chrony is configured"
+  when:
+      - rhel7cis_time_synchronization == "chrony"
+      - rhel7cis_rule_2_1_2
+      - not system_is_container
   tags:
       - level1-server
       - level1-workstation
       - patch
-      - rule_2.1.1
+      - NIST800-53R5_AU-3
+      - NIST800-53R5_AU-12
+      - rule_2.1.2
+  ansible.builtin.template:
+      src: chrony.conf.j2
+      dest: /etc/chrony.conf
+      owner: root
+      group: root
+      mode: '0644'
+
+- name: "2.1.3 | PATCH | Ensure chrony is not run as the root user"
+  when:
+      - rhel7cis_time_synchronization == "chrony"
+      - rhel7cis_rule_2_1_3
+      - not system_is_container
+  tags:
+      - level1-server
+      - level1-workstation
+      - patch
+      - rule_2.1.3
+  ansible.builtin.lineinfile:
+      path: /etc/sysconfig/chronyd
+      regexp: OPTIONS=\"(.*)(?!-u chrony)(.*)"
+      line: OPTIONS="\1\2 -u chrony"
+      create: true
+      backrefs: true
+      mode: '0644'
