@@ -1,0 +1,35 @@
+---
+
+- name: "4.2.3 | PATCH | Ensure permissions on all logfiles are configured"
+  ansible.builtin.command: find /var/log -type f -exec chmod g-wx,o-rwx "{}" +
+  changed_when: false
+  failed_when: false
+  when:
+      - rhel7cis_rule_4_2_3
+  tags:
+      - level1-server
+      - level1-workstation
+      - patch
+      - rule_4.2.3
+
+- name: "4.2.4 | AUDIT | Ensure logrotate is configured"
+  block:
+      - name: "4.2.4 | AUDIT | Ensure logrotate is configured"
+        ansible.builtin.find:
+            paths: /etc/logrotate.d/
+        register: log_rotate
+
+      - name: "4.2.4 | AUDIT | Ensure logrotate is configured | output list"
+        ansible.builtin.debug:
+            msg:
+                - WARNING!! The following files need to confirm with site requirements
+                - /etc/logrotate.conf
+                - "{{ log_rotate.files | map(attribute='path') | list }}"
+        when: log_rotate.matched > 0
+  when:
+      - rhel7cis_rule_4_2_4
+  tags:
+      - level1-server
+      - level1-workstation
+      - audit
+      - rule_4.2.4

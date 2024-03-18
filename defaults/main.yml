@@ -93,104 +93,154 @@ rhel7cis_tmp_svc: false
 # PLEASE NOTE: These work in coordination with the section # group variables and tags.
 # You must enable an entire section in order for the variables below to take effect.
 # Section 1 rules
-# Section 1 is Initial Setup (Filesystem Configuration, Configure Software Updates, Configure Sudo, Filesystem Integrity Checking, Secure Boot Settings, Additional Process Hardening, Mandatory Access Control, and Warning Banners)
 rhel7cis_rule_1_1_1_1: true
 rhel7cis_rule_1_1_1_2: true
 rhel7cis_rule_1_1_1_3: true
-rhel7cis_rule_1_1_2: true
-rhel7cis_rule_1_1_3: true
-rhel7cis_rule_1_1_4: true
-rhel7cis_rule_1_1_5: true
-rhel7cis_rule_1_1_6: true
-rhel7cis_rule_1_1_7: true
-rhel7cis_rule_1_1_8: true
-rhel7cis_rule_1_1_9: true
-rhel7cis_rule_1_1_10: true
-rhel7cis_rule_1_1_11: true
-rhel7cis_rule_1_1_12: true
-rhel7cis_rule_1_1_13: true
-rhel7cis_rule_1_1_14: true
-rhel7cis_rule_1_1_15: true
-rhel7cis_rule_1_1_16: true
-rhel7cis_rule_1_1_17: true
-rhel7cis_rule_1_1_18: true
-rhel7cis_rule_1_1_19: true
-rhel7cis_rule_1_1_20: true
-rhel7cis_rule_1_1_21: true
-rhel7cis_rule_1_1_22: true
-rhel7cis_rule_1_1_23: true
-rhel7cis_rule_1_1_24: true
+rhel7cis_rule_1_1_1_4: true
+rhel7cis_rule_1_1_1_5: true
+rhel7cis_rule_1_1_1_6: true
+rhel7cis_rule_1_1_1_7: true
+rhel7cis_rule_1_1_1_8: true
+
+# /tmp
+rhel7cis_rule_1_1_2_1_1: true
+rhel7cis_rule_1_1_2_1_2: true
+rhel7cis_rule_1_1_2_1_3: true
+rhel7cis_rule_1_1_2_1_4: true
+
+# /dev/shm
+rhel7cis_rule_1_1_2_2_1: true
+rhel7cis_rule_1_1_2_2_2: true
+rhel7cis_rule_1_1_2_2_3: true
+rhel7cis_rule_1_1_2_2_4: true
+
+# /home
+rhel7cis_rule_1_1_2_3_1: true
+rhel7cis_rule_1_1_2_3_2: true
+rhel7cis_rule_1_1_2_3_3: true
+
+# /var
+rhel7cis_rule_1_1_2_4_1: true
+rhel7cis_rule_1_1_2_4_2: true
+rhel7cis_rule_1_1_2_4_3: true
+
+# /var/tmp
+rhel7cis_rule_1_1_2_5_1: true
+rhel7cis_rule_1_1_2_5_2: true
+rhel7cis_rule_1_1_2_5_3: true
+rhel7cis_rule_1_1_2_5_4: true
+
+# /var/log
+rhel7cis_rule_1_1_2_6_1: true
+rhel7cis_rule_1_1_2_6_2: true
+rhel7cis_rule_1_1_2_6_3: true
+rhel7cis_rule_1_1_2_6_4: true
+
+# /var/log/audit
+rhel7cis_rule_1_1_2_7_1: true
+rhel7cis_rule_1_1_2_7_2: true
+rhel7cis_rule_1_1_2_7_3: true
+rhel7cis_rule_1_1_2_7_4: true
+
+# Software updates
 rhel7cis_rule_1_2_1: true
 rhel7cis_rule_1_2_2: true
 rhel7cis_rule_1_2_3: true
 rhel7cis_rule_1_2_4: true
 rhel7cis_rule_1_2_5: true
+
+# bootloader
 rhel7cis_rule_1_3_1: true
 rhel7cis_rule_1_3_2: true
+rhel7cis_rule_1_3_3: true
+
+# kernel sysctl and coredumps
 rhel7cis_rule_1_4_1: true
 rhel7cis_rule_1_4_2: true
 rhel7cis_rule_1_4_3: true
-rhel7cis_rule_1_5_1: true
-rhel7cis_rule_1_5_2: true
-rhel7cis_rule_1_5_3: true
-rhel7cis_rule_1_5_4: true
-rhel7cis_rule_1_6_1_1: true
-rhel7cis_rule_1_6_1_2: true
-rhel7cis_rule_1_6_1_3: true
-rhel7cis_rule_1_6_1_4: true
-rhel7cis_rule_1_6_1_5: true
-rhel7cis_rule_1_6_1_6: true
-rhel7cis_rule_1_6_1_7: true
-rhel7cis_rule_1_6_1_8: true
+rhel7cis_rule_1_4_4: true
+
+# SElinux
+rhel7cis_rule_1_5_1_1: true
+rhel7cis_rule_1_5_1_2: true
+rhel7cis_rule_1_5_1_3: true
+rhel7cis_rule_1_5_1_4: true
+rhel7cis_rule_1_5_1_5: true
+rhel7cis_rule_1_5_1_6: true
+rhel7cis_rule_1_5_1_7: true
+rhel7cis_rule_1_5_1_8: true
+
+# Message of the Day
+rhel7cis_rule_1_6_1: true
+rhel7cis_rule_1_6_2: true
+rhel7cis_rule_1_6_3: true
+rhel7cis_rule_1_6_4: true
+
+# Gnome and graphic desktop
 rhel7cis_rule_1_7_1: true
 rhel7cis_rule_1_7_2: true
 rhel7cis_rule_1_7_3: true
 rhel7cis_rule_1_7_4: true
 rhel7cis_rule_1_7_5: true
 rhel7cis_rule_1_7_6: true
-rhel7cis_rule_1_8_1: true
-rhel7cis_rule_1_8_2: true
-rhel7cis_rule_1_8_3: true
-rhel7cis_rule_1_8_4: true
-rhel7cis_rule_1_9: true
+rhel7cis_rule_1_7_7: true
+rhel7cis_rule_1_7_8: true
+rhel7cis_rule_1_7_9: true
+rhel7cis_rule_1_7_10: true
 
 # Section 2 rules
-# Section 2 is Services (inetd Services, Special Purpose Services, and Service Clients)
-rhel7cis_rule_2_1_1: true
-rhel7cis_rule_2_2_1_1: true
-rhel7cis_rule_2_2_1_2: true
-rhel7cis_rule_2_2_1_3: true
-rhel7cis_rule_2_2_2: true
-rhel7cis_rule_2_2_3: true
-rhel7cis_rule_2_2_4: true
-rhel7cis_rule_2_2_5: true
-rhel7cis_rule_2_2_6: true
-rhel7cis_rule_2_2_7: true
-rhel7cis_rule_2_2_8: true
-rhel7cis_rule_2_2_9: true
-rhel7cis_rule_2_2_10: true
-rhel7cis_rule_2_2_11: true
-rhel7cis_rule_2_2_12: true
-rhel7cis_rule_2_2_13: true
-rhel7cis_rule_2_2_14: true
-rhel7cis_rule_2_2_15: true
-rhel7cis_rule_2_2_16: true
-rhel7cis_rule_2_2_17: true
-rhel7cis_rule_2_2_18: true
-rhel7cis_rule_2_2_19: true
-rhel7cis_rule_2_3_1: true
-rhel7cis_rule_2_3_2: true
-rhel7cis_rule_2_3_3: true
-rhel7cis_rule_2_3_4: true
-rhel7cis_rule_2_3_5: true
-rhel7cis_rule_2_4: true
+# time sync
+rhel8cis_rule_2_1_1: true
+rhel8cis_rule_2_1_2: true
+rhel8cis_rule_2_1_3: true
 
-# Section 3 rules
+# Server services
+rhel8cis_rule_2_2_1: true
+rhel8cis_rule_2_2_2: true
+rhel8cis_rule_2_2_3: true
+rhel8cis_rule_2_2_4: true
+rhel8cis_rule_2_2_5: true
+rhel8cis_rule_2_2_6: true
+rhel8cis_rule_2_2_7: true
+rhel8cis_rule_2_2_8: true
+rhel8cis_rule_2_2_9: true
+rhel8cis_rule_2_2_10: true
+rhel8cis_rule_2_2_11: true
+rhel8cis_rule_2_2_12: true
+rhel8cis_rule_2_2_13: true
+rhel8cis_rule_2_2_14: true
+rhel8cis_rule_2_2_15: true
+rhel8cis_rule_2_2_16: true
+rhel8cis_rule_2_2_17: true
+rhel8cis_rule_2_2_18: true
+rhel8cis_rule_2_2_19: true
+rhel8cis_rule_2_2_20: true
+rhel8cis_rule_2_2_21: true
+rhel8cis_rule_2_2_22: true
+
+# Client services
+rhel8cis_rule_2_3_1: true
+rhel8cis_rule_2_3_2: true
+rhel8cis_rule_2_3_3: true
+rhel8cis_rule_2_3_4: true
+rhel8cis_rule_2_3_5: true
+
+##
+## Section 3 rules
+##
 # Section 3 is Network Configuration (Disable unused network protocols, Network parameters (host), Network parameters (Host and Router), Uncommon Network Protocols, Firewall Configuration, and Configure iptables)
+# ipv6, bluettoth and wireless
 rhel7cis_rule_3_1_1: true
 rhel7cis_rule_3_1_2: true
+rhel7cis_rule_3_1_3: true
+
+# network kernel modules
 rhel7cis_rule_3_2_1: true
 rhel7cis_rule_3_2_2: true
+rhel7cis_rule_3_2_3: true
+rhel7cis_rule_3_2_4: true
+
+# network kernel parameters
 rhel7cis_rule_3_3_1: true
 rhel7cis_rule_3_3_2: true
 rhel7cis_rule_3_3_3: true
@@ -200,129 +250,224 @@ rhel7cis_rule_3_3_6: true
 rhel7cis_rule_3_3_7: true
 rhel7cis_rule_3_3_8: true
 rhel7cis_rule_3_3_9: true
-rhel7cis_rule_3_4_1: true
-rhel7cis_rule_3_4_2: true
-rhel7cis_rule_3_5_1_1: true
-rhel7cis_rule_3_5_1_2: true
-rhel7cis_rule_3_5_1_3: true
-rhel7cis_rule_3_5_1_4: true
-rhel7cis_rule_3_5_1_5: true
-rhel7cis_rule_3_5_1_6: true
-rhel7cis_rule_3_5_1_7: true
-rhel7cis_rule_3_5_2_1: true
-rhel7cis_rule_3_5_2_2: true
-rhel7cis_rule_3_5_2_3: true
-rhel7cis_rule_3_5_2_4: true
-rhel7cis_rule_3_5_2_5: true
-rhel7cis_rule_3_5_2_6: true
-rhel7cis_rule_3_5_2_7: true
-rhel7cis_rule_3_5_2_8: true
-rhel7cis_rule_3_5_2_9: true
-rhel7cis_rule_3_5_2_10: true
-rhel7cis_rule_3_5_2_11: true
-rhel7cis_rule_3_5_3_1_1: true
-rhel7cis_rule_3_5_3_1_2: true
-rhel7cis_rule_3_5_3_1_3: true
-rhel7cis_rule_3_5_3_2_1: true
-rhel7cis_rule_3_5_3_2_2: true
-rhel7cis_rule_3_5_3_2_3: true
-rhel7cis_rule_3_5_3_2_4: true
-rhel7cis_rule_3_5_3_2_5: true
-rhel7cis_rule_3_5_3_2_6: true
-rhel7cis_rule_3_5_3_3_1: true
-rhel7cis_rule_3_5_3_3_2: true
-rhel7cis_rule_3_5_3_3_3: true
-rhel7cis_rule_3_5_3_3_4: true
-rhel7cis_rule_3_5_3_3_5: true
-rhel7cis_rule_3_5_3_3_6: true
+rhel7cis_rule_3_3_10: true
+rhel7cis_rule_3_3_11: true
 
-# Section 4 rules
-# Section 4 is Logging and Auditing (Configure System Accounting (auditd) and Configure Logging)
+# Configure firewall utility
+rhel7cis_rule_3_4_1_1: true
+rhel7cis_rule_3_4_1_2: true
+
+# firewalld
+rhel7cis_rule_3_4_2_1: true
+rhel7cis_rule_3_4_2_2: true
+rhel7cis_rule_3_4_2_3: true
+rhel7cis_rule_3_4_2_4: true
+
+# nftables
+rhel7cis_rule_3_4_3_1: true
+rhel7cis_rule_3_4_3_2: true
+rhel7cis_rule_3_4_3_3: true
+rhel7cis_rule_3_4_3_4: true
+rhel7cis_rule_3_4_3_5: true
+rhel7cis_rule_3_4_3_6: true
+rhel7cis_rule_3_4_3_7: true
+rhel7cis_rule_3_4_3_8: true
+rhel7cis_rule_3_4_3_9: true
+
+# iptables
+rhel7cis_rule_3_4_4_1_1: true
+
+# ip4tables
+rhel7cis_rule_3_4_4_2_1: true
+rhel7cis_rule_3_4_4_2_2: true
+rhel7cis_rule_3_4_4_2_3: true
+rhel7cis_rule_3_4_4_2_4: true
+rhel7cis_rule_3_4_4_2_5: true
+rhel7cis_rule_3_4_4_2_6: true
+
+# ip6tables
+rhel7cis_rule_3_4_4_3_1: true
+rhel7cis_rule_3_4_4_3_2: true
+rhel7cis_rule_3_4_4_3_3: true
+rhel7cis_rule_3_4_4_3_4: true
+rhel7cis_rule_3_4_4_3_5: true
+rhel7cis_rule_3_4_4_3_6: true
+
+#
+## Section 4 rules
+##
+# Section 4 is Job Schedulers, SSH and privilege PAM
+# Job Schedulers
+## Cron
 rhel7cis_rule_4_1_1_1: true
 rhel7cis_rule_4_1_1_2: true
 rhel7cis_rule_4_1_1_3: true
+rhel7cis_rule_4_1_1_4: true
+rhel7cis_rule_4_1_1_5: true
+rhel7cis_rule_4_1_1_6: true
+rhel7cis_rule_4_1_1_7: true
+rhel7cis_rule_4_1_1_8: true
+# At
 rhel7cis_rule_4_1_2_1: true
-rhel7cis_rule_4_1_2_2: true
-rhel7cis_rule_4_1_2_3: true
-rhel7cis_rule_4_1_2_4: true
-rhel7cis_rule_4_1_3: true
-rhel7cis_rule_4_1_4: true
-rhel7cis_rule_4_1_5: true
-rhel7cis_rule_4_1_6: true
-rhel7cis_rule_4_1_7: true
-rhel7cis_rule_4_1_8: true
-rhel7cis_rule_4_1_9: true
-rhel7cis_rule_4_1_10: true
-rhel7cis_rule_4_1_11: true
-rhel7cis_rule_4_1_12: true
-rhel7cis_rule_4_1_13: true
-rhel7cis_rule_4_1_14: true
-rhel7cis_rule_4_1_15: true
-rhel7cis_rule_4_1_16: true
-rhel7cis_rule_4_1_17: true
-rhel7cis_rule_4_2_1_1: true
-rhel7cis_rule_4_2_1_2: true
-rhel7cis_rule_4_2_1_3: true
-rhel7cis_rule_4_2_1_4: true
-rhel7cis_rule_4_2_1_5: true
-rhel7cis_rule_4_2_1_6: true
-rhel7cis_rule_4_2_2_1: true
-rhel7cis_rule_4_2_2_2: true
-rhel7cis_rule_4_2_2_3: true
+
+# SSH Server
+rhel7cis_rule_4_2_1: true
+rhel7cis_rule_4_2_2: true
 rhel7cis_rule_4_2_3: true
 rhel7cis_rule_4_2_4: true
+rhel7cis_rule_4_2_5: true
+rhel7cis_rule_4_2_6: true
+rhel7cis_rule_4_2_7: true
+rhel7cis_rule_4_2_8: true
+rhel7cis_rule_4_2_9: true
+rhel7cis_rule_4_2_10: true
+rhel7cis_rule_4_2_11: true
+rhel7cis_rule_4_2_12: true
+rhel7cis_rule_4_2_13: true
+rhel7cis_rule_4_2_14: true
+rhel7cis_rule_4_2_15: true
+rhel7cis_rule_4_2_16: true
+rhel7cis_rule_4_2_17: true
+rhel7cis_rule_4_2_18: true
+rhel7cis_rule_4_2_19: true
+rhel7cis_rule_4_2_20: true
+rhel7cis_rule_4_2_21: true
+rhel7cis_rule_4_2_22: true
 
-# Section 5 rules
-# Section 5 is Access, Authentication, and Authorization (Configure time-based job schedulers, Configure SSH Server, Configure PAM, and User Accounts and Environment)
-rhel7cis_rule_5_1_1: true
-rhel7cis_rule_5_1_2: true
+# Privilege escalation
+rhel7cis_rule_4_3_1: true
+rhel7cis_rule_4_3_2: true
+rhel7cis_rule_4_3_3: true
+rhel7cis_rule_4_3_4: true
+rhel7cis_rule_4_3_5: true
+rhel7cis_rule_4_3_6: true
+rhel7cis_rule_4_3_7: true
+
+## Configure Pluggable Authentication
+# software packages
+rhel7cis_rule_4_4_1_1: true
+rhel7cis_rule_4_4_1_2: true
+
+# pam_faillock
+rhel7cis_rule_4_4_2_1_1: true
+rhel7cis_rule_4_4_2_1_2: true
+rhel7cis_rule_4_4_2_1_3: true
+rhel7cis_rule_4_4_2_1_4: true
+
+# pam_pwquality
+rhel7cis_rule_4_4_2_2_1: true
+rhel7cis_rule_4_4_2_2_2: true
+rhel7cis_rule_4_4_2_2_3: true
+rhel7cis_rule_4_4_2_2_4: true
+rhel7cis_rule_4_4_2_2_5: true
+rhel7cis_rule_4_4_2_2_6: true
+rhel7cis_rule_4_4_2_2_7: true
+
+# pam pwhistory
+rhel7cis_rule_4_4_2_3_1: true
+rhel7cis_rule_4_4_2_3_2: true
+rhel7cis_rule_4_4_2_3_3: true
+rhel7cis_rule_4_4_2_3_4: true
+
+# pam pam_unix
+rhel7cis_rule_4_4_2_4_1: true
+rhel7cis_rule_4_4_2_4_2: true
+rhel7cis_rule_4_4_2_4_3: true
+rhel7cis_rule_4_4_2_4_4: true
+
+# shadow password
+rhel7cis_rule_4_5_1_1: true
+rhel7cis_rule_4_5_1_2: true
+rhel7cis_rule_4_5_1_3: true
+rhel7cis_rule_4_5_1_4: true
+rhel7cis_rule_4_5_1_5: true
+
+# root and system accts
+rhel7cis_rule_4_5_2_1: true
+rhel7cis_rule_4_5_2_2: true
+rhel7cis_rule_4_5_2_3: true
+rhel7cis_rule_4_5_2_4: true
+
+# user default envs
+rhel7cis_rule_4_5_3_1: true
+rhel7cis_rule_4_5_3_2: true
+rhel7cis_rule_4_5_3_3: true
+
+##
+## Section 5 rules
+##
+
+# Rsyslog
+rhel7cis_rule_5_1_1_1: true
+rhel7cis_rule_5_1_1_2: true
+rhel7cis_rule_5_1_1_3: true
+rhel7cis_rule_5_1_1_4: true
+rhel7cis_rule_5_1_1_5: true
+rhel7cis_rule_5_1_1_6: true
+rhel7cis_rule_5_1_1_7: true
+
+# Journald
+rhel7cis_rule_5_1_2_1_1: true
+rhel7cis_rule_5_1_2_1_2: true
+rhel7cis_rule_5_1_2_1_3: true
+rhel7cis_rule_5_1_2_1_4: true
+rhel7cis_rule_5_1_2_2: true
+rhel7cis_rule_5_1_2_3: true
+rhel7cis_rule_5_1_2_4: true
+rhel7cis_rule_5_1_2_5: true
+rhel7cis_rule_5_1_2_6: true
 rhel7cis_rule_5_1_3: true
 rhel7cis_rule_5_1_4: true
-rhel7cis_rule_5_1_5: true
-rhel7cis_rule_5_1_6: true
-rhel7cis_rule_5_1_7: true
-rhel7cis_rule_5_1_8: true
-rhel7cis_rule_5_1_9: true
-rhel7cis_rule_5_2_1: true
-rhel7cis_rule_5_2_2: true
-rhel7cis_rule_5_2_3: true
+
+# Auditd
+rhel7cis_rule_5_2_1_1: true
+rhel7cis_rule_5_2_1_2: true
+rhel7cis_rule_5_2_1_3: true
+rhel7cis_rule_5_2_1_4: true
+rhel7cis_rule_5_2_2_1: true
+rhel7cis_rule_5_2_2_2: true
+rhel7cis_rule_5_2_2_3: true
+rhel7cis_rule_5_2_2_4: true
+
+# auditd rules
+rhel7cis_rule_5_2_3_1: true
+rhel7cis_rule_5_2_3_2: true
+rhel7cis_rule_5_2_3_3: true
+rhel7cis_rule_5_2_3_4: true
+rhel7cis_rule_5_2_3_5: true
+rhel7cis_rule_5_2_3_6: true
+rhel7cis_rule_5_2_3_7: true
+rhel7cis_rule_5_2_3_8: true
+rhel7cis_rule_5_2_3_9: true
+rhel7cis_rule_5_2_3_10: true
+rhel7cis_rule_5_2_3_11: true
+rhel7cis_rule_5_2_3_12: true
+rhel7cis_rule_5_2_3_13: true
+rhel7cis_rule_5_2_3_14: true
+rhel7cis_rule_5_2_3_15: true
+rhel7cis_rule_5_2_3_16: true
+rhel7cis_rule_5_2_3_17: true
+rhel7cis_rule_5_2_3_18: true
+rhel7cis_rule_5_2_3_19: true
+rhel7cis_rule_5_2_3_20: true
+rhel7cis_rule_5_2_3_21: true
+
+# auditd file access
+rhel7cis_rule_5_2_4_1: true
+rhel7cis_rule_5_2_4_2: true
+rhel7cis_rule_5_2_4_3: true
+rhel7cis_rule_5_2_4_4: true
+rhel7cis_rule_5_2_4_5: true
+rhel7cis_rule_5_2_4_6: true
+rhel7cis_rule_5_2_4_7: true
+rhel7cis_rule_5_2_4_8: true
+rhel7cis_rule_5_2_4_9: true
+rhel7cis_rule_5_2_4_10: true
+
+# Aide
 rhel7cis_rule_5_3_1: true
 rhel7cis_rule_5_3_2: true
-rhel7cis_rule_5_3_3: true
-rhel7cis_rule_5_3_4: true
-rhel7cis_rule_5_3_5: true
-rhel7cis_rule_5_3_6: true
-rhel7cis_rule_5_3_7: true
-rhel7cis_rule_5_3_8: true
-rhel7cis_rule_5_3_9: true
-rhel7cis_rule_5_3_10: true
-rhel7cis_rule_5_3_12: true
-rhel7cis_rule_5_3_11: true
-rhel7cis_rule_5_3_13: true
-rhel7cis_rule_5_3_14: true
-rhel7cis_rule_5_3_15: true
-rhel7cis_rule_5_3_16: true
-rhel7cis_rule_5_3_17: true
-rhel7cis_rule_5_3_18: true
-rhel7cis_rule_5_3_19: true
-rhel7cis_rule_5_3_20: true
-rhel7cis_rule_5_3_21: true
-rhel7cis_rule_5_3_22: true
-rhel7cis_rule_5_4_1: true
-rhel7cis_rule_5_4_2: true
-rhel7cis_rule_5_4_3: true
-rhel7cis_rule_5_4_4: true
-rhel7cis_rule_5_5_1_1: true
-rhel7cis_rule_5_5_1_2: true
-rhel7cis_rule_5_5_1_3: true
-rhel7cis_rule_5_5_1_4: true
-rhel7cis_rule_5_5_1_5: true
-rhel7cis_rule_5_5_2: true
-rhel7cis_rule_5_5_3: true
-rhel7cis_rule_5_5_4: true
-rhel7cis_rule_5_5_5: true
-rhel7cis_rule_5_6: true
-rhel7cis_rule_5_7: true
+
 # Section 6 rules
 # Section 6 is System Maintenance (System File Permissions and User and Group Settings)
 rhel7cis_rule_6_1_1: true

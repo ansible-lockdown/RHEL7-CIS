@@ -1,21 +1,45 @@
 ---
 
-- name: "SECTION | 4.1| Configure System Accounting (auditd)"
+- name: "SECTION | 4.1.x.x | Configure Job Schedulers"
   ansible.builtin.import_tasks:
-      file: cis_4.1.1.x.yml
+      file: cis_4.1.x.x.yml
 
-- name: "SECTION | 4.1.2.x| Configure Data Retention"
-  ansible.builtin.import_tasks:
-      file: cis_4.1.2.x.yml
-
-- name: "SECTION | 4.2.x| Configure Logging"
-  ansible.builtin.import_tasks:
-      file: cis_4.2.1.x.yml
-
-- name: "SECTION | 4.2.2.x| Configure journald"
-  ansible.builtin.import_tasks:
-      file: cis_4.2.2.x.yml
-
-- name: "SECTION | 4.2.x | logfile configuration"
+- name: "SECTION | 4.2.x | Configure SSH Server"
   ansible.builtin.import_tasks:
       file: cis_4.2.x.yml
+
+- name: "SECTION | 4.3.x | Configure Privilege Escalation"
+  ansible.builtin.import_tasks:
+      file: cis_4.3.x.yml
+
+- name: "SECTION | 4.4.1.x | Configure PAM software"
+  ansible.builtin.import_tasks:
+      file: cis_4.4.1.x.yml
+
+- name: "SECTION | 4.4.2.1.x | Configure pam_faillock"
+  ansible.builtin.import_tasks:
+      file: cis_4.4.2.1.x.yml
+
+- name: "SECTION | 4.4.2.2.x | Configure pam_pwquality"
+  ansible.builtin.import_tasks:
+      file: cis_4.4.2.2.x.yml
+
+- name: "SECTION | 4.4.2.3.x | Configure pam_pwhistory"
+  ansible.builtin.import_tasks:
+      file: cis_4.4.2.3.x.yml
+
+- name: "SECTION | 4.4.2.4.x | Configure pam_unix"
+  ansible.builtin.import_tasks:
+      file: cis_4.4.2.4.x.yml
+
+- name: "SECTION | 4.5.1.x | Configure shadow password settings"
+  ansible.builtin.import_tasks:
+      file: cis_4.5.1.x.yml
+
+- name: "SECTION | 4.5.2.x | Configure root and system accounts"
+  ansible.builtin.import_tasks:
+      file: cis_4.5.2.x.yml
+
+- name: "SECTION | 4.5.3.x | Configure user default env"
+  ansible.builtin.import_tasks:
+      file: cis_4.5.3.x.yml

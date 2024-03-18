@@ -1,223 +1,316 @@
 ---
-- name: "3.3.1 | PATCH | Ensure source routed packets are not accepted"
-  block:
-      - name: "3.3.1 | PATCH | Ensure source routed packets are not accepted | IPv4"
-        ansible.posix.sysctl:
-            name: '{{ item.name }}'
-            value: '{{ item.value }}'
-            sysctl_set: true
-            state: present
-            reload: true
-            ignoreerrors: true
-        with_items:
-            - { name: net.ipv4.conf.all.accept_source_route, value: 0 }
-            - { name: net.ipv4.conf.default.accept_source_route, value: 0 }
-        notify:
-            - sysctl flush ipv4 route table
 
-      - name: "3.3.1 | PATCH | Ensure source routed packets are not accepted | IPv6"
-        ansible.posix.sysctl:
-            name: '{{ item.name }}'
-            value: '{{ item.value }}'
-            sysctl_set: true
-            state: present
-            reload: true
-            ignoreerrors: true
-        with_items:
-            - { name: net.ipv6.conf.all.accept_source_route, value: 0 }
-            - { name: net.ipv6.conf.default.accept_source_route, value: 0 }
-        notify:
-            - sysctl flush ipv6 route table
-        when:
-            - rhel7cis_ipv6_required
+- name: "3.3.1 | PATCH | Ensure IP forwarding is disabled"
   when:
-      - rhel7cis_rule_3_3_1
+      - not rhel8cis_is_router
+      - rhel8cis_rule_3_3_1
   tags:
       - level1-server
       - level1-workstation
+      - automated
       - sysctl
       - patch
+      - NIST800-53R5_CM-1
+      - NIST800-53R5_CM-2
+      - NIST800-53R5_CM-6
+      - NIST800-53R5_CM-7
+      - NIST800-53R5_IA-5
       - rule_3.3.1
-
-- name: "3.3.2 | PATCH | Ensure ICMP redirects are not accepted"
   block:
-      - name: "3.3.2 | PATCH | Ensure ICMP redirects are not accepted | IPv4"
+      - name: "3.3.1 | PATCH | Ensure IP forwarding is disabled | Disable IPv4 forwarding"
         ansible.posix.sysctl:
-            name: '{{ item.name }}'
-            value: '{{ item.value }}'
-            sysctl_set: true
-            state: present
-            reload: true
+            name: net.ipv4.ip_forward
+            value: '0'
             ignoreerrors: true
-        with_items:
-            - { name: net.ipv4.conf.all.accept_redirects, value: 0 }
-            - { name: net.ipv4.conf.default.accept_redirects, value: 0 }
-        notify:
-            - sysctl flush ipv4 route table
+            sysctl_file: "{{ rhel8cis_sysctl_file }}"
+        notify: Sysctl_flush_ipv4_routes
 
-      - name: "3.3.2 | PATCH | Ensure ICMP redirects are not accepted | IPv6"
-        ansible.posix.sysctl:
-            name: '{{ item.name }}'
-            value: '{{ item.value }}'
-            sysctl_set: true
-            state: present
-            reload: true
-            ignoreerrors: true
-        with_items:
-            - { name: net.ipv6.conf.all.accept_redirects, value: 0 }
-            - { name: net.ipv6.conf.default.accept_redirects, value: 0 }
-        notify:
-            - sysctl flush ipv6 route table
+      - name: "3.3.1 | PATCH | Ensure IP forwarding is disabled | Disable IPv6 forwarding"
         when:
-            - rhel7cis_ipv6_required
+            - rhel8cis_ipv6_required or
+              rhel8cis_ipv6_sysctl_force
+        ansible.posix.sysctl:
+            name: net.ipv6.conf.all.forwarding
+            value: '0'
+            ignoreerrors: true
+            sysctl_file: "{{ rhel8cis_sysctl_file }}"
+        notify: Sysctl_flush_ipv6_routes
+
+- name: "3.3.2 | PATCH | Ensure packet redirect sending is disabled"
   when:
-      - rhel7cis_rule_3_3_2
+      - not rhel8cis_is_router
+      - rhel8cis_rule_3_3_2
   tags:
       - level1-server
       - level1-workstation
-      - sysctl
+      - automated
       - patch
+      - sysctl
+      - NIST800-53R5_CM-1
+      - NIST800-53R5_CM-2
+      - NIST800-53R5_CM-6
+      - NIST800-53R5_CM-7
+      - NIST800-53R5_IA-5
       - rule_3.3.2
-
-- name: "3.3.3 | PATCH | Ensure secure ICMP redirects are not accepted"
   ansible.posix.sysctl:
-      name: '{{ item.name }}'
-      value: '{{ item.value }}'
+      name: "{{ item.name }}"
+      value: "{{ item.value }}"
       sysctl_set: true
-      state: present
-      reload: true
       ignoreerrors: true
-  with_items:
-      - { name: net.ipv4.conf.all.secure_redirects, value: 0 }
-      - { name: net.ipv4.conf.default.secure_redirects, value: 0 }
-  notify:
-      - sysctl flush ipv4 route table
+      sysctl_file: "{{ rhel8cis_sysctl_file }}"
+  notify: Sysctl_flush_ipv4_routes
+  loop:
+      - { name: net.ipv4.conf.all.send_redirects, value: 0 }
+      - { name: net.ipv4.conf.default.send_redirects, value: 0 }
+
+- name: "3.3.3 | PATCH | Ensure bogus ICMP responses are ignored"
   when:
-      - rhel7cis_rule_3_3_3
+      - rhel8cis_rule_3_3_3
   tags:
       - level1-server
       - level1-workstation
-      - sysctl
+      - automated
       - patch
+      - sysctl
+      - NIST800-53R5_CM-1
+      - NIST800-53R5_CM-2
+      - NIST800-53R5_CM-6
+      - NIST800-53R5_CM-7
+      - NIST800-53R5_IA-5
       - rule_3.3.3
-
-- name: "3.3.4 | PATCH | Ensure suspicious packets are logged"
-  ansible.posix.sysctl:
-      name: '{{ item.name }}'
-      value: '{{ item.value }}'
-      sysctl_set: true
-      state: present
-      reload: true
-      ignoreerrors: true
-  with_items:
-      - { name: net.ipv4.conf.all.log_martians, value: 1 }
-      - { name: net.ipv4.conf.default.log_martians, value: 1 }
-  notify:
-      - sysctl flush ipv4 route table
-  when:
-      - rhel7cis_rule_3_3_4
-  tags:
-      - level1-server
-      - level1-workstation
-      - sysctl
-      - patch
-      - rule_3.3.4
-
-- name: "3.3.5 | PATCH | Ensure broadcast ICMP requests are ignored"
-  ansible.posix.sysctl:
-      name: net.ipv4.icmp_echo_ignore_broadcasts
-      value: '1'
-      state: present
-      reload: true
-      ignoreerrors: true
-  notify:
-      - sysctl flush ipv4 route table
-  when:
-      - rhel7cis_rule_3_3_5
-  tags:
-      - level1-server
-      - level1-workstation
-      - sysctl
-      - patch
-      - rule_3.3.5
-
-- name: "3.3.6 | PATCH | Ensure bogus ICMP responses are ignored"
   ansible.posix.sysctl:
       name: net.ipv4.icmp_ignore_bogus_error_responses
       value: '1'
       state: present
-      reload: true
       ignoreerrors: true
-  notify:
-      - sysctl flush ipv4 route table
+      sysctl_file: "{{ rhel8cis_sysctl_file }}"
+  notify: Sysctl_flush_ipv4_routes
+
+- name: "3.3.4 | PATCH | Ensure broadcast ICMP requests are ignored"
   when:
-      - rhel7cis_rule_3_3_6
+      - rhel8cis_rule_3_3_4
   tags:
       - level1-server
       - level1-workstation
-      - sysctl
+      - automated
       - patch
+      - sysctl
+      - NIST800-53R5_CM-1
+      - NIST800-53R5_CM-2
+      - NIST800-53R5_CM-6
+      - NIST800-53R5_CM-7
+      - NIST800-53R5_IA-5
+      - rule_3.3.3
+      - rule_3.3.4
+  ansible.posix.sysctl:
+      name: net.ipv4.icmp_echo_ignore_broadcasts
+      value: '1'
+      ignoreerrors: true
+      sysctl_file: "{{ rhel8cis_sysctl_file }}"
+  notify: Sysctl_flush_ipv4_routes
+
+- name: "3.3.5 | PATCH | Ensure ICMP redirects are not accepted"
+  when:
+      - rhel8cis_rule_3_3_5
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - sysctl
+      - NIST800-53R5_CM-1
+      - NIST800-53R5_CM-2
+      - NIST800-53R5_CM-6
+      - NIST800-53R5_CM-7
+      - NIST800-53R5_IA-5
+      - rule_3.3.5
+  block:
+      - name: "3.3.5 | PATCH | Ensure ICMP redirects are not accepted | Set ICMP redirects IPv4"
+        ansible.posix.sysctl:
+            name: "{{ item.name }}"
+            value: "{{ item.value }}"
+            sysctl_set: true
+            ignoreerrors: true
+            sysctl_file: "{{ rhel8cis_sysctl_file }}"
+        notify: Sysctl_flush_ipv4_routes
+        loop:
+            - { name: net.ipv4.conf.all.accept_redirects, value: 0 }
+            - { name: net.ipv4.conf.default.accept_redirects, value: 0 }
+
+      - name: "3.3.5 | PATCH | Ensure ICMP redirects are not accepted | Set ICMP redirects IPv6"
+        when: rhel8cis_ipv6_required or rhel8cis_ipv6_sysctl_force
+        ansible.posix.sysctl:
+            name: "{{ item.name }}"
+            value: "{{ item.value }}"
+            sysctl_set: true
+            ignoreerrors: true
+            sysctl_file: "{{ rhel8cis_sysctl_file }}"
+        notify: Sysctl_flush_ipv6_routes
+        loop:
+            - { name: net.ipv6.conf.all.accept_redirects, value: 0 }
+            - { name: net.ipv6.conf.default.accept_redirects, value: 0 }
+
+- name: "3.3.6 | PATCH | Ensure secure ICMP redirects are not accepted"
+  when:
+      - rhel8cis_rule_3_3_6
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - sysctl
+      - NIST800-53R5_CM-1
+      - NIST800-53R5_CM-2
+      - NIST800-53R5_CM-6
+      - NIST800-53R5_CM-7
+      - NIST800-53R5_IA-5
       - rule_3.3.6
+  ansible.posix.sysctl:
+      name: "{{ item.name }}"
+      value: "{{ item.value }}"
+      sysctl_set: true
+      ignoreerrors: true
+      sysctl_file: "{{ rhel8cis_sysctl_file }}"
+  notify: Sysctl_flush_ipv4_routes
+  loop:
+      - { name: net.ipv4.conf.all.secure_redirects, value: 0 }
+      - { name: net.ipv4.conf.default.secure_redirects, value: 0 }
 
 - name: "3.3.7 | PATCH | Ensure Reverse Path Filtering is enabled"
-  ansible.posix.sysctl:
-      name: '{{ item.name }}'
-      value: '{{ item.value }}'
-      sysctl_set: true
-      state: present
-      reload: true
-      ignoreerrors: true
-  with_items:
-      - { name: net.ipv4.conf.all.rp_filter, value: 1 }
-      - { name: net.ipv4.conf.default.rp_filter, value: 1 }
-  notify:
-      - sysctl flush ipv4 route table
   when:
-      - rhel7cis_rule_3_3_7
+      - rhel8cis_rule_3_3_7
   tags:
       - level1-server
       - level1-workstation
-      - sysctl
+      - automated
       - patch
+      - sysctl
+      - NIST800-53R5_CM-1
+      - NIST800-53R5_CM-2
+      - NIST800-53R5_CM-6
+      - NIST800-53R5_CM-7
+      - NIST800-53R5_IA-5
       - rule_3.3.7
+  ansible.posix.sysctl:
+      name: "{{ item }}"
+      value: '1'
+      sysctl_set: true
+      ignoreerrors: true
+      sysctl_file: "{{ rhel8cis_sysctl_file }}"
+  loop:
+      - net.ipv4.conf.all.rp_filter
+      - net.ipv4.conf.default.rp_filter
+  notify: Sysctl_flush_ipv4_routes
 
-- name: "3.3.8 | PATCH | Ensure TCP SYN Cookies is enabled"
+- name: "3.3.8 | PATCH | Ensure source routed packets are not accepted"
+  when:
+      - rhel8cis_rule_3_3_8
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - sysctl
+      - NIST800-53R5_CM-1
+      - NIST800-53R5_CM-2
+      - NIST800-53R5_CM-6
+      - NIST800-53R5_CM-7
+      - NIST800-53R5_IA-5
+      - rule_3.3.8
+  block:
+      - name: "3.3.8 | PATCH | Ensure source routed packets are not accepted | Set routed packets IPv4"
+        ansible.posix.sysctl:
+            name: "{{ item.name }}"
+            value: "{{ item.value }}"
+            sysctl_set: true
+            ignoreerrors: true
+            sysctl_file: "{{ rhel8cis_sysctl_file }}"
+        notify: Sysctl_flush_ipv4_routes
+        loop:
+            - { name: net.ipv4.conf.all.accept_source_route, value: 0 }
+            - { name: net.ipv4.conf.default.accept_source_route, value: 0 }
+
+      - name: "3.3.8 | PATCH | Ensure source routed packets are not accepted | Set routed packets IPv6"
+        when: rhel8cis_ipv6_required or rhel8cis_ipv6_sysctl_force
+        ansible.posix.sysctl:
+            name: "{{ item.name }}"
+            value: "{{ item.value }}"
+            sysctl_set: true
+            ignoreerrors: true
+            sysctl_file: "{{ rhel8cis_sysctl_file }}"
+        notify: Sysctl_flush_ipv6_routes
+        loop:
+            - { name: net.ipv6.conf.all.accept_source_route, value: 0}
+            - { name: net.ipv6.conf.default.accept_source_route, value: 0 }
+
+- name: "3.3.9 | PATCH | Ensure suspicious packets are logged"
+  when:
+      - rhel8cis_rule_3_3_9
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - sysctl
+      - NIST800-53R5_AU-3
+      - rule_3.3.9
+  ansible.posix.sysctl:
+      name: "{{ item.name }}"
+      value: "{{ item.value }}"
+      sysctl_set: true
+      ignoreerrors: true
+      sysctl_file: "{{ rhel8cis_sysctl_file }}"
+  notify: Sysctl_flush_ipv4_routes
+  loop:
+      - { name: net.ipv4.conf.all.log_martians, value: 1 }
+      - { name: net.ipv4.conf.default.log_martians, value: 1 }
+
+- name: "3.3.10 | PATCH | Ensure TCP SYN Cookies is enabled"
+  when:
+      - rhel8cis_rule_3_3_10
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - sysctl
+      - NIST800-53R5_CM-1
+      - NIST800-53R5_CM-2
+      - NIST800-53R5_CM-6
+      - NIST800-53R5_CM-7
+      - NIST800-53R5_IA-5
+      - rule_3.3.10
   ansible.posix.sysctl:
       name: net.ipv4.tcp_syncookies
       value: '1'
-      state: present
-      reload: true
+      sysctl_set: true
       ignoreerrors: true
-  notify:
-      - sysctl flush ipv4 route table
+      sysctl_file: "{{ rhel8cis_sysctl_file }}"
+  notify: Sysctl_flush_ipv4_routes
+
+- name: "3.3.11 | PATCH | Ensure IPv6 router advertisements are not accepted"
   when:
-      - rhel7cis_rule_3_3_8
+      - rhel8cis_ipv6_required or rhel8cis_ipv6_sysctl_force
+      - rhel8cis_rule_3_3_11
   tags:
       - level1-server
       - level1-workstation
-      - sysctl
+      - automated
       - patch
-      - rule_3.3.8
-
-- name: "3.3.9 |  PATCH | Ensure IPv6 router advertisements are not accepted"
+      - sysctl
+      - NIST800-53R5_CM-1
+      - NIST800-53R5_CM-2
+      - NIST800-53R5_CM-6
+      - NIST800-53R5_CM-7
+      - NIST800-53R5_IA-5
+      - rule_3.3.11
   ansible.posix.sysctl:
-      name: '{{ item.name }}'
-      value: '{{ item.value }}'
+      name: "{{ item.name }}"
+      value: "{{ item.value }}"
       sysctl_set: true
-      state: present
-      reload: true
       ignoreerrors: true
-  with_items:
+      sysctl_file: "{{ rhel8cis_sysctl_file }}"
+  notify: Sysctl_flush_ipv6_routes
+  loop:
       - { name: net.ipv6.conf.all.accept_ra, value: 0 }
       - { name: net.ipv6.conf.default.accept_ra, value: 0 }
-  notify:
-      - sysctl flush ipv6 route table
-  when:
-      - rhel7cis_ipv6_required
-      - rhel7cis_rule_3_3_9
-  tags:
-      - level1-server
-      - level1-workstation
-      - sysctl
-      - patch
-      - rule_3.3.9

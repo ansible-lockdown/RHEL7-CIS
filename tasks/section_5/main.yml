@@ -1,33 +1,41 @@
 ---
 
-- name: "SECTION | 5.1 | Configure time-based job schedulers"
+# 5.1 Configure Logging
+- name: "SECTION | 5.1.1.x | Configure rsyslog"
+  when: amazon2cis_syslog == 'rsyslog'
   ansible.builtin.import_tasks:
-      file: cis_5.1.x.yml
+      file: cis_5.1.1.x.yml
 
-- name: "SECTION | 5.2 | Configure Sudo"
+- name: "SECTION | 5.1.2.x | Configure journald"
+  when: amazon2cis_syslog == 'journald'
   ansible.builtin.import_tasks:
-      file: cis_5.2.x.yml
+      file: cis_5.1.2.x.yml
 
-- name: "SECTION | 5.3 | Configure SSH Server"
+- name: "SECTION | 5.1.3 | Configure logile perms"
+  ansible.builtin.import_tasks:
+      file: cis_5.1.3.yml
+
+- name: "SECTION | 5.1.4 | Configure logrotate"
+  ansible.builtin.import_tasks:
+      file: cis_5.1.4.yml
+
+# 5.2 Configure System Accounting (auditd)
+- name: "SECTION | 5.2.1 | Ensure auditing is enabled"
+  ansible.builtin.import_tasks:
+      file: cis_5.2.1.x.yml
+
+- name: "SECTION | 5.2.2 | Configure Data Retention"
+  ansible.builtin.import_tasks:
+      file: cis_5.2.2.x.yml
+
+- name: "SECTION | 5.2.3.x | Configure auditd rules"
+  ansible.builtin.import_tasks:
+      file: cis_5.2.3.x.yml
+
+- name: "SECTION | 5.2.4.x | Audit file permissions"
+  ansible.builtin.import_tasks:
+      file: cis_5.2.4.x.yml
+
+- name: "SECTION | 5.3.x | Aide"
   ansible.builtin.import_tasks:
       file: cis_5.3.x.yml
-
-- name: "SECTION | 5.4 | Configure PAM"
-  ansible.builtin.import_tasks:
-      file: cis_5.4.x.yml
-
-- name: "SECTION | 5.5.1 | Set Shadow Password Suite Parameters"
-  ansible.builtin.import_tasks:
-      file: cis_5.5.1.x.yml
-
-- name: "SECTION | 5.5 | User Accounts and Environment"
-  ansible.builtin.import_tasks:
-      file: cis_5.5.x.yml
-
-- name: "SECTION | 5.6 | User Accounts and Environment"
-  ansible.builtin.import_tasks:
-      file: cis_5.6.yml
-
-- name: "SECTION | 5.7 | User Accounts and Environment"
-  ansible.builtin.import_tasks:
-      file: cis_5.7.yml
