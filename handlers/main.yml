@@ -1,19 +1,4 @@
 ---
-# handlers file for RHEL7-CIS
-
-- name: sysctl flush ipv4 route table
-  ansible.posix.sysctl:
-      name: net.ipv4.route.flush
-      value: '1'
-      sysctl_set: true
-  when: ansible_virtualization_type != "docker"
-
-- name: sysctl flush ipv6 route table
-  ansible.posix.sysctl:
-      name: net.ipv6.route.flush
-      value: '1'
-      sysctl_set: true
-  when: ansible_virtualization_type != "docker"
 
 - name: systemd restart tmp.mount
   ansible.builtin.systemd:
@@ -23,41 +8,108 @@
       masked: false
       state: reloaded
 
-- name: remount tmp
-  ansible.builtin.command: mount -o remount /tmp
+- name: Remount dev_shm
+  ansible.posix.mount:
+      name: /dev/shm
+      state: remounted
 
-- name: remount dev_shm
-  ansible.builtin.command: mount -o remount /dev/shm
+- name: Remount home
+  ansible.posix.mount:
+      name: /home
+      state: remounted
 
-- name: remount var_tmp
-  ansible.builtin.command: mount -o remount /var/tmp
+- name: Remount var
+  ansible.posix.mount:
+      name: /var
+      state: remounted
 
-- name: systemd restart var-tmp.mount
+- name: Remount var_tmp
+  ansible.posix.mount:
+      name: /var/tmp
+      state: remounted
+
+- name: Remount var_log
+  ansible.posix.mount:
+      name: /var/log
+      state: remounted
+
+- name: Remount var_log_audit
+  ansible.posix.mount:
+      name: /var/log/audit
+      state: remounted
+
+- name: systemd daemon reload
   ansible.builtin.systemd:
-      name: var-tmp.mount
       daemon_reload: true
-      enabled: true
-      masked: false
-      state: reloaded
 
-- name: remount home
-  ansible.builtin.command: mount -o remount /home
+- name: Rebuild_grub
+  ansible.builtin.command: /sbin/grub2-mkconfig -o "{{ rhel7cis_bootloader_file }}"
 
-- name: update dconf
-  ansible.builtin.command: dconf update
-
-- name: restart firewalld
+- name: Restart_postfix
   ansible.builtin.service:
-      name: firewalld
+      name: postfix
       state: restarted
 
-- name: reboot_required
-  ansible.builtin.set_fact:
-      change_requires_reboot: true
+- name: Sysctl_flush_ipv4_routes
+  ansible.posix.sysctl:
+      name: net.ipv4.route.flush
+      value: '1'
+      sysctl_set: true
+  ignore_errors: true  # noqa ignore-errors
 
-- name: restart xinetd
+- name: Sysctl_flush_ipv6_routes
+  ansible.posix.sysctl:
+      name: net.ipv6.route.flush
+      value: '1'
+      sysctl_set: true
+  ignore_errors: true  # noqa ignore-errors
+
+- name: Restart_rsyslog
   ansible.builtin.service:
-      name: xinetd
+      name: rsyslog
+      state: restarted
+
+- name: Restart_journald
+  ansible.builtin.service:
+      name: systemd-journald
+      state: restarted
+
+- name: Restart_systemd_journal_upload
+  ansible.builtin.service:
+      name: systemd-journal-upload
+      state: restarted
+
+- name: update auditd
+  ansible.builtin.template:
+      src: audit/99_auditd.rules.j2
+      dest: /etc/audit/rules.d/99_auditd.rules
+      owner: root
+      group: root
+      mode: 0600
+  notify: Restart_auditd
+
+- name: Auditd_immutable_check
+  ansible.builtin.shell: grep -c "^-e 2" /etc/audit/rules.d/99_auditd.rules
+  changed_when: false
+  register: auditd_immutable_check
+
+- name: Audit_immutable_fact
+  ansible.builtin.debug:
+      msg: "Reboot required for auditd to apply new rules as immutable set"
+  notify: Change_requires_reboot
+  when:
+      - auditd_immutable_check.stdout == '1'
+
+- name: Restart_auditd
+  ansible.builtin.shell: /sbin/service auditd restart
+
+- name: grub2cfg
+  ansible.builtin.command: /sbin/grub2-mkconfig -o "{{ rhel7cis_bootloader_file }}"
+  notify: Change_requires_reboot
+
+- name: restart rsyslog
+  ansible.builtin.service:
+      name: rsyslog
       state: restarted
 
 - name: restart sshd
@@ -65,33 +117,6 @@
       name: sshd
       state: restarted
 
-- name: restart postfix
-  ansible.builtin.service:
-      name: postfix
-      state: restarted
-
-- name: reload dconf
-  ansible.builtin.command: dconf update
-
-- name: restart auditd
-  ansible.builtin.command: /sbin/service auditd restart
-  changed_when: false
-  check_mode: false
-  failed_when: false
-  when:
-      - not rhel7cis_skip_for_travis
-  tags:
-      - skip_ansible_lint
-
-- name: grub2cfg
-  ansible.builtin.command: /sbin/grub2-mkconfig -o "{{ rhel7cis_bootloader_path }}grub.cfg"
-
-- name: restart rsyslog
-  ansible.builtin.service:
-      name: rsyslog
-      state: restarted
-
-- name: restart syslog-ng
-  ansible.builtin.service:
-      name: syslog-ng
-      state: restarted
+- name: Change_requires_reboot
+  ansible.builtin.set_fact:
+      change_requires_reboot: true

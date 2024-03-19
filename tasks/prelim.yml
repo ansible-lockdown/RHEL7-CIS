@@ -1,87 +1,234 @@
 ---
+
 # Preliminary tasks that should always be run
 # List users in order to look files inside each home directory
+- name: Parse etc password
+  ansible.builtin.import_tasks:
+      file: parse_etc_password.yml
+  tags:
+      - always
+
 - name: "PRELIM | List users accounts"
   ansible.builtin.command: "awk -F: '{print $1}' /etc/passwd"
-  register: users
   changed_when: false
   check_mode: false
+  register: users
 
 - name: "PRELIM | Gather accounts with empty password fields"
   ansible.builtin.shell: "cat /etc/shadow | awk -F: '($2 == \"\" ) {j++;print $1; } END {exit j}'"
-  register: empty_password_accounts
   changed_when: false
   check_mode: false
-  tags:
-      - skip_ansible_lint
+  register: empty_password_accounts
 
 - name: "PRELIM | Gather UID 0 accounts other than root"
   ansible.builtin.shell: "cat /etc/passwd | awk -F: '($3 == 0 && $1 != \"root\") {i++;print $1 } END {exit i}'"
-  register: uid_zero_accounts_except_root
   changed_when: false
   check_mode: false
+  register: rhel7cis_uid_zero_accounts_except_root
+
+- name: "PRELIM | Gather interactive user ID min and max"
+  when:
+      - rhel7cis_uid_info_dynamic
   tags:
-      - skip_ansible_lint
-
-- name: "PRELIM | Check whether machine is UEFI-based"
-  ansible.builtin.stat:
-      path: /sys/firmware/efi
-  register: rhel7cis_efi_boot
-  changed_when: false
-
-- name: set bootloader type
+      - always
   block:
-      - name: "PRELIM | set fact if UEFI boot | RHEL or OEL"
-        ansible.builtin.set_fact:
-            rhel7cis_bootloader_path: /boot/efi/EFI/redhat/
-            rhel7cis_legacy_boot: false
-        when:
-            - rhel7cis_efi_boot.stat.exists
-            - ansible_distribution != 'CentOS'  # Note: rhel & OEL both use redhat path
+      - name: "PRELIM | Gather interactive user ID min"
+        ansible.builtin.shell: grep ^UID_MIN /etc/login.defs | awk '{print $2}'
+        changed_when: false
+        failed_when: false
+        register: rhel7cis_min_uid
 
-      - name: "PRELIM | set fact if UEFI boot | CentOS "
-        ansible.builtin.set_fact:
-            rhel7cis_bootloader_path: /boot/efi/EFI/centos/
-            rhel7cis_legacy_boot: false
-        when:
-            - rhel7cis_efi_boot.stat.exists
-            - ansible_distribution == 'CentOS'
+      - name: "PRELIM | Gather interactive user ID max"
+        ansible.builtin.shell: grep ^UID_MAX /etc/login.defs | awk '{print $2}'
+        changed_when: false
+        failed_when: false
+        register: rhel7cis_max_uid
 
-      - name: "PRELIM | set if not UEFI boot"
+      - name: "PRELIM | Setting the fact"
         ansible.builtin.set_fact:
-            rhel7cis_bootloader_path: /boot/grub2/
+            rhel7uid_interactive_uid_start: "{{ rhel7cis_min_uid.stdout | string }}"
+            rhel7uid_interactive_uid_stop: "{{ rhel7cis_max_uid.stdout | string }}"
+
+- name: "PRELIM | Set facts based on boot type"
+  tags:
+      - always
+  block:
+      - name: "PRELIM | Check whether machine is UEFI-based"
+        ansible.builtin.stat:
+            path: /sys/firmware/efi
+        register: rhel_07_efi_boot
+
+      - name: "PRELIM | set legacy boot and grub path | Bios"
+        when: not rhel_07_efi_boot.stat.exists
+        ansible.builtin.set_fact:
             rhel7cis_legacy_boot: true
-        when: not rhel7cis_efi_boot.stat.exists
+            grub2_path: /etc/grub2.cfg
+            rhel7cis_boot_path: /boot/grub2/
 
-      - name: output bootloader and efi state
-        ansible.builtin.debug:
-            msg:
-                - "bootloader path set to {{ rhel7cis_bootloader_path }}"
-                - "legacy boot equals {{ rhel7cis_legacy_boot }}"
+      - name: "PRELIM | set grub fact | UEFI"
+        when: rhel_07_efi_boot.stat.exists
+        ansible.builtin.set_fact:
+            grub2_path: /etc/grub2-efi.cfg
+            rhel7cis_boot_path: "/boot/efi/EFI/{{ansible_facts.distribution | lower }}/"
+
+- name: "PRELIM | AUDIT | Ensure permissions on bootloader config are configured | Get grub config file stats"
+  tags:
+      - always
+  ansible.builtin.stat:
+      path: "{{ grub2_path }}"
+  changed_when: false
+  register: grub_cfg
+
 
 - name: "PRELIM | Section 1.1 | Create list of mount points"
   ansible.builtin.set_fact:
       mount_names: "{{ ansible_mounts | map(attribute='mount') | list }}"
 
-- name: "PRELIM | Section 1.7 | Ensure SELinux is installed"
-  ansible.builtin.package:
-      name: libselinux
-      state: present
+- name: "PRELIM | Section 1.5 | SELinux"
+  block:
+      - name: "PRELIM | Section 1.5 | Ensure SELinux is installed"
+        ansible.builtin.package:
+            name:
+                - libselinux
+                - policycoreutils-python
+            state: present
+
+      - name: "PRELIM | Section 1.5 | Check current firewalld_t semanage state"
+        ansible.builtin.shell: semanage permissive -l | grep firewalld_t
+        changed_when: false
+        failed_when: false
+        register: firewalld_t_sestate
+
+      - name: "PRELIM | Section 1.5 | Ensure firewalld_t is set to permissive"
+        when: "'firewalld_t' not in firewalld_t_sestate.stdout"
+        ansible.builtin.shell: semanage permissive -a firewalld_t
   when:
       - not rhel7cis_selinux_disable
   vars:
       ansible_python_interpreter: /bin/python
 
-- name: "PRELIM | Section 4.1 | Configure System Accounting (auditd)"
+- name: "PRELIM | Find all sudoers files."
+  when:
+      - rhel7cis_rule_4_3_4 or
+        rhel7cis_rule_4_3_5
+  tags:
+      - always
+  ansible.builtin.shell: "find /etc/sudoers /etc/sudoers.d/ -type f ! -name '*~' ! -name '*.*'"
+  changed_when: false
+  failed_when: false
+  check_mode: false
+  register: rhel7cis_sudoers_files
+
+- name: "PRELIM | Section 5.2.x | Configure System Accounting (auditd)"
   ansible.builtin.package:
       name: audit
       state: present
   vars:
       ansible_python_interpreter: /bin/python
 
-- name: "PRELIM | Section 5.1 | Configure cron"
+- name: "PRELIM | 5.2.4.x | Ensure audit log files are mode 0640 or less permissive | discover file"
+  ansible.builtin.shell: "grep ^log_file /etc/audit/auditd.conf | awk '{ print $NF }'"
+  changed_when: false
+  failed_when: audit_discovered_logfile.rc not in [0, 1]
+  register: audit_discovered_logfile
+  when:
+      - rhel7cis_rule_5_2_4_1
+      - rhel7cis_rule_5_2_4_2
+      - rhel7cis_rule_5_2_4_3
+      - rhel7cis_rule_5_2_4_4
+  tags:
+      - level2-server
+      - level2-workstation
+      - patch
+      - auditd
+      - rule_5.2.4.1
+      - rule_5.2.4.2
+      - rule_5.2.4.3
+      - rule_5.2.4.4
+
+- name: "PRELIM | 5.2.4.5/6/7 | Audit conf and rules files | list files"
+  ansible.builtin.find:
+      path: /etc/audit
+      file_type: file
+      recurse: true
+      patterns: '*.conf,*.rules'
+  register: auditd_conf_files
+  when:
+      - rhel7cis_rule_5_2_4_5 or
+        rhel7cis_rule_5_2_4_6 or
+        rhel7cis_rule_5_2_4_7
+  tags:
+      - level2-server
+      - level2-workstation
+      - patch
+      - auditd
+      - rule_5.2.4.5
+      - rule_5.2.4.6
+      - rule_5.2.4.7
+
+- name: "PRELIM | Section 4.1.1.x | Configure cron"
   ansible.builtin.package:
       name: cronie
       state: present
   vars:
       ansible_python_interpreter: /bin/python
+
+- name: "PRELIM | Interactive User accounts home directories"
+  tags:
+      - always
+  ansible.builtin.shell: >
+      grep -E -v '^(root|halt|sync|shutdown)' /etc/passwd | awk -F: '(!index($7, "sbin/nologin") && $7 != "/bin/false") { print $6 }'
+  changed_when: false
+  register: interactive_users_home
+
+##### Optional #####
+
+- name: "PRELIM | Optional | If IPv6 disable to stop ssh listening"
+  when:
+      - rhel7cis_ipv6_sshd_disable
+      - not rhel7cis_ipv6_required
+  tags:
+      - always
+  ansible.builtin.lineinfile:
+      path: /etc/ssh/sshd_config
+      regexp: ^AddressFamily
+      line: AddressFamily inet
+  notify: Restart_sshd
+
+- name: "PRELIM | Optional | If IPv6 disable to stop chronyd listening"
+  when:
+      - rhel7cis_ipv6_chrony_disable
+      - not rhel7cis_ipv6_required
+  tags:
+      - always
+  notify: Restart_chronyd
+  block:
+      - name: "PRELIM | Optional | If IPv6 disable to stop chronyd listening | Check existence"
+        ansible.builtin.shell: grep -E "OPTIONS=.*-4" /etc/sysconfig/chronyd
+        changed_when: false
+        failed_when: chrony_ipv6_exists.rc not in [ 0, 1]
+        register: chrony_ipv6_exists
+
+      - name: "PRELIM | Optional | If IPv6 disable to stop chronyd listening"
+        when: chrony_ipv6_exists.stdout | length == 0
+        ansible.builtin.lineinfile:
+            backrefs: true
+            path: /etc/sysconfig/chronyd
+            regexp: ^OPTIONS="(.*)"
+            line: OPTIONS="\1 -4"
+
+# Optional extra keys to extend auditd not part of CIS but can influence a system
+# e.g. admin_space_left: '10%'
+
+- name: PRELIM | Optional | Configure other keys for auditd.conf
+  when:
+      - rhel7cis_auditd_extra_conf.keys() | length > 0
+      - rhel7cis_level_2
+  tags:
+      - always
+  ansible.builtin.lineinfile:
+      path: /etc/audit/auditd.conf
+      regexp: "^{{ item }}( |=)"
+      line: "{{ item }} = {{ rhel7cis_auditd_extra_conf[item] }}"
+  notify: Restart_auditd
+  loop: "{{ rhel7cis_auditd_extra_conf.keys() }}"

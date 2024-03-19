@@ -2,8 +2,8 @@
 
 - name: "3.3.1 | PATCH | Ensure IP forwarding is disabled"
   when:
-      - not rhel8cis_is_router
-      - rhel8cis_rule_3_3_1
+      - not rhel7cis_is_router
+      - rhel7cis_rule_3_3_1
   tags:
       - level1-server
       - level1-workstation
@@ -22,24 +22,24 @@
             name: net.ipv4.ip_forward
             value: '0'
             ignoreerrors: true
-            sysctl_file: "{{ rhel8cis_sysctl_file }}"
+            sysctl_file: "{{ rhel7cis_sysctl_file }}"
         notify: Sysctl_flush_ipv4_routes
 
       - name: "3.3.1 | PATCH | Ensure IP forwarding is disabled | Disable IPv6 forwarding"
         when:
-            - rhel8cis_ipv6_required or
-              rhel8cis_ipv6_sysctl_force
+            - rhel7cis_ipv6_required or
+              rhel7cis_ipv6_sysctl_force
         ansible.posix.sysctl:
             name: net.ipv6.conf.all.forwarding
             value: '0'
             ignoreerrors: true
-            sysctl_file: "{{ rhel8cis_sysctl_file }}"
+            sysctl_file: "{{ rhel7cis_sysctl_file }}"
         notify: Sysctl_flush_ipv6_routes
 
 - name: "3.3.2 | PATCH | Ensure packet redirect sending is disabled"
   when:
-      - not rhel8cis_is_router
-      - rhel8cis_rule_3_3_2
+      - not rhel7cis_is_router
+      - rhel7cis_rule_3_3_2
   tags:
       - level1-server
       - level1-workstation
@@ -57,7 +57,7 @@
       value: "{{ item.value }}"
       sysctl_set: true
       ignoreerrors: true
-      sysctl_file: "{{ rhel8cis_sysctl_file }}"
+      sysctl_file: "{{ rhel7cis_sysctl_file }}"
   notify: Sysctl_flush_ipv4_routes
   loop:
       - { name: net.ipv4.conf.all.send_redirects, value: 0 }
@@ -65,7 +65,7 @@
 
 - name: "3.3.3 | PATCH | Ensure bogus ICMP responses are ignored"
   when:
-      - rhel8cis_rule_3_3_3
+      - rhel7cis_rule_3_3_3
   tags:
       - level1-server
       - level1-workstation
@@ -83,12 +83,12 @@
       value: '1'
       state: present
       ignoreerrors: true
-      sysctl_file: "{{ rhel8cis_sysctl_file }}"
+      sysctl_file: "{{ rhel7cis_sysctl_file }}"
   notify: Sysctl_flush_ipv4_routes
 
 - name: "3.3.4 | PATCH | Ensure broadcast ICMP requests are ignored"
   when:
-      - rhel8cis_rule_3_3_4
+      - rhel7cis_rule_3_3_4
   tags:
       - level1-server
       - level1-workstation
@@ -106,12 +106,12 @@
       name: net.ipv4.icmp_echo_ignore_broadcasts
       value: '1'
       ignoreerrors: true
-      sysctl_file: "{{ rhel8cis_sysctl_file }}"
+      sysctl_file: "{{ rhel7cis_sysctl_file }}"
   notify: Sysctl_flush_ipv4_routes
 
 - name: "3.3.5 | PATCH | Ensure ICMP redirects are not accepted"
   when:
-      - rhel8cis_rule_3_3_5
+      - rhel7cis_rule_3_3_5
   tags:
       - level1-server
       - level1-workstation
@@ -131,20 +131,20 @@
             value: "{{ item.value }}"
             sysctl_set: true
             ignoreerrors: true
-            sysctl_file: "{{ rhel8cis_sysctl_file }}"
+            sysctl_file: "{{ rhel7cis_sysctl_file }}"
         notify: Sysctl_flush_ipv4_routes
         loop:
             - { name: net.ipv4.conf.all.accept_redirects, value: 0 }
             - { name: net.ipv4.conf.default.accept_redirects, value: 0 }
 
       - name: "3.3.5 | PATCH | Ensure ICMP redirects are not accepted | Set ICMP redirects IPv6"
-        when: rhel8cis_ipv6_required or rhel8cis_ipv6_sysctl_force
+        when: rhel7cis_ipv6_required or rhel7cis_ipv6_sysctl_force
         ansible.posix.sysctl:
             name: "{{ item.name }}"
             value: "{{ item.value }}"
             sysctl_set: true
             ignoreerrors: true
-            sysctl_file: "{{ rhel8cis_sysctl_file }}"
+            sysctl_file: "{{ rhel7cis_sysctl_file }}"
         notify: Sysctl_flush_ipv6_routes
         loop:
             - { name: net.ipv6.conf.all.accept_redirects, value: 0 }
@@ -152,7 +152,7 @@
 
 - name: "3.3.6 | PATCH | Ensure secure ICMP redirects are not accepted"
   when:
-      - rhel8cis_rule_3_3_6
+      - rhel7cis_rule_3_3_6
   tags:
       - level1-server
       - level1-workstation
@@ -170,7 +170,7 @@
       value: "{{ item.value }}"
       sysctl_set: true
       ignoreerrors: true
-      sysctl_file: "{{ rhel8cis_sysctl_file }}"
+      sysctl_file: "{{ rhel7cis_sysctl_file }}"
   notify: Sysctl_flush_ipv4_routes
   loop:
       - { name: net.ipv4.conf.all.secure_redirects, value: 0 }
@@ -178,7 +178,7 @@
 
 - name: "3.3.7 | PATCH | Ensure Reverse Path Filtering is enabled"
   when:
-      - rhel8cis_rule_3_3_7
+      - rhel7cis_rule_3_3_7
   tags:
       - level1-server
       - level1-workstation
@@ -196,7 +196,7 @@
       value: '1'
       sysctl_set: true
       ignoreerrors: true
-      sysctl_file: "{{ rhel8cis_sysctl_file }}"
+      sysctl_file: "{{ rhel7cis_sysctl_file }}"
   loop:
       - net.ipv4.conf.all.rp_filter
       - net.ipv4.conf.default.rp_filter
@@ -204,7 +204,7 @@
 
 - name: "3.3.8 | PATCH | Ensure source routed packets are not accepted"
   when:
-      - rhel8cis_rule_3_3_8
+      - rhel7cis_rule_3_3_8
   tags:
       - level1-server
       - level1-workstation
@@ -224,20 +224,20 @@
             value: "{{ item.value }}"
             sysctl_set: true
             ignoreerrors: true
-            sysctl_file: "{{ rhel8cis_sysctl_file }}"
+            sysctl_file: "{{ rhel7cis_sysctl_file }}"
         notify: Sysctl_flush_ipv4_routes
         loop:
             - { name: net.ipv4.conf.all.accept_source_route, value: 0 }
             - { name: net.ipv4.conf.default.accept_source_route, value: 0 }
 
       - name: "3.3.8 | PATCH | Ensure source routed packets are not accepted | Set routed packets IPv6"
-        when: rhel8cis_ipv6_required or rhel8cis_ipv6_sysctl_force
+        when: rhel7cis_ipv6_required or rhel7cis_ipv6_sysctl_force
         ansible.posix.sysctl:
             name: "{{ item.name }}"
             value: "{{ item.value }}"
             sysctl_set: true
             ignoreerrors: true
-            sysctl_file: "{{ rhel8cis_sysctl_file }}"
+            sysctl_file: "{{ rhel7cis_sysctl_file }}"
         notify: Sysctl_flush_ipv6_routes
         loop:
             - { name: net.ipv6.conf.all.accept_source_route, value: 0}
@@ -245,7 +245,7 @@
 
 - name: "3.3.9 | PATCH | Ensure suspicious packets are logged"
   when:
-      - rhel8cis_rule_3_3_9
+      - rhel7cis_rule_3_3_9
   tags:
       - level1-server
       - level1-workstation
@@ -259,7 +259,7 @@
       value: "{{ item.value }}"
       sysctl_set: true
       ignoreerrors: true
-      sysctl_file: "{{ rhel8cis_sysctl_file }}"
+      sysctl_file: "{{ rhel7cis_sysctl_file }}"
   notify: Sysctl_flush_ipv4_routes
   loop:
       - { name: net.ipv4.conf.all.log_martians, value: 1 }
@@ -267,7 +267,7 @@
 
 - name: "3.3.10 | PATCH | Ensure TCP SYN Cookies is enabled"
   when:
-      - rhel8cis_rule_3_3_10
+      - rhel7cis_rule_3_3_10
   tags:
       - level1-server
       - level1-workstation
@@ -285,13 +285,13 @@
       value: '1'
       sysctl_set: true
       ignoreerrors: true
-      sysctl_file: "{{ rhel8cis_sysctl_file }}"
+      sysctl_file: "{{ rhel7cis_sysctl_file }}"
   notify: Sysctl_flush_ipv4_routes
 
 - name: "3.3.11 | PATCH | Ensure IPv6 router advertisements are not accepted"
   when:
-      - rhel8cis_ipv6_required or rhel8cis_ipv6_sysctl_force
-      - rhel8cis_rule_3_3_11
+      - rhel7cis_ipv6_required or rhel7cis_ipv6_sysctl_force
+      - rhel7cis_rule_3_3_11
   tags:
       - level1-server
       - level1-workstation
@@ -309,7 +309,7 @@
       value: "{{ item.value }}"
       sysctl_set: true
       ignoreerrors: true
-      sysctl_file: "{{ rhel8cis_sysctl_file }}"
+      sysctl_file: "{{ rhel7cis_sysctl_file }}"
   notify: Sysctl_flush_ipv6_routes
   loop:
       - { name: net.ipv6.conf.all.accept_ra, value: 0 }

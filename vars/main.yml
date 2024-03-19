@@ -1,2 +1,14 @@
 ---
 # vars file for RHEL7-CIS
+
+## Defaults
+min_ansible_version: 2.11.1
+system_is_container: false
+system_is_ec2: false
+update_audit_template: false
+
+change_requires_reboot: false
+
+# Used to control warning summary
+warn_control_list: ""
+warn_count: 0

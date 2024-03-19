@@ -4,68 +4,68 @@
   when:
       - rhel7cis_rule_1_4_1
   tags:
-      - level1-server
-      - level1-workstation
+      - level1
       - automated
       - patch
-      - sysctl
-      - NIST800-53R5_CM-6
       - rule_1.4.1
+      - NIST800-53R5_CM-6
   ansible.posix.sysctl:
       name: kernel.randomize_va_space
       value: '2'
+      state: present
       reload: true
-      sysctl_file: /etc/sysctl.d/60-kernel_sysctl.conf
       sysctl_set: true
       ignoreerrors: true
+      sysctl_file: "{{ kernel_sysctl_file }}"
 
 - name: "1.4.2 | PATCH | Ensure ptrace_scope is restricted"
   when:
       - rhel7cis_rule_1_4_2
   tags:
-      - level1-server
-      - level1-workstation
+      - level1
       - automated
       - patch
-      - sysctl
-      - NIST800-53R5_CM-6
       - rule_1.4.2
   ansible.posix.sysctl:
       name: kernel.yama.ptrace_scope
       value: '1'
+      state: present
       reload: true
-      sysctl_file: /etc/sysctl.d/60-kernel_sysctl.conf
       sysctl_set: true
       ignoreerrors: true
+      sysctl_file: "{{ kernel_sysctl_file }}"
 
 - name: "1.4.3 | PATCH | Ensure core dump backtraces are disabled"
-  tags:
-      - level1-server
-      - level1-workstation
-      - automated
-      - patch
-      - sysctl
-      - NIST800-53R5_CM-6
-      - rule_1.4.3
-  ansible.builtin.lineinfile:
-      path: /etc/systemd/coredump.conf
-      regexp: 'ProcessSizeMax='
-      line: 'ProcessSizeMax=0'
   when:
       - rhel7cis_rule_1_4_3
+  tags:
+      - level1
+      - automated
+      - patch
+      - rule_1.4.3
+      - coredump
+      - NIST800-53R5_CM-6b
+  notify: systemd daemon reload
+  ansible.builtin.lineinfile:
+      dest: /etc/systemd/coredump.conf
+      regexp: ^ProcessSizeMax
+      line: ProcessSizeMax=0
+      create: true
+      mode: '0644'
 
 - name: "1.4.4 | PATCH | Ensure core dump storage is disabled"
   when:
       - rhel7cis_rule_1_4_4
-      - systemd_coredump.stat.exists
   tags:
-      - level1-server
-      - level1-workstation
+      - level1
       - automated
       - patch
       - rule_1.4.4
-  notify: Systemd_daemon_reload
+      - coredump
+  notify: systemd daemon reload
   ansible.builtin.lineinfile:
-      path: /etc/systemd/coredump.conf
-      regexp: 'Storage='
-      line: 'Storage=none'
+      dest: /etc/systemd/coredump.conf
+      regexp: ^Storage
+      line: Storage=none
+      create: true
+      mode: '0644'

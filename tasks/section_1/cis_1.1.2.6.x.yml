@@ -1,61 +1,57 @@
 ---
 
-- name: "1.1.2.6.1 | AUDIT | Ensure separate partition exists for /var/log"
+- name: "1.1.2.6.1 | PATCH | Ensure /var/log is a seperate partition"
   when:
+      - required_mount not in mount_names
       - rhel7cis_rule_1_1_2_6_1
-      - "'/var/log' not in mount_names"
   tags:
-      - level2-server
-      - level2-workstation
+      - level2
       - automated
-      - audit
-      - mounts
+      - patch
       - rule_1.1.2.6.1
+      - mounts
       - NIST800-53R5_CM-7
   vars:
       warn_control_id: '1.1.2.6.1'
       required_mount: '/var/log'
+
   block:
-      - name: "1.1.2.6.1 | AUDIT | Ensure separate partition exists for /var/log | Warn if partition is absent"
+      - name: "1.1.2.6.1 | AUDIT | Ensure /var/log is a separate partition | Absent"
         ansible.builtin.debug:
             msg: "Warning!! {{ required_mount }} doesn't exist. This is a manual task"
-        register: var_log_mount_absent
-        changed_when: var_log_mount_absent.skipped is undefined
 
-      - name: "1.1.2.6.1 | AUDIT | Ensure separate partition exists for /var/log | Present"
+      - name: "1.1.2.6.1 | AUDIT | Ensure /var/log is a separate partition | Warn Count"
         ansible.builtin.import_tasks:
             file: warning_facts.yml
 
-# skips if mount is absent
 - name: |
-          "1.1.2.6.2 | PATCH | Ensure nodev option set on /var/log partition"
-          "1.1.2.6.3 | PATCH | Ensure nosuid option set on /var/log partition"
-          "1.1.2.6.4 | PATCH | Ensure noexec option set on /var/log partition"
+         "1.1.2.6.2 | PATCH | Ensure nodev option set on /var/log partition
+          1.1.2.6.3 | PATCH | Ensure nosuid option set on /var/log partition
+          1.1.2.6.4 | PATCH | Ensure noexec option set on /var/log partition"
   when:
-      - "'/var/log' in mount_names"
       - item.mount == "/var/log"
+      - rhel7cis_tmp_svc
       - rhel7cis_rule_1_1_2_6_2 or
         rhel7cis_rule_1_1_2_6_3 or
         rhel7cis_rule_1_1_2_6_4
   tags:
-      - level1-server
-      - level1-workstation
+      - level2
       - automated
       - patch
-      - mounts
-      - skip_ansible_lint
       - rule_1.1.2.6.2
       - rule_1.1.2.6.3
       - rule_1.1.2.6.4
+      - mounts
       - NIST800-53R5_AC-3
       - NIST800-53R5_MP-2
-  notify: Change_requires_reboot
   ansible.posix.mount:
       name: /var/log
       src: "{{ item.device }}"
       fstype: "{{ item.fstype }}"
       state: present
       opts: defaults,{% if rhel7cis_rule_1_1_2_6_2 %}nodev,{% endif %}{% if rhel7cis_rule_1_1_2_6_3 %}nosuid,{% endif %}{% if rhel7cis_rule_1_1_2_6_4 %}noexec{% endif %}
-  loop: "{{ ansible_facts.mounts }}"
+  notify: Remount var_log
+  with_items:
+      - "{{ ansible_mounts }}"
   loop_control:
       label: "{{ item.device }}"

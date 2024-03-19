@@ -10,6 +10,8 @@
       - automated
       - patch
       - rule_2.1.1
+      - NIST800-53R5_AU-3
+      - NIST800-53R5_AU-12
   ansible.builtin.package:
       name: "{{ rhel7cis_time_synchronization }}"
       state: present

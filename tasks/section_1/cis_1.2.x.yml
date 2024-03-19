@@ -43,9 +43,9 @@
         loop_control:
             label: "{{ item.path }}"
 
-      - name: "1.2.2 | PATCH | Ensure gpgcheck is globally activated | Update dnf.conf"
+      - name: "1.2.2 | PATCH | Ensure gpgcheck is globally activated | Update yum.conf"
         ansible.builtin.lineinfile:
-            path: /etc/dnf/dnf.conf
+            path: /etc/yum.conf
             regexp: ^(#|)gpgcheck=
             line: gpgcheck=1
 
@@ -76,9 +76,9 @@
         loop_control:
             label: "{{ item.path }}"
 
-      - name: "1.2.3 | PATCH | Ensure repo_gpgcheck is globally activated | Update dnf.conf"
+      - name: "1.2.3 | PATCH | Ensure repo_gpgcheck is globally activated | Update yum.conf"
         ansible.builtin.lineinfile:
-            path: /etc/dnf/dnf.conf
+            path: /etc/yum.conf
             regexp: ^(#|)repo_gpgcheck=
             line: repo_gpgcheck=1
 
@@ -96,7 +96,7 @@
       warn_control_id: '1.2.4'
   block:
       - name: "1.2.4 | AUDIT | Ensure package manager repositories are configured | Get repo list"
-        ansible.builtin.shell: dnf repolist
+        ansible.builtin.shell: yum repolist
         changed_when: false
         failed_when: false
         register: dnf_configured
@@ -145,6 +145,6 @@
       - kernel_limit
       - rule_1.2.5
   ansible.builtin.lineinfile:
-      path: /etc/dnf/dnf.conf
+      path: /etc/yum.conf
       regexp: ^installonly_limit=
       line: installonly_limit={{ rhel7cis_installed_kernel_limit }}

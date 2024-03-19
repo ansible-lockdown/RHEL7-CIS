@@ -2,12 +2,12 @@
 
 # 5.1 Configure Logging
 - name: "SECTION | 5.1.1.x | Configure rsyslog"
-  when: amazon2cis_syslog == 'rsyslog'
+  when: rhel7cis_syslog == 'rsyslog'
   ansible.builtin.import_tasks:
       file: cis_5.1.1.x.yml
 
 - name: "SECTION | 5.1.2.x | Configure journald"
-  when: amazon2cis_syslog == 'journald'
+  when: rhel7cis_syslog == 'journald'
   ansible.builtin.import_tasks:
       file: cis_5.1.2.x.yml
 

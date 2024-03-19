@@ -53,6 +53,7 @@
   ansible.builtin.import_tasks:
       file: cis_1.6.x.yml
 
-- name: "SECTION | 1.7 | GDM Login"
+- name: "SECTION | 1.7 | Gnome desktop"
+  when: rhel7cis_gui
   ansible.builtin.import_tasks:
       file: cis_1.7.x.yml

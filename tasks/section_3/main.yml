@@ -18,31 +18,31 @@
 
 - name: "SECTION | 3.4.2 | Configure firewalld"
   when:
-  - amazon2cis_system_firewall == "firewalld"
+  - rhel7cis_system_firewall == "firewalld"
   ansible.builtin.import_tasks:
       file: cis_3.4.2.x.yml
 
 - name: "SECTION | 3.4.3 | Configure nftables"
   when:
-  - amazon2cis_system_firewall == "nftables"
+  - rhel7cis_system_firewall == "nftables"
   ansible.builtin.import_tasks:
       file: cis_3.4.3.x.yml
 
 - name: "SECTION | 3.4.4.1.x | Configure iptables software"
   when:
-  - amazon2cis_system_firewall == "iptables"
+  - rhel7cis_system_firewall == "iptables"
   ansible.builtin.import_tasks:
       file: cis_3.4.4.1.x.yml
 
 - name: "SECTION | 3.4.4.2.x | Configure iptables"
   when:
-  - amazon2cis_system_firewall == "iptables"
+  - rhel7cis_system_firewall == "iptables"
   ansible.builtin.import_tasks:
       file: cis_3.4.4.2.x.yml
 
 - name: "SECTION | 3.4.4.3.x | Configure ip6tables"
   when:
-  - amazon2cis_system_firewall == "iptables"
-  - amazon2cis_ipv6_required
+  - rhel7cis_system_firewall == "iptables"
+  - rhel7cis_ipv6_required
   ansible.builtin.import_tasks:
       file: cis_3.4.4.3.x.yml

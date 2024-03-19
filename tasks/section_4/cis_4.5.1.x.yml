@@ -27,7 +27,7 @@
 
       - name: "4.5.1.1 | PATCH | Ensure strong password hashing algorithm is configured | Captures users who need to change passwd"
         when: rhel7cis_force_user_passwd_change
-        ansible.builtin.shell: "awk -F '( $3>='{{ rhel7cis_uid_min }}' && $1 != 'nfsnobody' ) { print $1 }' /etc/passwd"
+        ansible.builtin.shell: "awk -F: '( $3>='{{ rhel7cis_uid_min }}' && $1 != 'nfsnobody' ) { print $1 }' /etc/passwd"
         failed_when: false
         changed_when: false
         register: rhel7cis_4_5_1_1_user_crypt_password
@@ -36,9 +36,8 @@
         when:
             - rhel7cis_force_user_passwd_change
             - rhel7cis_4_5_1_1_user_crypt_password.stdout | length > 0
-        ansible.builtin.shell: "xargs -n 1 chage -d 0 {{ item }}"
-        loop:
-            - rhel7cis_4_5_1_1_user_crypt_password.stdout_lines
+        ansible.builtin.shell: "chage -d 0 {{ item }}"
+        loop: "{{ rhel7cis_4_5_1_1_user_crypt_password.stdout_lines }}"
 
 - name: "4.5.1.2 | PATCH | Ensure password expiration is 365 days or less"
   when:

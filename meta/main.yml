@@ -1,7 +1,7 @@
 ---
 
 galaxy_info:
-    author: "MindPoint group"
+    author: "MindPoint Group"
     description: "Apply the CIS RHEL7 role"
     company: "MindPoint Group"
     license: MIT
