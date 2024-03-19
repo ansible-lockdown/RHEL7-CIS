@@ -77,7 +77,7 @@
       mode: '0600'
 
 - name: Pre Audit | Run pre_remediation {{ benchmark }} audit
-  ansible.builtin.shell: "{{ audit_conf_dir }}/run_audit.sh -v {{ audit_vars_path }} -o {{ pre_audit_outfile }} -g \"{{ group_names }}\""
+  ansible.builtin.shell: "{{ audit_conf_dir }}/run_audit.sh -v {{ audit_vars_path }} -f {{ audit_format }} -o {{ pre_audit_outfile }} -g \"{{ group_names }}\""
   changed_when: true
   environment:
       AUDIT_BIN: "{{ audit_bin }}"

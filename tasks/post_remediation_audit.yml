@@ -1,7 +1,7 @@
 ---
 
 - name: Post Audit | Run post_remediation {{ benchmark }} audit
-  ansible.builtin.shell: "{{ audit_conf_dir }}/run_audit.sh -v {{ audit_vars_path }} -o {{ post_audit_outfile }} -g \"{{ group_names }}\""
+  ansible.builtin.shell: "{{ audit_conf_dir }}/run_audit.sh -v {{ audit_vars_path }} -f {{ audit_format }} -o {{ post_audit_outfile }} -g \"{{ group_names }}\""
   changed_when: true
   environment:
       AUDIT_BIN: "{{ audit_bin }}"
@@ -36,7 +36,7 @@
   when:
       - audit_format == "documentation"
   block:
-      - name: Post Audit | capture data {{ post_audit_outfile }}
+      - name: Post Audit | Capture data {{ post_audit_outfile }}
         ansible.builtin.shell: tail -2 {{ post_audit_outfile }}
         register: post_audit
         changed_when: false
