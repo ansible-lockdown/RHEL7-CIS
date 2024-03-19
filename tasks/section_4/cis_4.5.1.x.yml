@@ -125,9 +125,6 @@
         failed_when: rhel7cis_users_inactive_def.rc not in [ 0, 1 ]
         register: rhel7cis_users_inactive_def
 
-      - ansible.builtin.debug:
-            msg: "{{ rhel7cis_users_inactive_def.stdout }}"
-
       - name: "4.5.1.4 | PATCH | Ensure inactive password lock is 30 days or less | change default"
         when:
             - rhel7cis_users_inactive_def is defined

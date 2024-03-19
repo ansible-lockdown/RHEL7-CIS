@@ -79,7 +79,6 @@
   changed_when: false
   register: grub_cfg
 
-
 - name: "PRELIM | Section 1.1 | Create list of mount points"
   ansible.builtin.set_fact:
       mount_names: "{{ ansible_mounts | map(attribute='mount') | list }}"
