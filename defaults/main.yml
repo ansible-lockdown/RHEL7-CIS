@@ -586,7 +586,7 @@ rhel7cis_nis_server: true  # set to mask if nis client required
 rhel7cis_nis_mask: false
 rhel7cis_print_server: false  # replaces cups
 rhel7cis_print_mask: false
-rhel7cis_rpc_server: true
+rhel7cis_rpc_server: false
 rhel7cis_rpc_mask: true
 rhel7cis_rsync_server: false
 rhel7cis_rsync_mask: false

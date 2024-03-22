@@ -38,7 +38,7 @@
       name: /var/log/audit
       state: remounted
 
-- name: systemd daemon reload
+- name: Systemd_daemon_reload
   ansible.builtin.systemd:
       daemon_reload: true
 

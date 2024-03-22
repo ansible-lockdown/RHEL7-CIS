@@ -45,7 +45,7 @@
       - rule_1.4.3
       - coredump
       - NIST800-53R5_CM-6b
-  notify: systemd daemon reload
+  notify: Systemd_daemon_reload
   ansible.builtin.lineinfile:
       dest: /etc/systemd/coredump.conf
       regexp: ^ProcessSizeMax
@@ -62,7 +62,7 @@
       - patch
       - rule_1.4.4
       - coredump
-  notify: systemd daemon reload
+  notify: Systemd_daemon_reload
   ansible.builtin.lineinfile:
       dest: /etc/systemd/coredump.conf
       regexp: ^Storage
