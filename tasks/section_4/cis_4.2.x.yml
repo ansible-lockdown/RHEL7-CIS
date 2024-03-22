@@ -102,7 +102,7 @@
             line: AllowUsers {{ rhel7cis_sshd['allowusers'] }}
             validate: 'sshd -t -f %s'
         notify: restart sshd
-        when: "rhel7cis_sshd['allowusers']|default('') | length > 0"
+        when: "rhel7cis_sshd['allowusers']| default('') | length > 0"
 
       - name: "4.2.4 | PATCH | Ensure sshd access is configured | Add line to sshd_config for allowgroups"
         ansible.builtin.lineinfile:
@@ -111,7 +111,7 @@
             line: AllowGroups {{ rhel7cis_sshd['allowgroups'] }}
             validate: 'sshd -t -f %s'
         notify: restart sshd
-        when: "rhel7cis_sshd['allowgroups']|default('') | length > 0"
+        when: "rhel7cis_sshd['allowgroups']| default('') | length > 0"
 
       - name: "4.2.4 | PATCH | Ensure sshd access is configured | Add line to sshd_config for denyusers"
         ansible.builtin.lineinfile:
@@ -120,7 +120,7 @@
             line: DenyUsers {{ rhel7cis_sshd['denyusers'] }}
             validate: 'sshd -t -f %s'
         notify: restart sshd
-        when: "rhel7cis_sshd['denyusers']|default('') | length > 0"
+        when: "rhel7cis_sshd['denyusers']| default('') | length > 0"
 
       - name: "4.2.4 | PATCH | Ensure sshd access is configured | Add line to sshd_config for denygroups"
         ansible.builtin.lineinfile:
@@ -129,7 +129,7 @@
             line: DenyGroups {{ rhel7cis_sshd['denygroups'] }}
             validate: 'sshd -t -f %s'
         notify: restart sshd
-        when: "rhel7cis_sshd['denygroups']|default('') | length > 0"
+        when: "rhel7cis_sshd['denygroups']| default('') | length > 0"
 
 - name: "4.2.5 | PATCH | Ensure SSH banner is configured"
   when:
