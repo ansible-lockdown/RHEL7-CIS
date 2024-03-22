@@ -560,7 +560,7 @@ rhel7cis_ipv6_chrony_disable: false
 
 # Service configuration
 # Options are
-# true to leave installed if exists not changes take place
+# true to leave installed if exists no changes take place
 # false - this removes the package
 # mask - if a dependancy for product so cannot be removed
 # Server Services
@@ -580,7 +580,7 @@ rhel7cis_ftp_server: false
 rhel7cis_ftp_mask: false
 rhel7cis_message_server: false  # This is for messaging dovecot and cyrus-imap
 rhel7cis_message_mask: false
-rhel7cis_nfs_server: true
+rhel7cis_nfs_server: false
 rhel7cis_nfs_mask: true
 rhel7cis_nis_server: true  # set to mask if nis client required
 rhel7cis_nis_mask: false
