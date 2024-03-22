@@ -29,67 +29,68 @@
   block:
       - name: "3.4.1.2 | PATCH | Ensure a single firewall configuration utility is in use | firewalld"
         when:
-            - "'iptables-services' in ansible_facts.packages"
             - rhel7cis_system_firewall == "firewalld"
             - rhel7cis_iptables == "mask"
         ansible.builtin.systemd:
             name: "{{ item }}"
+            enabled: "{{ (item in ansible_facts.packages) | ternary(false, omit) }}"
+            state: "{{ (item in ansible_facts.packages) | ternary('stopped', omit) }}"
             masked: true
-            state: stopped
         loop:
             - iptables-services
             - ip6tables-services
 
       - name: "3.4.1.2 | PATCH | Ensure a single firewall configuration utility is in use | firewalld"
         when:
-            - "'nftables' in ansible_facts.packages"
             - rhel7cis_system_firewall == "firewalld"
             - rhel7cis_nftables == "mask"
         ansible.builtin.systemd:
             name: nftables
+            enabled: "{{ ('nftables' in ansible_facts.packages) | ternary(false, omit) }}"
+            state: "{{ ('nftables' in ansible_facts.packages) | ternary('stopped', omit) }}"
             masked: true
-            state: stopped
 
       - name: "3.4.1.2 | PATCH | Ensure a single firewall configuration utility is in use | iptables"
         when:
-            - "'nftables' in ansible_facts.packages"
             - rhel7cis_system_firewall == "iptables"
-            - rhel7cis_iptables == "mask"
+            - rhel7cis_nftables == "mask"
         ansible.builtin.systemd:
             name: nftables
+            enabled: "{{ ('nftables' in ansible_facts.packages) | ternary(false, omit) }}"
+            state: "{{ ('nftables' in ansible_facts.packages) | ternary('stopped', omit) }}"
             masked: true
-            state: stopped
 
       - name: "3.4.1.2 | PATCH | Ensure a single firewall configuration utility is in use | iptables"
         when:
-            - "'firewalld' in ansible_facts.packages"
             - rhel7cis_system_firewall == "iptables"
             - rhel7cis_firewalld == "mask"
         ansible.builtin.systemd:
-            name: nftables
+            name: firewalld
+            enabled: "{{ ('firewalld' in ansible_facts.packages) | ternary(false, omit) }}"
+            state: "{{ ('firewalld' in ansible_facts.packages) | ternary('stopped', omit) }}"
             masked: true
-            state: stopped
 
       - name: "3.4.1.2 | PATCH | Ensure a single firewall configuration utility is in use | nftables"
         when:
-            - "'iptables-services' in ansible_facts.packages"
             - rhel7cis_system_firewall == "nftables"
             - rhel7cis_iptables == "mask"
         ansible.builtin.systemd:
             name: "{{ item }}"
+            enabled: "{{ (item in ansible_facts.packages) | ternary(false, omit) }}"
+            state: "{{ (item in ansible_facts.packages) | ternary('stopped', omit) }}"
             masked: true
-            state: stopped
         loop:
             - iptables-services
             - ip6tables-services
 
       - name: "3.4.1.2 | PATCH | Ensure a single firewall configuration utility is in use | nftables"
         when:
-            - "'firewalld' in ansible_facts.packages"
             - rhel7cis_system_firewall == "nftables"
             - rhel7cis_firewalld == "mask"
         ansible.builtin.systemd:
             name: firewalld
+            enabled: "{{ ('firewalld' in ansible_facts.packages) | ternary(false, omit) }}"
+            state: "{{ ('firewalld' in ansible_facts.packages) | ternary('stopped', omit) }}"
             masked: true
 
       - name: "3.4.1.2 | PATCH | Ensure a single firewall configuration utility is in use | {{ rhel7cis_system_firewall }} package installed"

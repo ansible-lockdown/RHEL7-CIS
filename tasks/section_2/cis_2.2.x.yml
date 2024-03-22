@@ -3,7 +3,6 @@
 - name: "2.2.1 | PATCH | Ensure autofs services are not in use"
   when:
       - rhel7cis_rule_2_2_1
-      - "'autofs' in ansible_facts.packages"
   tags:
       - level1-server
       - level2-workstation
@@ -15,6 +14,7 @@
   block:
       - name: "2.2.1 | PATCH | Ensure autofs services are not in use | Remove Package"
         when:
+            - "'autofs' in ansible_facts.packages"
             - not rhel7cis_autofs_services
             - not rhel7cis_autofs_mask
         ansible.builtin.package:
@@ -28,14 +28,13 @@
         notify: Systemd_daemon_reload
         ansible.builtin.systemd:
             name: autofs
-            enabled: false
-            state: stopped
+            enabled: "{{ ('autofs' in ansible_facts.packages) | ternary(false, omit) }}"
+            state: "{{ ('autofs' in ansible_facts.packages) | ternary('stopped', omit) }}"
             masked: true
 
 - name: "2.2.2 | PATCH | Ensure avahi daemon services are not in use"
   when:
       - rhel7cis_rule_2_2_2
-      - "'avahi' in ansible_facts.packages or 'avahi-autopd' in ansible_facts.packages"
   tags:
       - level1-server
       - level2-workstation
@@ -49,6 +48,7 @@
         when:
             - not rhel7cis_avahi_server
             - not rhel7cis_avahi_mask
+            - "'avahi' in ansible_facts.packages or 'avahi-autopd' in ansible_facts.packages"
         ansible.builtin.package:
             name:
                 - avahi-autoipd
@@ -62,8 +62,8 @@
         notify: Systemd_daemon_reload
         ansible.builtin.systemd:
             name: "{{ item }}"
-            enabled: false
-            state: stopped
+            enabled: "{{ ('avahi' in ansible_facts.packages) | ternary(false, omit) }}"
+            state: "{{ ('avahi' in ansible_facts.packages) | ternary('stopped', omit) }}"
             masked: true
         loop:
             - avahi-daemon.socket
@@ -71,7 +71,6 @@
 
 - name: "2.2.3 | PATCH | Ensure dhcp server services are not in use"
   when:
-      - "'dhcp-server' in ansible_facts.packages"
       - rhel7cis_rule_2_2_3
   tags:
       - level1-server
@@ -84,6 +83,7 @@
   block:
       - name: "2.2.3 | PATCH | Ensure dhcp server services are not in use | Remove package"
         when:
+            - "'dhcp-server' in ansible_facts.packages"
             - not rhel7cis_dhcp_server
             - not rhel7cis_dhcp_mask
         ansible.builtin.package:
@@ -97,8 +97,8 @@
         notify: Systemd_daemon_reload
         ansible.builtin.systemd:
             name: "{{ item }}"
-            enabled: false
-            state: stopped
+            enabled: "{{ ('dhcp-server' in ansible_facts.packages) | ternary(false, omit) }}"
+            state: "{{ ('dhcp-server' in ansible_facts.packages) | ternary('stopped', omit) }}"
             masked: true
         loop:
             - dhcpd.service
@@ -106,7 +106,6 @@
 
 - name: "2.2.4 | PATCH | Ensure dns server services are not in use"
   when:
-      - "'bind' in ansible_facts.packages"
       - rhel7cis_rule_2_2_4
   tags:
       - level1-server
@@ -119,6 +118,7 @@
   block:
       - name: "2.2.4 | PATCH | Ensure dns server services are not in use | Remove package"
         when:
+            - "'bind' in ansible_facts.packages"
             - not rhel7cis_dns_server
             - not rhel7cis_dns_mask
         ansible.builtin.package:
@@ -132,13 +132,12 @@
         notify: Systemd_daemon_reload
         ansible.builtin.systemd:
             name: named.service
-            enabled: false
-            state: stopped
+            enabled: "{{ ('bind' in ansible_facts.packages) | ternary(false, omit) }}"
+            state: "{{ ('bind' in ansible_facts.packages) | ternary('stopped', omit) }}"
             masked: true
 
 - name: "2.2.5 | PATCH | Ensure dnsmasq server services are not in use"
   when:
-      - "'dnsmasq' in ansible_facts.packages"
       - rhel7cis_rule_2_2_5
   tags:
       - level1-server
@@ -151,6 +150,7 @@
   block:
       - name: "2.2.5 | PATCH | Ensure dnsmasq server services are not in use | Remove package"
         when:
+            - "'dnsmasq' in ansible_facts.packages"
             - not rhel7cis_dnsmasq_server
             - not rhel7cis_dnsmasq_mask
         ansible.builtin.package:
@@ -164,13 +164,12 @@
         notify: Systemd_daemon_reload
         ansible.builtin.systemd:
             name: dnsmasq.service
-            enabled: false
-            state: stopped
+            enabled: "{{ ('dnsmasq' in ansible_facts.packages) | ternary(false, omit) }}"
+            state: "{{ ('dnsmasq' in ansible_facts.packages) | ternary('stopped', omit) }}"
             masked: true
 
 - name: "2.2.6 | PATCH | Ensure samba file server services are not in use"
   when:
-      - "'samba' in ansible_facts.packages"
       - rhel7cis_rule_2_2_6
   tags:
       - level1-server
@@ -184,6 +183,7 @@
   block:
       - name: "2.2.6 | PATCH | Ensure samba file server services are not in use | Remove package"
         when:
+            - "'samba' in ansible_facts.packages"
             - not rhel7cis_samba_server
             - not rhel7cis_samba_mask
         ansible.builtin.package:
@@ -197,13 +197,12 @@
         notify: Systemd_daemon_reload
         ansible.builtin.systemd:
             name: smb.service
-            enabled: false
-            state: stopped
+            enabled: "{{ ('samba' in ansible_facts.packages) | ternary(false, omit) }}"
+            state: "{{ ('samba' in ansible_facts.packages) | ternary('stopped', omit) }}"
             masked: true
 
 - name: "2.2.7 | PATCH | Ensure ftp server services are not in use"
   when:
-      - "'ftp' in ansible_facts.packages"
       - rhel7cis_rule_2_2_7
   tags:
       - level1-server
@@ -217,6 +216,7 @@
   block:
       - name: "2.2.7 | PATCH | Ensure ftp server services are not in use | Remove package"
         when:
+            - "'vsftp' in ansible_facts.packages"
             - not rhel7cis_ftp_server
             - not rhel7cis_ftp_mask
         ansible.builtin.package:
@@ -230,13 +230,12 @@
         notify: Systemd_daemon_reload
         ansible.builtin.systemd:
             name: vsftpd.service
-            enabled: false
-            state: stopped
+            enabled: "{{ ('vsftpd' in ansible_facts.packages) | ternary(false, omit) }}"
+            state: "{{ ('vsftpd' in ansible_facts.packages) | ternary('stopped', omit) }}"
             masked: true
 
 - name: "2.2.8 | PATCH | Ensure message access server services are not in use"
   when:
-      - "'dovecot' in ansible_facts.packages or 'cyrus-imapd' in ansible_facts.packages"
       - rhel7cis_rule_2_2_8
   tags:
       - level1-server
@@ -251,6 +250,7 @@
   block:
       - name: "2.2.8 | PATCH | Ensure message access server services are not in use | Remove package"
         when:
+            - "'dovecot' in ansible_facts.packages or 'cyrus-imapd' in ansible_facts.packages"
             - not rhel7cis_message_server
             - not rhel7cis_message_mask
         ansible.builtin.package:
@@ -266,8 +266,8 @@
         notify: Systemd_daemon_reload
         ansible.builtin.systemd:
             name: "{{ item }}"
-            enabled: false
-            state: stopped
+            enabled: "{{ (item in ansible_facts.packages) | ternary(false, omit) }}"
+            state: "{{ (item in ansible_facts.packages) | ternary('stopped', omit) }}"
             masked: true
         loop:
             - "dovecot.socket"
@@ -276,7 +276,6 @@
 
 - name: "2.2.9 | PATCH | Ensure network file system services are not in use"
   when:
-      - "'nfs-utils' in ansible_facts.packages"
       - rhel7cis_rule_2_2_9
   tags:
       - level1-server
@@ -291,6 +290,7 @@
   block:
       - name: "2.2.9 | PATCH | Ensure network file system services are not in use | Remove package"
         when:
+            - "'nfs-utils' in ansible_facts.packages"
             - not rhel7cis_nfs_server
             - not rhel7cis_nfs_mask
         ansible.builtin.package:
@@ -304,13 +304,12 @@
         notify: Systemd_daemon_reload
         ansible.builtin.systemd:
             name: nfs-server.service
-            enabled: false
-            state: stopped
+            enabled: "{{ ('nfs-utils' in ansible_facts.packages) | ternary(false, omit) }}"
+            state: "{{ ('nfs-utils' in ansible_facts.packages) | ternary('stopped', omit) }}"
             masked: true
 
 - name: "2.2.10 | PATCH | Ensure nis server services are not in use"
   when:
-      - "'ypserv' in ansible_facts.packages"
       - rhel7cis_rule_2_2_10
   tags:
       - level1-server
@@ -324,6 +323,7 @@
   block:
       - name: "2.2.10 | PATCH | Ensure nis server services are not in use | Remove package"
         when:
+            - "'ypserv' in ansible_facts.packages"
             - not rhel7cis_nis_server
             - not rhel7cis_nis_mask
         ansible.builtin.package:
@@ -336,13 +336,12 @@
             - rhel7cis_nis_mask
         ansible.builtin.systemd:
             name: ypserv.service
-            enabled: false
-            state: stopped
+            enabled: "{{ ('ypserv' in ansible_facts.packages) | ternary(false, omit) }}"
+            state: "{{ ('ypserv' in ansible_facts.packages) | ternary('stopped', omit) }}"
             masked: true
 
 - name: "2.2.11 | PATCH | Ensure print server services are not in use"
   when:
-      - "'cups' in ansible_facts.packages"
       - rhel7cis_rule_2_2_11
   tags:
       - level1-server
@@ -354,6 +353,7 @@
   block:
       - name: "2.2.11 | PATCH | Ensure print server services are not in use | Remove package"
         when:
+            - "'cups' in ansible_facts.packages"
             - not rhel7cis_print_server
             - not rhel7cis_print_mask
         ansible.builtin.package:
@@ -367,8 +367,8 @@
         notify: Systemd_daemon_reload
         ansible.builtin.systemd:
             name: "{{ item }}"
-            enabled: false
-            state: stopped
+            enabled: "{{ (item in ansible_facts.packages) | ternary(false, omit) }}"
+            state: "{{ (item in ansible_facts.packages) | ternary('stopped', omit) }}"
             masked: true
         loop:
             - "cups.socket"
@@ -376,7 +376,6 @@
 
 - name: "2.2.12 | PATCH | Ensure rpcbind services are not in use"
   when:
-      - "'rpcbind' in ansible_facts.packages"
       - rhel7cis_rule_2_2_12
   tags:
       - level1-server
@@ -390,6 +389,7 @@
   block:
       - name: "2.2.12 | PATCH | Ensure rpcbind services are not in use | Remove package"
         when:
+            - "'rpcbind' in ansible_facts.packages"
             - not rhel7cis_rpc_server
             - not rhel7cis_rpc_mask
         ansible.builtin.package:
@@ -403,8 +403,8 @@
         notify: Systemd_daemon_reload
         ansible.builtin.systemd:
             name: "{{ item }}"
-            enabled: false
-            state: stopped
+            enabled: "{{ (item in ansible_facts.packages) | ternary(false, omit) }}"
+            state: "{{ (item in ansible_facts.packages) | ternary('stopped', omit) }}"
             masked: true
         loop:
             - rpcbind.service
@@ -412,7 +412,6 @@
 
 - name: "2.2.13 | PATCH | Ensure rsync services are not in use"
   when:
-      - "'rsync-daemon' in ansible_facts.packages"
       - rhel7cis_rule_2_2_13
   tags:
       - level1-server
@@ -426,6 +425,7 @@
   block:
       - name: "2.2.13 | PATCH | Ensure rsync services are not in use | Remove package"
         when:
+            - "'rsync-daemon' in ansible_facts.packages"
             - not rhel7cis_rsync_server
             - not rhel7cis_rsync_mask
         ansible.builtin.package:
@@ -439,8 +439,8 @@
         notify: Systemd_daemon_reload
         ansible.builtin.systemd:
             name: "{{ item }}"
-            enabled: false
-            state: stopped
+            enabled: "{{ (item in ansible_facts.packages) | ternary(false, omit) }}"
+            state: "{{ (item in ansible_facts.packages) | ternary('stopped', omit) }}"
             masked: true
         loop:
             - 'rsyncd.socket'
@@ -448,7 +448,6 @@
 
 - name: "2.2.14 | PATCH | Ensure snmp services are not in use"
   when:
-      - "'net-snmp' in ansible_facts.packages"
       - rhel7cis_rule_2_2_14
   tags:
       - level1-server
@@ -461,6 +460,7 @@
   block:
       - name: "2.2.14 | PATCH | Ensure snmp services are not in use | Remove package"
         when:
+            - "'net-snmp' in ansible_facts.packages"
             - not rhel7cis_net_snmp_server
             - not rhel7cis_net_snmp_mask
         ansible.builtin.package:
@@ -474,13 +474,12 @@
         notify: Systemd_daemon_reload
         ansible.builtin.systemd:
             name: snmpd.service
-            enabled: false
-            state: stopped
+            enabled: "{{ ('net-snmp' in ansible_facts.packages) | ternary(false, omit) }}"
+            state: "{{ ('net-snmp' in ansible_facts.packages) | ternary('stopped', omit) }}"
             masked: true
 
 - name: "2.2.15 | PATCH | Ensure telnet server services are not in use"
   when:
-      - "'telnet-server' in ansible_facts.packages"
       - rhel7cis_rule_2_2_15
   tags:
       - level1-server
@@ -494,6 +493,7 @@
   block:
       - name: "2.2.15 | PATCH | Ensure telnet server services are not in use | Remove package"
         when:
+            - "'telnet-server' in ansible_facts.packages"
             - not rhel7cis_telnet_server
             - not rhel7cis_telnet_mask
         ansible.builtin.package:
@@ -507,13 +507,12 @@
         notify: Systemd_daemon_reload
         ansible.builtin.systemd:
             name: telnet.socket
-            enabled: false
-            state: stopped
+            enabled: "{{ ('telnet-server' in ansible_facts.packages) | ternary(false, omit) }}"
+            state: "{{ ('telnet-server' in ansible_facts.packages) | ternary('stopped', omit) }}"
             masked: true
 
 - name: "2.2.16 | PATCH | Ensure tftp server services are not in use"
   when:
-      - "'tftp-server' in ansible_facts.packages"
       - rhel7cis_rule_2_2_16
   tags:
       - level1-server
@@ -526,6 +525,7 @@
   block:
       - name: "2.2.16 | PATCH | Ensure tftp server services are not in use | Remove package"
         when:
+            - "'tftp-server' in ansible_facts.packages"
             - not rhel7cis_tftp_server
             - not rhel7cis_tftp_mask
         ansible.builtin.package:
@@ -539,8 +539,8 @@
         notify: Systemd_daemon_reload
         ansible.builtin.systemd:
             name: "{{ item }}"
-            enabled: false
-            state: stopped
+            enabled: "{{ (item in ansible_facts.packages) | ternary(false, omit) }}"
+            state: "{{ (item in ansible_facts.packages) | ternary('stopped', omit) }}"
             masked: true
         loop:
             - 'tftp.socket'
@@ -548,8 +548,7 @@
 
 - name: "2.2.17 | PATCH | Ensure web proxy server services are not in use"
   when:
-      - "'squid' in ansible_facts.packages"
-      - rhel7cis_rule_2_217
+      - rhel7cis_rule_2_2_17
   tags:
       - level1-server
       - level1-workstation
@@ -562,10 +561,11 @@
   block:
       - name: "2.2.17 | PATCH | Ensure web proxy server services are not in use | Remove package"
         when:
+            - "'squid' in ansible_facts.packages"
             - not rhel7cis_squid_server
             - not rhel7cis_squid_mask
         ansible.builtin.package:
-            name: tftp-server
+            name: squid
             state: absent
 
       - name: "2.2.17 | PATCH | Ensure web proxy server services are not in use | Mask service"
@@ -575,8 +575,8 @@
         notify: Systemd_daemon_reload
         ansible.builtin.systemd:
             name: squid.service
-            enabled: false
-            state: stopped
+            enabled: "{{ ('squid' in ansible_facts.packages) | ternary(false, omit) }}"
+            state: "{{ ('squid' in ansible_facts.packages) | ternary('stopped', omit) }}"
             masked: true
 
 - name: "2.2.18 | PATCH | Ensure web server services are not in use"
@@ -595,18 +595,18 @@
   block:
       - name: "2.2.18 | PATCH | Ensure web server services are not in use | Remove httpd server"
         when:
+            - "'httpd' in ansible_facts.packages"
             - not rhel7cis_httpd_server
             - not rhel7cis_httpd_mask
-            - "'httpd' in ansible_facts.packages"
         ansible.builtin.package:
             name: httpd
             state: absent
 
       - name: "2.2.18 | PATCH | Ensure web server services are not in use | Remove nginx server"
         when:
+            - "'nginx' in ansible_facts.packages"
             - not rhel7cis_nginx_server
             - not rhel7cis_nginx_mask
-            - "'nginx' in ansible_facts.packages"
         ansible.builtin.package:
             name: nginx
             state: absent
@@ -619,8 +619,8 @@
         notify: Systemd_daemon_reload
         ansible.builtin.systemd:
             name: httpd.service
-            enabled: false
-            state: stopped
+            enabled: "{{ ('httpd' in ansible_facts.packages) | ternary(false, omit) }}"
+            state: "{{ ('httpd' in ansible_facts.packages) | ternary('stopped', omit) }}"
             masked: true
 
       - name: "2.2.18 | PATCH | Ensure web server services are not in use | Mask nginx service"
@@ -631,13 +631,12 @@
         notify: Systemd_daemon_reload
         ansible.builtin.systemd:
             name: ngnix.service
-            enabled: false
-            state: stopped
+            enabled: "{{ ('nginx' in ansible_facts.packages) | ternary(false, omit) }}"
+            state: "{{ ('nginx' in ansible_facts.packages) | ternary('stopped', omit) }}"
             masked: true
 
 - name: "2.2.19 | PATCH | Ensure xinetd services are not in use"
   when:
-      - "'xinetd' in ansible_facts.packages"
       - rhel7cis_rule_2_2_19
   tags:
       - level1-server
@@ -650,6 +649,7 @@
   block:
       - name: "2.2.19 | PATCH | Ensure xinetd services are not in use | Remove package"
         when:
+            - "'xinetd' in ansible_facts.packages"
             - not rhel7cis_xinetd_server
             - not rhel7cis_xinetd_mask
         ansible.builtin.package:
@@ -663,8 +663,8 @@
         notify: Systemd_daemon_reload
         ansible.builtin.systemd:
             name: xinetd.service
-            enabled: false
-            state: stopped
+            enabled: "{{ ('xinetd' in ansible_facts.packages) | ternary(false, omit) }}"
+            state: "{{ ('xinetd' in ansible_facts.packages) | ternary('stopped', omit) }}"
             masked: true
 
 - name: "2.2.20 | PATCH | Ensure X window server services are not in use"
