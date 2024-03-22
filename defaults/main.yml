@@ -26,6 +26,9 @@ python2_bin: /bin/python2.7
 benchmark: RHEL7-CIS
 benchmark_version: v4.0.0
 
+## Level are used heavily in audit
+rhel7cis_level_1: true
+rhel7cis_level_2: true
 ##########################################
 ### Goss is required on the remote host ###
 ## Refer to vars/auditd.yml for any other settings ##
