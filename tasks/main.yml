@@ -35,7 +35,7 @@
             fail_msg: "You have rule 4.5.2.4 enabled this requires that you have a root password set"
             success_msg: "You have a root password set"
 
-- name: "check sugroup exists if used"
+- name: "Check sugroup exists if used"
   when:
       - rhel7cis_sugroup is defined
       - rhel7cis_rule_4_3_7
