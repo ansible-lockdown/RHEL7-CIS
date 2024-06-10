@@ -30,20 +30,20 @@ repos:
 
 # Scan for passwords
 - repo: https://github.com/Yelp/detect-secrets
-  rev: v1.4.0
+  rev: v1.5.0
   hooks:
   - id: detect-secrets
     args: [ '--baseline', '.config/.secrets.baseline' ]
     exclude: .config/.gitleaks-report.json
 
 - repo: https://github.com/gitleaks/gitleaks
-  rev: v8.18.2
+  rev: v8.18.3
   hooks:
   - id: gitleaks
     args: ['--baseline-path', '.config/.gitleaks-report.json']
 
 - repo: https://github.com/ansible-community/ansible-lint
-  rev: v24.2.2
+  rev: v24.6.0
   hooks:
   - id: ansible-lint
     name: Ansible-lint
