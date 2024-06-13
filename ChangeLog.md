@@ -1,4 +1,15 @@
-# release CIS RedHat Enterprise Linux 7 Benchmark v3.0.1 - 09-21-2020
+# Release CIS RedHat Enterprise Linux 7 Benchmark
+
+## v4.0.0 - 21-12-2023
+
+- Rewrite to address v4.0.0 changes - refer to full changelog in release
+- Audit binary version updates
+- Audit only option added
+- Audit moved earlier in process
+- Audit improvements for copy/unarchive etc
+- workflow update to self hosted runner
+
+## v3.0.1 - 09-21-2020
 
 ## 1.1.4
 
