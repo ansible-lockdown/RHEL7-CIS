@@ -71,6 +71,25 @@
             grub2_path: /etc/grub2-efi.cfg
             rhel7cis_boot_path: "/boot/efi/EFI/{{ansible_facts.distribution | lower }}/"
 
+- name: Include audit specific variables
+  when:
+      - run_audit or audit_only
+      - setup_audit
+  tags:
+      - setup_audit
+      - run_audit
+  ansible.builtin.include_vars:
+      file: audit.yml
+
+- name: Include pre-remediation audit tasks
+  when:
+      - run_audit or audit_only
+      - setup_audit
+  tags:
+      - run_audit
+  ansible.builtin.import_tasks:
+      file: pre_remediation_audit.yml
+
 - name: "PRELIM | AUDIT | Ensure permissions on bootloader config are configured | Get grub config file stats"
   tags:
       - always

@@ -29,23 +29,30 @@ benchmark_version: v4.0.0
 ## Level are used heavily in audit
 rhel7cis_level_1: true
 rhel7cis_level_2: true
-##########################################
+###
+### Settings for associated Audit role using Goss
+###
+
+###########################################
 ### Goss is required on the remote host ###
-## Refer to vars/auditd.yml for any other settings ##
+### vars/auditd.yml for other settings  ###
 
 # Allow audit to setup the requirements including installing git (if option chosen and downloading and adding goss binary to system)
 setup_audit: false
 
 # enable audits to run - this runs the audit and get the latest content
 run_audit: false
+# Run heavy tests - some tests can have more impact on a system enabling these can have greater impact on a system
+audit_run_heavy_tests: true
 
-# Only run Audit do not remediate
+## Only run Audit do not remediate
 audit_only: false
-# As part of audit_only
-# This will enable files to be copied back to control node
+### As part of audit_only ###
+# This will enable files to be copied back to control node in audit_only mode
 fetch_audit_files: false
-# Path to copy the files to will create dir structure
+# Path to copy the files to will create dir structure in audit_only mode
 audit_capture_files_dir: /some/location to copy to on control node
+#############################
 
 # How to retrieve audit binary
 # Options are copy or download - detailed settings at the bottom of this file
@@ -58,19 +65,25 @@ get_audit_binary_method: download
 audit_bin_copy_location: /some/accessible/path
 
 # how to get audit files onto host options
-# options are git/copy/get_url other e.g. if you wish to run from already downloaded conf
+# options are git/copy/archive/get_url other e.g. if you wish to run from already downloaded conf
 audit_content: git
 
-# archive or copy:
-audit_conf_copy: "some path to copy from"
+# If using either archive, copy, get_url:
+## Note will work with .tar files - zip will require extra configuration
+### If using get_url this is expecting github url in tar.gz format e.g.
+### https://github.com/ansible-lockdown/UBUNTU22-CIS-Audit/archive/refs/heads/benchmark-v1.0.0.tar.gz
+audit_conf_source: "some path or url to copy from"
 
-# get_url:
-audit_files_url: "some url maybe s3?"
+# Destination for the audit content to be placed on managed node
+# note may not need full path e.g. /opt with the directory being the {{ benchmark }}-Audit directory
+audit_conf_dest: "/opt"
 
-# Run heavy tests - some tests can have more impact on a system enabling these can have greater impact on a system
-audit_run_heavy_tests: true
+# Where the audit logs are stored
+audit_log_dir: '/opt'
 
-### End Goss enablements ####
+### Goss Settings ##
+####### END ########
+
 #### Detailed settings found at the end of this document ####
 
 # Place to find the container yml file for your environment - /vars/... This can be adjusted for your requirements.
