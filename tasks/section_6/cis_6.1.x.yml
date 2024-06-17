@@ -211,7 +211,7 @@
             path: '{{ item }}'
             mode: o-w
             state: touch
-        with_items: "{{ rhel_08_6_1_11_perms_results.stdout_lines }}"
+        with_items: "{{ rhel7cis_6_1_11_perms_results.stdout_lines }}"
 
       - name: "6.1.11 | PATCH | Ensure world writable files and directories are secured | sticky bit set on world-writable directories"
         ansible.builtin.shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d -perm -0002 2>/dev/null | xargs chmod a+t
@@ -220,14 +220,14 @@
 
       - name: "6.1.11 | AUDIT | Ensure world writable files and directories are secured | Warning"
         when:
-            - rhel_08_6_1_11_perms_results.stdout_lines is defined
+            - rhel7cis_6_1_11_perms_results.stdout_lines is defined
             - not rhel7cis_no_world_write_adjust
         ansible.builtin.debug:
             msg: "Warning!! - WorldWritable files have been found"
 
       - name: "6.1.11 | AUDIT | Ensure world writable files and directories are secured | Warn Count"
         when:
-            - rhel_08_6_1_11_perms_results.stdout_lines is defined
+            - rhel7cis_6_1_11_perms_results.stdout_lines is defined
             - not rhel7cis_no_world_write_adjust
         ansible.builtin.import_tasks:
             file: warning_facts.yml

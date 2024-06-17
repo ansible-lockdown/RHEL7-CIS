@@ -50,17 +50,17 @@
       - name: "PRELIM | Check whether machine is UEFI-based"
         ansible.builtin.stat:
             path: /sys/firmware/efi
-        register: rhel_07_efi_boot
+        register: rhel7cis_efi_boot
 
       - name: "PRELIM | set legacy boot and grub path | Bios"
-        when: not rhel_07_efi_boot.stat.exists
+        when: not rhel7cis_efi_boot.stat.exists
         ansible.builtin.set_fact:
             rhel7cis_legacy_boot: true
             grub2_path: /etc/grub2.cfg
             rhel7cis_boot_path: /boot/grub2/
 
       - name: "PRELIM | set grub fact | UEFI"
-        when: rhel_07_efi_boot.stat.exists
+        when: rhel7cis_efi_boot.stat.exists
         ansible.builtin.set_fact:
             grub2_path: /etc/grub2-efi.cfg
             rhel7cis_boot_path: "/boot/efi/EFI/{{ansible_facts.distribution | lower }}/"
