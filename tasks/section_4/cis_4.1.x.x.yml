@@ -32,7 +32,7 @@
       - NIST800-53R5_AC-3
       - NIST800-53R5_MP-2
   ansible.builtin.file:
-      dest: /etc/crontab
+      path: /etc/crontab
       owner: root
       group: root
       mode: '0600'
@@ -50,7 +50,7 @@
       - NIST800-53R5_AC-3
       - NIST800-53R5_MP-2
   ansible.builtin.file:
-      dest: /etc/cron.hourly
+      path: /etc/cron.hourly
       state: directory
       owner: root
       group: root
@@ -69,7 +69,7 @@
       - NIST800-53R5_AC-3
       - NIST800-53R5_MP-2
   ansible.builtin.file:
-      dest: /etc/cron.daily
+      path: /etc/cron.daily
       state: directory
       owner: root
       group: root
@@ -87,7 +87,7 @@
       - NIST800-53R5_AC-3
       - NIST800-53R5_MP-2
   ansible.builtin.file:
-      dest: /etc/cron.weekly
+      path: /etc/cron.weekly
       state: directory
       owner: root
       group: root
@@ -106,7 +106,7 @@
       - NIST800-53R5_AC-3
       - NIST800-53R5_MP-2
   ansible.builtin.file:
-      dest: /etc/cron.monthly
+      path: /etc/cron.monthly
       state: directory
       owner: root
       group: root
@@ -125,7 +125,7 @@
       - NIST800-53R5_AC-3
       - NIST800-53R5_MP-2
   ansible.builtin.file:
-      dest: /etc/cron.d
+      path: /etc/cron.d
       state: directory
       owner: root
       group: root
@@ -146,7 +146,7 @@
   block:
       - name: "4.1.1.8 | PATCH | Ensure cron is restricted to authorized users | Remove cron.deny"
         ansible.builtin.file:
-            dest: /etc/cron.deny
+            path: /etc/cron.deny
             state: absent
 
       - name: "4.1.1.8 | PATCH | Ensure cron is restricted to authorized users | Check if cron.allow exists"
@@ -156,7 +156,7 @@
 
       - name: "4.1.1.8 | PATCH | Ensure cron is restricted to authorized users | Ensure cron.allow is restricted to authorized users"
         ansible.builtin.file:
-            dest: /etc/cron.allow
+            path: /etc/cron.allow
             state: '{{ "file" if  rhel7cis_4_1_1_8_p.stat.exists else "touch" }}'
             owner: root
             group: root
@@ -176,7 +176,7 @@
   block:
       - name: "4.1.2.1 | PATCH | Ensure at is restricted to authorized users | Remove at.deny"
         ansible.builtin.file:
-            dest: /etc/at.deny
+            path: /etc/at.deny
             state: absent
 
       - name: "4.1.2.1 | AUDIT | Ensure at is restricted to authorized users | Check if at.allow exists"
