@@ -69,14 +69,14 @@
       - NIST800-53R5_CA-9
   block:
       - name: "3.4.4.2.3 | AUDIT | Ensure iptables firewall rules exist for all open ports | Get list of open ports"
-        ansible.builtin.command: ss -4tuln
+        ansible.builtin.shell: ss -4tuln
         changed_when: false
         failed_when: false
         check_mode: false
         register: rhel7cis_3_4_4_2_3_open_ports
 
       - name: "3.4.4.2.3 | AUDIT | Ensure iptables firewall rules exist for all open ports | Get list of rules"
-        ansible.builtin.command: iptables -L INPUT -v -n
+        ansible.builtin.shell: iptables -L INPUT -v -n
         changed_when: false
         failed_when: false
         check_mode: false

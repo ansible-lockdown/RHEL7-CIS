@@ -32,10 +32,10 @@
       - NIST800-53R5_CA-9
   block:
       - name: "3.4.3.2 | PATCH | Ensure iptables are flushed | Flush IPv4 tables"
-        ansible.builtin.command: iptables -F
+        ansible.builtin.shell: iptables -F
 
       - name: "3.4.3.2 | PATCH | Ensure iptables are flushed | Flush IPv6 tables"
-        ansible.builtin.command: ip6tables -F
+        ansible.builtin.shell: ip6tables -F
         when:
             - rhel7cis_ipv6_required
 
@@ -52,7 +52,7 @@
       - NIST800-53R5_CA-9
   block:
       - name: "3.4.3.3 | AUDIT | Ensure an nftables table exists | Check for tables"
-        ansible.builtin.command: nft list tables
+        ansible.builtin.shell: nft list tables
         changed_when: false
         failed_when: false
         register: rhel7cis_3_4_3_3_nft_tables
@@ -82,7 +82,7 @@
             file: warning_facts.yml
 
       - name: "3.4.3.3 | PATCH | Ensure an nftables table exists | Create table if needed"
-        ansible.builtin.command: nft create table inet "{{ rhel7cis_nft_tables_tablename }}"
+        ansible.builtin.shell: nft create table inet "{{ rhel7cis_nft_tables_tablename }}"
         failed_when: false
         when:
             - rhel7cis_nft_tables_autoNewTable
@@ -139,7 +139,7 @@
       - name: "3.4.3.4 | PATCH | Ensure nftables base chains exist | Create chains if needed"
         when:
             - rhel7cis_nft_tables_autochaincreate
-        ansible.builtin.command: "{{ item }}"
+        ansible.builtin.shell: "{{ item }}"
         failed_when: false
         with_items:
             - nft create chain inet "{{ rhel7cis_nft_tables_tablename }}" input { type filter hook input priority 0 \; }
@@ -177,17 +177,17 @@
         register: rhel7cis_3_4_3_2_ip6saddr
 
       - name: "3.4.3.5 | PATCH | Ensure nftables loopback traffic is configured | Set iif lo accept rule"
-        ansible.builtin.command: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" input iif lo accept
+        ansible.builtin.shell: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" input iif lo accept
         when:
             - '"iif \"lo\" accept" not in rhel7cis_3_4_3_5_iiflo.stdout'
 
       - name: "3.4.3.5 | PATCH | Ensure nftables loopback traffic is configured | Set ip sddr rule"
-        ansible.builtin.command: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" input ip saddr 127.0.0.0/8 counter drop
+        ansible.builtin.shell: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" input ip saddr 127.0.0.0/8 counter drop
         when:
             - '"ip saddr 127.0.0.0/8 counter packets 0 bytes 0 drop" not in rhel7cis_3_4_3_5_ipsaddr.stdout'
 
       - name: "3.4.3.5 | PATCH | Ensure nftables loopback traffic is configured | Set ip6 saddr rule"
-        ansible.builtin.command: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" input ip6 saddr ::1 counter drop
+        ansible.builtin.shell: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" input ip6 saddr ::1 counter drop
         when:
             - '"ip6 saddr ::1 counter packets 0 bytes 0 drop" not in rhel7cis_3_4_3_5_ip6saddr.stdout'
 
@@ -216,32 +216,32 @@
         register: rhel7cis_3_4_3_6_outconnectionrule
 
       - name: "3.4.3.6 | PATCH | Ensure nftables outbound and established connections are configured | Add input tcp established accpet policy"
-        ansible.builtin.command: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" input ip protocol tcp ct state established accept
+        ansible.builtin.shell: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" input ip protocol tcp ct state established accept
         when:
             - '"ip protocol tcp ct state established accept" not in rhel7cis_3_4_3_6_inconnectionrule.stdout'
 
       - name: "3.4.3.6 | PATCH | Ensure nftables outbound and established connections are configured | Add input udp established accpet policy"
-        ansible.builtin.command: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" input ip protocol udp ct state established accept
+        ansible.builtin.shell: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" input ip protocol udp ct state established accept
         when:
             - '"ip protocol udp ct state established accept" not in rhel7cis_3_4_3_6_inconnectionrule.stdout'
 
       - name: "3.4.3.6 | PATCH | Ensure nftables outbound and established connections are configured | Add input icmp established accpet policy"
-        ansible.builtin.command: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" input ip protocol icmp ct state established accept
+        ansible.builtin.shell: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" input ip protocol icmp ct state established accept
         when:
             - '"ip protocol icmp ct state established accept" not in rhel7cis_3_4_3_6_inconnectionrule.stdout'
 
       - name: "3.4.3.6 | PATCH | Ensure nftables outbound and established connections are configured | Add output tcp new, related, established accpet policy"
-        ansible.builtin.command: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" output ip protocol tcp ct state new,related,established accept
+        ansible.builtin.shell: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" output ip protocol tcp ct state new,related,established accept
         when:
             - '"ip protocol tcp ct state established,related,new accept" not in rhel7cis_3_4_3_6_outconnectionrule.stdout'
 
       - name: "3.4.3.6 | PATCH | Ensure nftables outbound and established connections are configured | Add output udp new, related, established accpet policy"
-        ansible.builtin.command: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" output ip protocol udp ct state new,related,established accept
+        ansible.builtin.shell: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" output ip protocol udp ct state new,related,established accept
         when:
             - '"ip protocol udp ct state established,related,new accept" not in rhel7cis_3_4_3_6_outconnectionrule.stdout'
 
       - name: "3.4.3.6 | PATCH | Ensure nftables outbound and established connections are configured | Add output icmp new, related, established accpet policy"
-        ansible.builtin.command: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" output ip protocol icmp ct state new,related,established accept
+        ansible.builtin.shell: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" output ip protocol icmp ct state new,related,established accept
         when:
             - '"ip protocol icmp ct state established,related,new accept" not in rhel7cis_3_4_3_6_outconnectionrule.stdout'
 
@@ -282,22 +282,22 @@
         register: rhel7cis_3_4_3_7_sshallowcheck
 
       - name: "3.4.3.7 | PATCH | Ensure nftables default deny firewall policy | Enable SSH traffic"
-        ansible.builtin.command: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" input tcp dport ssh accept
+        ansible.builtin.shell: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" input tcp dport ssh accept
         when:
             - '"tcp dport ssh accept" not in rhel7cis_3_4_3_7_sshallowcheck.stdout'
 
       - name: "3.4.3.7 | PATCH | Ensure nftables default deny firewall policy | Set hook input deny policy"
-        ansible.builtin.command: nft chain inet "{{ rhel7cis_nft_tables_tablename }}" input { policy drop \; }
+        ansible.builtin.shell: nft chain inet "{{ rhel7cis_nft_tables_tablename }}" input { policy drop \; }
         when:
             - '"type filter hook input priority 0; policy drop;" not in rhel7cis_3_4_3_7_inputpolicy.stdout'
 
       - name: "3.4.3.7 | PATCH | Ensure nftables default deny firewall policy | Create hook forward deny policy"
-        ansible.builtin.command: nft chain inet "{{ rhel7cis_nft_tables_tablename }}" forward { policy drop \; }
+        ansible.builtin.shell: nft chain inet "{{ rhel7cis_nft_tables_tablename }}" forward { policy drop \; }
         when:
             - '"type filter hook forward priority 0; policy drop;" not in rhel7cis_3_4_3_7_forwardpolicy.stdout'
 
       - name: "3.4.3.7 | PATCH | Ensure nftables default deny firewall policy | Create hook output deny policy"
-        ansible.builtin.command: nft chain inet "{{ rhel7cis_nft_tables_tablename }}" output { policy drop \; }
+        ansible.builtin.shell: nft chain inet "{{ rhel7cis_nft_tables_tablename }}" output { policy drop \; }
         when:
             - '"type filter hook output priority 0; policy drop;" not in rhel7cis_3_4_3_7_outputpolicy.stdout'
 
