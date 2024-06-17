@@ -266,21 +266,21 @@
       - name: "6.2.8 | AUDIT | Ensure root PATH Integrity | Check for empty dirs"
         ansible.builtin.shell: 'echo {{ root_paths }} | grep -q "::" && echo "roots path contains a empty directory (::)"'
         changed_when: false
-        failed_when: root_path_empty_dir.rc not in [ 0, 1 ]
-        register: root_path_empty_dir
+        failed_when: rhel7cis_6_2_8_root_path_empty_dir.rc not in [ 0, 1 ]
+        register: rhel7cis_6_2_8_root_path_empty_dir
 
       - name: "6.2.8 | AUDIT | Ensure root PATH Integrity | Check for trailing ':'"
         ansible.builtin.shell: '{{ root_paths }} | cut -d= -f2 | grep -q ":$" && echo "roots path contains a trailing (:)"'
         changed_when: false
-        failed_when: root_path_trailing_colon.rc not in [ 0, 1 ]
-        register: root_path_trailing_colon
+        failed_when: rhel7cis_6_2_8_root_path_trailing_colon.rc not in [ 0, 1 ]
+        register: rhel7cis_6_2_8_root_path_trailing_colon
 
       - name: "6.2.8 | AUDIT | Ensure root PATH Integrity | Check for owner and permissions"
         block:
             - name: "6.2.8 | AUDIT | Ensure root PATH Integrity | Check for owner and permissions"
               ansible.builtin.stat:
                   path: "{{ item }}"
-              register: root_path_perms
+              register: rhel7cis_6_2_8_root_path_perms
               loop: "{{ rhel7cis_6_2_8_root_paths_split.stdout_lines }}"
 
             - name: "6.2.8 | AUDIT | Ensure root PATH Integrity | Set permissions"
@@ -296,7 +296,7 @@
                   group: root
                   mode: '0755'
                   follow: false
-              loop: "{{ root_path_perms.results }}"
+              loop: "{{ rhel7cis_6_2_8_root_path_perms.results }}"
               loop_control:
                   label: "{{ item }}"
 
