@@ -13,7 +13,7 @@
 - name: "PREREQ | Add the required packages | Python 3"
   block:
       - name: PREREQ | Check if python36-rpm package installed
-        ansible.builtin.command: rpm -q python36-rpm
+        ansible.builtin.shell: rpm -q python36-rpm
         register: python36_rpm_present
         failed_when: ( python36_rpm_present.rc not in [ 0, 1 ] )
         changed_when: false
@@ -36,7 +36,7 @@
             - libselinux-python3
 
       - name: PREREQ | Disable Epel repo if installed earlier
-        ansible.builtin.command: yum-config-manager disable epel
+        ansible.builtin.shell: yum-config-manager disable epel
         when: epel_installed.changed  # noqa: no-handler
   when:
       - ( ansible_python.version.major == 3  and ansible_python.version.minor == 6 )
