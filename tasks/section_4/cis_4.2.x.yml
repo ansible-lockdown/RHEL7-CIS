@@ -38,7 +38,7 @@
             patterns: 'ssh_host_*_key'
             recurse: true
             file_type: any
-        register: rhel7_4_2_2_priv_ssh_key_results
+        register: rhel7cis_4_2_2_priv_ssh_key_results
 
       - name: "4.2.2 | PATCH | Ensure permissions on SSH private host key files are configured | Set keys permissions"
         ansible.builtin.file:
@@ -47,7 +47,7 @@
             group: root
             mode: '0600'
         with_items:
-            - "{{ rhel7_4_2_2_priv_ssh_key_results.files }}"
+            - "{{ rhel7cis_4_2_2_priv_ssh_key_results.files }}"
         loop_control:
             label: "{{ item.path }}"
 
@@ -70,7 +70,7 @@
             patterns: 'ssh_host_*_key'
             recurse: true
             file_type: any
-        register: rhel7_4_2_3_pub_ssh_key_results
+        register: rhel7cis_4_2_3_pub_ssh_key_results
 
       - name: "4.2.3 | AUDIT | Ensure permissions on SSH public host key files are configured"
         ansible.builtin.file:
@@ -79,7 +79,7 @@
             group: root
             mode: '0600'
         with_items:
-            - "{{ rhel7_4_2_3_pub_ssh_key_results.files }}"
+            - "{{ rhel7cis_4_2_3_pub_ssh_key_results.files }}"
         loop_control:
             label: "{{ item.path }}"
 

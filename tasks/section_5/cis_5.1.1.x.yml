@@ -85,13 +85,13 @@
         changed_when: false
         failed_when: false
         check_mode: false
-        register: rhel7_5_1_1_5_audit
+        register: rhel7cis_5_1_1_5_audit
 
       - name: "5.1.1.5 | AUDIT | Ensure logging is configured | rsyslog current config message out"
         ansible.builtin.debug:
             msg:
                 - "These are the current logging configurations for rsyslog, please review:"
-                - "{{ rhel7_5_1_1_5_audit.stdout_lines }}"
+                - "{{ rhel7cis_5_1_1_5_audit.stdout_lines }}"
 
       - name: "5.1.1.5 | PATCH | Ensure logging is configured | mail.* log setting"
         when: rhel7cis_rsyslog_ansiblemanaged
