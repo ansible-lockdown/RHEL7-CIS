@@ -77,7 +77,7 @@
             path: "{{ item.path }}"
             owner: root
             group: root
-            mode: 0600
+            mode: '0600'
         with_items:
             - "{{ rhel7_4_2_3_pub_ssh_key_results.files }}"
         loop_control:

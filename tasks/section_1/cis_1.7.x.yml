@@ -35,7 +35,7 @@
       create: true
       owner: root
       group: root
-      mode: 0644
+      mode: '0644'
   notify: Reload_dconf
   loop:
       - { file: '/etc/dconf/profile/gdm', regexp: 'user-db', line: 'user-db:user' }
