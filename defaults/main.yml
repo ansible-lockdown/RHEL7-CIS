@@ -529,7 +529,7 @@ rhel7cis_set_boot_pass: false
 rhel7cis_bootloader_file: /etc/grub2.cfg
 
 # cis 1.4.1
-kernel_sysctl_file: /etc/sysctl.d/60-kernel_sysctl.conf
+rhel7cis_kernel_sysctl_file: /etc/sysctl.d/60-kernel_sysctl.conf
 rhel7cis_sysctl_file: /etc/sysctl.conf
 
 # 1.5 SELinux policy

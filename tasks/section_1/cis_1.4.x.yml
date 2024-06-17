@@ -16,7 +16,7 @@
       reload: true
       sysctl_set: true
       ignoreerrors: true
-      sysctl_file: "{{ kernel_sysctl_file }}"
+      sysctl_file: "{{ rhel7cis_kernel_sysctl_file }}"
 
 - name: "1.4.2 | PATCH | Ensure ptrace_scope is restricted"
   when:
@@ -33,7 +33,7 @@
       reload: true
       sysctl_set: true
       ignoreerrors: true
-      sysctl_file: "{{ kernel_sysctl_file }}"
+      sysctl_file: "{{ rhel7cis_kernel_sysctl_file }}"
 
 - name: "1.4.3 | PATCH | Ensure core dump backtraces are disabled"
   when:
