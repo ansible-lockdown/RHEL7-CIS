@@ -64,7 +64,6 @@
         failed_when: false
         check_mode: false
 
-
       - name: "3.1.2 | AUDIT | Ensure wireless interfaces are disabled | Check if wifi is enabled"
         when: rhel_08_nmcli_available.rc == 0
         ansible.builtin.shell: nmcli radio wifi
