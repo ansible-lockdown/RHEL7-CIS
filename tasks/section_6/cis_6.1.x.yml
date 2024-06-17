@@ -201,11 +201,11 @@
         ansible.builtin.shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -0002
         failed_when: false
         changed_when: false
-        register: rhel_08_6_1_11_perms_results
+        register: rhel7cis_6_1_11_perms_results
 
       - name: "6.1.11 | PATCH | Adjust world-writable files if they exist (Configurable)"
         when:
-            - rhel_08_6_1_11_perms_results.stdout_lines is defined
+            - rhel7cis_6_1_11_perms_results.stdout_lines is defined
             - rhel7cis_no_world_write_adjust
         ansible.builtin.file:
             path: '{{ item }}'

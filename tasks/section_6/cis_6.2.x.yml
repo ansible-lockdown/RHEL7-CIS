@@ -350,7 +350,7 @@
       - name: "6.2.10 | AUDIT | Ensure local interactive user home directories exist | get perms stat"
         ansible.builtin.stat:
             path: "{{ item }}"
-        register: rhel_09_6_2_10_home_dir_perms
+        register: rhel7cis_6_2_10_home_dir_perms
         loop: "{{ discovered_interactive_users_home.stdout_lines }}"
 
       - name: "6.2.10 | PATCH | Ensure local interactive user home directories exist | set perms if needed"
@@ -358,7 +358,7 @@
             path: "{{ item.stat.path }}"
             state: directory
             mode: g-w,o-rwx
-        loop: "{{ rhel_09_6_2_10_home_dir_perms.results }}"
+        loop: "{{ rhel7cis_6_2_10_home_dir_perms.results }}"
         loop_control:
             label: "{{ item }}"
 
