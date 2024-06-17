@@ -60,9 +60,10 @@
       - name: "3.1.2 | AUDIT | Ensure wireless interfaces are disabled | Check if nmcli command is available"
         ansible.builtin.shell: rpm -q NetworkManager
         changed_when: false
+        register: rhel_08_nmcli_available
         failed_when: false
         check_mode: false
-        register: rhel_08_nmcli_available
+
 
       - name: "3.1.2 | AUDIT | Ensure wireless interfaces are disabled | Check if wifi is enabled"
         when: rhel_08_nmcli_available.rc == 0
