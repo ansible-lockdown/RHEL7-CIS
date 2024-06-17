@@ -1,6 +1,6 @@
 ---
 
-- name: "1.1.2.3.1 | PATCH | Ensure /home is a seperate partition"
+- name: "1.1.2.3.1 | AUDIT | Ensure /home is a seperate partition"
   when:
       - required_mount not in mount_names
       - rhel7cis_rule_1_1_2_3_1
