@@ -351,7 +351,7 @@
         ansible.builtin.stat:
             path: "{{ item }}"
         register: rhel_09_6_2_10_home_dir_perms
-        loop: "{{ interactive_users_home.stdout_lines }}"
+        loop: "{{ discovered_interactive_users_home.stdout_lines }}"
 
       - name: "6.2.10 | PATCH | Ensure local interactive user home directories exist | set perms if needed"
         ansible.builtin.file:
@@ -384,7 +384,7 @@
             etype: group
             permissions: rx
             state: present
-        loop: "{{ interactive_users_home.stdout_lines }}"
+        loop: "{{ discovered_interactive_users_home.stdout_lines }}"
 
       - name: "6.2.10 | PATCH | Ensure local interactive user home directories exist | Set other ACL"
         ansible.posix.acl:
@@ -393,7 +393,7 @@
             etype: other
             permissions: 0
             state: present
-        loop: "{{ interactive_users_home.stdout_lines }}"
+        loop: "{{ discovered_interactive_users_home.stdout_lines }}"
 
 - name: "6.2.11 | PATCH | Ensure local interactive user dot files access is configured"
   when:

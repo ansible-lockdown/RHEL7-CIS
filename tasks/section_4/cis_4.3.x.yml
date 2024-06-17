@@ -63,7 +63,7 @@
       regexp: '^([^#|{% if system_is_ec2 %}ec2-user{% endif %}].*)NOPASSWD(.*)'
       replace: '\1PASSWD\2'
       validate: '/usr/sbin/visudo -cf %s'
-  loop: "{{ rhel7cis_sudoers_files.stdout_lines }}"
+  loop: "{{ discovered_sudoers_files.stdout_lines }}"
 
 - name: "4.3.5 | PATCH | Ensure re-authentication for privilege escalation is not disabled globally"
   when:
@@ -81,7 +81,7 @@
       regexp: '^([^#].*)!authenticate(.*)'
       replace: '\1authenticate\2'
       validate: '/usr/sbin/visudo -cf %s'
-  loop: "{{ rhel7cis_sudoers_files.stdout_lines }}"
+  loop: "{{ discovered_sudoers_files.stdout_lines }}"
 
 - name: "4.3.6 | PATCH | Ensure sudo authentication timeout is configured correctly"
   when:

@@ -24,8 +24,8 @@
 - name: "1.3.2 | PATCH | Ensure permissions on bootloader config are configured"
   when:
       - rhel7cis_rule_1_3_2
-      - grub_cfg.stat.exists
-      - grub_cfg.stat.islnk
+      - discovered_grub_cfg.stat.exists
+      - discovered_grub_cfg.stat.islnk
   tags:
       - level1-server
       - level1-workstation
