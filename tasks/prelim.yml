@@ -3,16 +3,10 @@
 # Preliminary tasks that should always be run
 # List users in order to look files inside each home directory
 - name: Parse etc password
-  ansible.builtin.import_tasks:
-      file: parse_etc_password.yml
   tags:
       - always
-
-- name: "PRELIM | List users accounts"
-  ansible.builtin.command: "awk -F: '{print $1}' /etc/passwd"
-  changed_when: false
-  check_mode: false
-  register: users
+  ansible.builtin.import_tasks:
+      file: parse_etc_password.yml
 
 - name: "PRELIM | Gather accounts with empty password fields"
   ansible.builtin.shell: "cat /etc/shadow | awk -F: '($2 == \"\" ) {j++;print $1; } END {exit j}'"
@@ -96,13 +90,15 @@
   ansible.builtin.stat:
       path: "{{ grub2_path }}"
   changed_when: false
-  register: grub_cfg
+  register: discovered_grub_cfg
 
 - name: "PRELIM | Section 1.1 | Create list of mount points"
   ansible.builtin.set_fact:
       mount_names: "{{ ansible_mounts | map(attribute='mount') | list }}"
 
 - name: "PRELIM | Section 1.5 | SELinux"
+  when:
+      - not rhel7cis_selinux_disable
   block:
       - name: "PRELIM | Section 1.5 | Ensure SELinux is installed"
         ansible.builtin.package:
@@ -120,8 +116,6 @@
       - name: "PRELIM | Section 1.5 | Ensure firewalld_t is set to permissive"
         when: "'firewalld_t' not in firewalld_t_sestate.stdout"
         ansible.builtin.shell: semanage permissive -a firewalld_t
-  when:
-      - not rhel7cis_selinux_disable
   vars:
       ansible_python_interpreter: /bin/python
 
@@ -135,7 +129,7 @@
   changed_when: false
   failed_when: false
   check_mode: false
-  register: rhel7cis_sudoers_files
+  register: discovered_sudoers_files
 
 - name: "PRELIM | Section 5.2.x | Configure System Accounting (auditd)"
   ansible.builtin.package:
@@ -145,15 +139,11 @@
       ansible_python_interpreter: /bin/python
 
 - name: "PRELIM | 5.2.4.x | Ensure audit log files are mode 0640 or less permissive | discover file"
-  ansible.builtin.shell: "grep ^log_file /etc/audit/auditd.conf | awk '{ print $NF }'"
-  changed_when: false
-  failed_when: audit_discovered_logfile.rc not in [0, 1]
-  register: audit_discovered_logfile
   when:
-      - rhel7cis_rule_5_2_4_1
-      - rhel7cis_rule_5_2_4_2
-      - rhel7cis_rule_5_2_4_3
-      - rhel7cis_rule_5_2_4_4
+      - rhel7cis_rule_5_2_4_1 or
+        rhel7cis_rule_5_2_4_2 or
+        rhel7cis_rule_5_2_4_3 or
+        rhel7cis_rule_5_2_4_4
   tags:
       - level2-server
       - level2-workstation
@@ -163,14 +153,12 @@
       - rule_5.2.4.2
       - rule_5.2.4.3
       - rule_5.2.4.4
+  ansible.builtin.shell: "grep ^log_file /etc/audit/auditd.conf | awk '{ print $NF }'"
+  changed_when: false
+  failed_when: audit_discovered_logfile.rc not in [0, 1]
+  register: audit_discovered_logfile
 
 - name: "PRELIM | 5.2.4.5/6/7 | Audit conf and rules files | list files"
-  ansible.builtin.find:
-      path: /etc/audit
-      file_type: file
-      recurse: true
-      patterns: '*.conf,*.rules'
-  register: auditd_conf_files
   when:
       - rhel7cis_rule_5_2_4_5 or
         rhel7cis_rule_5_2_4_6 or
@@ -183,6 +171,12 @@
       - rule_5.2.4.5
       - rule_5.2.4.6
       - rule_5.2.4.7
+  ansible.builtin.find:
+      path: /etc/audit
+      file_type: file
+      recurse: true
+      patterns: '*.conf,*.rules'
+  register: auditd_conf_files
 
 - name: "PRELIM | Section 4.1.1.x | Configure cron"
   ansible.builtin.package:
@@ -197,7 +191,7 @@
   ansible.builtin.shell: >
       grep -E -v '^(root|halt|sync|shutdown)' /etc/passwd | awk -F: '(!index($7, "sbin/nologin") && $7 != "/bin/false") { print $6 }'
   changed_when: false
-  register: interactive_users_home
+  register: discovered_interactive_users_home
 
 ##### Optional #####
 
@@ -225,10 +219,10 @@
         ansible.builtin.shell: grep -E "OPTIONS=.*-4" /etc/sysconfig/chronyd
         changed_when: false
         failed_when: chrony_ipv6_exists.rc not in [ 0, 1]
-        register: chrony_ipv6_exists
+        register: discovered_chrony_ipv6_exists
 
       - name: "PRELIM | Optional | If IPv6 disable to stop chronyd listening"
-        when: chrony_ipv6_exists.stdout | length == 0
+        when: discovered_chrony_ipv6_exists.stdout | length == 0
         ansible.builtin.lineinfile:
             backrefs: true
             path: /etc/sysconfig/chronyd
