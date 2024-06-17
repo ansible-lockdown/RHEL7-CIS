@@ -36,7 +36,7 @@
 
       - name: "1.2.2 | PATCH | Ensure gpgcheck is globally activated | Update yum.repos"
         ansible.builtin.replace:
-            name: "{{ item.path }}"
+            path: "{{ item.path }}"
             regexp: "^gpgcheck=0"
             replace: "gpgcheck=1"
         loop: "{{ yum_repos.files }}"
