@@ -49,7 +49,7 @@
       fstype: "{{ item.fstype }}"
       state: present
       opts: defaults,{% if rhel7cis_rule_1_1_2_1_2 %}nodev,{% endif %}{% if rhel7cis_rule_1_1_2_1_3 %}nosuid,{% endif %}{% if rhel7cis_rule_1_1_2_1_4 %}noexec{% endif %}
-  notify: systemd restart tmp.mount
+  notify: Systemd_restart_tmp.mount
   with_items:
       - "{{ ansible_mounts }}"
   loop_control:

@@ -1,6 +1,6 @@
 ---
 
-- name: systemd restart tmp.mount
+- name: Systemd_restart_tmp.mount
   ansible.builtin.systemd:
       name: tmp.mount
       daemon_reload: true
@@ -8,32 +8,32 @@
       masked: false
       state: reloaded
 
-- name: Remount dev_shm
+- name: Remount_dev_shm
   ansible.posix.mount:
       name: /dev/shm
       state: remounted
 
-- name: Remount home
+- name: Remount_home
   ansible.posix.mount:
       name: /home
       state: remounted
 
-- name: Remount var
+- name: Remount_var
   ansible.posix.mount:
       name: /var
       state: remounted
 
-- name: Remount var_tmp
+- name: Remount_var_tmp
   ansible.posix.mount:
       name: /var/tmp
       state: remounted
 
-- name: Remount var_log
+- name: Remount_var_log
   ansible.posix.mount:
       name: /var/log
       state: remounted
 
-- name: Remount var_log_audit
+- name: Remount_var_log_audit
   ansible.posix.mount:
       name: /var/log/audit
       state: remounted
@@ -79,15 +79,6 @@
       name: systemd-journal-upload
       state: restarted
 
-- name: update auditd
-  ansible.builtin.template:
-      src: audit/99_auditd.rules.j2
-      dest: /etc/audit/rules.d/99_auditd.rules
-      owner: root
-      group: root
-      mode: 0600
-  notify: Restart_auditd
-
 - name: Auditd_immutable_check
   ansible.builtin.shell: grep -c "^-e 2" /etc/audit/rules.d/99_auditd.rules
   changed_when: false
@@ -107,12 +98,12 @@
   ansible.builtin.command: /sbin/grub2-mkconfig -o "{{ rhel7cis_bootloader_file }}"
   notify: Change_requires_reboot
 
-- name: restart rsyslog
+- name: Restart_rsyslog
   ansible.builtin.service:
       name: rsyslog
       state: restarted
 
-- name: restart sshd
+- name: Restart_sshd
   ansible.builtin.service:
       name: sshd
       state: restarted

@@ -49,7 +49,7 @@
       fstype: "{{ item.fstype }}"
       state: present
       opts: defaults,{% if rhel7cis_rule_1_1_2_5_2 %}nodev,{% endif %}{% if rhel7cis_rule_1_1_2_5_3 %}nosuid,{% endif %}{% if rhel7cis_rule_1_1_2_5_4 %}noexec{% endif %}
-  notify: Remount var_tmp
+  notify: Remount_var_tmp
   with_items:
       - "{{ ansible_mounts }}"
   loop_control:
