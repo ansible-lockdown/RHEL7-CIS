@@ -343,7 +343,7 @@
             owner: "{{ item.id }}"
             group: "{{ item.gid }}"
         register: rhel7cis_6_2_10_home_dir
-        loop: "{{ rhel7cis_passwd  | selectattr('uid', '>=', rhel7uid_interactive_uid_start | int ) | selectattr('uid', '<=', rhel7cis_max_uid | int ) | list }}"
+        loop: "{{ rhel7cis_passwd  | selectattr('uid', '>=', rhel7uid_interactive_uid_start | int ) | selectattr('uid', '<=', rhel7uid_interactive_uid_stop | int ) | list }}"
         loop_control:
             label: "{{ item.id }}"
 
@@ -372,7 +372,7 @@
             path: "{{ item.dir }}"
             owner: "{{ item.id }}"
             state: directory
-        loop: "{{ rhel7cis_passwd | selectattr('uid', '>=', rhel7uid_interactive_uid_start | int ) | selectattr('uid', '<=', rhel7cis_max_uid | int ) | list }}"
+        loop: "{{ rhel7cis_passwd | selectattr('uid', '>=', rhel7uid_interactive_uid_start | int ) | selectattr('uid', '<=', rhel7uid_interactive_uid_stop | int ) | list }}"
         loop_control:
             label: "{{ item.id }}"
 
