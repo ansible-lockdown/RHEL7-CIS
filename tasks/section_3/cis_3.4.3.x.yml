@@ -186,7 +186,6 @@
             - '"iif \"lo\" accept" not in rhel7cis_3_4_3_5_iiflo.stdout'
         ansible.builtin.shell: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" input iif lo accept
 
-
       - name: "3.4.3.5 | PATCH | Ensure nftables loopback traffic is configured | Set ip sddr rule"
         when:
             - '"ip saddr 127.0.0.0/8 counter packets 0 bytes 0 drop" not in rhel7cis_3_4_3_5_ipsaddr.stdout'
@@ -236,7 +235,6 @@
         when:
             - '"ip protocol icmp ct state established accept" not in rhel7cis_3_4_3_6_inconnectionrule.stdout'
         ansible.builtin.shell: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" input ip protocol icmp ct state established accept
-
 
       - name: "3.4.3.6 | PATCH | Ensure nftables outbound and established connections are configured | Add output tcp new, related, established accept policy"
         when:
