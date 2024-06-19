@@ -1,15 +1,13 @@
----
 ## metadata for Audit benchmark
-benchmark_version: '3.1.1'
+benchmark_version: '4.0.0'
 
 # Set if genuine RHEL (subscription manager check) not for derivatives e.g. CentOS
-is_redhat_os: {% if ansible_distribution == "RedHat" %}true{% else %}false{% endif %}
+host_os_distribution: {{ ansible_distribution }}
 
 # timeout for each command to run where set - default = 10seconds/10000ms
 timeout_ms: {{ audit_cmd_timeout }}
 
 # Taken from LE rhel7-cis
-rhel7cis_notauto: {{ rhel7cis_notauto }}
 rhel7cis_section1: {{ rhel7cis_section1 }}
 rhel7cis_section2: {{ rhel7cis_section2 }}
 rhel7cis_section3: {{ rhel7cis_section3 }}
@@ -17,17 +15,26 @@ rhel7cis_section4: {{ rhel7cis_section4 }}
 rhel7cis_section5: {{ rhel7cis_section5 }}
 rhel7cis_section6: {{ rhel7cis_section6 }}
 
+rhel7cis_level_1: {{ rhel7cis_level_1 }}
+rhel7cis_level_2: {{ rhel7cis_level_2 }}
+
 rhel7cis_selinux_disable: {{ rhel7cis_selinux_disable }}
 rhel7cis_selinux_state: {{ rhel7cis_selinux_state }}
 
-
-rhel7cis_level1: true
-rhel7cis_level2: true
 # to enable rules that may have IO impact on a system e.g. full filesystem scans or CPU heavy
-run_heavy_tests: {{ audit_run_heavy_tests }}
+rhel7cis_run_heavy_tests: {{ audit_run_heavy_tests }}
 
+{% if rhel7cis_legacy_boot is defined %}
 rhel7cis_legacy_boot: {{ rhel7cis_legacy_boot }}
+{% endif %}
+# if Bios boot
+rhel7cis_bootloader_file: /boot/grub2/grub.cfg
 
+# These variables correspond with the CIS rule IDs or paragraph numbers defined in
+# the CIS benchmark documents.
+# PLEASE NOTE: These work in coordination with the section # group variables and tags.
+# You must enable an entire section in order for the variables below to take effect.
+# Section 1 rules
 # These variables correspond with the CIS rule IDs or paragraph numbers defined in
 # the CIS benchmark documents.
 # PLEASE NOTE: These work in coordination with the section # group variables and tags.
@@ -36,68 +43,106 @@ rhel7cis_legacy_boot: {{ rhel7cis_legacy_boot }}
 rhel7cis_rule_1_1_1_1: {{ rhel7cis_rule_1_1_1_1 }}
 rhel7cis_rule_1_1_1_2: {{ rhel7cis_rule_1_1_1_2 }}
 rhel7cis_rule_1_1_1_3: {{ rhel7cis_rule_1_1_1_3 }}
-rhel7cis_rule_1_1_2: {{ rhel7cis_rule_1_1_2 }}
-rhel7cis_rule_1_1_3: {{ rhel7cis_rule_1_1_3 }}
-rhel7cis_rule_1_1_4: {{ rhel7cis_rule_1_1_4 }}
-rhel7cis_rule_1_1_5: {{ rhel7cis_rule_1_1_5 }}
-rhel7cis_rule_1_1_6: {{ rhel7cis_rule_1_1_6 }}
-rhel7cis_rule_1_1_7: {{ rhel7cis_rule_1_1_7 }}
-rhel7cis_rule_1_1_8: {{ rhel7cis_rule_1_1_8 }}
-rhel7cis_rule_1_1_9: {{ rhel7cis_rule_1_1_9 }}
-rhel7cis_rule_1_1_10: {{ rhel7cis_rule_1_1_10 }}
-rhel7cis_rule_1_1_11: {{ rhel7cis_rule_1_1_11 }}
-rhel7cis_rule_1_1_12: {{ rhel7cis_rule_1_1_12 }}
-rhel7cis_rule_1_1_13: {{ rhel7cis_rule_1_1_13 }}
-rhel7cis_rule_1_1_14: {{ rhel7cis_rule_1_1_14 }}
-rhel7cis_rule_1_1_15: {{ rhel7cis_rule_1_1_15 }}
-rhel7cis_rule_1_1_16: {{ rhel7cis_rule_1_1_16 }}
-rhel7cis_rule_1_1_17: {{ rhel7cis_rule_1_1_17 }}
-rhel7cis_rule_1_1_18: {{ rhel7cis_rule_1_1_18 }}
-rhel7cis_rule_1_1_19: {{ rhel7cis_rule_1_1_19 }}
-rhel7cis_rule_1_1_20: {{ rhel7cis_rule_1_1_20 }}
-rhel7cis_rule_1_1_21: {{ rhel7cis_rule_1_1_21 }}
-rhel7cis_rule_1_1_22: {{ rhel7cis_rule_1_1_22 }}
-rhel7cis_rule_1_1_23: {{ rhel7cis_rule_1_1_23 }}
-rhel7cis_rule_1_1_24: {{ rhel7cis_rule_1_1_24 }}
+rhel7cis_rule_1_1_1_4: {{ rhel7cis_rule_1_1_1_4 }}
+rhel7cis_rule_1_1_1_5: {{ rhel7cis_rule_1_1_1_5 }}
+rhel7cis_rule_1_1_1_6: {{ rhel7cis_rule_1_1_1_6 }}
+rhel7cis_rule_1_1_1_7: {{ rhel7cis_rule_1_1_1_7 }}
+rhel7cis_rule_1_1_1_8: {{ rhel7cis_rule_1_1_1_8 }}
+# /tmp
+rhel7cis_rule_1_1_2_1_1: {{ rhel7cis_rule_1_1_2_1_1 }}
+rhel7cis_rule_1_1_2_1_2: {{ rhel7cis_rule_1_1_2_1_2 }}
+rhel7cis_rule_1_1_2_1_3: {{ rhel7cis_rule_1_1_2_1_3 }}
+rhel7cis_rule_1_1_2_1_4: {{ rhel7cis_rule_1_1_2_1_4 }}
+
+# /dev/shm
+rhel7cis_rule_1_1_2_2_1: {{ rhel7cis_rule_1_1_2_2_1 }}
+rhel7cis_rule_1_1_2_2_2: {{ rhel7cis_rule_1_1_2_2_2 }}
+rhel7cis_rule_1_1_2_2_3: {{ rhel7cis_rule_1_1_2_2_3 }}
+rhel7cis_rule_1_1_2_2_4: {{ rhel7cis_rule_1_1_2_2_4 }}
+
+# /home
+rhel7cis_rule_1_1_2_3_1: {{ rhel7cis_rule_1_1_2_3_1 }}
+rhel7cis_rule_1_1_2_3_2: {{ rhel7cis_rule_1_1_2_3_2 }}
+rhel7cis_rule_1_1_2_3_3: {{ rhel7cis_rule_1_1_2_3_3 }}
+
+# /var
+rhel7cis_rule_1_1_2_4_1: {{ rhel7cis_rule_1_1_2_4_1 }}
+rhel7cis_rule_1_1_2_4_2: {{ rhel7cis_rule_1_1_2_4_2 }}
+rhel7cis_rule_1_1_2_4_3: {{ rhel7cis_rule_1_1_2_4_3 }}
+
+# /var/tmp
+rhel7cis_rule_1_1_2_5_1: {{ rhel7cis_rule_1_1_2_5_1 }}
+rhel7cis_rule_1_1_2_5_2: {{ rhel7cis_rule_1_1_2_5_2 }}
+rhel7cis_rule_1_1_2_5_3: {{ rhel7cis_rule_1_1_2_5_3 }}
+rhel7cis_rule_1_1_2_5_4: {{ rhel7cis_rule_1_1_2_5_4 }}
+
+# /var/log
+rhel7cis_rule_1_1_2_6_1: {{ rhel7cis_rule_1_1_2_6_1 }}
+rhel7cis_rule_1_1_2_6_2: {{ rhel7cis_rule_1_1_2_6_2 }}
+rhel7cis_rule_1_1_2_6_3: {{ rhel7cis_rule_1_1_2_6_3 }}
+rhel7cis_rule_1_1_2_6_4: {{ rhel7cis_rule_1_1_2_6_4 }}
+
+# /var/log/audit
+rhel7cis_rule_1_1_2_7_1: {{ rhel7cis_rule_1_1_2_7_1 }}
+rhel7cis_rule_1_1_2_7_2: {{ rhel7cis_rule_1_1_2_7_2 }}
+rhel7cis_rule_1_1_2_7_3: {{ rhel7cis_rule_1_1_2_7_3 }}
+rhel7cis_rule_1_1_2_7_4: {{ rhel7cis_rule_1_1_2_7_4 }}
+
+#  Patching
 rhel7cis_rule_1_2_1: {{ rhel7cis_rule_1_2_1 }}
 rhel7cis_rule_1_2_2: {{ rhel7cis_rule_1_2_2 }}
 rhel7cis_rule_1_2_3: {{ rhel7cis_rule_1_2_3 }}
 rhel7cis_rule_1_2_4: {{ rhel7cis_rule_1_2_4 }}
 rhel7cis_rule_1_2_5: {{ rhel7cis_rule_1_2_5 }}
+
+# bootloader grub
 rhel7cis_rule_1_3_1: {{ rhel7cis_rule_1_3_1 }}
 rhel7cis_rule_1_3_2: {{ rhel7cis_rule_1_3_2 }}
+rhel7cis_rule_1_3_3: {{ rhel7cis_rule_1_3_3 }}
+
+# kernel sysctl and coredumps
 rhel7cis_rule_1_4_1: {{ rhel7cis_rule_1_4_1 }}
 rhel7cis_rule_1_4_2: {{ rhel7cis_rule_1_4_2 }}
 rhel7cis_rule_1_4_3: {{ rhel7cis_rule_1_4_3 }}
-rhel7cis_rule_1_5_1: {{ rhel7cis_rule_1_5_1 }}
-rhel7cis_rule_1_5_2: {{ rhel7cis_rule_1_5_2 }}
-rhel7cis_rule_1_5_3: {{ rhel7cis_rule_1_5_3 }}
-rhel7cis_rule_1_5_4: {{ rhel7cis_rule_1_5_4 }}
-rhel7cis_rule_1_6_1_1: {{ rhel7cis_rule_1_6_1_1 }}
-rhel7cis_rule_1_6_1_2: {{ rhel7cis_rule_1_6_1_2 }}
-rhel7cis_rule_1_6_1_3: {{ rhel7cis_rule_1_6_1_3 }}
-rhel7cis_rule_1_6_1_4: {{ rhel7cis_rule_1_6_1_4 }}
-rhel7cis_rule_1_6_1_5: {{ rhel7cis_rule_1_6_1_5 }}
-rhel7cis_rule_1_6_1_6: {{ rhel7cis_rule_1_6_1_6 }}
-rhel7cis_rule_1_6_1_7: {{ rhel7cis_rule_1_6_1_7 }}
-rhel7cis_rule_1_6_1_8: {{ rhel7cis_rule_1_6_1_8 }}
+rhel7cis_rule_1_4_4: {{ rhel7cis_rule_1_4_4 }}
+
+# SElinux
+rhel7cis_rule_1_5_1_1: {{ rhel7cis_rule_1_5_1_1 }}
+rhel7cis_rule_1_5_1_2: {{ rhel7cis_rule_1_5_1_2 }}
+rhel7cis_rule_1_5_1_3: {{ rhel7cis_rule_1_5_1_3 }}
+rhel7cis_rule_1_5_1_4: {{ rhel7cis_rule_1_5_1_4 }}
+rhel7cis_rule_1_5_1_5: {{ rhel7cis_rule_1_5_1_5 }}
+rhel7cis_rule_1_5_1_6: {{ rhel7cis_rule_1_5_1_6 }}
+rhel7cis_rule_1_5_1_7: {{ rhel7cis_rule_1_5_1_7 }}
+rhel7cis_rule_1_5_1_8: {{ rhel7cis_rule_1_5_1_8 }}
+
+# motd and banner
+rhel7cis_rule_1_6_1: {{ rhel7cis_rule_1_6_1 }}
+rhel7cis_rule_1_6_2: {{ rhel7cis_rule_1_6_2 }}
+rhel7cis_rule_1_6_3: {{ rhel7cis_rule_1_6_3 }}
+rhel7cis_rule_1_6_4: {{ rhel7cis_rule_1_6_4 }}
+rhel7cis_rule_1_6_5: {{ rhel7cis_rule_1_6_5 }}
+rhel7cis_rule_1_6_6: {{ rhel7cis_rule_1_6_6 }}
+
+# Gnome and Desktop
 rhel7cis_rule_1_7_1: {{ rhel7cis_rule_1_7_1 }}
 rhel7cis_rule_1_7_2: {{ rhel7cis_rule_1_7_2 }}
 rhel7cis_rule_1_7_3: {{ rhel7cis_rule_1_7_3 }}
 rhel7cis_rule_1_7_4: {{ rhel7cis_rule_1_7_4 }}
 rhel7cis_rule_1_7_5: {{ rhel7cis_rule_1_7_5 }}
 rhel7cis_rule_1_7_6: {{ rhel7cis_rule_1_7_6 }}
-rhel7cis_rule_1_8_1: {{ rhel7cis_rule_1_8_1 }}
-rhel7cis_rule_1_8_2: {{ rhel7cis_rule_1_8_2 }}
-rhel7cis_rule_1_8_3: {{ rhel7cis_rule_1_8_3 }}
-rhel7cis_rule_1_8_4: {{ rhel7cis_rule_1_8_4 }}
-rhel7cis_rule_1_9: {{ rhel7cis_rule_1_9 }}
+rhel7cis_rule_1_7_7: {{ rhel7cis_rule_1_7_7 }}
+rhel7cis_rule_1_7_8: {{ rhel7cis_rule_1_7_8 }}
+rhel7cis_rule_1_7_9: {{ rhel7cis_rule_1_7_9 }}
+rhel7cis_rule_1_7_10: {{ rhel7cis_rule_1_7_10 }}
 
-# section 2 rules
+# Time Service (Chrony)
 rhel7cis_rule_2_1_1: {{ rhel7cis_rule_2_1_1 }}
-rhel7cis_rule_2_2_1_1: {{ rhel7cis_rule_2_2_1_1 }}
-rhel7cis_rule_2_2_1_2: {{ rhel7cis_rule_2_2_1_2 }}
-rhel7cis_rule_2_2_1_3: {{ rhel7cis_rule_2_2_1_3 }}
+rhel7cis_rule_2_1_2: {{ rhel7cis_rule_2_1_2 }}
+rhel7cis_rule_2_1_3: {{ rhel7cis_rule_2_1_3 }}
+
+# Special purpose services
+rhel7cis_rule_2_2_1: {{ rhel7cis_rule_2_2_1 }}
 rhel7cis_rule_2_2_2: {{ rhel7cis_rule_2_2_2 }}
 rhel7cis_rule_2_2_3: {{ rhel7cis_rule_2_2_3 }}
 rhel7cis_rule_2_2_4: {{ rhel7cis_rule_2_2_4 }}
@@ -116,17 +161,33 @@ rhel7cis_rule_2_2_16: {{ rhel7cis_rule_2_2_16 }}
 rhel7cis_rule_2_2_17: {{ rhel7cis_rule_2_2_17 }}
 rhel7cis_rule_2_2_18: {{ rhel7cis_rule_2_2_18 }}
 rhel7cis_rule_2_2_19: {{ rhel7cis_rule_2_2_19 }}
+rhel7cis_rule_2_2_20: {{ rhel7cis_rule_2_2_20 }}
+rhel7cis_rule_2_2_21: {{ rhel7cis_rule_2_2_21 }}
+rhel7cis_rule_2_2_22: {{ rhel7cis_rule_2_2_22 }}
+
+# Client Services
 rhel7cis_rule_2_3_1: {{ rhel7cis_rule_2_3_1 }}
 rhel7cis_rule_2_3_2: {{ rhel7cis_rule_2_3_2 }}
 rhel7cis_rule_2_3_3: {{ rhel7cis_rule_2_3_3 }}
 rhel7cis_rule_2_3_4: {{ rhel7cis_rule_2_3_4 }}
 rhel7cis_rule_2_3_5: {{ rhel7cis_rule_2_3_5 }}
 
-# Section 3 rules
+##
+## Section 3 rules
+##
+# Section 3 is Network Configuration (Disable unused network protocols, Network parameters (host), Network parameters (Host and Router), Uncommon Network Protocols, Firewall Configuration, and Configure iptables)
+# ipv6, bluettoth and wireless
 rhel7cis_rule_3_1_1: {{ rhel7cis_rule_3_1_1 }}
 rhel7cis_rule_3_1_2: {{ rhel7cis_rule_3_1_2 }}
+rhel7cis_rule_3_1_3: {{ rhel7cis_rule_3_1_3 }}
+
+# network kernel modules
 rhel7cis_rule_3_2_1: {{ rhel7cis_rule_3_2_1 }}
 rhel7cis_rule_3_2_2: {{ rhel7cis_rule_3_2_2 }}
+rhel7cis_rule_3_2_3: {{ rhel7cis_rule_3_2_3 }}
+rhel7cis_rule_3_2_4: {{ rhel7cis_rule_3_2_4 }}
+
+# network kernel parameters
 rhel7cis_rule_3_3_1: {{ rhel7cis_rule_3_3_1 }}
 rhel7cis_rule_3_3_2: {{ rhel7cis_rule_3_3_2 }}
 rhel7cis_rule_3_3_3: {{ rhel7cis_rule_3_3_3 }}
@@ -136,124 +197,221 @@ rhel7cis_rule_3_3_6: {{ rhel7cis_rule_3_3_6 }}
 rhel7cis_rule_3_3_7: {{ rhel7cis_rule_3_3_7 }}
 rhel7cis_rule_3_3_8: {{ rhel7cis_rule_3_3_8 }}
 rhel7cis_rule_3_3_9: {{ rhel7cis_rule_3_3_9 }}
-rhel7cis_rule_3_4_1: {{ rhel7cis_rule_3_4_1 }}
-rhel7cis_rule_3_4_2: {{ rhel7cis_rule_3_4_2 }}
-rhel7cis_rule_3_5_1_1: {{ rhel7cis_rule_3_5_1_1 }}
-rhel7cis_rule_3_5_1_2: {{ rhel7cis_rule_3_5_1_2 }}
-rhel7cis_rule_3_5_1_3: {{ rhel7cis_rule_3_5_1_3 }}
-rhel7cis_rule_3_5_1_4: {{ rhel7cis_rule_3_5_1_4 }}
-rhel7cis_rule_3_5_1_5: {{ rhel7cis_rule_3_5_1_5 }}
-rhel7cis_rule_3_5_1_6: {{ rhel7cis_rule_3_5_1_6 }}
-rhel7cis_rule_3_5_1_7: {{ rhel7cis_rule_3_5_1_7 }}
-rhel7cis_rule_3_5_2_1: {{ rhel7cis_rule_3_5_2_1 }}
-rhel7cis_rule_3_5_2_2: {{ rhel7cis_rule_3_5_2_2 }}
-rhel7cis_rule_3_5_2_3: {{ rhel7cis_rule_3_5_2_3 }}
-rhel7cis_rule_3_5_2_4: {{ rhel7cis_rule_3_5_2_4 }}
-rhel7cis_rule_3_5_2_5: {{ rhel7cis_rule_3_5_2_5 }}
-rhel7cis_rule_3_5_2_6: {{ rhel7cis_rule_3_5_2_6 }}
-rhel7cis_rule_3_5_2_7: {{ rhel7cis_rule_3_5_2_7 }}
-rhel7cis_rule_3_5_2_8: {{ rhel7cis_rule_3_5_2_8 }}
-rhel7cis_rule_3_5_2_9: {{ rhel7cis_rule_3_5_2_9 }}
-rhel7cis_rule_3_5_2_10: {{ rhel7cis_rule_3_5_2_10 }}
-rhel7cis_rule_3_5_2_11: {{ rhel7cis_rule_3_5_2_11 }}
-rhel7cis_rule_3_5_3_1_1: {{ rhel7cis_rule_3_5_3_1_1 }}
-rhel7cis_rule_3_5_3_1_2: {{ rhel7cis_rule_3_5_3_1_2 }}
-rhel7cis_rule_3_5_3_1_3: {{ rhel7cis_rule_3_5_3_1_3 }}
-rhel7cis_rule_3_5_3_2_1: {{ rhel7cis_rule_3_5_3_2_1 }}
-rhel7cis_rule_3_5_3_2_2: {{ rhel7cis_rule_3_5_3_2_2 }}
-rhel7cis_rule_3_5_3_2_3: {{ rhel7cis_rule_3_5_3_2_3 }}
-rhel7cis_rule_3_5_3_2_4: {{ rhel7cis_rule_3_5_3_2_4 }}
-rhel7cis_rule_3_5_3_2_5: {{ rhel7cis_rule_3_5_3_2_5 }}
-rhel7cis_rule_3_5_3_2_6: {{ rhel7cis_rule_3_5_3_2_6 }}
-rhel7cis_rule_3_5_3_3_1: {{ rhel7cis_rule_3_5_3_3_1 }}
-rhel7cis_rule_3_5_3_3_2: {{ rhel7cis_rule_3_5_3_3_2 }}
-rhel7cis_rule_3_5_3_3_3: {{ rhel7cis_rule_3_5_3_3_3 }}
-rhel7cis_rule_3_5_3_3_4: {{ rhel7cis_rule_3_5_3_3_4 }}
-rhel7cis_rule_3_5_3_3_5: {{ rhel7cis_rule_3_5_3_3_5 }}
-rhel7cis_rule_3_5_3_3_6: {{ rhel7cis_rule_3_5_3_3_6 }}
+rhel7cis_rule_3_3_10: {{ rhel7cis_rule_3_3_10 }}
+rhel7cis_rule_3_3_11: {{ rhel7cis_rule_3_3_11 }}
 
+# Configure firewall utility
+rhel7cis_rule_3_4_1_1: {{ rhel7cis_rule_3_4_1_1 }}
+rhel7cis_rule_3_4_1_2: {{ rhel7cis_rule_3_4_1_2 }}
+
+# firewalld
+rhel7cis_rule_3_4_2_1: {{ rhel7cis_rule_3_4_2_1 }}
+rhel7cis_rule_3_4_2_2: {{ rhel7cis_rule_3_4_2_2 }}
+rhel7cis_rule_3_4_2_3: {{ rhel7cis_rule_3_4_2_3 }}
+rhel7cis_rule_3_4_2_4: {{ rhel7cis_rule_3_4_2_4 }}
+
+# nftables
+rhel7cis_rule_3_4_3_1: {{ rhel7cis_rule_3_4_3_1 }}
+rhel7cis_rule_3_4_3_2: {{ rhel7cis_rule_3_4_3_2 }}
+rhel7cis_rule_3_4_3_3: {{ rhel7cis_rule_3_4_3_3 }}
+rhel7cis_rule_3_4_3_4: {{ rhel7cis_rule_3_4_3_4 }}
+rhel7cis_rule_3_4_3_5: {{ rhel7cis_rule_3_4_3_5 }}
+rhel7cis_rule_3_4_3_6: {{ rhel7cis_rule_3_4_3_6 }}
+rhel7cis_rule_3_4_3_7: {{ rhel7cis_rule_3_4_3_7 }}
+rhel7cis_rule_3_4_3_8: {{ rhel7cis_rule_3_4_3_8 }}
+rhel7cis_rule_3_4_3_9: {{ rhel7cis_rule_3_4_3_9 }}
+
+# iptables
+rhel7cis_rule_3_4_4_1_1: {{ rhel7cis_rule_3_4_4_1_1 }}
+
+# ip4tables
+rhel7cis_rule_3_4_4_2_1: {{ rhel7cis_rule_3_4_4_2_1 }}
+rhel7cis_rule_3_4_4_2_2: {{ rhel7cis_rule_3_4_4_2_2 }}
+rhel7cis_rule_3_4_4_2_3: {{ rhel7cis_rule_3_4_4_2_3 }}
+rhel7cis_rule_3_4_4_2_4: {{ rhel7cis_rule_3_4_4_2_4 }}
+rhel7cis_rule_3_4_4_2_5: {{ rhel7cis_rule_3_4_4_2_5 }}
+rhel7cis_rule_3_4_4_2_6: {{ rhel7cis_rule_3_4_4_2_6 }}
+
+# ip6tables
+rhel7cis_rule_3_4_4_3_1: {{ rhel7cis_rule_3_4_4_3_1 }}
+rhel7cis_rule_3_4_4_3_2: {{ rhel7cis_rule_3_4_4_3_2 }}
+rhel7cis_rule_3_4_4_3_3: {{ rhel7cis_rule_3_4_4_3_3 }}
+rhel7cis_rule_3_4_4_3_4: {{ rhel7cis_rule_3_4_4_3_4 }}
+rhel7cis_rule_3_4_4_3_5: {{ rhel7cis_rule_3_4_4_3_5 }}
+rhel7cis_rule_3_4_4_3_6: {{ rhel7cis_rule_3_4_4_3_6 }}
+
+##
 # Section 4 rules
+##
+
+# Crond and at
 rhel7cis_rule_4_1_1_1: {{ rhel7cis_rule_4_1_1_1 }}
 rhel7cis_rule_4_1_1_2: {{ rhel7cis_rule_4_1_1_2 }}
 rhel7cis_rule_4_1_1_3: {{ rhel7cis_rule_4_1_1_3 }}
+rhel7cis_rule_4_1_1_4: {{ rhel7cis_rule_4_1_1_4 }}
+rhel7cis_rule_4_1_1_5: {{ rhel7cis_rule_4_1_1_5 }}
+rhel7cis_rule_4_1_1_6: {{ rhel7cis_rule_4_1_1_6 }}
+rhel7cis_rule_4_1_1_7: {{ rhel7cis_rule_4_1_1_7 }}
+rhel7cis_rule_4_1_1_8: {{ rhel7cis_rule_4_1_1_8 }}
 rhel7cis_rule_4_1_2_1: {{ rhel7cis_rule_4_1_2_1 }}
-rhel7cis_rule_4_1_2_2: {{ rhel7cis_rule_4_1_2_2 }}
-rhel7cis_rule_4_1_2_3: {{ rhel7cis_rule_4_1_2_3 }}
-rhel7cis_rule_4_1_2_4: {{ rhel7cis_rule_4_1_2_4 }}
-rhel7cis_rule_4_1_3: {{ rhel7cis_rule_4_1_3 }}
-rhel7cis_rule_4_1_4: {{ rhel7cis_rule_4_1_4 }}
-rhel7cis_rule_4_1_5: {{ rhel7cis_rule_4_1_5 }}
-rhel7cis_rule_4_1_6: {{ rhel7cis_rule_4_1_6 }}
-rhel7cis_rule_4_1_7: {{ rhel7cis_rule_4_1_7 }}
-rhel7cis_rule_4_1_8: {{ rhel7cis_rule_4_1_8 }}
-rhel7cis_rule_4_1_9: {{ rhel7cis_rule_4_1_9 }}
-rhel7cis_rule_4_1_10: {{ rhel7cis_rule_4_1_10 }}
-rhel7cis_rule_4_1_11: {{ rhel7cis_rule_4_1_11 }}
-rhel7cis_rule_4_1_12: {{ rhel7cis_rule_4_1_12 }}
-rhel7cis_rule_4_1_13: {{ rhel7cis_rule_4_1_13 }}
-rhel7cis_rule_4_1_14: {{ rhel7cis_rule_4_1_14 }}
-rhel7cis_rule_4_1_15: {{ rhel7cis_rule_4_1_15 }}
-rhel7cis_rule_4_1_16: {{ rhel7cis_rule_4_1_16 }}
-rhel7cis_rule_4_1_17: {{ rhel7cis_rule_4_1_17 }}
-rhel7cis_rule_4_2_1_1: {{ rhel7cis_rule_4_2_1_1 }}
-rhel7cis_rule_4_2_1_2: {{ rhel7cis_rule_4_2_1_2 }}
-rhel7cis_rule_4_2_1_3: {{ rhel7cis_rule_4_2_1_3 }}
-rhel7cis_rule_4_2_1_4: {{ rhel7cis_rule_4_2_1_4 }}
-rhel7cis_rule_4_2_1_5: {{ rhel7cis_rule_4_2_1_5 }}
-rhel7cis_rule_4_2_2_1: {{ rhel7cis_rule_4_2_2_1 }}
-rhel7cis_rule_4_2_2_2: {{ rhel7cis_rule_4_2_2_2 }}
-rhel7cis_rule_4_2_2_3: {{ rhel7cis_rule_4_2_2_3 }}
-rhel7cis_rule_4_2_3: {{ rhel7cis_rule_4_2_3 }}
 
-# Section 5
-rhel7cis_rule_5_1_1: {{ rhel7cis_rule_5_1_1 }}
-rhel7cis_rule_5_1_2: {{ rhel7cis_rule_5_1_2 }}
+# SSHD
+rhel7cis_rule_4_2_1: {{ rhel7cis_rule_4_2_1 }}
+rhel7cis_rule_4_2_2: {{ rhel7cis_rule_4_2_2 }}
+rhel7cis_rule_4_2_3: {{ rhel7cis_rule_4_2_3 }}
+rhel7cis_rule_4_2_4: {{ rhel7cis_rule_4_2_4 }}
+rhel7cis_rule_4_2_5: {{ rhel7cis_rule_4_2_5 }}
+rhel7cis_rule_4_2_6: {{ rhel7cis_rule_4_2_6 }}
+rhel7cis_rule_4_2_7: {{ rhel7cis_rule_4_2_7 }}
+rhel7cis_rule_4_2_8: {{ rhel7cis_rule_4_2_8 }}
+rhel7cis_rule_4_2_9: {{ rhel7cis_rule_4_2_9 }}
+rhel7cis_rule_4_2_10: {{ rhel7cis_rule_4_2_10 }}
+rhel7cis_rule_4_2_11: {{ rhel7cis_rule_4_2_11 }}
+rhel7cis_rule_4_2_12: {{ rhel7cis_rule_4_2_12 }}
+rhel7cis_rule_4_2_13: {{ rhel7cis_rule_4_2_13 }}
+rhel7cis_rule_4_2_14: {{ rhel7cis_rule_4_2_14 }}
+rhel7cis_rule_4_2_15: {{ rhel7cis_rule_4_2_15 }}
+rhel7cis_rule_4_2_16: {{ rhel7cis_rule_4_2_16 }}
+rhel7cis_rule_4_2_17: {{ rhel7cis_rule_4_2_17 }}
+rhel7cis_rule_4_2_18: {{ rhel7cis_rule_4_2_18 }}
+rhel7cis_rule_4_2_19: {{ rhel7cis_rule_4_2_19 }}
+rhel7cis_rule_4_2_20: {{ rhel7cis_rule_4_2_20 }}
+rhel7cis_rule_4_2_21: {{ rhel7cis_rule_4_2_21 }}
+rhel7cis_rule_4_2_22: {{ rhel7cis_rule_4_2_22 }}
+
+# Privilege Escalation
+rhel7cis_rule_4_3_1: {{ rhel7cis_rule_4_3_1 }}
+rhel7cis_rule_4_3_2: {{ rhel7cis_rule_4_3_2 }}
+rhel7cis_rule_4_3_3: {{ rhel7cis_rule_4_3_3 }}
+rhel7cis_rule_4_3_4: {{ rhel7cis_rule_4_3_4 }}
+rhel7cis_rule_4_3_5: {{ rhel7cis_rule_4_3_5 }}
+rhel7cis_rule_4_3_6: {{ rhel7cis_rule_4_3_6 }}
+rhel7cis_rule_4_3_7: {{ rhel7cis_rule_4_3_7 }}
+
+## Configure Pluggable Authentication
+# software packages
+rhel7cis_rule_4_4_1_1: {{ rhel7cis_rule_4_4_1_1 }}
+rhel7cis_rule_4_4_1_2: {{ rhel7cis_rule_4_4_1_2 }}
+
+# pam_faillock
+rhel7cis_rule_4_4_2_1_1: {{ rhel7cis_rule_4_4_2_1_1 }}
+rhel7cis_rule_4_4_2_1_2: {{ rhel7cis_rule_4_4_2_1_2 }}
+rhel7cis_rule_4_4_2_1_3: {{ rhel7cis_rule_4_4_2_1_3 }}
+rhel7cis_rule_4_4_2_1_4: {{ rhel7cis_rule_4_4_2_1_4 }}
+
+# pam_pwquality
+rhel7cis_rule_4_4_2_2_1: {{ rhel7cis_rule_4_4_2_2_1 }}
+rhel7cis_rule_4_4_2_2_2: {{ rhel7cis_rule_4_4_2_2_2 }}
+rhel7cis_rule_4_4_2_2_3: {{ rhel7cis_rule_4_4_2_2_3 }}
+rhel7cis_rule_4_4_2_2_4: {{ rhel7cis_rule_4_4_2_2_4 }}
+rhel7cis_rule_4_4_2_2_5: {{ rhel7cis_rule_4_4_2_2_5 }}
+rhel7cis_rule_4_4_2_2_6: {{ rhel7cis_rule_4_4_2_2_6 }}
+rhel7cis_rule_4_4_2_2_7: {{ rhel7cis_rule_4_4_2_2_7 }}
+
+# pam pwhistory
+rhel7cis_rule_4_4_2_3_1: {{ rhel7cis_rule_4_4_2_3_1 }}
+rhel7cis_rule_4_4_2_3_2: {{ rhel7cis_rule_4_4_2_3_2 }}
+rhel7cis_rule_4_4_2_3_3: {{ rhel7cis_rule_4_4_2_3_3 }}
+rhel7cis_rule_4_4_2_3_4: {{ rhel7cis_rule_4_4_2_3_4 }}
+
+# pam pam_unix
+rhel7cis_rule_4_4_2_4_1: {{ rhel7cis_rule_4_4_2_4_1 }}
+rhel7cis_rule_4_4_2_4_2: {{ rhel7cis_rule_4_4_2_4_2 }}
+rhel7cis_rule_4_4_2_4_3: {{ rhel7cis_rule_4_4_2_4_3 }}
+rhel7cis_rule_4_4_2_4_4: {{ rhel7cis_rule_4_4_2_4_4 }}
+
+# shadow password
+rhel7cis_rule_4_5_1_1: {{ rhel7cis_rule_4_5_1_1 }}
+rhel7cis_rule_4_5_1_2: {{ rhel7cis_rule_4_5_1_2 }}
+rhel7cis_rule_4_5_1_3: {{ rhel7cis_rule_4_5_1_3 }}
+rhel7cis_rule_4_5_1_4: {{ rhel7cis_rule_4_5_1_4 }}
+rhel7cis_rule_4_5_1_5: {{ rhel7cis_rule_4_5_1_5 }}
+
+# root and system accts
+rhel7cis_rule_4_5_2_1: {{ rhel7cis_rule_4_5_2_1 }}
+rhel7cis_rule_4_5_2_2: {{ rhel7cis_rule_4_5_2_2 }}
+rhel7cis_rule_4_5_2_3: {{ rhel7cis_rule_4_5_2_3 }}
+rhel7cis_rule_4_5_2_4: {{ rhel7cis_rule_4_5_2_4 }}
+
+# user default envs
+rhel7cis_rule_4_5_3_1: {{ rhel7cis_rule_4_5_3_1 }}
+rhel7cis_rule_4_5_3_2: {{ rhel7cis_rule_4_5_3_2 }}
+rhel7cis_rule_4_5_3_3: {{ rhel7cis_rule_4_5_3_3 }}
+
+#
+## Section 5 rules
+##
+
+# Rsyslog
+rhel7cis_rule_5_1_1_1: {{ rhel7cis_rule_5_1_1_1 }}
+rhel7cis_rule_5_1_1_2: {{ rhel7cis_rule_5_1_1_2 }}
+rhel7cis_rule_5_1_1_3: {{ rhel7cis_rule_5_1_1_3 }}
+rhel7cis_rule_5_1_1_4: {{ rhel7cis_rule_5_1_1_4 }}
+rhel7cis_rule_5_1_1_5: {{ rhel7cis_rule_5_1_1_5 }}
+rhel7cis_rule_5_1_1_6: {{ rhel7cis_rule_5_1_1_6 }}
+rhel7cis_rule_5_1_1_7: {{ rhel7cis_rule_5_1_1_7 }}
+
+# Journald
+rhel7cis_rule_5_1_2_1_1: {{ rhel7cis_rule_5_1_2_1_1 }}
+rhel7cis_rule_5_1_2_1_2: {{ rhel7cis_rule_5_1_2_1_2 }}
+rhel7cis_rule_5_1_2_1_3: {{ rhel7cis_rule_5_1_2_1_3 }}
+rhel7cis_rule_5_1_2_1_4: {{ rhel7cis_rule_5_1_2_1_4 }}
+rhel7cis_rule_5_1_2_2: {{ rhel7cis_rule_5_1_2_2 }}
+rhel7cis_rule_5_1_2_3: {{ rhel7cis_rule_5_1_2_3 }}
+rhel7cis_rule_5_1_2_4: {{ rhel7cis_rule_5_1_2_4 }}
+rhel7cis_rule_5_1_2_5: {{ rhel7cis_rule_5_1_2_5 }}
+rhel7cis_rule_5_1_2_6: {{ rhel7cis_rule_5_1_2_6 }}
 rhel7cis_rule_5_1_3: {{ rhel7cis_rule_5_1_3 }}
 rhel7cis_rule_5_1_4: {{ rhel7cis_rule_5_1_4 }}
-rhel7cis_rule_5_1_5: {{ rhel7cis_rule_5_1_5 }}
-rhel7cis_rule_5_1_6: {{ rhel7cis_rule_5_1_6 }}
-rhel7cis_rule_5_1_7: {{ rhel7cis_rule_5_1_7 }}
-rhel7cis_rule_5_1_8: {{ rhel7cis_rule_5_1_8 }}
-rhel7cis_rule_5_1_9: {{ rhel7cis_rule_5_1_9 }}
-rhel7cis_rule_5_2_1: {{ rhel7cis_rule_5_2_1 }}
-rhel7cis_rule_5_2_2: {{ rhel7cis_rule_5_2_2 }}
-rhel7cis_rule_5_2_3: {{ rhel7cis_rule_5_2_3 }}
+
+# Auditd
+rhel7cis_rule_5_2_1_1: {{ rhel7cis_rule_5_2_1_1 }}
+rhel7cis_rule_5_2_1_2: {{ rhel7cis_rule_5_2_1_2 }}
+rhel7cis_rule_5_2_1_3: {{ rhel7cis_rule_5_2_1_3 }}
+rhel7cis_rule_5_2_1_4: {{ rhel7cis_rule_5_2_1_4 }}
+rhel7cis_rule_5_2_2_1: {{ rhel7cis_rule_5_2_2_1 }}
+rhel7cis_rule_5_2_2_2: {{ rhel7cis_rule_5_2_2_2 }}
+rhel7cis_rule_5_2_2_3: {{ rhel7cis_rule_5_2_2_3 }}
+rhel7cis_rule_5_2_2_4: {{ rhel7cis_rule_5_2_2_4 }}
+
+# auditd rules
+rhel7cis_rule_5_2_3_1: {{ rhel7cis_rule_5_2_3_1 }}
+rhel7cis_rule_5_2_3_2: {{ rhel7cis_rule_5_2_3_2 }}
+rhel7cis_rule_5_2_3_3: {{ rhel7cis_rule_5_2_3_3 }}
+rhel7cis_rule_5_2_3_4: {{ rhel7cis_rule_5_2_3_4 }}
+rhel7cis_rule_5_2_3_5: {{ rhel7cis_rule_5_2_3_5 }}
+rhel7cis_rule_5_2_3_6: {{ rhel7cis_rule_5_2_3_6 }}
+rhel7cis_rule_5_2_3_7: {{ rhel7cis_rule_5_2_3_7 }}
+rhel7cis_rule_5_2_3_8: {{ rhel7cis_rule_5_2_3_8 }}
+rhel7cis_rule_5_2_3_9: {{ rhel7cis_rule_5_2_3_9 }}
+rhel7cis_rule_5_2_3_10: {{ rhel7cis_rule_5_2_3_10 }}
+rhel7cis_rule_5_2_3_11: {{ rhel7cis_rule_5_2_3_11 }}
+rhel7cis_rule_5_2_3_12: {{ rhel7cis_rule_5_2_3_12 }}
+rhel7cis_rule_5_2_3_13: {{ rhel7cis_rule_5_2_3_13 }}
+rhel7cis_rule_5_2_3_14: {{ rhel7cis_rule_5_2_3_14 }}
+rhel7cis_rule_5_2_3_15: {{ rhel7cis_rule_5_2_3_15 }}
+rhel7cis_rule_5_2_3_16: {{ rhel7cis_rule_5_2_3_16 }}
+rhel7cis_rule_5_2_3_17: {{ rhel7cis_rule_5_2_3_17 }}
+rhel7cis_rule_5_2_3_18: {{ rhel7cis_rule_5_2_3_18 }}
+rhel7cis_rule_5_2_3_19: {{ rhel7cis_rule_5_2_3_19 }}
+rhel7cis_rule_5_2_3_20: {{ rhel7cis_rule_5_2_3_20 }}
+rhel7cis_rule_5_2_3_21: {{ rhel7cis_rule_5_2_3_21 }}
+
+# auditd file access
+rhel7cis_rule_5_2_4_1: {{ rhel7cis_rule_5_2_4_1 }}
+rhel7cis_rule_5_2_4_2: {{ rhel7cis_rule_5_2_4_2 }}
+rhel7cis_rule_5_2_4_3: {{ rhel7cis_rule_5_2_4_3 }}
+rhel7cis_rule_5_2_4_4: {{ rhel7cis_rule_5_2_4_4 }}
+rhel7cis_rule_5_2_4_5: {{ rhel7cis_rule_5_2_4_5 }}
+rhel7cis_rule_5_2_4_6: {{ rhel7cis_rule_5_2_4_6 }}
+rhel7cis_rule_5_2_4_7: {{ rhel7cis_rule_5_2_4_7 }}
+rhel7cis_rule_5_2_4_8: {{ rhel7cis_rule_5_2_4_8 }}
+rhel7cis_rule_5_2_4_9: {{ rhel7cis_rule_5_2_4_9 }}
+rhel7cis_rule_5_2_4_10: {{ rhel7cis_rule_5_2_4_10 }}
+
+# Aide
 rhel7cis_rule_5_3_1: {{ rhel7cis_rule_5_3_1 }}
 rhel7cis_rule_5_3_2: {{ rhel7cis_rule_5_3_2 }}
-rhel7cis_rule_5_3_3: {{ rhel7cis_rule_5_3_3 }}
-rhel7cis_rule_5_3_4: {{ rhel7cis_rule_5_3_4 }}
-rhel7cis_rule_5_3_5: {{ rhel7cis_rule_5_3_5 }}
-rhel7cis_rule_5_3_6: {{ rhel7cis_rule_5_3_6 }}
-rhel7cis_rule_5_3_7: {{ rhel7cis_rule_5_3_7 }}
-rhel7cis_rule_5_3_8: {{ rhel7cis_rule_5_3_8 }}
-rhel7cis_rule_5_3_9: {{ rhel7cis_rule_5_3_9 }}
-rhel7cis_rule_5_3_10: {{ rhel7cis_rule_5_3_10 }}
-rhel7cis_rule_5_3_11: {{ rhel7cis_rule_5_3_11 }}
-rhel7cis_rule_5_3_12: {{ rhel7cis_rule_5_3_12 }}
-rhel7cis_rule_5_3_13: {{ rhel7cis_rule_5_3_13 }}
-rhel7cis_rule_5_3_14: {{ rhel7cis_rule_5_3_14 }}
-rhel7cis_rule_5_3_15: {{ rhel7cis_rule_5_3_15 }}
-rhel7cis_rule_5_3_16: {{ rhel7cis_rule_5_3_16 }}
-rhel7cis_rule_5_3_17: {{ rhel7cis_rule_5_3_17 }}
-rhel7cis_rule_5_3_18: {{ rhel7cis_rule_5_3_18 }}
-rhel7cis_rule_5_3_19: {{ rhel7cis_rule_5_3_19 }}
-rhel7cis_rule_5_3_20: {{ rhel7cis_rule_5_3_20 }}
-rhel7cis_rule_5_3_21: {{ rhel7cis_rule_5_3_21 }}
-rhel7cis_rule_5_3_22: {{ rhel7cis_rule_5_3_22 }}
-rhel7cis_rule_5_4_1: {{ rhel7cis_rule_5_4_1 }}
-rhel7cis_rule_5_4_2: {{ rhel7cis_rule_5_4_2 }}
-rhel7cis_rule_5_4_3: {{ rhel7cis_rule_5_4_3 }}
-rhel7cis_rule_5_4_4: {{ rhel7cis_rule_5_4_4 }}
-rhel7cis_rule_5_5_1_1: {{ rhel7cis_rule_5_5_1_1 }}
-rhel7cis_rule_5_5_1_2: {{ rhel7cis_rule_5_5_1_2 }}
-rhel7cis_rule_5_5_1_3: {{ rhel7cis_rule_5_5_1_3 }}
-rhel7cis_rule_5_5_1_4: {{ rhel7cis_rule_5_5_1_4 }}
-rhel7cis_rule_5_5_1_5: {{ rhel7cis_rule_5_5_1_5 }}
-rhel7cis_rule_5_5_2: {{ rhel7cis_rule_5_5_2 }}
-rhel7cis_rule_5_5_3: {{ rhel7cis_rule_5_5_3 }}
-rhel7cis_rule_5_5_4: {{ rhel7cis_rule_5_5_4 }}
-rhel7cis_rule_5_5_5: {{ rhel7cis_rule_5_5_5 }}
-rhel7cis_rule_5_7: {{ rhel7cis_rule_5_7 }}
 
 # Section 6
 rhel7cis_rule_6_1_1: {{ rhel7cis_rule_6_1_1 }}
@@ -288,184 +446,225 @@ rhel7cis_rule_6_2_14: {{ rhel7cis_rule_6_2_14 }}
 rhel7cis_rule_6_2_15: {{ rhel7cis_rule_6_2_15 }}
 rhel7cis_rule_6_2_16: {{ rhel7cis_rule_6_2_16 }}
 rhel7cis_rule_6_2_17: {{ rhel7cis_rule_6_2_17 }}
+#####
 
+####
+# Section1
+####
 
-# Service configuration booleans set true to keep service
-rhel7cis_avahi_server: {{ rhel7cis_avahi_server }}
-rhel7cis_cups_server: {{ rhel7cis_cups_server }}
-rhel7cis_dhcp_server: {{ rhel7cis_dhcp_server }}
-rhel7cis_ldap_server: {{ rhel7cis_ldap_server }}
-rhel7cis_telnet_server: {{ rhel7cis_telnet_server }}
-rhel7cis_nfs_server: {{ rhel7cis_nfs_server }}
-rhel7cis_rpc_server: {{ rhel7cis_rpc_server }}
-rhel7cis_ntalk_server: {{ rhel7cis_ntalk_server }}
-rhel7cis_rsyncd_server: {{ rhel7cis_rsyncd_server }}
-rhel7cis_tftp_server: {{ rhel7cis_tftp_server }}
-rhel7cis_rsh_server: {{ rhel7cis_rsh_server }}
-rhel7cis_nis_server: {{ rhel7cis_nis_server }}
-rhel7cis_snmp_server: {{ rhel7cis_snmp_server }}
-rhel7cis_squid_server: {{ rhel7cis_squid_server }}
-rhel7cis_smb_server: {{ rhel7cis_smb_server }}
-rhel7cis_dovecot_server: {{ rhel7cis_dovecot_server }}
-rhel7cis_httpd_server: {{ rhel7cis_httpd_server }}
-rhel7cis_vsftpd_server: {{ rhel7cis_vsftpd_server }}
-rhel7cis_named_server: {{ rhel7cis_named_server }}
-rhel7cis_nfs_rpc_server: {{ rhel7cis_nfs_rpc_server }}
-rhel7cis_is_mail_server: {{ rhel7cis_is_mail_server }}
-rhel7cis_bind: {{ rhel7cis_bind }}
-rhel7cis_vsftpd: {{ rhel7cis_vsftpd }}
-rhel7cis_httpd: {{ rhel7cis_httpd }}
-rhel7cis_dovecot: {{ rhel7cis_dovecot }}
-rhel7cis_samba: {{ rhel7cis_samba }}
-rhel7cis_squid: {{ rhel7cis_squid }}
-rhel7cis_net_snmp: {{ rhel7cis_net_snmp}}
-rhel7cis_allow_autofs: {{ rhel7cis_allow_autofs }}
-
-# client services
-rhel7cis_openldap_clients_required: {{ rhel7cis_openldap_clients_required }}
-rhel7cis_telnet_required: {{ rhel7cis_telnet_required }}
-rhel7cis_talk_required: {{ rhel7cis_talk_required }}
-rhel7cis_rsh_required: {{ rhel7cis_rsh_required }}
-rhel7cis_ypbind_required: {{ rhel7cis_ypbind_required }}
-
-# AIDE
-rhel7cis_config_aide: {{ rhel7cis_config_aide }}
-# aide setup via - cron, timer
-rhel7_aide_scan: cron
-
-# AIDE cron settings
-rhel7cis_aide_cron:
-  cron_user: {{ rhel7cis_aide_cron.cron_user }}
-  cron_file: '{{ rhel7cis_aide_cron.cron_file }}'
-  aide_job: ' {{ rhel7cis_aide_cron.aide_job }}'
-  aide_minute: '{{ rhel7cis_aide_cron.aide_minute }}'
-  aide_hour: '{{ rhel7cis_aide_cron.aide_hour }}'
-  aide_day: '{{ rhel7cis_aide_cron.aide_day }}'
-  aide_month: '{{ rhel7cis_aide_cron.aide_month }}'
-  aide_weekday: '{{ rhel7cis_aide_cron.aide_weekday }}'
-
-# 1.4.1 Bootloader password
-rhel7cis_bootloader_file: {{ rhel7cis_bootloader_path }}grub.cfg
-rhel7cis_bootloader_user: {{ rhel7cis_bootloader_path }}user.cfg
-rhel7cis_bootloader_password: {{ rhel7cis_bootloader_password_hash }}
+rhel7cis_boot_path: {{ rhel7cis_boot_path }}
 rhel7cis_set_boot_pass: {{ rhel7cis_set_boot_pass }}
 
 # Warning Banner Content (issue, issue.net, motd)
 rhel7cis_warning_banner: {{ rhel7cis_warning_banner }}
 # End Banner
 
-# Set to 'true' if X Windows is needed in your environment
-rhel7cis_xwindows_required: {{ rhel7cis_xwindows_required }}
-
 # Whether or not to run tasks related to auditing/patching the desktop environment
 rhel7cis_gui: {{ rhel7cis_gui }}
 
-# xinetd required
-rhel7cis_xinetd_required: {{ rhel7cis_xinetd_required }}
-
-# IPv6 required
-rhel7cis_ipv6_required: {{ rhel7cis_ipv6_required }}
-
-# System network parameters (host only OR host and router)
-rhel7cis_is_router: {{ rhel7cis_is_router }}
-
-# Time Synchronization
+####
+# Section 2
+####
 rhel7cis_time_synchronization: {{ rhel7cis_time_synchronization }}
 
-rhel7cis_firewall: {{ rhel7cis_firewall }}
-# rhel7cis_firewall: iptables
-rhel7cis_default_firewall_zone: {{ rhel7cis_default_zone }}
+# 2.2.x
+# Service configuration booleans set true to keep service
+# Service configuration
+# Options are
+# true to leave installed if exists not changes take place
+# false - this removes the package
+# mask - if a dependancy for product so cannot be removed
+# Server Services
+rhel7cis_autofs_services: {{ rhel7cis_autofs_services }}
+rhel7cis_autofs_mask: {{ rhel7cis_autofs_mask }}
+rhel7cis_avahi_server: {{ rhel7cis_avahi_server }}
+rhel7cis_avahi_mask: {{ rhel7cis_avahi_mask }}
+rhel7cis_dhcp_server: {{ rhel7cis_dhcp_server }}
+rhel7cis_dhcp_mask: {{ rhel7cis_dhcp_mask }}
+rhel7cis_dns_server: {{ rhel7cis_dns_server }}
+rhel7cis_dns_mask: {{ rhel7cis_dns_mask }}
+rhel7cis_dnsmasq_server: {{ rhel7cis_dnsmasq_server }}
+rhel7cis_dnsmasq_mask: {{ rhel7cis_dnsmasq_mask }}
+rhel7cis_samba_server: {{ rhel7cis_samba_server }}
+rhel7cis_samba_mask: {{ rhel7cis_samba_mask }}
+rhel7cis_ftp_server: {{ rhel7cis_ftp_server }}
+rhel7cis_ftp_mask: {{ rhel7cis_ftp_mask }}
+rhel7cis_message_server: {{ rhel7cis_message_server }}  # This is for messaging dovecot and cyrus-imap
+rhel7cis_message_mask: {{ rhel7cis_message_mask }}
+rhel7cis_nfs_server: {{ rhel7cis_nfs_server }}
+rhel7cis_nfs_mask: {{ rhel7cis_nfs_mask }}
+rhel7cis_nis_server: {{ rhel7cis_nis_server }}  # set to mask if nis client required
+rhel7cis_nis_mask: {{ rhel7cis_nis_mask }}
+rhel7cis_print_server: {{ rhel7cis_print_server }}  # replaces cups
+rhel7cis_print_mask: {{ rhel7cis_print_mask }}
+rhel7cis_rpc_server: {{ rhel7cis_rpc_server }}
+rhel7cis_rpc_mask: {{ rhel7cis_rpc_mask }}
+rhel7cis_rsync_server: {{ rhel7cis_rsync_server }}
+rhel7cis_rsync_mask: {{ rhel7cis_rsync_mask }}
+rhel7cis_net_snmp_server: {{ rhel7cis_net_snmp_server }}
+rhel7cis_net_snmp_mask: {{ rhel7cis_net_snmp_mask }}
+rhel7cis_telnet_server: {{ rhel7cis_telnet_server }}
+rhel7cis_telnet_mask: {{ rhel7cis_telnet_mask }}
+rhel7cis_tftp_server: {{ rhel7cis_tftp_server }}
+rhel7cis_tftp_mask: {{ rhel7cis_tftp_mask }}
+rhel7cis_squid_server: {{ rhel7cis_squid_server }}
+rhel7cis_squid_mask: {{ rhel7cis_squid_mask }}
+rhel7cis_httpd_server: {{ rhel7cis_httpd_server }}
+rhel7cis_httpd_mask: {{ rhel7cis_httpd_mask }}
+rhel7cis_nginx_server: {{ rhel7cis_nginx_server }}
+rhel7cis_nginx_mask: {{ rhel7cis_nginx_mask }}
+rhel7cis_xinetd_server: {{ rhel7cis_xinetd_server }}
+rhel7cis_xinetd_mask: {{ rhel7cis_xinetd_mask }}
+rhel7cis_xwindow_server: {{ rhel7cis_xwindow_server }}  # will remove mask not an option
+rhel7cis_is_mail_server: {{ rhel7cis_is_mail_server }}
+
+# Service Clients
+# Client Services
+rhel7cis_ftp_client: {{ rhel7cis_ftp_client }}
+rhel7cis_openldap_clients_required: {{ rhel7cis_openldap_clients_required }}
+rhel7cis_ypbind_required: {{ rhel7cis_ypbind_required }}  # Same package as NIS server
+rhel7cis_telnet_required: {{ rhel7cis_telnet_required }}
+rhel7cis_tftp_client: {{ rhel7cis_tftp_client }}
+
+###
+## Section 3 Variables
+####
+# 3.1.x
+# IPv6 required
+rhel7cis_ipv6_required: {{ rhel7cis_ipv6_required }}
+rhel7cis_ipv6_sysctl_force: {{ rhel7cis_ipv6_sysctl_force }}
+rhel7cis_ipv6_sysctl_file: /etc/sysctl.d/60-ipv6.conf
+# Setting this will stop ipv6 listening on ::1 and will remove from /etc/hosts
+rhel7cis_ipv6_disable_localhost: {{ rhel7cis_ipv6_disable_localhost }}
+
+# service = true removes package - mask = true will just mask package
+rhel7cis_bluetooth_service: {{ rhel7cis_bluetooth_service }}
+rhel7cis_bluetooth_mask: {{ rhel7cis_bluetooth_mask }}
+
+# 3.3.x
+# System network parameters (host only OR host and router)
+rhel7cis_is_router: {{ rhel7cis_is_router }}
+rhel7cis_ipv4_sysctl_file: /etc/sysctl.d/60-ipv4.conf
+
+# Firewall Service - either firewalld, iptables or nftables
+# multiple options for removal or masking of services
+# The firewall to be configured
+rhel7cis_system_firewall: firewalld
+# Set the following to remove or mask - note will not effect system_firewall # set to none
+rhel7cis_nftables: mask
+rhel7cis_iptables: mask
+rhel7cis_firewalld: none
+
 rhel7cis_firewall_interface:
-- ['ens224']
-- ['ens192']
-rhel7cis_firewall_services: {{ rhel7cis_firewall_services }}
+- eth0
 
-# rhel7cis_firewall: iptables
-iptables_boot_config: {{ rhel7cis_iptables_boot_config }}
-ip6tables_boot_config: {{ rhel7cis_ip6tables_boot_config }}
+####
+## Section 4 Variables
+####
 
-# Section 4
-# auditd settings
-rhel7cis_auditd:
-  space_left_action: {{ rhel7cis_auditd.space_left_action }}
-  action_mail_acct: {{ rhel7cis_auditd.action_mail_acct }}
-  admin_space_left_action: {{ rhel7cis_auditd.admin_space_left_action }}
-  max_log_file_action: {{ rhel7cis_auditd.max_log_file_action }}
-  auditd_backlog_limit: {{ rhel7cis_audit_backlog_limit }}
+# SSH variables
 
-# syslog
-{% if rhel7cis_syslog == "rsyslog" %}
-rhel7cis_rsyslog: true
-{% endif %}
+## Can be VERBOSE or INFO
+rhel7cis_ssh_loglevel: INFO
+# rhel7cis_ssh_maxsessions is the max number of sessions
+# To conform to CIS standards this value nees to be 10 or less
 
-# Section 5
+rhel7cis_sshd:
+    clientalivecountmax: 3
+    # clientaliveinterval shoudl be between 1 and 900
+    clientaliveinterval: 15
+    ciphers: "chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr"
+    macs: "hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256"
+    kex: "curve25519-sha256,curve25519-sha256@libssh.org,ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group-exchange-sha256"
+    # logingracetime value is in seconds and needs to be set to 1 minute or less
+    logingracetime: 60
+
 rhel7cis_sshd_limited: false
 #Note the following to understand precedence and layout
 rhel7cis_sshd_access:
-- AllowUser
-- AllowGroup
-- DenyUser
-- DenyGroup
+{% if rhel7cis_sshd.allowusers is defined %}
+  AllowUser: {{ rhel7cis_sshd.allowusers }}
+{% endif %}
+{% if rhel7cis_sshd.allowgroups is defined %}
+  AllowGroup: {{ rhel7cis_sshd.allowgroups }}
+{% endif %}
+{% if rhel7cis_sshd.denyusers is defined %}
+  DenyUser: {{ rhel7cis_sshd.denyusers }}
+{% endif %}
+{% if rhel7cis_sshd.denygroups is defined %}
+  DenyGroup: {{ rhel7cis_sshd.denygroups }}
+{% endif %}
 
-rhel7cis_ssh_strong_ciphers:  Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128- gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
 rhel7cis_ssh_weak_ciphers:
-- 3des-cbc
-- aes128-cbc
-- aes192-cbc
-- aes256-cbc
-- arcfour
-- arcfour128
-- arcfour256
-- blowfish-cbc
-- cast128-cbc
-- rijndael-cbc@lysator.liu.se
+  - 3des-cbc
+  - aes128-cbc
+  - aes192-cbc
+  - aes256-cbc
+  - arcfour
+  - arcfour128
+  - arcfour256
+  - blowfish-cbc
+  - cast128-cbc
+  - rijndael-cbc@lysator.liu.se
 
-rhel7cis_ssh_strong_macs:  MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2- 512,hmac-sha2-256
-rhel7cis_ssh_weak_macs:
-- hmac-md5
-- hmac-md5-96
-- hmac-ripemd160
-- hmac-sha1
-- hmac-sha1-96
-- umac-64@openssh.com
-- umac-128@openssh.com
-- hmac-md5-etm@openssh.com
-- hmac-md5-96-etm@openssh.com
-- hmac-ripemd160-etm@openssh.com
-- hmac-sha1-etm@openssh.com
-- hmac-sha1-96-etm@openssh.com
-- umac-64-etm@openssh.com
-- umac-128-etm@openssh.com
-
-rhel7cis_ssh_strong_kex: KexAlgorithms curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman- group14-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256
 rhel7cis_ssh_weak_kex:
-- diffie-hellman-group1-sha1
-- diffie-hellman-group14-sha1
-- diffie-hellman-group-exchange-sha1
+  - diffie-hellman-group1-sha1
+  - diffie-hellman-group14-sha1
+  - diffie-hellman-group-exchange-sha1
 
-rhel7cis_ssh_aliveinterval: "300"
-rhel7cis_ssh_countmax: "3"
+rhel7cis_ssh_weak_macs:
+  - hmac-md5
+  - hmac-md5-96
+  - hmac-ripemd160
+  - hmac-sha1
+  - hmac-sha1-96
+  - umac-64@openssh.com
+  - umac-128@openssh.com
+  - hmac-md5-etm@openssh.com
+  - hmac-md5-96-etm@openssh.com
+  - hmac-ripemd160-etm@openssh.com
+  - hmac-sha1-etm@openssh.com
+  - hmac-sha1-96-etm@openssh.com
+  - umac-64-etm@openssh.com
+  - umac-128-etm@openssh.com
 
-rhel7cis_sugroup: {{ rhel7cis_sugroup| default('wheel') }}
+## Sudo
 
+# Group to be used for su
+# this group needs to exists groups will not be created for remediation this is considered sys admins
 
-## PAM
-rhel7cis_pam_password:
-  - minclass = 4
-rhel7cis_pam_passwd_retry: "3"
-# faillock or tally2
-rhel7cis_accountlock: faillock
+rhel7cis_sugroup: wheel
+rhel7cis_sugroup_users: ""
 
-## note this is to skip tests
-skip_rhel7cis_pam_passwd_auth: true
-skip_rhel7cis_pam_system_auth: true
+rhel7cis_pwquality_minclass: {{ rhel7cis_pwquality_minclass }}
 
-# choose one of below
-rhel7cis_pwhistory_so: "14"
-rhel7cis_unix_so: false
-rhel7cis_passwd_remember: "{{ rhel7cis_pam_faillock.remember }}"
+rhel7cis_pass:
+    max_days: 365
+    warn_age: 7
 
-# logins.def password settings
-rhel7cis_pass_max_days: {{ rhel7cis_pass.max_days }}
-rhel7cis_pass_min_days: {{ rhel7cis_pass.min_days }}
-rhel7cis_pass_warn_age: {{ rhel7cis_pass.warn_age }}
+####
+## Section 5 Variables
+####
+
+# Preferred method of logging
+# Whether rsyslog or journald preferred method for local logging
+rhel7cis_syslog: rsyslog
+rhel7cis_rsyslog_ansiblemanaged: {{ rhel7cis_rsyslog_ansiblemanaged }}
+# Set if system is the log server
+rhel7cis_system_is_log_server: {{ rhel7cis_system_is_log_server }}
+
+# AuditD
+
+# auditd settings
+rhel7cis_auditd:
+    max_log_file_action: keep_logs
+
+# AIDE
+rhel7cis_config_aide: {{ rhel7cis_config_aide }}
+
+# aide setup via - cron, timer
+rhel7cis_aide_scan: cron
+
+####
+## Section 6 variables
+####

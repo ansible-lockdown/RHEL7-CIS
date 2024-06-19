@@ -1,0 +1,98 @@
+---
+
+- name: "3.4.2.1 | PATCH | Ensure FirewallD is installed"
+  when:
+      - rhel7cis_rule_3_4_2_1
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - rule_3.4.2.1
+      - firewall
+      - firewalld
+      - NIST800-53R5_CA-9
+  ansible.builtin.package:
+      name: firewalld
+      state: present
+  vars:
+      ansible_python_interpreter: /bin/python
+
+- name: "3.4.2.2 | PATCH | Ensure firewalld service is enabled and running"
+  when:
+      - rhel7cis_rule_3_4_2_2
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - rule_3.4.2.2
+      - firewall
+      - firewalld
+      - NIST800-53R5_CA-9
+  ansible.builtin.systemd:
+      name: firewalld
+      state: started
+      enabled: true
+
+- name: "3.4.2.3 | AUDIT | Ensure firewalld drops unnecessary services and ports"
+  when:
+      - rhel7cis_rule_3_4_2_3
+  tags:
+      - level1-server
+      - level1-workstation
+      - manual
+      - audit
+      - rule_3.4.2.3
+      - firewall
+      - NIST800-53R5_CA-9
+  block:
+      - name: "3.4.2.3 | AUDIT | Ensure unnecessary services and ports are not accepted | Get list of services and ports"
+        ansible.builtin.shell: "firewall-cmd --get-active-zones | awk '!/:/ {print $1}' | while read ZN; do firewall-cmd --list-all --zone=$ZN; done"
+        changed_when: false
+        failed_when: false
+        register: rhel7cis_3_4_2_3_services_ports
+
+      - name: "3.4.2.3 | AUDIT | Ensure firewalld drops unnecessary services and ports | Show services and ports"
+        ansible.builtin.debug:
+            msg:
+                - "The items below are the services and ports that are accepted, please correct as needed"
+                - "{{ rhel7cis_3_4_2_3_services_ports.stdout_lines }}"
+
+      - name: "3.4.2.3 | AUDIT | Ensure firewalld drops unnecessary services and ports | Warn Count"
+        when: rhel7cis_3_4_2_3_services_ports.stdout | length > 0
+        vars:
+            warn_control_id: '3.4.2.3'
+        ansible.builtin.import_tasks:
+            file: warning_facts.yml
+
+- name: "3.4.2.4 | AUDIT | Ensure network interfaces are assigned to appropriate zone"
+  when:
+      - rhel7cis_rule_3_4_2_4
+  tags:
+      - level1-server
+      - level1-workstation
+      - manual
+      - audit
+      - rule_3.4.2.4
+      - firewall
+      - NIST800-53R5_CA-9
+  block:
+      - name: "3.4.2.4 | AUDIT | Ensure network interfaces are assigned to appropriate zone | capture output"
+        ansible.builtin.shell: find /sys/class/net/* -maxdepth 1 | awk -F"/" '{print $NF}' | while read -r netint; do [ "$netint" != "lo" ] && firewall-cmd --get-active-zones | grep -B1 $netint; done
+        changed_when: false
+        failed_when: false
+        register: rhel7cis_3_4_2_4_nics_and_zones
+
+      - name: "3.4.2.4 | AUDIT | Ensure network interfaces are assigned to appropriate zone | Show nics and zones"
+        ansible.builtin.debug:
+            msg:
+                - "The items below are the system network interfaces and associated firewalld zones, please correct as needed"
+                - "{{ rhel7cis_3_4_2_4_nics_and_zones.stdout_lines }}"
+
+      - name: "3.4.2.4 | AUDIT | Ensure network interfaces are assigned to appropriate zone | Warn Count"
+        when: rhel7cis_3_4_2_4_nics_and_zones.stdout | length > 0
+        vars:
+            warn_control_id: '3.4.2.4'
+        ansible.builtin.import_tasks:
+            file: warning_facts.yml

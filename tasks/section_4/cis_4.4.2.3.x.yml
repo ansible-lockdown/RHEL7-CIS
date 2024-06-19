@@ -1,0 +1,118 @@
+---
+
+- name: "4.4.2.3.1 | PATCH | Ensure pam_pwhistory module is enabled"
+  when:
+      - rhel7cis_rule_4_4_2_3_1
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - pam
+      - pam_pwhistory
+      - rule_4.4.2.3.1
+      - NIST800-53R5_IA-5
+  block:
+      - name: "4.4.2.3.1 | AUDIT | Ensure pam_pwhistory module is enabled | check if exists"
+        ansible.builtin.shell: grep -P "^auth\s+(sufficient|required|requisite)\s+pam_pwhistory.so" /etc/pam.d/{system,password}-auth | wc -l
+        changed_when: false
+        failed_when: rhel7cis_4_4_2_3_1_pwhistory_exists.rc not in [ 0, 1 ]
+        register: rhel7cis_4_4_2_3_1_pwhistory_exists
+
+      - name: "4.4.2.3.1 | PATCH | Ensure pam_pwhistory module is enabled | present"
+        when: rhel7cis_4_4_2_3_1_pwhistory_exists.stdout|int < 2
+        community.general.pamd:
+            name: "{{ item }}"
+            type: password
+            control: sufficient
+            module_path: pam_unix.so
+            state: before
+            new_type: password
+            new_control: required
+            new_module_path: pam_pwhistory.so
+            module_arguments: 'use_authtok'
+        loop:
+            - system-auth
+            - password-auth
+
+      - name: "4.4.2.3.1 | PATCH | Ensure pam_pwhistory module is enabled | updated"
+        when: rhel7cis_4_4_2_3_1_pwhistory_exists.stdout | int < 2
+        community.general.pamd:
+            name: "{{ item }}"
+            type: password
+            control: required
+            module_path: pam_pwhistory.so
+            state: args_present
+            module_arguments: 'use_authtok'
+        loop:
+            - system-auth
+            - password-auth
+
+- name: "4.4.2.3.2 | PATCH | Ensure password history remember is configured"
+  when:
+      - rhel7cis_rule_4_4_2_3_2
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - pam
+      - pam_pwhistory
+      - rule_4.4.2.3.2
+      - NIST800-53R5_IA-5
+  community.general.pamd:
+      name: "{{ item }}"
+      type: password
+      control: required
+      module_path: pam_pwhistory.so
+      state: args_present
+      module_arguments: 'remember={{ rhel7cis_pwhistory_remember }}'
+  loop:
+      - system-auth
+      - password-auth
+
+- name: "4.4.2.3.3 | PATCH | Ensure password history is enforced for the root user"
+  when:
+      - rhel7cis_rule_4_4_2_3_3
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - pam
+      - pam_pwhistory
+      - rule_4.4.2.3.3
+      - NIST800-53R5_IA-5
+  community.general.pamd:
+      name: "{{ item }}"
+      type: password
+      control: required
+      module_path: pam_pwhistory.so
+      state: args_present
+      module_arguments: 'enforce_for_root'
+  loop:
+      - system-auth
+      - password-auth
+
+- name: "4.4.2.3.4 | PATCH | Ensure pam_pwhistory includes use_authtok"
+  when:
+      - rhel7cis_rule_4_4_2_3_4
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - pam
+      - pam_pwhistory
+      - rule_4.4.2.3.4
+      - NIST800-53R5_IA-5
+  community.general.pamd:
+      name: "{{ item }}"
+      type: password
+      control: required
+      module_path: pam_pwhistory.so
+      state: args_present
+      module_arguments: 'use_authtok'
+  loop:
+      - system-auth
+      - password-auth

@@ -1,0 +1,30 @@
+---
+
+- name: "5.1.3 | PATCH | Ensure logrotate is configured"
+  when:
+      - rhel7cis_rule_5_1_3
+  tags:
+      - level1-server
+      - level1-workstation
+      - manual
+      - patch
+      - logrotate
+      - rule_5.1.3
+  block:
+      - name: "5.1.3 | AUDIT | Ensure logrotate is configured | Get logrotate settings"
+        ansible.builtin.find:
+            paths: /etc/logrotate.d/
+        register: rhel7cis_log_rotate_conf
+
+      - name: "5.1.3 | PATCH | Ensure logrotate is configured | conf files"
+        ansible.builtin.replace:
+            path: "{{ item.path }}"
+            regexp: '^(\s*)(daily|weekly|monthly|yearly)$'
+            replace: "\\1{{ rhel7cis_logrotate }}"
+        loop: "{{ rhel7cis_log_rotate_conf.files }}"
+
+      - name: "5.1.3 | PATCH | Ensure logrotate is configured | logrotate.conf"
+        ansible.builtin.replace:
+            path: /etc/logrotate.conf
+            regexp: '^(\s*)(daily|weekly|monthly|yearly)$'
+            replace: "\\1{{ rhel7cis_logrotate }}"

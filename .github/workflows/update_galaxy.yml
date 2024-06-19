@@ -1,21 +1,19 @@
 ---
 
-# This is a basic workflow to help you get started with Actions
+    name: update galaxy
 
-name: update galaxy
+    on:
+        push:
+            branches:
+                - main
+    jobs:
+        update_role:
+            runs-on: ubuntu-latest
+            steps:
+                - name: Checkout repo
+                  uses: actions/checkout@v4
 
-# Controls when the action will run.
-# Triggers the workflow on merge request events to the main branch
-on:
-    push:
-        branches:
-            - main
-jobs:
-    update_role:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v3
-            - uses: robertdebock/galaxy-action@master
-              with:
-                  galaxy_api_key: ${{ secrets.GALAXY_API_KEY }}
-                  git_branch: main
+                - name: Action Ansible Galaxy Release ${{ github.ref_name }}
+                  uses: ansible-actions/ansible-galaxy-action@main
+                  with:
+                    galaxy_api_key: ${{ secrets.GALAXY_API_KEY }}

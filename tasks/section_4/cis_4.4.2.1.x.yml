@@ -1,0 +1,199 @@
+---
+
+- name: |
+      "4.4.2.1.1 | PATCH | Ensure pam_faillock module is enabled
+       4.4.2.1.2 | PATCH | Ensure password failed attempts lockout is configured
+       4.4.2.1.3 | PATCH | Ensure password unlock time is configured
+       4.4.2.1.4 | PATCH | Ensure password failed attempts lockout includes root account"
+  when:
+      - rhel7cis_rule_4_4_2_1_1 or
+        rhel7cis_rule_4_4_2_1_2 or
+        rhel7cis_rule_4_4_2_1_3 or
+        rhel7cis_rule_4_4_2_1_4
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - pam
+      - pam_faillock
+      - rule_4.4.2.1.1
+      - rule_4.4.2.1.2
+      - rule_4.4.2.1.3
+      - rule_4.4.2.1.4
+      - NIST800-53R5_CM-1
+      - NIST800-53R5_CM-2
+      - NIST800-53R5_CM-6
+      - NIST800-53R5_CM-7
+      - NIST800-53R5_IA-5
+  block:
+      - name: |
+          "4.4.2.1.1 | PATCH | Ensure pam_faillock module is enabled
+           4.4.2.1.2 | PATCH | Ensure password failed attempts lockout is configured
+           4.4.2.1.3 | PATCH | Ensure password unlock time is configured
+           4.4.2.1.4 | PATCH | Ensure password failed attempts lockout includes root account | auth_required"
+        community.general.pamd:
+            name: "{{ item }}"
+            type: auth
+            control: required
+            module_path: pam_env.so
+            state: after
+            new_type: auth
+            new_control: required
+            new_module_path: pam_faillock.so
+            module_arguments: 'preauth
+               silent
+               audit
+               {% if rhel7cis_rule_4_4_2_1_2 %}deny="{{ rhel7cis_pam_faillock.deny }}"{% endif %}
+               {% if rhel7cis_rule_4_4_2_1_3 %}unlock_time="{{ rhel7cis_pam_faillock.unlock_time }}"{% endif %}
+               {% if rhel7cis_rule_4_4_2_1_4 %}even_deny_root{% endif %}'
+        loop:
+            - system-auth
+            - password-auth
+
+      - name: |
+          "4.4.2.1.1 | PATCH | Ensure pam_faillock module is enabled
+           4.4.2.1.2 | PATCH | Ensure password failed attempts lockout is configured
+           4.4.2.1.3 | PATCH | Ensure password unlock time is configured
+           4.4.2.1.4 | PATCH | Ensure password failed attempts lockout includes root account | auth_default"
+        community.general.pamd:
+            name: "{{ item }}"
+            type: auth
+            control: sufficient
+            module_path: pam_unix.so
+            state: after
+            new_type: auth
+            new_control: '[default=die]'
+            new_module_path: pam_faillock.so
+            module_arguments: 'authfail
+               audit
+               {% if rhel7cis_rule_4_4_2_1_2 %}deny={{ rhel7cis_pam_faillock.deny }}{% endif %}
+               {% if rhel7cis_rule_4_4_2_1_3 %}unlock_time={{ rhel7cis_pam_faillock.unlock_time }}{% endif %}
+               {% if rhel7cis_rule_4_4_2_1_4 %}even_deny_root{% endif %}'
+        loop:
+            - system-auth
+            - password-auth
+
+      - name: |
+          "4.4.2.1.1 | PATCH | Ensure pam_faillock module is enabled
+           4.4.2.1.2 | PATCH | Ensure password failed attempts lockout is configured
+           4.4.2.1.3 | PATCH | Ensure password unlock time is configured
+           4.4.2.1.4 | PATCH | Ensure password failed attempts lockout includes root account | add to account section"
+        community.general.pamd:
+            name: "{{ item }}"
+            type: account
+            control: required
+            module_path: pam_unix.so
+            state: before
+            new_type: account
+            new_control: required
+            new_module_path: pam_faillock.so
+            module_arguments: ''
+        loop:
+            - system-auth
+            - password-auth
+
+- name: "4.4.2.1.2 | PATCH | Ensure password failed attempts lockout is configured"
+  when: rhel7cis_rule_4_4_2_1_2
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - pam
+      - pam_faillock
+      - rule_4.4.2.1.2
+  block:
+      - name: "4.4.2.1.2 | PATCH | Ensure password failed attempts lockout is configured | auth_required"
+        community.general.pamd:
+            name: "{{ item }}"
+            type: auth
+            control: required
+            module_path: pam_faillock.so
+            state: args_present
+            module_arguments: 'deny={{ rhel7cis_pam_faillock.deny }}'
+        loop:
+            - system-auth
+            - password-auth
+
+      - name: "4.4.2.1.2 | PATCH | Ensure password failed attempts lockout is configured | auth_default"
+        community.general.pamd:
+            name: "{{ item }}"
+            type: auth
+            control: '[default=die]'
+            module_path: pam_faillock.so
+            state: args_present
+            module_arguments: 'deny={{ rhel7cis_pam_faillock.deny }}'
+        loop:
+            - system-auth
+            - password-auth
+
+- name: "4.4.2.1.3 | PATCH | Ensure password unlock time is configured"
+  when: rhel7cis_rule_4_4_2_1_3
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - pam
+      - pam_faillock
+      - rule_4.4.2.1.3
+  block:
+      - name: "4.4.2.1.3 | PATCH | Ensure password unlock time is configured | auth_required"
+        community.general.pamd:
+            name: "{{ item }}"
+            type: auth
+            control: required
+            module_path: pam_faillock.so
+            state: args_present
+            module_arguments: 'unlock_time={{ rhel7cis_pam_faillock.unlock_time }}'
+        loop:
+            - system-auth
+            - password-auth
+
+      - name: "4.4.2.1.3 | PATCH | Ensure password unlock time is configured | auth_default"
+        community.general.pamd:
+            name: "{{ item }}"
+            type: auth
+            control: '[default=die]'
+            module_path: pam_faillock.so
+            state: args_present
+            module_arguments: 'unlock_time={{ rhel7cis_pam_faillock.unlock_time }}'
+        loop:
+            - system-auth
+            - password-auth
+
+- name: "4.4.2.1.4 | PATCH | Ensure password failed attempts lockout includes root account"
+  when: rhel7cis_rule_4_4_2_1_4
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - pam
+      - pam_faillock
+      - rule_4.4.2.1.4
+  block:
+      - name: "4.4.2.1.4 | PATCH | Ensure password failed attempts lockout includes root account | auth_required"
+        community.general.pamd:
+            name: "{{ item }}"
+            type: auth
+            control: required
+            module_path: pam_faillock.so
+            state: args_present
+            module_arguments: 'even_deny_root'
+        loop:
+            - system-auth
+            - password-auth
+
+      - name: "4.4.2.1.4 | PATCH | Ensure password failed attempts lockout includes root account | auth_default"
+        community.general.pamd:
+            name: "{{ item }}"
+            type: auth
+            control: '[default=die]'
+            module_path: pam_faillock.so
+            state: args_present
+            module_arguments: 'even_deny_root'
+        loop:
+            - system-auth
+            - password-auth

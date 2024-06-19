@@ -1,0 +1,202 @@
+---
+
+- name: "4.1.1.1 | PATCH | Ensure cron daemon is enabled and active"
+  when:
+      - rhel7cis_rule_4_1_1_1
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - rule_4.1.1.1
+      - cron
+      - NIST800-53R5_CM-1
+      - NIST800-53R5_CM-2
+      - NIST800-53R5_CM-6
+      - NIST800-53R5_CM-7
+      - NIST800-53R5_IA-5
+  ansible.builtin.service:
+      name: crond
+      state: started
+      enabled: true
+
+- name: "4.1.1.2 | PATCH | Ensure permissions on /etc/crontab are configured"
+  when:
+      - rhel7cis_rule_4_1_1_2
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - rule_4.1.1.2
+      - permissions
+      - cron
+      - NIST800-53R5_AC-3
+      - NIST800-53R5_MP-2
+  ansible.builtin.file:
+      path: /etc/crontab
+      owner: root
+      group: root
+      mode: '0600'
+
+- name: "4.1.1.3 | PATCH | Ensure permissions on /etc/cron.hourly are configured"
+  when:
+      - rhel7cis_rule_4_1_1_3
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - rule_4.1.1.3
+      - permissions
+      - cron
+      - NIST800-53R5_AC-3
+      - NIST800-53R5_MP-2
+  ansible.builtin.file:
+      path: /etc/cron.hourly
+      state: directory
+      owner: root
+      group: root
+      mode: '0700'
+
+- name: "4.1.1.4 | PATCH | Ensure permissions on /etc/cron.daily are configured"
+  when:
+      - rhel7cis_rule_4_1_1_4
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - rule_4.1.1.4
+      - permissions
+      - cron
+      - NIST800-53R5_AC-3
+      - NIST800-53R5_MP-2
+  ansible.builtin.file:
+      path: /etc/cron.daily
+      state: directory
+      owner: root
+      group: root
+      mode: '0700'
+
+- name: "4.1.1.5 | PATCH | Ensure permissions on /etc/cron.weekly are configured"
+  when:
+      - rhel7cis_rule_4_1_1_5
+  tags:
+      - level1-server
+      - level1-workstation
+      - patch
+      - rule_4.1.1.5
+      - permissions
+      - cron
+      - NIST800-53R5_AC-3
+      - NIST800-53R5_MP-2
+  ansible.builtin.file:
+      path: /etc/cron.weekly
+      state: directory
+      owner: root
+      group: root
+      mode: '0700'
+
+- name: "4.1.1.6 | PATCH | Ensure permissions on /etc/cron.monthly are configured"
+  when:
+      - rhel7cis_rule_4_1_1_6
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - rule_4.1.1.6
+      - permissions
+      - cron
+      - NIST800-53R5_AC-3
+      - NIST800-53R5_MP-2
+  ansible.builtin.file:
+      path: /etc/cron.monthly
+      state: directory
+      owner: root
+      group: root
+      mode: '0700'
+
+- name: "4.1.1.7 | PATCH | Ensure permissions on /etc/cron.d are configured"
+  when:
+      - rhel7cis_rule_4_1_1_7
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - rule_4.1.1.7
+      - permissions
+      - cron
+      - NIST800-53R5_AC-3
+      - NIST800-53R5_MP-2
+  ansible.builtin.file:
+      path: /etc/cron.d
+      state: directory
+      owner: root
+      group: root
+      mode: '0700'
+
+- name: "4.1.1.8 | PATCH | Ensure cron is restricted to authorized users"
+  when:
+      - rhel7cis_rule_4_1_1_8
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - rule_4.1.1.8
+      - permissions
+      - cron
+      - NIST800-53R5_AC-3
+      - NIST800-53R5_MP-2
+  block:
+      - name: "4.1.1.8 | PATCH | Ensure cron is restricted to authorized users | Remove cron.deny"
+        ansible.builtin.file:
+            path: /etc/cron.deny
+            state: absent
+
+      - name: "4.1.1.8 | AUDIT | Ensure cron is restricted to authorized users | Check if cron.allow exists"
+        ansible.builtin.stat:
+            path: "/etc/cron.allow"
+        register: rhel7cis_4_1_1_8_p
+
+      - name: "4.1.1.8 | PATCH | Ensure cron is restricted to authorized users | Ensure cron.allow is restricted to authorized users"
+        ansible.builtin.file:
+            path: /etc/cron.allow
+            state: '{{ "file" if  rhel7cis_4_1_1_8_p.stat.exists else "touch" }}'
+            owner: root
+            group: root
+            mode: '0600'
+
+- name: "4.1.2.1 | PATCH | Ensure at is restricted to authorized users"
+  when:
+      - rhel7cis_rule_4_1_2_1
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - rule_4.1.2.1
+      - at
+      - NIST800-53R5_AC-3
+      - NIST800-53R5_MP-2
+  block:
+      - name: "4.1.2.1 | PATCH | Ensure at is restricted to authorized users | Remove at.deny"
+        ansible.builtin.file:
+            path: /etc/at.deny
+            state: absent
+
+      - name: "4.1.2.1 | AUDIT | Ensure at is restricted to authorized users | Check if at.allow exists"
+        ansible.builtin.stat:
+            path: "/etc/at.allow"
+        register: rhel7cis_4_1_1_9_p
+
+      - name: "4.1.2.1 | PATCH | Ensure at is restricted to authorized users | Ensure at.allow is restricted to authorized users"
+        ansible.builtin.file:
+            dest: /etc/at.allow
+            state: '{{ "file" if  rhel7cis_4_1_1_9_p.stat.exists else "touch" }}'
+            owner: root
+            group: root
+            mode: '0600'

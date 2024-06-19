@@ -1,86 +1,86 @@
 ---
 
-- name: "2.3.1 | PATCH | Ensure NIS client is not installed"
-  ansible.builtin.package:
-      name: ypbind
-      state: absent
-  vars:
-      ansible_python_interpreter: /bin/python
+- name: "2.3.1 | PATCH | Ensure ftp client is not installed"
   when:
-      - not rhel7cis_ypbind_required
-      - "'ypbind' in ansible_facts.packages"
+      - not rhel7cis_ftp_client
+      - "'ftp' in ansible_facts.packages"
       - rhel7cis_rule_2_3_1
   tags:
       - level1-server
       - level1-workstation
-      - nis
+      - automated
       - patch
+      - ftp
+      - NIST800-53R5_CM-7
       - rule_2.3.1
-
-- name: "2.3.2 | PATCH | Ensure rsh client is not installed"
   ansible.builtin.package:
-      name: rsh
+      name: ftp
       state: absent
-  vars:
-      ansible_python_interpreter: /bin/python
+
+- name: "2.3.2 | PATCH | Ensure ldap client is not installed"
   when:
-      - not rhel7cis_rsh_required
-      - "'rsh' in ansible_facts.packages"
+      - not rhel7cis_openldap_clients_required
+      - "'openldap-clients' in ansible_facts.packages"
       - rhel7cis_rule_2_3_2
   tags:
-      - level1-server
-      - level1-workstation
-      - rsh
+      - level2-server
+      - level2-workstation
+      - automated
       - patch
+      - ldap
+      - NIST800-53R5_CM-7
       - rule_2.3.2
-
-- name: "2.3.3 | PATCH | Ensure talk client is not installed"
   ansible.builtin.package:
-      name: talk
+      name: openldap-clients
       state: absent
-  vars:
-      ansible_python_interpreter: /bin/python
+
+- name: "2.3.3 | PATCH | Ensure nis client is not installed"
   when:
-      - not rhel7cis_talk_required
-      - "'talk' in ansible_facts.packages"
+      - not rhel7cis_ypbind_required
+      - "'ypbind' in ansible_facts.packages"
       - rhel7cis_rule_2_3_3
   tags:
       - level1-server
       - level1-workstation
-      - talk
+      - automated
       - patch
+      - nis
+      - NIST800-53R5_CM-7
       - rule_2.3.3
+  ansible.builtin.package:
+      name: ypbind
+      state: absent
 
 - name: "2.3.4 | PATCH | Ensure telnet client is not installed"
-  ansible.builtin.package:
-      name: telnet
-      state: absent
-  vars:
-      ansible_python_interpreter: /bin/python
   when:
-      - "'telnet' in ansible_facts.packages"
       - not rhel7cis_telnet_required
+      - "'telnet' in ansible_facts.packages"
       - rhel7cis_rule_2_3_4
   tags:
       - level1-server
       - level1-workstation
-      - telnet
+      - automated
       - patch
+      - telnet
+      - NIST800-53R5_CM-7
       - rule_2.3.4
-
-- name: "2.3.5 | PATCH | Ensure LDAP client is not installed"
   ansible.builtin.package:
-      name: openldap-clients
+      name: telnet
       state: absent
-  vars:
-      ansible_python_interpreter: /bin/python
+
+- name: "2.3.5 | PATCH | Ensure TFTP client is not installed"
   when:
-      - not rhel7cis_openldap_clients_required
-      - "'openldap-clients' in ansible_facts.packages"
+      - not rhel7cis_tftp_client
+      - "'tftp' in ansible_facts.packages"
       - rhel7cis_rule_2_3_5
   tags:
       - level1-server
       - level1-workstation
-      - ldap_client
+      - automated
       - patch
+      - tftp
+      - NIST800-53R5_CM-7
       - rule_2.3.5
+  ansible.builtin.package:
+      name: tftp
+      state: absent

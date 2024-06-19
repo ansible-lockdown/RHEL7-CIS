@@ -1,0 +1,121 @@
+---
+
+- name: "5.2.1.1 | PATCH | Ensure audit is installed"
+  when:
+      - rhel7cis_rule_5_2_1_1
+  tags:
+      - level2-server
+      - level2-workstation
+      - automated
+      - patch
+      - NIST800-53R5_AU-2
+      - NIST800-53R5_AU-3
+      - NIST800-53R5_AU-12
+      - NIST800-53R5_SI-5
+      - auditd
+      - rule_5.2.1.1
+  block:
+      - name: "5.2.1.1 | PATCH | Ensure auditd is installed | Install auditd packages"
+        ansible.builtin.package:
+            name: audit
+            state: present
+        when: '"auditd" not in ansible_facts.packages'
+
+      - name: "5.2.1.1 | PATCH | Ensure auditd is installed | Install auditd-lib packages"
+        ansible.builtin.package:
+            name: audit-libs
+            state: present
+        when: '"auditd-lib" not in ansible_facts.packages'
+
+- name: "5.2.1.2 | PATCH | Ensure auditing for processes that start prior to auditd is enabled"
+  when:
+      - rhel7cis_rule_5_2_1_2
+  tags:
+      - level2-server
+      - level2-workstation
+      - automated
+      - patch
+      - auditd
+      - grub
+      - rule_5.2.1.2
+  notify: Rebuild_grub
+  block:
+      - name: "5.2.1.2 | AUDIT | Ensure auditing for processes that start prior to auditd is enabled | Get GRUB_CMDLINE_LINUX"
+        ansible.builtin.shell: grep "GRUB_CMDLINE_LINUX_DEFAULT=" /etc/default/grub | cut -f2 -d'"'
+        changed_when: false
+        failed_when: false
+        check_mode: false
+        register: rhel7cis_5_2_1_2_grub_cmdline_linux
+
+      - name: "5.2.1.2 | PATCH | Ensure auditing for processes that start prior to auditd is enabled | Replace existing setting"
+        when: "'audit=' in rhel7cis_5_2_1_2_grub_cmdline_linux.stdout"
+        ansible.builtin.replace:
+            dest: /etc/default/grub
+            regexp: 'audit=([0-9]+)'
+            replace: 'audit=1'
+            after: '^GRUB_CMDLINE_LINUX_DEFAULT="'
+            before: '"'
+
+      - name: "5.2.1.2 | PATCH | Ensure auditing for processes that start prior to auditd is enabled | Add audit setting if missing"
+        when: "'audit=' not in rhel7cis_5_2_1_2_grub_cmdline_linux.stdout"
+        ansible.builtin.lineinfile:
+            path: /etc/default/grub
+            regexp: '^GRUB_CMDLINE_LINUX_DEFAULT='
+            line: 'GRUB_CMDLINE_LINUX_DEFAULT="{{ rhel7cis_5_2_1_2_grub_cmdline_linux.stdout }} audit=1"'
+
+- name: "5.2.1.3 | PATCH | Ensure audit_backlog_limit is sufficient"
+  when:
+      - rhel7cis_rule_5_2_1_3
+  tags:
+      - level2-server
+      - level2-workstation
+      - automated
+      - patch
+      - auditd
+      - NIST800-53R5_AU-2
+      - NIST800-53R5_AU-12
+      - NIST800-53R5_SI-5
+      - grub
+      - rule_5.2.1.3
+  notify: Rebuild_grub
+  block:
+      - name: "5.2.1.3 | AUDIT | Ensure audit_backlog_limit is sufficient | Get GRUB_CMDLINE_LINUX"
+        ansible.builtin.shell: grep 'GRUB_CMDLINE_LINUX_DEFAULT=' /etc/default/grub | cut -f2 -d'"'
+        changed_when: false
+        failed_when: false
+        check_mode: false
+        register: rhel7cis_5_2_1_3_grub_cmdline_linux
+
+      - name: "5.2.1.3 | PATCH | Ensure audit_backlog_limit is sufficient | Replace existing setting"
+        when: "'audit_backlog_limit=' in rhel7cis_5_2_1_3_grub_cmdline_linux.stdout"
+        ansible.builtin.replace:
+            dest: /etc/default/grub
+            regexp: 'audit_backlog_limit=([0-9]+)'
+            replace: 'audit_backlog_limit={{ rhel7cis_audit_back_log_limit }}'
+            after: '^GRUB_CMDLINE_LINUX_DEFAULT="'
+            before: '"'
+
+      - name: "5.2.1.3 | PATCH | Ensure audit_backlog_limit is sufficient | Add audit_backlog_limit setting if missing"
+        when: "'audit_backlog_limit=' not in rhel7cis_5_2_1_3_grub_cmdline_linux.stdout"
+        ansible.builtin.lineinfile:
+            path: /etc/default/grub
+            regexp: '^GRUB_CMDLINE_LINUX_DEFAULT='
+            line: 'GRUB_CMDLINE_LINUX_DEFAULT="{{ rhel7cis_5_2_1_3_grub_cmdline_linux.stdout }} audit_backlog_limit={{ rhel7cis_audit_back_log_limit }}"'
+
+- name: "5.2.1.4 | PATCH | Ensure auditd service is enabled"
+  when:
+      - rhel7cis_rule_5_2_1_4
+  tags:
+      - level2-server
+      - level2-workstation
+      - automated
+      - patch
+      - NIST800-53R5_AU-2
+      - NIST800-53R5_AU-12
+      - NIST800-53R5_SI-5
+      - auditd
+      - rule_5.2.1.4
+  ansible.builtin.service:
+      name: auditd
+      state: started
+      enabled: true

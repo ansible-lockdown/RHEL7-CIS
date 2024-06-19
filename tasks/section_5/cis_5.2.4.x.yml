@@ -1,0 +1,174 @@
+---
+
+- name: "5.2.4.1 | PATCH | Ensure the audit log directory is 0750 or more restrictive"
+  when:
+      - rhel7cis_rule_5_2_4_1
+  tags:
+      - level2-server
+      - level2-workstation
+      - patch
+      - auditd
+      - rule_5.2.4.1
+  block:
+      - name: "5.2.4.1 | AUDIT | Ensure the audit log directory is 0750 or more restrictive | get current permissions"
+        ansible.builtin.stat:
+            path: "{{ discovered_audit_logfile.stdout | dirname }}"
+        register: auditlog_dir
+
+      - name: "5.2.4.1 | PATCH | Ensure the audit log directory is 0750 or more restrictive | set"
+        ansible.builtin.file:
+            path: "{{ discovered_audit_logfile.stdout | dirname }}"
+            state: directory
+            mode: g-w,o-rwx
+
+- name: |
+      "5.2.4.2 | PATCH | Ensure audit log files are mode 0640 or less permissive"
+      "5.2.4.3 | PATCH | Ensure only authorized users own audit log files"
+      "5.2.4.4 | PATCH | Ensure only authorized groups are assigned ownership of audit log files"
+  when:
+      - rhel7cis_rule_5_2_4_2 or
+        rhel7cis_rule_5_2_4_3 or
+        rhel7cis_rule_5_2_4_4
+  tags:
+      - level2-server
+      - level2-workstation
+      - patch
+      - auditd
+      - rule_5.2.4.2
+      - rule_5.2.4.3
+      - rule_5.2.4.4
+  block:
+      - name: "5.2.4.2 | AUDIT | Ensure audit log files are mode 0640 or less permissive | stat file"
+        ansible.builtin.stat:
+            path: "{{ discovered_audit_logfile.stdout }}"
+        changed_when: false
+        register: auditd_logfile
+
+      - name: |
+            "5.2.4.2 | PATCH | Ensure audit log files are mode 0640 or less permissive"
+            "5.2.4.3 | PATCH | Ensure only authorized users own audit log files"
+            "5.2.4.4 | PATCH | Ensure only authorized groups are assigned ownership of audit log files"
+        ansible.builtin.file:
+            path: "{{ discovered_audit_logfile.stdout }}"
+            mode: "{% if auditd_logfile.stat.mode != '0600' %}0640{% endif %}"
+            owner: root
+            group: root
+
+- name: "5.2.4.5 | PATCH | Ensure audit configuration files are 640 or more restrictive"
+  when:
+      - rhel7cis_rule_5_2_4_5
+  tags:
+      - level2-server
+      - level2-workstation
+      - patch
+      - auditd
+      - rule_5.2.4.5
+  ansible.builtin.file:
+      path: "{{ item.path }}"
+      mode: g-wx,o-rwx
+  loop: "{{ auditd_conf_files.files }}"
+  loop_control:
+      label: "{{ item.path }}"
+
+- name: "5.2.4.6 | PATCH | Ensure audit configuration files are owned by root"
+  when:
+      - rhel7cis_rule_5_2_4_6
+  tags:
+      - level2-server
+      - level2-workstation
+      - patch
+      - auditd
+      - rule_5.2.4.6
+  ansible.builtin.file:
+      path: "{{ item.path }}"
+      owner: root
+  loop: "{{ auditd_conf_files.files }}"
+  loop_control:
+      label: "{{ item.path }}"
+
+- name: "5.2.4.7 | PATCH | Ensure audit configuration files belong to group root"
+  when:
+      - rhel7cis_rule_5_2_4_7
+  tags:
+      - level2-server
+      - level2-workstation
+      - patch
+      - auditd
+      - rule_5.2.4.7
+  ansible.builtin.file:
+      path: "{{ item.path }}"
+      group: root
+  loop: "{{ auditd_conf_files.files }}"
+  loop_control:
+      label: "{{ item.path }}"
+
+- name: "5.2.4.8 | PATCH | Ensure audit tools are 755 or more restrictive"
+  when:
+      - rhel7cis_rule_5_2_4_8
+  tags:
+      - level2-server
+      - level2-workstation
+      - patch
+      - auditd
+      - rule_5.2.4.8
+  block:
+      - name: "5.2.4.8 | AUDIT | Get audit binary file stat | get current mode"
+        ansible.builtin.stat:
+            path: "{{ item }}"
+        register: "audit_bins"
+        loop:
+            - /sbin/auditctl
+            - /sbin/aureport
+            - /sbin/ausearch
+            - /sbin/autrace
+            - /sbin/auditd
+            - /sbin/augenrules
+
+      - name: "5.2.4.8 | PATCH | Ensure audit tools are 755 or more restrictive | set if required"
+        ansible.builtin.file:
+            path: "{{ item.item }}"
+            mode: g-w,o-w
+        loop: "{{ audit_bins.results }}"
+        loop_control:
+            label: "{{ item.item }}"
+
+- name: "5.2.4.9 | PATCH | Ensure audit tools are owned by root"
+  when:
+      - rhel7cis_rule_5_2_4_9
+  tags:
+      - level2-server
+      - level2-workstation
+      - patch
+      - auditd
+      - rule_5.2.4.9
+  ansible.builtin.file:
+      path: "{{ item }}"
+      owner: root
+      group: root
+  loop:
+      - /sbin/auditctl
+      - /sbin/aureport
+      - /sbin/ausearch
+      - /sbin/autrace
+      - /sbin/auditd
+      - /sbin/augenrules
+
+- name: "5.2.4.10 | PATCH | Ensure audit tools belong to group root"
+  when:
+      - rhel7cis_rule_5_2_4_10
+  tags:
+      - level2-server
+      - level2-workstation
+      - patch
+      - auditd
+      - rule_5.2.4.10
+  ansible.builtin.file:
+      path: "{{ item }}"
+      group: root
+  loop:
+      - /sbin/auditctl
+      - /sbin/aureport
+      - /sbin/ausearch
+      - /sbin/autrace
+      - /sbin/auditd
+      - /sbin/augenrules

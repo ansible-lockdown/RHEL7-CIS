@@ -1,0 +1,20 @@
+---
+
+# This task is used to create variables used in giving a warning summary for manual tasks
+# that need attention
+#
+# The warn_control_list and warn_count vars start life in vars/main.yml but get updated
+# as the tasks that have a warning complete
+#
+# Those two variables are used in the tasks/main.yml to display a list of warnings
+#
+# warn_control_id is set within the task itself and has the control ID as the value
+#
+# warn_control_list is the main variable to be used and is a list made up of the warn_control_id’s
+#
+# warn_count the main variable for the number of warnings and each time a warn_control_id is added
+# the count increases by a value of 1
+- name: "{{ warn_control_id }} | WARNING | Set fact for manual task warning."
+  ansible.builtin.set_fact:
+      warn_control_list: "{{ warn_control_list }} [{{ warn_control_id }}]"
+      warn_count: "{{ warn_count | int + 1 }}"

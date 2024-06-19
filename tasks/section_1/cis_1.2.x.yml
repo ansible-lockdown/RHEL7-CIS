@@ -1,50 +1,40 @@
 ---
 
-- name: "1.2.1 | PATCH | Ensure GPG keys are configured"
-  block:
-      - name: "1.2.1 | PATCH | Ensure GPG keys are configured"
-        ansible.builtin.shell: "PKG=`rpm -qf {{ rpm_gpg_key }}` && rpm -q --queryformat \"%{PACKAGER} %{SIGPGP:pgpsig}\\n\" \"${PKG}\" | grep \"^{{ rpm_packager }}.*Key.ID.{{ rpm_key }}\""
-        changed_when: false
+- name: "1.2.1 | AUDIT | Ensure GPG keys are configured"
   when:
       - rhel7cis_rule_1_2_1
+      - ansible_distribution == "RedHat" or
+        ansible_distribution == "CentOS"
   tags:
       - level1-server
       - level1-workstation
+      - manual
       - patch
+      - NIST800-53R5_SI-2
       - rule_1.2.1
 
-- name: "1.2.2 | AUDIT | Ensure package manager repositories are configured"
-  block:
-      - name: "1.2.2 | AUDIT | Ensure package manager repositories are configured"
-        ansible.builtin.shell: yum repolist
-        changed_when: false
-        register: repolist
-        check_mode: false
+  ansible.builtin.shell: "PKG=`rpm -qf {{ rpm_gpg_key }}` && rpm -q --queryformat \"%{PACKAGER} %{SIGPGP:pgpsig}\\n\" \"${PKG}\" | grep \"^{{ rpm_packager }}.*Key.ID.{{ rpm_key }}\""
+  changed_when: false
 
-      - name: "1.2.2 | AUDIT | Ensure package manager repositories are configured"
-        ansible.builtin.debug:
-            msg:
-                - "Please check against site policy repos listed below match expected:"
-                - "{{ repolist.stdout_lines }}"
+- name: "1.2.2 | PATCH | Ensure gpgcheck is globally activated"
   when:
       - rhel7cis_rule_1_2_2
   tags:
       - level1-server
       - level1-workstation
-      - audit
+      - automated
+      - patch
+      - NIST800-53R5_SI-2
       - rule_1.2.2
-      - skip_ansible_lint
-
-- name: "1.2.3 | PATCH | Ensure gpgcheck is globally activated"
   block:
-      - name: "1.2.3 | AUDIT | Ensure gpgcheck is globally activated"
+      - name: "1.2.2 | AUDIT | Ensure gpgcheck is globally activated | Find repos"
         ansible.builtin.find:
             paths: /etc/yum.repos.d
             patterns: "*.repo"
-        changed_when: false
         register: yum_repos
+        changed_when: false
 
-      - name: "1.2.3 | PATCH | Ensure gpgcheck is globally activated"
+      - name: "1.2.2 | PATCH | Ensure gpgcheck is globally activated | Update yum.repos"
         ansible.builtin.replace:
             path: "{{ item.path }}"
             regexp: "^gpgcheck=0"
@@ -52,38 +42,109 @@
         loop: "{{ yum_repos.files }}"
         loop_control:
             label: "{{ item.path }}"
+
+      - name: "1.2.2 | PATCH | Ensure gpgcheck is globally activated | Update yum.conf"
+        ansible.builtin.lineinfile:
+            path: /etc/yum.conf
+            regexp: ^(#|)gpgcheck=
+            line: gpgcheck=1
+
+- name: "1.2.3 | PATCH | Ensure repo_gpgcheck is globally activated"
   when:
       - rhel7cis_rule_1_2_3
   tags:
-      - level1-server
-      - level1-workstation
+      - level2-server
+      - level2-workstation
+      - automated
       - patch
+      - NIST800-53R5_SI-2
       - rule_1.2.3
+  block:
+      - name: "1.2.3 | AUDIT | Ensure repo_gpgcheck is globally activated | Find repos"
+        ansible.builtin.find:
+            paths: /etc/yum.repos.d
+            patterns: "*.repo"
+        register: yum_repos
+        changed_when: false
 
-- name: "1.2.4 | AUDIT | Ensure Red Hat Subscription Manager connection is configured"
-  ansible.builtin.shell: subscription-manager identity
-  changed_when: false
-  failed_when: false
+      - name: "1.2.3 | PATCH | Ensure repo_gpgcheck is globally activated | Update yum.repos"
+        ansible.builtin.replace:
+            name: "{{ item.path }}"
+            regexp: "^repo_gpgcheck=0"
+            replace: "repo_gpgcheck=1"
+        loop: "{{ yum_repos.files }}"
+        loop_control:
+            label: "{{ item.path }}"
+
+      - name: "1.2.3 | PATCH | Ensure repo_gpgcheck is globally activated | Update yum.conf"
+        ansible.builtin.lineinfile:
+            path: /etc/yum.conf
+            regexp: ^(#|)repo_gpgcheck=
+            line: repo_gpgcheck=1
+
+- name: "1.2.4 | AUDIT | Ensure package manager repositories are configured"
   when:
-      - ansible_distribution == "RedHat"
       - rhel7cis_rule_1_2_4
   tags:
       - level1-server
       - level1-workstation
-      - patch
+      - manual
+      - audit
+      - NIST800-53R5_SI-2
       - rule_1.2.4
+  vars:
+      warn_control_id: '1.2.4'
+  block:
+      - name: "1.2.4 | AUDIT | Ensure package manager repositories are configured | Get repo list"
+        ansible.builtin.shell: yum repolist
+        changed_when: false
+        failed_when: false
+        register: dnf_configured
+        check_mode: false
 
-- name: "1.2.5 | PATCH | Disable the rhnsd Daemon"
-  ansible.builtin.systemd:
-      name: rhnsd
-      state: stopped
-      enabled: false
-      masked: true
+      - name: "1.2.4 | AUDIT | Ensure package manager repositories are configured | Display repo list"
+        ansible.builtin.debug:
+            msg:
+                - "Warning!! Below are the configured repos. Please review and make sure all align with site policy"
+                - "{{ dnf_configured.stdout_lines }}"
+
+      - name: "1.2.4 | AUDIT | Ensure package manager repositories are configured | Warn Count"
+        ansible.builtin.import_tasks:
+            file: warning_facts.yml
+
+- name: "1.2.5 | PATCH | Ensure updates, patches, and additional security software are installed"
   when:
-      - ansible_distribution == "RedHat" and not rhel7cis_rhnsd_required
       - rhel7cis_rule_1_2_5
+      - not system_is_ec2
   tags:
       - level1-server
       - level1-workstation
+      - automated
       - patch
+      - rule_1.2_5
+  notify: Change_requires_reboot
+  block:
+      - name: "1.2.5 | PATCH | Ensure updates, patches, and additional security software are installed | Patch"
+        ansible.builtin.package:
+            name: "*"
+            state: latest
+
+      - name: "1.2.5 | PATCH | Ensure updates, patches, and additional security software are installed | update_facts"
+        ansible.builtin.package_facts:
+            manager: auto
+
+- name: "1.2.5 | PATCH | Ensure updates, patches, and additional security software are installed | limit kernels"
+  when:
+      - rhel7cis_rule_1_2_5
+      - rhel7cis_apply_installed_kernel_limit
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - kernel_limit
       - rule_1.2.5
+  ansible.builtin.lineinfile:
+      path: /etc/yum.conf
+      regexp: ^installonly_limit=
+      line: installonly_limit={{ rhel7cis_installed_kernel_limit }}

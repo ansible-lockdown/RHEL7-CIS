@@ -1,0 +1,197 @@
+---
+
+- name: "5.1.2.1.1 | PATCH | Ensure systemd-journal-remote is installed"
+  when:
+      - rhel7cis_rule_5_1_2_1_1
+      - rhel7cis_syslog == 'journald'
+  tags:
+      - level1-server
+      - level1-workstation
+      - manual
+      - patch
+      - NIST800-53R5_AU-2
+      - NIST800-53R5_AU-12
+      - NIST800-53R5_SI-5
+      - journald
+      - rule_5.1.2.1.1
+  ansible.builtin.package:
+      name: systemd-journal-remote
+      state: present
+
+- name: "5.1.2.1.2 | PATCH | Ensure systemd-journal-remote is configured"
+  when:
+      - rhel7cis_rule_5_1_2_1_2
+      - rhel7cis_syslog == 'journald'
+  tags:
+      - level1-server
+      - level1-workstation
+      - manual
+      - patch
+      - NIST800-53R5_AU-2
+      - NIST800-53R5_AU-12
+      - NIST800-53R5_SI-5
+      - journald
+      - rule_5.1.2.1.2
+  notify: Restart_systemd_journal_upload
+  ansible.builtin.lineinfile:
+      path: /etc/systemd/journal-upload.conf
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+  loop:
+      - { regexp: 'URL=', line: 'URL={{ rhel7cis_journal_upload_url }}'}
+      - { regexp: 'ServerKeyFile=', line: 'ServerKeyFile={{ rhel7cis_journal_upload_serverkeyfile }}'}
+      - { regexp: 'ServerCertificateFile=', line: 'ServerCertificateFile={{ rhel7cis_journal_servercertificatefile }}'}
+      - { regexp: 'TrustedCertificateFile=', line: 'TrustedCertificateFile={{ rhel7cis_journal_trustedcertificatefile }}'}
+
+- name: "5.1.2.1.3 | PATCH | Ensure systemd-journal-remote is enabled"
+  when:
+      - rhel7cis_system_is_log_server
+      - rhel7cis_rule_5_1_2_1_3
+      - rhel7cis_syslog == 'journald'
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - NIST800-53R5_AU-2
+      - NIST800-53R5_AU-12
+      - NIST800-53R5_SI-5
+      - journald
+      - rule_5.1.2.1.3
+  ansible.builtin.systemd:
+      name: systemd-journal-upload
+      state: started
+      enabled: true
+
+- name: "5.1.2.1.4 | PATCH | Ensure journald is not configured to recieve logs from a remote client"
+  when:
+      - not rhel7cis_system_is_log_server
+      - rhel7cis_rule_5_1_2_1_4
+      - rhel7cis_syslog == 'journald'
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - journald
+      - rule_5.1.2.1.4
+  ansible.builtin.systemd:
+      name: systemd-journal-remote.socket
+      state: stopped
+      enabled: false
+      masked: true
+
+- name: "5.1.2.2 | PATCH | Ensure journald service is enabled"
+  when:
+      - rhel7cis_rule_5_1_2_2
+      - rhel7cis_syslog == 'journald'
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - audit
+      - journald
+      - rule_5.1.2.2
+  block:
+      - name: "5.1.2.2 | PATCH | Ensure journald service is enabled | Enable service"
+        ansible.builtin.systemd:
+            name: systemd-journald
+            state: started
+            enabled: true
+
+      - name: "5.1.2.2 | AUDIT | Ensure journald service is enabled | Capture status"
+        ansible.builtin.shell: systemctl is-enabled systemd-journald.service
+        changed_when: false
+        failed_when: false
+        register: rhel7cis_5_1_2_2_status
+
+      - name: "5.1.2.2 | AUDIT | Ensure journald service is enabled | Alert on bad status"
+        ansible.builtin.debug:
+            msg:
+                - "Warning!! The status of systemd-journald should be static and it is not. Please investigate"
+        when: "'static' not in rhel7cis_5_1_2_2_status.stdout"
+
+      - name: "5.1.2.2 | AUDIT | Ensure journald service is enabled | Warn Count"
+        ansible.builtin.import_tasks:
+            file: warning_facts.yml
+        vars:
+            warn_control_id: '5.1.2.2'
+        when: "'static' not in rhel7cis_5_1_2_2_status.stdout"
+
+- name: "5.1.2.3 | PATCH | Ensure journald is configured to compress large log files"
+  when:
+      - rhel7cis_rule_5_1_2_3
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - journald
+      - rule_5.1.2.3
+  notify: Restart_journald
+  ansible.builtin.lineinfile:
+      path: /etc/systemd/journald.conf
+      regexp: 'Compress='
+      line: Compress=yes
+      insertafter: ^#Compress
+      validate: /usr/bin/bash -n %s
+
+- name: "5.1.2.4 | PATCH | Ensure journald is configured to write logfiles to persistent disk"
+  when:
+      - rhel7cis_rule_5_1_2_4
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - journald
+      - rule_5.1.2.4
+  notify: Restart_journald
+  ansible.builtin.lineinfile:
+      path: /etc/systemd/journald.conf
+      regexp: 'Storage='
+      line: Storage=persistent
+      state: present
+      insertafter: ^#Storage
+      validate: /usr/bin/bash -n %s
+
+# This is counter to control 5.1.1.3??
+- name: "5.1.2.5 | PATCH | Ensure journald is not configured to send logs to rsyslog"
+  when:
+      - rhel7cis_rule_5_1_2_5
+      - rhel7cis_syslog == 'journald'
+  tags:
+      - level1-server
+      - level2-workstation
+      - manual
+      - patch
+      - journald
+      - rule_5.1.2.5
+  notify: Restart_journald
+  ansible.builtin.lineinfile:
+      path: /etc/systemd/journald.conf
+      regexp: "^ForwardToSyslog="
+      line: "#ForwardToSyslog=yes"
+
+- name: "5.1.2.6 | PATCH | Ensure journald log rotation is configured per site policy"
+  when:
+      - rhel7cis_rule_5_1_2_6
+      - rhel7cis_syslog == 'journald'
+  tags:
+      - level1-server
+      - level1-workstation
+      - manual
+      - patch
+      - journald
+      - rule_5.1.2.6
+  ansible.builtin.lineinfile:
+      path: /etc/systemd/journald.conf
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+  notify: Restart_journald
+  loop:
+      - { regexp: '^#SystemMaxUse=|^SystemMaxUse=', line: 'SystemMaxUse={{ rhel7cis_journald_systemmaxuse }}'}
+      - { regexp: '^#SystemKeepFree=|^SystemKeepFree=', line: 'SystemKeepFree={{ rhel7cis_journald_systemkeepfree }}' }
+      - { regexp: '^#RuntimeMaxUse=|^RuntimeMaxUse=', line: 'RuntimeMaxUse={{ rhel7cis_journald_runtimemaxuse }}'}
+      - { regexp: '^#RuntimeKeepFree=|^RuntimeKeepFree=', line: 'RuntimeKeepFree={{ rhel7cis_journald_runtimekeepfree }}'}
+      - { regexp: '^#MaxFileSec=|^MaxFileSec=', line: 'MaxFileSec={{ rhel7cis_journald_maxfilesec }}'}

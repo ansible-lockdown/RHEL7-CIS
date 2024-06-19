@@ -1,0 +1,343 @@
+---
+
+- name: "3.4.3.1 | PATCH | Ensure nftables is installed"
+  when:
+      - rhel7cis_rule_3_4_3_1
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - rule_3.4.3.1
+      - firewall
+      - nftables
+      - NIST800-53R5_CA-9
+  vars:
+      ansible_python_interpreter: /bin/python
+  ansible.builtin.package:
+      name: nftables
+      state: present
+
+- name: "3.4.3.2 | PATCH | Ensure iptables are flushed"
+  when:
+      - "'iptables' in ansible_facts.packages"
+      - rhel7cis_firewall != "iptables"
+      - rhel7cis_rule_3_4_3_2
+  tags:
+      - level1-server
+      - level1-workstation
+      - manual
+      - patch
+      - rule_3.4.3.2
+      - firewall
+      - nftables
+      - NIST800-53R5_CA-9
+  block:
+      - name: "3.4.3.2 | PATCH | Ensure iptables are flushed | Flush IPv4 tables"
+        ansible.builtin.shell: iptables -F
+
+      - name: "3.4.3.2 | PATCH | Ensure iptables are flushed | Flush IPv6 tables"
+        ansible.builtin.shell: ip6tables -F
+        when:
+            - rhel7cis_ipv6_required
+
+- name: "3.4.3.3 | PATCH | Ensure an nftables table exists"
+  when:
+      - rhel7cis_rule_3_4_3_3
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - rule_3.4.3.3
+      - firewall
+      - nftables
+      - NIST800-53R5_CA-9
+  block:
+      - name: "3.4.3.3 | AUDIT | Ensure an nftables table exists | Check for tables"
+        ansible.builtin.shell: nft list tables
+        changed_when: false
+        failed_when: false
+        register: rhel7cis_3_4_3_3_nft_tables
+
+      - name: "3.4.3.3 | AUDIT | Ensure an nftables table exists | Show existing tables"
+        when:
+            - rhel7cis_3_4_3_3_nft_tables.stdout | length > 0
+        ansible.builtin.debug:
+            msg:
+                - "Below are the current nft tables, please review"
+                - "{{ rhel7cis_3_4_3_3_nft_tables.stdout_lines }}"
+
+      - name: "3.4.3.3 | AUDIT | Ensure an nftables table exists | Alert on no tables"
+        when:
+            - rhel7cis_3_4_3_3_nft_tables.stdout | length == 0
+            - not rhel7cis_nft_tables_autoNewTable
+        ansible.builtin.debug:
+            msg:
+                - "Warning! You currently have no nft tables, please review your setup"
+                - 'Use the command "nft create table inet <table name>" to create a new table'
+
+      - name: "3.4.3.3 | WARN | Ensure an nftables table exists | Warn Count"
+        when: not rhel7cis_nft_tables_autoNewTable
+        vars:
+            warn_control_id: '3.4.3.3'
+        ansible.builtin.import_tasks:
+            file: warning_facts.yml
+
+      - name: "3.4.3.3 | PATCH | Ensure an nftables table exists | Create table if needed"
+        ansible.builtin.shell: nft create table inet "{{ rhel7cis_nft_tables_tablename }}"
+        failed_when: false
+        when:
+            - rhel7cis_nft_tables_autoNewTable
+
+- name: "3.4.3.4 | PATCH | Ensure nftables base chains exist"
+  when:
+      - rhel7cis_rule_3_4_3_4
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - rule_3.4.3.4
+      - firewall
+      - nftables
+      - NIST800-53R5_CA-9
+  block:
+      - name: "3.4.3.4 | AUDIT | Ensure nftables base chains exist | Get current chains for INPUT"
+        ansible.builtin.shell: nft list ruleset | grep 'hook input'
+        changed_when: false
+        failed_when: false
+        register: rhel7cis_3_4_3_4_input_chains
+
+      - name: "3.4.3.4 | AUDIT | Ensure nftables base chains exist | Get current chains for FORWARD"
+        ansible.builtin.shell: nft list ruleset | grep 'hook forward'
+        changed_when: false
+        failed_when: false
+        register: rhel7cis_3_4_3_4_forward_chains
+
+      - name: "3.4.3.4 | AUDIT | Ensure nftables base chains exist | Get current chains for OUTPUT"
+        ansible.builtin.shell: nft list ruleset | grep 'hook output'
+        changed_when: false
+        failed_when: false
+        register: rhel7cis_3_4_3_4_output_chains
+
+      - name: "3.4.3.4 | AUDIT | Ensure nftables base chains exist | Display chains for review"
+        when:
+            - not rhel7cis_nft_tables_autochaincreate
+        ansible.builtin.debug:
+            msg:
+                - "Below are the current INPUT chains"
+                - "{{ rhel7cis_3_4_3_4_input_chains.stdout_lines }}"
+                - "Below are the current FORWARD chains"
+                - "{{ rhel7cis_3_4_3_4_forward_chains.stdout_lines }}"
+                - "Below are teh current OUTPUT chains"
+                - "{{ rhel7cis_3_4_3_4_output_chains.stdout_lines }}"
+
+      - name: "3.4.3.3 | WARN | Ensure nftables base chains exist | Warn Count"
+        when: not rhel7cis_nft_tables_autochaincreate
+        vars:
+            warn_control_id: '3.4.3.4'
+        ansible.builtin.import_tasks:
+            file: warning_facts.yml
+
+      - name: "3.4.3.4 | PATCH | Ensure nftables base chains exist | Create chains if needed"
+        when:
+            - rhel7cis_nft_tables_autochaincreate
+        ansible.builtin.shell: "{{ item }}"
+        failed_when: false
+        with_items:
+            - nft create chain inet "{{ rhel7cis_nft_tables_tablename }}" input { type filter hook input priority 0 \; }
+            - nft create chain inet "{{ rhel7cis_nft_tables_tablename }}" forward { type filter hook forward priority 0 \; }
+            - nft create chain inet "{{ rhel7cis_nft_tables_tablename }}" output { type filter hook output priority 0 \; }
+
+- name: "3.4.3.5 | PATCH | Ensure nftables loopback traffic is configured"
+  when:
+      - rhel7cis_rule_3.4.3.5
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - rule_3.4.3.5
+      - firewall
+      - nftables
+      - NIST800-53R5_CA-9
+  block:
+      - name: "3.4.3.5 | AUDIT | Ensure nftables loopback traffic is configured | Gather iif lo accept existence"
+        ansible.builtin.shell: nft list ruleset | awk '/hook input/,/}/' | grep 'iif "lo" accept'
+        changed_when: false
+        failed_when: false
+        register: rhel7cis_3_4_3_5_iiflo
+
+      - name: "3.4.3.5 | AUDIT | Ensure nftables loopback traffic is configured | Gather ip saddr existence"
+        ansible.builtin.shell: nft list ruleset | awk '/hook input/,/}/' | grep 'ip saddr'
+        changed_when: false
+        failed_when: false
+        register: rhel7cis_3_4_3_5_ipsaddr
+
+      - name: "3.4.3.5 | AUDIT | Ensure nftables loopback traffic is configured | Gather ip6 saddr existence"
+        ansible.builtin.shell: nft list ruleset | awk '/hook input/,/}/' | grep 'ip6 saddr'
+        changed_when: false
+        failed_when: false
+        register: rhel7cis_3_4_3_2_ip6saddr
+
+      - name: "3.4.3.5 | PATCH | Ensure nftables loopback traffic is configured | Set iif lo accept rule"
+        when:
+            - '"iif \"lo\" accept" not in rhel7cis_3_4_3_5_iiflo.stdout'
+        ansible.builtin.shell: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" input iif lo accept
+
+      - name: "3.4.3.5 | PATCH | Ensure nftables loopback traffic is configured | Set ip sddr rule"
+        when:
+            - '"ip saddr 127.0.0.0/8 counter packets 0 bytes 0 drop" not in rhel7cis_3_4_3_5_ipsaddr.stdout'
+        ansible.builtin.shell: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" input ip saddr 127.0.0.0/8 counter drop
+
+      - name: "3.4.3.5 | PATCH | Ensure nftables loopback traffic is configured | Set ip6 saddr rule"
+        when:
+            - '"ip6 saddr ::1 counter packets 0 bytes 0 drop" not in rhel7cis_3_4_3_5_ip6saddr.stdout'
+        ansible.builtin.shell: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" input ip6 saddr ::1 counter drop
+
+- name: "3.4.3.6 | PATCH | Ensure nftables outbound and established connections are configured"
+  when:
+      - rhel7cis_rule_3_4_3_6
+  tags:
+      - level1-server
+      - level1-workstation
+      - manual
+      - patch
+      - rule_3.4.3.6
+      - firewall
+      - nftables
+      - NIST800-53R5_CA-9
+  block:
+      - name: "3.4.3.6 | AUDIT | Ensure nftables outbound and established connections are configured | Gather incoming connection rules"
+        ansible.builtin.shell: nft list ruleset | awk '/hook input/,/}/' | grep -E 'ip protocol (tcp|udp|icmp) ct state'
+        changed_when: false
+        failed_when: false
+        register: rhel7cis_3_4_3_6_inconnectionrule
+
+      - name: "3.4.3.6 | AUDIT | Ensure nftables outbound and established connections are configured | Gather outbound connection rules"
+        ansible.builtin.shell: nft list ruleset | awk '/hook output/,/}/' | grep -E 'ip protocol (tcp|udp|icmp) ct state'
+        changed_when: false
+        failed_when: false
+        register: rhel7cis_3_4_3_6_outconnectionrule
+
+      - name: "3.4.3.6 | PATCH | Ensure nftables outbound and established connections are configured | Add input tcp established accept policy"
+        when:
+            - '"ip protocol tcp ct state established accept" not in rhel7cis_3_4_3_6_inconnectionrule.stdout'
+        ansible.builtin.shell: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" input ip protocol tcp ct state established accept
+
+      - name: "3.4.3.6 | PATCH | Ensure nftables outbound and established connections are configured | Add input udp established accept policy"
+        when:
+            - '"ip protocol udp ct state established accept" not in rhel7cis_3_4_3_6_inconnectionrule.stdout'
+        ansible.builtin.shell: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" input ip protocol udp ct state established accept
+
+      - name: "3.4.3.6 | PATCH | Ensure nftables outbound and established connections are configured | Add input icmp established accept policy"
+        when:
+            - '"ip protocol icmp ct state established accept" not in rhel7cis_3_4_3_6_inconnectionrule.stdout'
+        ansible.builtin.shell: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" input ip protocol icmp ct state established accept
+
+      - name: "3.4.3.6 | PATCH | Ensure nftables outbound and established connections are configured | Add output tcp new, related, established accept policy"
+        when:
+            - '"ip protocol tcp ct state established,related,new accept" not in rhel7cis_3_4_3_6_outconnectionrule.stdout'
+        ansible.builtin.shell: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" output ip protocol tcp ct state new,related,established accept
+
+      - name: "3.4.3.6 | PATCH | Ensure nftables outbound and established connections are configured | Add output udp new, related, established accept policy"
+        when:
+            - '"ip protocol udp ct state established,related,new accept" not in rhel7cis_3_4_3_6_outconnectionrule.stdout'
+        ansible.builtin.shell: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" output ip protocol udp ct state new,related,established accept
+
+      - name: "3.4.3.6 | PATCH | Ensure nftables outbound and established connections are configured | Add output icmp new, related, established accept policy"
+        when:
+            - '"ip protocol icmp ct state established,related,new accept" not in rhel7cis_3_4_3_6_outconnectionrule.stdout'
+        ansible.builtin.shell: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" output ip protocol icmp ct state new,related,established accept
+
+- name: "3.4.3.7 | PATCH | Ensure nftables default deny firewall policy"
+  when:
+      - rhel7cis_rule_3_4_3_7
+  tags:
+      - level1-server
+      - level1-workstation
+      - manual
+      - patch
+      - rule_3.4.3.7
+      - firewall
+      - nftables
+      - NIST800-53R5_CA-9
+  block:
+      - name: "3.4.3.7 | AUDIT | Ensure nftables default deny firewall policy | Check for hook input deny policy"
+        ansible.builtin.shell: nft list table inet "{{ rhel7cis_nft_tables_tablename }}" | grep 'hook input'
+        failed_when: false
+        changed_when: false
+        register: rhel7cis_3_4_3_7_inputpolicy
+
+      - name: "3.4.3.7 | AUDIT | Ensure nftables default deny firewall policy | Check for hook forward deny policy"
+        ansible.builtin.shell: nft list table inet "{{ rhel7cis_nft_tables_tablename }}" | grep 'hook forward'
+        failed_when: false
+        changed_when: false
+        register: rhel7cis_3_4_3_7_forwardpolicy
+
+      - name: "3.4.3.7 | AUDIT | Ensure nftables default deny firewall policy | Check for hook output deny policy"
+        ansible.builtin.shell: nft list table inet "{{ rhel7cis_nft_tables_tablename }}" | grep 'hook output'
+        failed_when: false
+        changed_when: false
+        register: rhel7cis_3_4_3_7_outputpolicy
+
+      - name: "3.4.3.7 | AUDIT | Ensure nftables default deny firewall policy | Check for SSH allow"
+        ansible.builtin.shell: nft list table inet "{{ rhel7cis_nft_tables_tablename }}" | grep 'ssh'
+        failed_when: false
+        changed_when: false
+        register: rhel7cis_3_4_3_7_sshallowcheck
+
+      - name: "3.4.3.7 | PATCH | Ensure nftables default deny firewall policy | Enable SSH traffic"
+        when:
+            - '"tcp dport ssh accept" not in rhel7cis_3_4_3_7_sshallowcheck.stdout'
+        ansible.builtin.shell: nft add rule inet "{{ rhel7cis_nft_tables_tablename }}" input tcp dport ssh accept
+
+      - name: "3.4.3.7 | PATCH | Ensure nftables default deny firewall policy | Set hook input deny policy"
+        when:
+            - '"type filter hook input priority 0; policy drop;" not in rhel7cis_3_4_3_7_inputpolicy.stdout'
+        ansible.builtin.shell: nft chain inet "{{ rhel7cis_nft_tables_tablename }}" input { policy drop \; }
+
+      - name: "3.4.3.7 | PATCH | Ensure nftables default deny firewall policy | Create hook forward deny policy"
+        when:
+            - '"type filter hook forward priority 0; policy drop;" not in rhel7cis_3_4_3_7_forwardpolicy.stdout'
+        ansible.builtin.shell: nft chain inet "{{ rhel7cis_nft_tables_tablename }}" forward { policy drop \; }
+
+      - name: "3.4.3.7 | PATCH | Ensure nftables default deny firewall policy | Create hook output deny policy"
+        when:
+            - '"type filter hook output priority 0; policy drop;" not in rhel7cis_3_4_3_7_outputpolicy.stdout'
+        ansible.builtin.shell: nft chain inet "{{ rhel7cis_nft_tables_tablename }}" output { policy drop \; }
+
+- name: "3.4.3.8 | PATCH | Ensure nftables service is enabled and active"
+  when:
+      - rhel7cis_rule_3_4_3_8
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - rule_3.4.3.8
+      - firewall
+      - nftables
+      - NIST800-53R5_CA-9
+  ansible.builtin.systemd:
+      name: nftables
+      enabled: true
+      state: started
+
+- name: "3.4.3.9 | PATCH | Ensure nftables rules are permanent"
+  when:
+      - rhel7cis_rule_3_4_3_9
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - rule_3.4.3.9
+      - firewall
+      - nftables
+  ansible.builtin.lineinfile:
+      path: /etc/sysconfig/nftables.conf
+      state: present
+      insertafter: EOF
+      line: include "/etc/nftables/inet-{{ rhel7cis_nft_tables_tablename }}.rules"

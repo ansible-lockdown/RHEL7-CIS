@@ -4,40 +4,56 @@
   ansible.builtin.import_tasks:
       file: cis_1.1.1.x.yml
 
-- name: "SECTION | 1.1 | Partition Configurations"
+- name: "SECTION | 1.1.2.1.x | Configure /tmp"
   ansible.builtin.import_tasks:
-      file: cis_1.1.x.yml
+      file: cis_1.1.2.1.x.yml
+
+- name: "SECTION | 1.1.2.2.x | Configure /dev/shm"
+  ansible.builtin.import_tasks:
+      file: cis_1.1.2.2.x.yml
+
+- name: "SECTION | 1.1.2.3.x | Configure /home"
+  ansible.builtin.import_tasks:
+      file: cis_1.1.2.3.x.yml
+
+- name: "SECTION | 1.1.2.4.x | Configure /var"
+  ansible.builtin.import_tasks:
+      file: cis_1.1.2.4.x.yml
+
+- name: "SECTION | 1.1.2.5.x | Configure /var/tmp"
+  ansible.builtin.import_tasks:
+      file: cis_1.1.2.5.x.yml
+
+- name: "SECTION | 1.1.2.6.x | Configure /var/log"
+  ansible.builtin.import_tasks:
+      file: cis_1.1.2.6.x.yml
+
+- name: "SECTION | 1.1.2.7.x | Configure /var/log/audit"
+  ansible.builtin.import_tasks:
+      file: cis_1.1.2.7.x.yml
 
 - name: "SECTION | 1.2 | Configure Software Updates"
   ansible.builtin.import_tasks:
       file: cis_1.2.x.yml
 
-- name: "SECTION | 1.3 | Filesystem Integrity"
+- name: "SECTION | 1.3 | Secure Boot Settings"
   ansible.builtin.import_tasks:
       file: cis_1.3.x.yml
-  when: rhel7cis_config_aide
 
-- name: "SECTION | 1.4 | Secure Boot Settings"
+- name: "SECTION | 1.4 | Configure Additional Process Hardening"
   ansible.builtin.import_tasks:
       file: cis_1.4.x.yml
 
-- name: "SECTION | 1.5 | Additional Process Hardening"
+- name: "SECTION | 1.5 | Mandatory Access Control"
   ansible.builtin.import_tasks:
       file: cis_1.5.x.yml
-
-- name: "SECTION | 1.6 | Mandatory Access Control"
-  ansible.builtin.import_tasks:
-      file: cis_1.6.x.yml
   when: not rhel7cis_selinux_disable
 
-- name: "SECTION | 1.7 | Warning Banners"
+- name: "SECTION | 1.6 | Warning Banners"
+  ansible.builtin.import_tasks:
+      file: cis_1.6.x.yml
+
+- name: "SECTION | 1.7 | Gnome desktop"
+  when: rhel7cis_gui
   ansible.builtin.import_tasks:
       file: cis_1.7.x.yml
-
-- name: "SECTION | 1.8 | GDM Login"
-  ansible.builtin.import_tasks:
-      file: cis_1.8.x.yml
-
-- name: "SECTION | 1.9 | Updated and Patches"
-  ansible.builtin.import_tasks:
-      file: cis_1.9.x.yml

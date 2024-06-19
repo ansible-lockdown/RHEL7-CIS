@@ -1,0 +1,95 @@
+## This file is managed by Ansible, YOUR CHANGES WILL BE LOST!
+
+# This template will set all of the auditd configurations via a handler in the role in one task instead of individually
+{% if rhel7cis_rule_5_2_3_1 %}
+-w /etc/sudoers -p wa -k scope
+-w /etc/sudoers.d/ -p wa -k scope
+{% endif %}
+{% if rhel7cis_rule_5_2_3_2 %}
+-a always,exit -F arch=b64 -C euid!=uid -F auid!=unset -S execve -k user_emulation
+-a always,exit -F arch=b32 -C euid!=uid -F auid!=unset -S execve -k user_emulation
+{% endif %}
+{% if rhel7cis_rule_5_2_3_3 %}
+-w {{ rhel7cis_sudolog_location }} -p wa -k sudo_log_file
+{% endif %}
+{% if rhel7cis_rule_5_2_3_4 %}
+-a always,exit -F arch=b64 -S adjtimex,settimeofday,clock_settime -k time-change
+-a always,exit -F arch=b32 -S adjtimex,settimeofday,clock_settime -k time-change
+-w /etc/localtime -p wa -k time-change
+{% endif %}
+{% if rhel7cis_rule_5_2_3_5 %}
+-a always,exit -F arch=b64 -S sethostname,setdomainname -F key=system-locale
+-a always,exit -F arch=b32 -S sethostname,setdomainname -F key=system-locale
+-w /etc/issue -p wa -k system-locale
+-w /etc/issue.net -p wa -k system-locale
+-w /etc/hosts -p wa -k system-locale
+-w /etc/sysconfig/network -p wa -k system-locale
+-w /etc/sysconfig/network-scripts/ -p wa -k system-locale
+{% endif %}
+{% if rhel7cis_rule_5_2_3_6 %}
+{% for proc in priv_procs.stdout_lines -%}
+-a always,exit -F path={{ proc }} -F perm=x -F auid>={{ rhel7uid_interactive_uid_start }} -F auid!=unset -k privileged
+{% endfor %}
+{% endif %}
+{% if rhel7cis_rule_5_2_3_7 %}
+-a always,exit -F arch=b64 -S creat,open,openat,truncate,ftruncate -F exit=-EACCES -F auid>={{ rhel7uid_interactive_uid_start }} -F auid!=unset -F key=access
+-a always,exit -F arch=b64 -S creat,open,openat,truncate,ftruncate -F exit=-EPERM -F auid>={{ rhel7uid_interactive_uid_start }} -F auid!=unset -F key=access
+-a always,exit -F arch=b32 -S creat,open,openat,truncate,ftruncate -F exit=-EACCES -F auid>={{ rhel7uid_interactive_uid_start }} -F auid!=unset -F key=access
+-a always,exit -F arch=b32 -S creat,open,openat,truncate,ftruncate -F exit=-EPERM -F auid>={{ rhel7uid_interactive_uid_start }} -F auid!=unset -F key=access
+{% endif %}
+{% if rhel7cis_rule_5_2_3_8 %}
+-w /etc/group -p wa -k identity
+-w /etc/passwd -p wa -k identity
+-w /etc/gshadow -p wa -k identity
+-w /etc/shadow -p wa -k identity
+-w /etc/security/opasswd -p wa -k identity
+{% endif %}
+{% if rhel7cis_rule_5_2_3_9 %}
+-a always,exit -F arch=b64 -S chmod,fchmod,fchmodat -F auid>={{ rhel7uid_interactive_uid_start }} -F auid!=unset -F key=perm_mod
+-a always,exit -F arch=b64 -S chown,fchown,lchown,fchownat -F auid>={{ rhel7uid_interactive_uid_start }} -F auid!=unset -F key=perm_mod
+-a always,exit -F arch=b32 -S chmod,fchmod,fchmodat -F auid>={{ rhel7uid_interactive_uid_start }} -F auid!=unset -F key=perm_mod
+-a always,exit -F arch=b32 -S lchown,fchown,chown,fchownat -F auid>={{ rhel7uid_interactive_uid_start }} -F auid!=unset -F key=perm_mod
+-a always,exit -F arch=b64 -S setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr -F auid>={{ rhel7uid_interactive_uid_start }} -F auid!=unset -F key=perm_mod
+-a always,exit -F arch=b32 -S setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr -F auid>={{ rhel7uid_interactive_uid_start }} -F auid!=unset -F key=perm_mod
+{% endif %}
+{% if rhel7cis_rule_5_2_3_10 %}
+-a always,exit -F arch=b32 -S mount -F auid>={{ rhel7uid_interactive_uid_start }} -F auid!=unset -k mounts
+-a always,exit -F arch=b64 -S mount -F auid>={{ rhel7uid_interactive_uid_start }} -F auid!=unset -k mounts
+{% endif %}
+{% if rhel7cis_rule_5_2_3_11 %}
+-w /var/run/utmp -p wa -k session
+-w /var/log/wtmp -p wa -k session
+-w /var/log/btmp -p wa -k session
+{% endif %}
+{% if rhel7cis_rule_5_2_3_12 %}
+-w /var/log/lastlog -p wa -k logins
+-w /var/run/faillock -p wa -k logins
+{% endif %}
+{% if rhel7cis_rule_5_2_3_13 %}
+-a always,exit -F arch=b64 -S unlink,unlinkat,rename,renameat -F auid>={{ rhel7uid_interactive_uid_start }} -F auid!=unset -F key=delete
+-a always,exit -F arch=b32 -S unlink,unlinkat,rename,renameat -F auid>={{ rhel7uid_interactive_uid_start }} -F auid!=unset -F key=delete
+{% endif %}
+{% if rhel7cis_rule_5_2_3_14 %}
+-w /etc/selinux/ -p wa -k MAC-policy
+-w /usr/share/selinux/ -p wa -k MAC-policy
+{% endif %}
+{% if rhel7cis_rule_5_2_3_15 %}
+-a always,exit -F path=/usr/bin/chcon -F perm=x -F auid>={{ rhel7uid_interactive_uid_start }} -F auid!=unset -k perm_chng
+{% endif %}
+{% if rhel7cis_rule_5_2_3_16 %}
+-a always,exit -F path=/usr/bin/setfacl -F perm=x -F auid>={{ rhel7uid_interactive_uid_start }} -F auid!=unset -k perm_chng
+{% endif %}
+{% if rhel7cis_rule_5_2_3_17 %}
+-a always,exit -F path=/usr/bin/chacl -F perm=x -F auid>={{ rhel7uid_interactive_uid_start }} -F auid!=unset -k perm_chng
+{% endif %}
+{% if rhel7cis_rule_5_2_3_18 %}
+-a always,exit -F path=/usr/sbin/usermod -F perm=x -F auid>={{ rhel7uid_interactive_uid_start }} -F auid!=unset -k usermod
+{% endif %}
+{% if rhel7cis_rule_5_2_3_19 %}
+-a always,exit -F arch=b32 -S init_module,finit_module,delete_module,create_module,query_module -F auid>={{ rhel7uid_interactive_uid_start }} -F auid!=unset -k kernel_modules
+-a always,exit -F arch=b64 -S init_module,finit_module,delete_module,create_module,query_module -F auid>={{ rhel7uid_interactive_uid_start }} -F auid!=unset -k kernel_modules
+-a always,exit -F path=/usr/bin/kmod -F perm=x -F auid>={{ rhel7uid_interactive_uid_start }} -F auid!=unset -k kernel_modules
+{% endif %}
+{% if rhel7cis_rule_5_2_3_20 %}
+-e 2
+{% endif %}
