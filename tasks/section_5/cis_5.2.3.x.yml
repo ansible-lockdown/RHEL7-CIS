@@ -201,7 +201,7 @@
       - rhel7cis_rule_5_2_3_15
   tags:
       - level2-server
-      - level2- workstation
+      - level2-workstation
       - automated
       - patch
       - auditd

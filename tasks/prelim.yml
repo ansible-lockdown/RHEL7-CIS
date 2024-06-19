@@ -235,7 +235,6 @@
 - name: PRELIM | Optional | Configure other keys for auditd.conf
   when:
       - rhel7cis_auditd_extra_conf.keys() | length > 0
-      - rhel7cis_level_2
   tags:
       - always
   ansible.builtin.lineinfile:

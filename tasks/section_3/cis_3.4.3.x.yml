@@ -4,7 +4,8 @@
   when:
       - rhel7cis_rule_3_4_3_1
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_3.4.3.1
@@ -23,7 +24,8 @@
       - rhel7cis_firewall != "iptables"
       - rhel7cis_rule_3_4_3_2
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - manual
       - patch
       - rule_3.4.3.2
@@ -43,7 +45,8 @@
   when:
       - rhel7cis_rule_3_4_3_3
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_3.4.3.3
@@ -91,7 +94,8 @@
   when:
       - rhel7cis_rule_3_4_3_4
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_3.4.3.4
@@ -150,7 +154,8 @@
   when:
       - rhel7cis_rule_3.4.3.5
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_3.4.3.5
@@ -195,7 +200,8 @@
   when:
       - rhel7cis_rule_3_4_3_6
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - manual
       - patch
       - rule_3.4.3.6
@@ -249,7 +255,8 @@
   when:
       - rhel7cis_rule_3_4_3_7
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - manual
       - patch
       - rule_3.4.3.7
@@ -305,7 +312,8 @@
   when:
       - rhel7cis_rule_3_4_3_8
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_3.4.3.8
@@ -326,7 +334,8 @@
   when:
       - rhel7cis_rule_3_4_3_9
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_3.4.3.9

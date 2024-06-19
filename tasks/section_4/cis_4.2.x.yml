@@ -10,7 +10,8 @@
   when:
       - rhel7cis_rule_4_2_1
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_4.2.1
@@ -23,7 +24,8 @@
   when:
       - rhel7cis_rule_4_2_2
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_4.2.2
@@ -55,7 +57,8 @@
   when:
       - rhel7cis_rule_4_2_3
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_4.2.3
@@ -87,7 +90,8 @@
   when:
       - rhel7cis_rule_4_2_4
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_4.2.4
@@ -135,7 +139,8 @@
   when:
       - rhel7cis_rule_4_2_5
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_4.2.5
@@ -156,7 +161,8 @@
   when:
       - rhel7cis_rule_4_2_6
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_4.2.6
@@ -173,7 +179,8 @@
   when:
       - rhel7cis_rule_4_2_7
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_4.2.7
@@ -204,7 +211,8 @@
   when:
       - rhel7cis_rule_4_2_8
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_4.2.8
@@ -221,7 +229,8 @@
   when:
       - rhel7cis_rule_4_2_9
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_4.2.9
@@ -242,7 +251,8 @@
   when:
       - rhel7cis_rule_4_2_10
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_4.2.10
@@ -263,7 +273,8 @@
   when:
       - rhel7cis_rule_4_2_11
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_4.2.11
@@ -284,7 +295,8 @@
   when:
       - rhel7cis_rule_4_2_12
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_4.2.12
@@ -301,7 +313,8 @@
   when:
       - rhel7cis_rule_4_2_13
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_4.2.13
@@ -318,7 +331,8 @@
   when:
       - rhel7cis_rule_4_2_14
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_4.2.14
@@ -337,7 +351,8 @@
   when:
       - rhel7cis_rule_4_2_15
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_4.2.15
@@ -358,7 +373,8 @@
   when:
       - rhel7cis_rule_4_2_16
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_4.2.16
@@ -375,7 +391,8 @@
   when:
       - rhel7cis_rule_4_2_17
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_4.2.17
@@ -396,7 +413,8 @@
   when:
       - rhel7cis_rule_4_2_18
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_4.2.18
@@ -417,7 +435,8 @@
   when:
       - rhel7cis_rule_4_2_19
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_4.2.19
@@ -438,7 +457,8 @@
   when:
       - rhel7cis_rule_4_2_20
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_4.2.20
@@ -459,7 +479,8 @@
   when:
       - rhel7cis_rule_4_2_21
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_4.2.21
@@ -480,7 +501,8 @@
   when:
       - rhel7cis_rule_4_2_22
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_4.2.22

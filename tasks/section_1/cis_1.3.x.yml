@@ -86,7 +86,8 @@
   when:
       - rhel7cis_rule_1_3_3
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_1.3.3

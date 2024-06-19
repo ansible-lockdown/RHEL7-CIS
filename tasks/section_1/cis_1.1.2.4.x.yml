@@ -5,7 +5,8 @@
       - required_mount not in mount_names
       - rhel7cis_rule_1_1_2_4_1
   tags:
-      - level2
+      - level2-server
+      - level2-workstation
       - automated
       - patch
       - rule_1.1.2.4.1
@@ -32,7 +33,8 @@
       - rhel7cis_rule_1_1_2_4_2 or
         rhel7cis_rule_1_1_2_4_3
   tags:
-      - level2
+      - level2-server
+      - level2-workstation
       - automated
       - patch
       - rule_1.1.2.4.2

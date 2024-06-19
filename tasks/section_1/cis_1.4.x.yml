@@ -4,7 +4,8 @@
   when:
       - rhel7cis_rule_1_4_1
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_1.4.1
@@ -22,7 +23,8 @@
   when:
       - rhel7cis_rule_1_4_2
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_1.4.2
@@ -39,7 +41,8 @@
   when:
       - rhel7cis_rule_1_4_3
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_1.4.3
@@ -57,7 +60,8 @@
   when:
       - rhel7cis_rule_1_4_4
   tags:
-      - level1
+      - level1-server
+      - level1-workstation
       - automated
       - patch
       - rule_1.4.4
