@@ -58,7 +58,7 @@
             - item.id != "shutdown"
             - item.id != "halt"
             - item.id != "nfsnobody"
-            - item.uid < rhel7cis_min_uid | int
+            - item.uid < rhel7uid_interactive_uid_start | int
             - item.shell != "      /bin/false"
             - item.shell != "      /usr/sbin/nologin"
         ansible.builtin.user:
@@ -75,7 +75,7 @@
             - item.id != "shutdown"
             - item.id != "halt"
             - item.id != "nfsnobody"
-            - item.uid < rhel7cis_min_uid | int
+            - item.uid < rhel7uid_interactive_uid_start | int
             - item.shell != "      /bin/false"
             - item.shell != "      /usr/sbin/nologin"
         ansible.builtin.user:

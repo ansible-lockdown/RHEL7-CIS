@@ -302,7 +302,7 @@
 
 - name: "6.2.9 | PATCH | Ensure root is the only UID 0 account"
   when:
-      - rhel7cis_uid_zero_accounts_except_root.rc
+      - discovered_uid_zero_accounts_except_root.rc
       - rhel7cis_rule_6_2_9
   tags:
       - level1-server
@@ -319,7 +319,7 @@
   ansible.builtin.shell: passwd -l {{ item }}
   changed_when: false
   failed_when: false
-  loop: "{{ rhel7cis_uid_zero_accounts_except_root.stdout_lines }}"
+  loop: "{{ discovered_uid_zero_accounts_except_root.stdout_lines }}"
 
 - name: "6.2.10 | PATCH | Ensure local interactive user home directories exist"
   when:
@@ -343,7 +343,7 @@
             owner: "{{ item.id }}"
             group: "{{ item.gid }}"
         register: rhel7cis_6_2_10_home_dir
-        loop: "{{ rhel7cis_passwd  | selectattr('uid', '>=', rhel7cis_min_uid | int ) | selectattr('uid', '<=', rhel7cis_max_uid | int ) | list }}"
+        loop: "{{ rhel7cis_passwd  | selectattr('uid', '>=', rhel7uid_interactive_uid_start | int ) | selectattr('uid', '<=', rhel7cis_max_uid | int ) | list }}"
         loop_control:
             label: "{{ item.id }}"
 
@@ -364,7 +364,7 @@
 
       - name: "6.2.10 | PATCH | Ensure local interactive user home directories exist | own their home directories"
         when:
-            - item.uid >= rhel7cis_min_uid | int
+            - item.uid >= rhel7uid_interactive_uid_start | int
             - item.id != 'nobody'
             - (item.id != 'tss' and item.dir != '/dev/null')
             - item.shell != '/sbin/nologin'
@@ -372,7 +372,7 @@
             path: "{{ item.dir }}"
             owner: "{{ item.id }}"
             state: directory
-        loop: "{{ rhel7cis_passwd | selectattr('uid', '>=', rhel7cis_min_uid | int ) | selectattr('uid', '<=', rhel7cis_max_uid | int ) | list }}"
+        loop: "{{ rhel7cis_passwd | selectattr('uid', '>=', rhel7uid_interactive_uid_start | int ) | selectattr('uid', '<=', rhel7cis_max_uid | int ) | list }}"
         loop_control:
             label: "{{ item.id }}"
 

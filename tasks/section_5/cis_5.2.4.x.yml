@@ -12,12 +12,12 @@
   block:
       - name: "5.2.4.1 | AUDIT | Ensure the audit log directory is 0750 or more restrictive | get current permissions"
         ansible.builtin.stat:
-            path: "{{ audit_discovered_logfile.stdout | dirname }}"
+            path: "{{ discovered_audit_logfile.stdout | dirname }}"
         register: auditlog_dir
 
       - name: "5.2.4.1 | PATCH | Ensure the audit log directory is 0750 or more restrictive | set"
         ansible.builtin.file:
-            path: "{{ audit_discovered_logfile.stdout | dirname }}"
+            path: "{{ discovered_audit_logfile.stdout | dirname }}"
             state: directory
             mode: g-w,o-rwx
 
@@ -40,7 +40,7 @@
   block:
       - name: "5.2.4.2 | AUDIT | Ensure audit log files are mode 0640 or less permissive | stat file"
         ansible.builtin.stat:
-            path: "{{ audit_discovered_logfile.stdout }}"
+            path: "{{ discovered_audit_logfile.stdout }}"
         changed_when: false
         register: auditd_logfile
 
@@ -49,7 +49,7 @@
             "5.2.4.3 | PATCH | Ensure only authorized users own audit log files"
             "5.2.4.4 | PATCH | Ensure only authorized groups are assigned ownership of audit log files"
         ansible.builtin.file:
-            path: "{{ audit_discovered_logfile.stdout }}"
+            path: "{{ discovered_audit_logfile.stdout }}"
             mode: "{% if auditd_logfile.stat.mode != '0600' %}0640{% endif %}"
             owner: root
             group: root

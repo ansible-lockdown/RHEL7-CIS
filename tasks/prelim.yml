@@ -8,17 +8,11 @@
   ansible.builtin.import_tasks:
       file: parse_etc_password.yml
 
-- name: "PRELIM | Gather accounts with empty password fields"
-  ansible.builtin.shell: "cat /etc/shadow | awk -F: '($2 == \"\" ) {j++;print $1; } END {exit j}'"
-  changed_when: false
-  check_mode: false
-  register: empty_password_accounts
-
 - name: "PRELIM | Gather UID 0 accounts other than root"
   ansible.builtin.shell: "cat /etc/passwd | awk -F: '($3 == 0 && $1 != \"root\") {i++;print $1 } END {exit i}'"
   changed_when: false
   check_mode: false
-  register: rhel7cis_uid_zero_accounts_except_root
+  register: discovered_uid_zero_accounts_except_root
 
 - name: "PRELIM | Gather interactive user ID min and max"
   when:
@@ -30,18 +24,18 @@
         ansible.builtin.shell: grep ^UID_MIN /etc/login.defs | awk '{print $2}'
         changed_when: false
         failed_when: false
-        register: rhel7cis_min_uid
+        register: discovered_min_uid
 
       - name: "PRELIM | Gather interactive user ID max"
         ansible.builtin.shell: grep ^UID_MAX /etc/login.defs | awk '{print $2}'
         changed_when: false
         failed_when: false
-        register: rhel7cis_max_uid
+        register: discovered_max_uid
 
       - name: "PRELIM | Setting the fact"
         ansible.builtin.set_fact:
-            rhel7uid_interactive_uid_start: "{{ rhel7cis_min_uid.stdout | string }}"
-            rhel7uid_interactive_uid_stop: "{{ rhel7cis_max_uid.stdout | string }}"
+            rhel7uid_interactive_uid_start: "{{ discovered_min_uid.stdout | string }}"
+            rhel7uid_interactive_uid_stop: "{{ discovered_max_uid.stdout | string }}"
 
 - name: "PRELIM | Set facts based on boot type"
   tags:
@@ -50,17 +44,17 @@
       - name: "PRELIM | Check whether machine is UEFI-based"
         ansible.builtin.stat:
             path: /sys/firmware/efi
-        register: rhel7cis_efi_boot
+        register: discovered_efi_boot
 
       - name: "PRELIM | set legacy boot and grub path | Bios"
-        when: not rhel7cis_efi_boot.stat.exists
+        when: not discovered_efi_boot.stat.exists
         ansible.builtin.set_fact:
             rhel7cis_legacy_boot: true
             grub2_path: /etc/grub2.cfg
             rhel7cis_boot_path: /boot/grub2/
 
       - name: "PRELIM | set grub fact | UEFI"
-        when: rhel7cis_efi_boot.stat.exists
+        when: discovered_efi_boot.stat.exists
         ansible.builtin.set_fact:
             grub2_path: /etc/grub2-efi.cfg
             rhel7cis_boot_path: "/boot/efi/EFI/{{ansible_facts.distribution | lower }}/"
@@ -111,10 +105,10 @@
         ansible.builtin.shell: semanage permissive -l | grep firewalld_t
         changed_when: false
         failed_when: false
-        register: firewalld_t_sestate
+        register: discovered_firewalld_t_sestate
 
       - name: "PRELIM | Section 1.5 | Ensure firewalld_t is set to permissive"
-        when: "'firewalld_t' not in firewalld_t_sestate.stdout"
+        when: "'firewalld_t' not in discovered_firewalld_t_sestate.stdout"
         ansible.builtin.shell: semanage permissive -a firewalld_t
   vars:
       ansible_python_interpreter: /bin/python
@@ -155,8 +149,8 @@
       - rule_5.2.4.4
   ansible.builtin.shell: "grep ^log_file /etc/audit/auditd.conf | awk '{ print $NF }'"
   changed_when: false
-  failed_when: audit_discovered_logfile.rc not in [0, 1]
-  register: audit_discovered_logfile
+  failed_when: discovered_audit_logfile.rc not in [0, 1]
+  register: discovered_audit_logfile
 
 - name: "PRELIM | 5.2.4.5/6/7 | Audit conf and rules files | list files"
   when:
