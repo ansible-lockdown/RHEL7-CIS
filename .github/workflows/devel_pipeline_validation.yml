@@ -1,6 +1,6 @@
 ---
 
-  name: Devel pipeline (tofu)
+  name: Devel pipeline
 
   on: # yamllint disable-line rule:truthy
     pull_request_target:
@@ -45,7 +45,8 @@
           ENABLE_DEBUG: ${{ vars.ENABLE_DEBUG }}
           # Imported as a variable by terraform
           TF_VAR_repository: ${{ github.event.repository.name }}
-          AWS_REGION : "us-east-1"
+          AWS_REGION: "us-east-1"
+          ANSIBLE_VERSION: ${{ vars.ANSIBLE_RUNNER_VERSION }}
         defaults:
           run:
             shell: bash
@@ -59,13 +60,24 @@
             with:
               ref: ${{ github.event.pull_request.head.sha }}
 
+          - name: If a variable for IAC_BRANCH is set use that branch
+            working-directory: .github/workflows
+            run: |
+              if [ ${{ vars.IAC_BRANCH }} != '' ]; then
+                 echo "IAC_BRANCH=${{ vars.IAC_BRANCH }}" >> $GITHUB_ENV
+                 echo "Pipeline using the following IAC branch ${{ vars.IAC_BRANCH }}"
+              else
+                 echo IAC_BRANCH=main >> $GITHUB_ENV
+              fi
+
+
           # Pull in terraform code for linux servers
           - name: Clone GitHub IaC plan
             uses: actions/checkout@v4
             with:
               repository: ansible-lockdown/github_linux_IaC
               path: .github/workflows/github_linux_IaC
-              ref: self_hosted
+              ref: ${{ env.IAC_BRANCH }}
 
           # Uses dedicated restricted role and policy to enable this only for this task
           # No credentials are part of github for AWS auth
@@ -132,9 +144,8 @@
             env:
               ANSIBLE_HOST_KEY_CHECKING: "false"
               ANSIBLE_DEPRECATION_WARNINGS: "false"
-              ANSIBLE_VERSION: "2.16.6"
             run: |
-              /opt/ansible_"${ANSIBLE_VERSION}"_venv/bin/ansible-playbook -i hosts.yml --private-key ~/.ssh/le_runner ../../../site.yml
+              /opt/ansible_${{ env.ANSIBLE_VERSION }}_venv/bin/ansible-playbook -i hosts.yml --private-key ~/.ssh/le_runner ../../../site.yml
 
         # Remove test system - User secrets to keep if necessary
 
