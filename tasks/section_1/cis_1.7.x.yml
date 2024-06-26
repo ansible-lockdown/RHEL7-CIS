@@ -1,97 +1,250 @@
 ---
 
-- name: "1.7.1 | PATCH | Ensure message of the day is configured properly"
-  ansible.builtin.template:
-      src: etc/motd.j2
-      dest: /etc/motd
-      owner: root
-      group: root
-      mode: 0644
+- name: "1.7.1 | PATCH | Ensure GNOME Display Manager is removed"
   when:
       - rhel7cis_rule_1_7_1
+      - "'gdm' in ansible_facts.packages"
+      - not rhel7cis_gui
   tags:
-      - level1-server
-      - level1-workstation
-      - banner
+      - level2-server
+      - automated
       - patch
+      - gui
+      - gdm
       - rule_1.7.1
+  ansible.builtin.package:
+      name: gdm
+      state: absent
 
-- name: "1.7.2 | PATCH | Ensure local login warning banner is configured properly"
-  ansible.builtin.template:
-      src: etc/issue.j2
-      dest: /etc/issue
-      owner: root
-      group: root
-      mode: 0644
+- name: "1.7.2 | PATCH | Ensure GDM login banner is configured"
   when:
       - rhel7cis_rule_1_7_2
+      - rhel7cis_gui
   tags:
       - level1-server
       - level1-workstation
-      - banner
+      - automated
       - patch
+      - gui
+      - gdm
       - rule_1.7.2
-
-- name: "1.7.3 | PATCH | Ensure remote login warning banner is configured properly"
-  ansible.builtin.template:
-      src: etc/issue.net.j2
-      dest: /etc/issue.net
+  ansible.builtin.lineinfile:
+      path: "{{ item.file }}"
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+      create: true
       owner: root
       group: root
-      mode: 0644
-  when:
-      - rhel7cis_rule_1_7_3
-  tags:
-      - level1-server
-      - level1-workstation
-      - banner
-      - patch
-      - rule_1.7.3
+      mode: '0644'
+  notify: Reload_dconf
+  loop:
+      - { file: '/etc/dconf/profile/gdm', regexp: 'user-db', line: 'user-db:user' }
+      - { file: '/etc/dconf/profile/gdm', regexp: 'system-db', line: 'system-db:gdm' }
+      - { file: '/etc/dconf/profile/gdm', regexp: 'file-db', line: 'file-db:/usr/share/gdm/greeter-dconf-defaults' }
+      - { file: '/etc/dconf/db/gdm.d/01-banner-message', regexp: '\[org\/gnome\/login-screen\]', line: '[org/gnome/login-screen]' }
+      - { file: '/etc/dconf/db/gdm.d/01-banner-message', regexp: 'banner-message-enable', line: 'banner-message-enable=true' }
+      - { file: '/etc/dconf/db/gdm.d/01-banner-message', regexp: 'banner-message-text', line: "banner-message-text='{{ rhel7cis_warning_banner | replace('\n', ' ') }}' " }
 
-- name: "1.7.4 | PATCH | Ensure permissions on /etc/motd are configured"
-  ansible.builtin.file:
-      dest: /etc/motd
-      state: file
+- name: "1.7.3 | PATCH | Ensure GDM disable-user-list option is enabled"
+  ansible.builtin.lineinfile:
+      path: "{{ item.file }}"
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+      create: true
       owner: root
       group: root
-      mode: 0644
+      mode: '0644'
+  notify: Reload_dconf
+  loop:
+      - { file: '/etc/dconf/profile/gdm', regexp: 'user-db', line: 'user-db:user' }
+      - { file: '/etc/dconf/profile/gdm', regexp: 'system-db', line: 'system-db:gdm' }
+      - { file: '/etc/dconf/profile/gdm', regexp: 'file-db', line: 'file-db:/usr/share/gdm/greeter-dconf-defaults'}
+      - { file: '/etc/dconf/db/gdm.d/00-login-screen', regexp: '\[org\/gnome\/login-screen\]', line: '[org/gnome/login-screen]' }
+      - { file: '/etc/dconf/db/gdm.d/00-login-screen', regexp: 'disable-user-list=', line: 'disable-user-list=true' }
+
+- name: "1.7.4 | PATCH | Ensure GDM screen locks when the user is idle"
   when:
       - rhel7cis_rule_1_7_4
+      - rhel7cis_gui
   tags:
       - level1-server
       - level1-workstation
-      - perms
+      - automated
       - patch
+      - gui
       - rule_1.7.4
+  notify: Reload_dconf
+  block:
+      - name: "1.7.4 | PATCH | Ensure GDM screen locks when the user is idle | User profile"
+        ansible.builtin.lineinfile:
+            path: /etc/dconf/profile/user
+            regexp: "{{ item.regexp }}"
+            line: "{{ item.line }}"
+            create: true
+            owner: root
+            group: root
+            mode: '0644'
+        loop:
+            - { regexp: '^user-db', line: 'user-db: user' }
+            - { regexp: '^system-db', line: 'system-db: local' }
 
-- name: "1.7.5 | PATCH | Ensure permissions on /etc/issue are configured"
-  ansible.builtin.file:
-      dest: /etc/issue
-      state: file
-      owner: root
-      group: root
-      mode: 0644
+      - name: "1.7.4 | PATCH | Ensure GDM screen locks when the user is idle | Make db directory"
+        ansible.builtin.file:
+            path: "/etc/dconf/db/{{ rhel7cis_dconf_db_name }}.d"
+            owner: root
+            group: root
+            mode: '0755'
+            state: directory
+
+      - name: "1.7.4 | PATCH | Ensure GDM screen locks when the user is idle | Make conf file"
+        ansible.builtin.template:
+            src: etc/dconf/db/00-screensaver.j2
+            dest: "/etc/dconf/db/{{ rhel7cis_dconf_db_name }}.d/00-screensaver"
+            owner: root
+            group: root
+            mode: '0644'
+
+- name: "1.7.5 PATCH | Ensure GDM screen locks cannot be overridden"
   when:
       - rhel7cis_rule_1_7_5
+      - rhel7cis_gui
   tags:
       - level1-server
-      - level1-workstation
-      - perms
+      - level2-workstation
+      - automated
       - patch
+      - gui
       - rule_1.7.5
+  block:
+      - name: "1.7.5 | PATCH | Ensure GDM screen locks cannot be overridden | Make lock directory"
+        ansible.builtin.file:
+            path: "/etc/dconf/db/{{ rhel7cis_dconf_db_name }}.d/locks"
+            owner: root
+            group: root
+            mode: '0755'
+            state: directory
 
-- name: "1.7.6 | PATCH | Ensure permissions on /etc/issue.net are configured"
-  ansible.builtin.file:
-      dest: /etc/issue.net
-      state: file
-      owner: root
-      group: root
-      mode: 0644
+      - name: "1.7.5 | PATCH | Ensure GDM screen locks cannot be overridden | Make lock file"
+        ansible.builtin.template:
+            src: etc/dconf/db/locks/00-screensaver_lock.j2
+            dest: "/etc/dconf/db/{{ rhel7cis_dconf_db_name }}.d/locks/00-screensaver"
+            owner: root
+            group: root
+            mode: '0644'
+
+- name: "1.7.6 | PATCH | Ensure GDM automatic mounting of removable media is disabled"
   when:
       - rhel7cis_rule_1_7_6
+      - rhel7cis_gui
+  tags:
+      - level1-server
+      - level2-workstation
+      - patch
+      - gui
+      - rule_1.7.6
+  notify: Reload_dconf
+  ansible.builtin.template:
+      src: etc/dconf/db/00-media-automount.j2
+      dest: "/etc/dconf/db/{{ rhel7cis_dconf_db_name }}.d/00-media-automount"
+      owner: root
+      group: root
+      mode: '0644'
+
+- name: "1.7.7 | PATCH | Ensure GDM disabling automatic mounting of removable media is not overridden"
+  when:
+      - rhel7cis_rule_1_7_7
+      - rhel7cis_gui
+  tags:
+      - level1-server
+      - level2-workstation
+      - patch
+      - gui
+      - rule_1.7.7
+  notify: Reload_dconf
+  block:
+      - name: "1.7.7 | PATCH | Ensure GDM disabling automatic mounting of removable media is not overridden | Make lock directory"
+        ansible.builtin.file:
+            path: "/etc/dconf/db/{{ rhel7cis_dconf_db_name }}.d/locks"
+            owner: root
+            group: root
+            mode: '0755'
+            state: directory
+
+      - name: "1.7.7 | PATCH | Ensure GDM disabling automatic mounting of removable media is not overridden | Make lock file"
+        ansible.builtin.template:
+            src: etc/dconf/db/locks/00-automount_lock.j2
+            dest: "/etc/dconf/db/{{ rhel7cis_dconf_db_name }}.d/locks/00-automount_lock"
+            owner: root
+            group: root
+            mode: '0644'
+
+- name: "1.7.8 | PATCH | Ensure GDM autorun-never is enabled"
+  when:
+      - rhel7cis_rule_1_7_8
+      - rhel7cis_gui
+  tags:
+      - level1-server
+      - level2-workstation
+      - patch
+      - gui
+      - rule_1.7.8
+  notify: Reload_dconf
+  block:
+      - name: "1.7.8 | PATCH | Ensure GDM autorun-never is enabled | Make directory"
+        ansible.builtin.file:
+            path: "/etc/dconf/db/{{ rhel7cis_dconf_db_name }}.d"
+            owner: root
+            group: root
+            mode: '0755'
+            state: directory
+
+      - name: "1.7.8 | PATCH | Ensure GDM autorun-never is enabled | Make conf file"
+        ansible.builtin.template:
+            src: etc/dconf/db/00-media-autorun.j2
+            dest: "/etc/dconf/db/{{ rhel7cis_dconf_db_name }}.d/00-media-autorun"
+            owner: root
+            group: root
+            mode: '0644'
+
+- name: "1.7.9 | PATCH | Ensure GDM autorun-never is not overridden"
+  when:
+      - rhel7cis_rule_1_7_9
+      - rhel7cis_gui
+  tags:
+      - level1-server
+      - level2-workstation
+      - patch
+      - gui
+      - rule_1.7.9
+  notify: Reload_dconf
+  block:
+      - name: "1.7.9 | PATCH | Ensure GDM autorun-never is not overridden | Make lock directory"
+        ansible.builtin.file:
+            path: "/etc/dconf/db/{{ rhel7cis_dconf_db_name }}.d/locks"
+            owner: root
+            group: root
+            mode: '0755'
+            state: directory
+
+      - name: "1.7.9 | PATCH | Ensure GDM autorun-never is not overridden | Make lockfile"
+        ansible.builtin.template:
+            src: etc/dconf/db/locks/00-autorun_lock.j2
+            dest: "/etc/dconf/db/{{ rhel7cis_dconf_db_name }}.d/locks/00-autorun_lock"
+            owner: root
+            group: root
+            mode: '0644'
+
+- name: "1.7.10 | PATCH | Ensure XDMCP is not enabled"
+  when:
+      - rhel7cis_rule_1_7_10
+      - rhel7cis_gui
   tags:
       - level1-server
       - level1-workstation
-      - perms
       - patch
-      - rule_1.7.6
+      - gui
+      - rule_1.7.10
+  ansible.builtin.lineinfile:
+      path: /etc/gdm/custom.conf
+      regexp: 'Enable=true'
+      state: absent

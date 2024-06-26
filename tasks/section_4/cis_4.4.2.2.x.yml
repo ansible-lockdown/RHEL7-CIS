@@ -1,0 +1,150 @@
+---
+
+- name: "4.4.2.2.1 | PATCH | Ensure pam_pwquality module is enabled"
+  when:
+      - rhel7cis_rule_4_4_2_2_1
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - pam
+      - pam_pwquality
+      - rule_4.4.2.2.1
+      - NIST800-53R5_IA-5
+  block:
+      - name: "4.4.2.2.1 | PATCH | Ensure pam_pwquality module is enabled | present"
+        community.general.pamd:
+            name: "{{ item }}"
+            type: password
+            control: required
+            module_path: pam_pwhistory.so
+            state: before
+            new_type: password
+            new_control: requisite
+            new_module_path: pam_pwquality.so
+            module_arguments: 'try_first_pass
+               local_users_only'
+        loop:
+            - system-auth
+            - password-auth
+
+      - name: "4.4.2.2.1 | PATCH | Ensure pam_pwquality module is enabled | args_updated"
+        community.general.pamd:
+            name: "{{ item }}"
+            type: password
+            control: requisite
+            module_path: pam_pwquality.so
+            state: args_present
+            module_arguments: 'try_first_pass
+               local_users_only'
+        loop:
+            - system-auth
+            - password-auth
+
+- name: "4.4.2.2.2 | PATCH | Ensure password number of changed characters is configured"
+  when: rhel7cis_rule_4_4_2_2_2
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - pam
+      - pam_pwquality
+      - rule_4.4.2.2.2
+      - NIST800-53R5_IA-5
+  ansible.builtin.lineinfile:
+      path: /etc/security/pwquality.conf
+      regexp: ^(?i)(#|)\s*difok
+      line: "difok = {{ rhel7cis_pwquality_difok }}"
+
+- name: "4.4.2.2.3 | PATCH | Ensure password length is configured"
+  when: rhel7cis_rule_4_4_2_2_3
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - pam
+      - pam_pwquality
+      - rule_4.4.2.2.3
+      - NIST800-53R5_IA-5
+  ansible.builtin.lineinfile:
+      path: /etc/security/pwquality.conf
+      regexp: ^(?i)(#|)\s*minlen
+      line: "minlen = {{ rhel7cis_pwquality_minlen }}"
+
+- name: "4.4.2.2.4 | PATCH | Ensure password complexity is configured"
+  when: rhel7cis_rule_4_4_2_2_4
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - pam
+      - pam_pwquality
+      - rule_4.4.2.2.4
+      - NIST800-53R5_IA-5
+  block:
+      - name: "4.4.2.2.4 | PATCH | Ensure password complexity is configured | minclass"
+        ansible.builtin.lineinfile:
+            path: /etc/security/pwquality.conf
+            regexp: ^minclass
+            line: "minclass = {{ rhel7cis_pwquality_minclass_value }}"
+        when: rhel7cis_pwquality_minclass
+
+      - name: "4.4.2.2.4 | PATCH | Ensure password complexity is configured | seperated values"
+        ansible.builtin.lineinfile:
+            path: /etc/security/pwquality.conf
+            regexp: ^{{ item.key }}
+            line: "{{ item.key }} = {{ item.value }}"
+        loop: "{{ rhel7cis_pwquality }}"
+        when: not rhel7cis_pwquality_minclass
+
+- name: "4.4.2.2.5 | PATCH | Ensure password same consecutive characters is configured"
+  when: rhel7cis_rule_4_4_2_2_5
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - pam
+      - pam_pwquality
+      - rule_4.4.2.2.5
+      - NIST800-53R5_IA-5
+  ansible.builtin.lineinfile:
+      path: /etc/security/pwquality.conf
+      regexp: ^(?i)(#|)\s*maxrepeat
+      line: "maxrepeat = {{ rhel7cis_pwquality_maxrepeat }}"
+
+- name: "4.4.2.2.6 | PATCH | Ensure password maximum sequential characters is configured"
+  when: rhel7cis_rule_4_4_2_2_6
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - pam
+      - pam_pwquality
+      - rule_4.4.2.2.6
+      - NIST800-53R5_IA-5
+  ansible.builtin.lineinfile:
+      path: /etc/security/pwquality.conf
+      regexp: ^(?i)(#|)\s*maxsequence
+      line: "maxsequence = {{ rhel7cis_pwquality_maxsequence }}"
+
+- name: "4.4.2.2.7 | PATCH | Ensure password dictionary check is enabled"
+  when: rhel7cis_rule_4_4_2_2_7
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - pam
+      - pam_pwquality
+      - rule_4.4.2.2.7
+      - NIST800-53R5_IA-5
+  ansible.builtin.lineinfile:
+      path: /etc/security/pwquality.conf
+      regexp: ^(?i)(#|)\s*dictcheck
+      line: "dictcheck = 1"

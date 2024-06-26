@@ -1,0 +1,83 @@
+---
+
+- name: "4.4.2.4.1 | PATCH | Ensure pam_unix does not include nullok"
+  when:
+      - rhel7cis_rule_4_4_2_4_1
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - pam
+      - pam_unix
+      - rule_4.4.2.4.1
+      - NIST800-53R5_IA-5
+  ansible.builtin.lineinfile:
+      path: "/etc/pam.d/{{ item }}"
+      regexp: (.*pam_unix.so.*)(nullok)(.*)
+      line: \1\3
+      backrefs: true
+  loop:
+      - system-auth
+      - password-auth
+
+- name: "4.4.2.4.2 | PATCH | Ensure pam_unix does not include remember"
+  when:
+      - rhel7cis_rule_4_4_2_4_2
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - pam
+      - pam_unix
+      - rule_4.4.2.4.2
+  ansible.builtin.lineinfile:
+      path: "/etc/pam.d/{{ item }}"
+      regexp: (.*pam_unix.so.*)remember(.*)
+      line: \1\2
+      backrefs: true
+  loop:
+      - system-auth
+      - password-auth
+
+- name: "4.4.2.4.3 | PATCH | Ensure pam_unix includes a strong password hashing algorithm"
+  when:
+      - rhel7cis_rule_4_4_2_4_3
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - pam
+      - pam_unix
+      - rule_4.4.2.4.3
+  ansible.builtin.lineinfile:
+      path: "/etc/pam.d/{{ item }}"
+      regexp: (.*pam_unix.so.*)(md5|bigcrypt|sha256|blowfish)(.*)
+      line: \1\2 sha512
+      backrefs: true
+  loop:
+      - system-auth
+      - password-auth
+
+- name: "4.4.2.4.4 | PATCH | Ensure pam_unix includes use_authtok"
+  when:
+      - rhel7cis_rule_4_4_2_4_4
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - pam
+      - pam_unix
+      - rule_4.4.2.4.4
+      - NIST800-53R5_IA-5
+  ansible.builtin.lineinfile:
+      path: "/etc/pam.d/{{ item }}"
+      regexp: (.*pam_unix.so.*)(use_authtok)(.*)
+      line: \1use_authtok\3
+      backrefs: true
+  loop:
+      - system-auth
+      - password-auth

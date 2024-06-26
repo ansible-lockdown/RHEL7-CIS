@@ -1,0 +1,14 @@
+---
+
+- name: POST | AUDITD | Apply auditd template - only required rules will be added
+  ansible.builtin.template:
+      src: audit/99_auditd.rules.j2
+      dest: /etc/audit/rules.d/99_auditd.rules
+      owner: root
+      group: root
+      mode: '0600'
+  register: audit_rules_updated
+  notify:
+      - Auditd_immutable_check
+      - Audit_immutable_fact
+      - Restart_auditd

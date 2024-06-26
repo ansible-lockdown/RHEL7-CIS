@@ -1,0 +1,55 @@
+---
+
+- name: "1.1.2.3.1 | AUDIT | Ensure /home is a seperate partition"
+  when:
+      - required_mount not in mount_names
+      - rhel7cis_rule_1_1_2_3_1
+  tags:
+      - level2-server
+      - level2-workstation
+      - automated
+      - patch
+      - rule_1.1.2.3.1
+      - mounts
+      - NIST800-53R5_CM-7
+  vars:
+      warn_control_id: '1.1.2.3.1'
+      required_mount: '/home'
+  block:
+      - name: "1.1.2.3.1 | AUDIT | Ensure /home is a separate partition | Absent"
+        ansible.builtin.debug:
+            msg: "Warning!! {{ required_mount }} doesn't exist. This is a manual task"
+
+      - name: "1.1.2.3.1 | AUDIT | Ensure /home is a separate partition | Warn Count"
+        ansible.builtin.import_tasks:
+            file: warning_facts.yml
+
+- name: |
+         "1.1.2.3.2 | PATCH | Ensure nodev option set on /home partition
+          1.1.2.3.3 | PATCH | Ensure nosuid option set on /home partition
+  when:
+      - item.mount == "/home"
+      - rhel7cis_tmp_svc
+      - rhel7cis_rule_1_1_2_3_2 or
+        rhel7cis_rule_1_1_2_3_3
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - rule_1.1.2.3.2
+      - rule_1.1.2.3.3
+      - mounts
+      - NIST800-53R5_AC-3
+      - NIST800-53R5_MP-2
+  ansible.posix.mount:
+      name: /home
+      src: "{{ item.device }}"
+      fstype: "{{ item.fstype }}"
+      state: present
+      opts: defaults,{% if rhel7cis_rule_1_1_2_3_2 %}nodev,{% endif %}{% if rhel7cis_rule_1_1_2_3_3 %}nosuid{% endif %}
+  notify: Remount_home
+  with_items:
+      - "{{ ansible_mounts }}"
+  loop_control:
+      label: "{{ item.device }}"

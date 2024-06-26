@@ -1,0 +1,99 @@
+---
+
+- name: "4.5.2.1 | PATCH | Ensure default group for the root account is GID 0"
+  when:
+      - rhel7cis_rule_4_5_2_1
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - NIST800-53R5_CM-1
+      - NIST800-53R5_CM-2
+      - NIST800-53R5_CM-6
+      - NIST800-53R5_CM-7
+      - NIST800-53R5_IA-5
+      - root
+      - rule_4.5.2.1
+  ansible.builtin.user:
+      name: root
+      group: 0
+
+- name: "4.5.2.2 | PATCH | Ensure root user umask is configured"
+  when:
+      - rhel7cis_rule_4_5_2_2
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - NIST800-53R5_AC-3
+      - NIST800-53R5_MP-2
+      - shadow_suite
+      - rule_4.5.2.2
+  ansible.builtin.lineinfile:
+      path: /root/.bash_profile
+      regexp: \s*umask
+      line: "umask {{ rhel7cis_root_umask }}"
+
+- name: "4.5.2.3 | PATCH | Ensure system accounts are secured"
+  when:
+      - rhel7cis_rule_4_5_2_3
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - NIST800-53R5_AC-2
+      - NIST800-53R5_AC-3
+      - NIST800-53R5_AC-11
+      - NIST800-53R5_MP-2
+      - shadow_suite
+      - rule_4.5.2.3
+  block:
+      - name: "4.5.2.3 | PATCH | | Ensure system accounts are secured | Set nologin"
+        when:
+            - item.id != "root"
+            - item.id != "sync"
+            - item.id != "shutdown"
+            - item.id != "halt"
+            - item.id != "nfsnobody"
+            - item.uid < rhel7uid_interactive_uid_start | int
+            - item.shell != "      /bin/false"
+            - item.shell != "      /usr/sbin/nologin"
+        ansible.builtin.user:
+            name: "{{ item.id }}"
+            shell: /usr/sbin/nologin
+        loop: "{{ rhel7cis_passwd }}"
+        loop_control:
+            label: "{{ item.id }}"
+
+      - name: "4.5.2.3 | PATCH | | Ensure system accounts are secured | Lock accounts"
+        when:
+            - item.id != "root"
+            - item.id != "sync"
+            - item.id != "shutdown"
+            - item.id != "halt"
+            - item.id != "nfsnobody"
+            - item.uid < rhel7uid_interactive_uid_start | int
+            - item.shell != "      /bin/false"
+            - item.shell != "      /usr/sbin/nologin"
+        ansible.builtin.user:
+            name: "{{ item.id }}"
+            password_lock: true
+        loop: "{{ rhel7cis_passwd }}"
+        loop_control:
+            label: "{{ item.id }}"
+
+- name: "4.5.2.4 | PATCH | Ensure root password is set"
+  when:
+      - rhel7cis_rule_4_5_2_4
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - shadow_suite
+      - rule_4.5.2.4
+  ansible.builtin.debug:
+      msg: "This is set as an assert in tasks/main"

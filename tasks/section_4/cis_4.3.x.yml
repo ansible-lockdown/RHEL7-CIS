@@ -1,0 +1,153 @@
+---
+
+- name: "4.3.1 | PATCH | Ensure sudo is installed"
+  when:
+      - rhel7cis_rule_4_3_1
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - rule_4.3.1
+      - sudo
+      - NIST800-53R5_AC-6
+  ansible.builtin.package:
+      name: sudo
+      state: present
+
+- name: "4.3.2 | PATCH | Ensure sudo commands use pty"
+  when:
+      - rhel7cis_rule_4_3_2
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - rule_4.3.2
+      - sudo
+      - NIST800-53R5_AC-6
+  ansible.builtin.lineinfile:
+      path: /etc/sudoers
+      regexp: ^Defaults\s+use_pty
+      line: "Defaults    use_pty"
+      validate: '/usr/sbin/visudo -cf %s'
+
+- name: "4.3.3 | PATCH | Ensure sudo log file exists"
+  when:
+      - rhel7cis_rule_4_3_3
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - rule_4.3.3
+      - sudo
+      - NIST800-53R5_AU-3
+      - NIST800-53R5_AU-12
+  ansible.builtin.lineinfile:
+      path: /etc/sudoers
+      regexp: '^Defaults\s+logfile='
+      line: 'Defaults    logfile="{{ rhel7cis_sudolog_location }}"'
+      validate: '/usr/sbin/visudo -cf %s'
+
+- name: "4.3.4 | PATCH | Ensure users must provide password for escalation"
+  when:
+      - rhel7cis_rule_4_3_4
+  tags:
+      - level2-server
+      - level2-workstation
+      - automated
+      - patch
+      - sudo
+      - rule_4.3.4
+      - NIST800-53R5_AC-6
+  ansible.builtin.replace:
+      path: "{{ item }}"
+      regexp: '^([^#|{% if system_is_ec2 %}ec2-user{% endif %}].*)NOPASSWD(.*)'
+      replace: '\1PASSWD\2'
+      validate: '/usr/sbin/visudo -cf %s'
+  loop: "{{ discovered_sudoers_files.stdout_lines }}"
+
+- name: "4.3.5 | PATCH | Ensure re-authentication for privilege escalation is not disabled globally"
+  when:
+      - rhel7cis_rule_4_3_5
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - sudo
+      - rule_4.3.5
+      - NIST800-53R5_AC-6
+  ansible.builtin.replace:
+      path: "{{ item }}"
+      regexp: '^([^#].*)!authenticate(.*)'
+      replace: '\1authenticate\2'
+      validate: '/usr/sbin/visudo -cf %s'
+  loop: "{{ discovered_sudoers_files.stdout_lines }}"
+
+- name: "4.3.6 | PATCH | Ensure sudo authentication timeout is configured correctly"
+  when:
+      - rhel7cis_rule_4_3_6
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - sudo
+      - rule_4.3.6
+  block:
+      - name: "4.3.6 | AUDIT | Ensure sudo authentication timeout is configured correctly | Get files with timeout set"
+        ansible.builtin.shell: grep -is 'timestamp_timeout' /etc/sudoers /etc/sudoers.d/* | cut -d":" -f1 | uniq | sort
+        changed_when: false
+        failed_when: false
+        register: rhel7cis_4_3_6_timeout_files
+
+      - name: "4.3.6 | PATCH | Ensure sudo authentication timeout is configured correctly | Set value if no results"
+        when: rhel7cis_4_3_6_timeout_files.stdout | length == 0
+        ansible.builtin.lineinfile:
+            path: /etc/sudoers
+            regexp: 'Defaults\s+timestamp_timeout='
+            line: "Defaults    timestamp_timeout={{ rhel7cis_sudo_timestamp_timeout }}"
+            validate: '/usr/sbin/visudo -cf %s'
+
+      - name: "4.3.6 | PATCH | Ensure sudo authentication timeout is configured correctly | Set value if has results"
+        when: rhel7cis_4_3_6_timeout_files.stdout | length > 0
+        ansible.builtin.replace:
+            path: "{{ item }}"
+            regexp: 'timestamp_timeout=(\d+)'
+            replace: "timestamp_timeout={{ rhel7cis_sudo_timestamp_timeout }}"
+            validate: '/usr/sbin/visudo -cf %s'
+        loop: "{{ rhel7cis_4_3_6_timeout_files.stdout_lines }}"
+
+- name: "4.3.7 | PATCH | Ensure access to the su command is restricted"
+  when:
+      - rhel7cis_rule_4_3_7
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - sudo
+      - rule_4.3.7
+      - NIST800-53R5_AC-3
+      - NIST800-53R5_MP-2
+  block:
+      - name: "4.3.7 | PATCH | Ensure access to the su command is restricted | Ensure sugroup exists"
+        ansible.builtin.group:
+            name: "{{ rhel7cis_sugroup }}"
+            state: present
+        register: rhel7cis_4_3_7_sugroup
+
+      - name: "4.3.7 | PATCH | Ensure access to the su command is restricted | remove users from group"
+        ansible.builtin.lineinfile:
+            path: /etc/group
+            regexp: '^{{ rhel7cis_sugroup }}(:.:.*:).*$'
+            line: '{{ rhel7cis_sugroup }}\g<1>'
+            backrefs: true
+
+      - name: "4.3.7 | PATCH | Ensure access to the su command is restricted | Setting pam_wheel to use_uid"
+        ansible.builtin.lineinfile:
+            path: /etc/pam.d/su
+            regexp: '^(#)?auth\s+required\s+pam_wheel\.so'
+            line: 'auth           required        pam_wheel.so use_uid group={{ rhel7cis_sugroup }}'

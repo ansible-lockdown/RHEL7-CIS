@@ -1,0 +1,22 @@
+---
+
+- name: "3.4.4.1.1 | PATCH | Ensure iptables packages are installed"
+  when:
+      - rhel7cis_rule_3_4_4_1_1
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - rule_3.4.4.1.1
+      - firewall
+      - iptables
+      - NIST800-53R5_CA-9
+  vars:
+      ansible_python_interpreter: /bin/python
+  ansible.builtin.package:
+      name: "{{ item }}"
+      state: present
+  with_items:
+      - iptables
+      - iptables-services

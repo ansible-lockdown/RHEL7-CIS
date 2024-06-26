@@ -1,5 +1,7 @@
 ---
 
+#### Audit Configuration Settings ####
+
 # Timeout for those cmds that take longer to run where timeout set
 audit_cmd_timeout: 120000
 
@@ -13,27 +15,26 @@ audit_file_git: "https://github.com/ansible-lockdown/{{ benchmark }}-Audit.git"
 audit_git_version: "benchmark_{{ benchmark_version }}"
 
 ## Goss configuration information
-# Where the goss configs and outputs are stored
-audit_out_dir: '/opt'
-# Where the goss audit configuration will be stored
-audit_conf_dir: "{{ audit_out_dir }}/{{ benchmark }}-Audit"
+# Where the goss audit configuration will be stored - NOTE benchmark-audit is expected
+audit_conf_dir: "{{ audit_conf_dest | default('/opt') }}/{{ benchmark }}-Audit"
 
 # If changed these can affect other products
-pre_audit_outfile: "{{ audit_out_dir }}/{{ ansible_facts.hostname }}-{{ benchmark }}-{{ benchmark_version }}_pre_scan_{{ ansible_facts.date_time.epoch }}.{{ audit_format }}"
-post_audit_outfile: "{{ audit_out_dir }}/{{ ansible_facts.hostname }}-{{ benchmark }}-{{ benchmark_version }}_post_scan_{{ ansible_facts.date_time.epoch }}.{{ audit_format }}"
+pre_audit_outfile: "{{ audit_log_dir }}/{{ ansible_facts.hostname }}-{{ benchmark }}-{{ benchmark_version }}_pre_scan_{{ ansible_facts.date_time.epoch }}.{{ audit_format }}"
+post_audit_outfile: "{{ audit_log_dir }}/{{ ansible_facts.hostname }}-{{ benchmark }}-{{ benchmark_version }}_post_scan_{{ ansible_facts.date_time.epoch }}.{{ audit_format }}"
 
 ## The following should not need changing
 
 ### Audit binary settings ###
 audit_bin_version:
-    release: v0.3.23
-    AMD64_checksum: 'sha256:9e9f24e25f86d6adf2e669a9ffbe8c3d7b9b439f5f877500dea02ba837e10e4d'
+    release: v0.4.4
+    AMD64_checksum: 'sha256:1c4f54b22fde9d4d5687939abc2606b0660a5d14a98afcd09b04b793d69acdc5'
 audit_bin_path: /usr/local/bin/
 audit_bin: "{{ audit_bin_path }}goss"
 audit_format: json
 
 audit_vars_path: "{{ audit_conf_dir }}/vars/{{ ansible_facts.hostname }}.yml"
 audit_results: |
-      The pre remediation results are: {{ pre_audit_summary }}.
-      The post remediation results are: {{ post_audit_summary }}.
-      Full breakdown can be found in {{ audit_out_dir }}
+      The audit results are: {{ pre_audit_summary }}
+      {% if not audit_only %}The post remediation audit results are: {{ post_audit_summary }}{% endif %}
+
+      Full breakdown can be found in {{ audit_log_dir }}

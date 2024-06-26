@@ -1,0 +1,30 @@
+---
+
+- name: "4.4.1.1 | PATCH | Ensure latest version of pam is installed"
+  when:
+      - rhel7cis_rule_4_4_1_1
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - pam
+      - rule_4.4.1.1
+  ansible.builtin.package:
+      name: pam
+      state: latest
+
+- name: "4.4.1.2 | PATCH | Ensure libpwquality is installed"
+  when:
+      - rhel7cis_rule_4_4_1_2
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - pam
+      - rule_4.4.1.2
+      - NIST800-53R5_IA-5
+  ansible.builtin.package:
+      name: libpwquality
+      state: present

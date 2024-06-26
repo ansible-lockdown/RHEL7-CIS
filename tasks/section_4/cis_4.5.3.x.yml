@@ -1,0 +1,68 @@
+---
+
+- name: "4.5.3.1 | PATCH | Ensure nologin is not listed in /etc/shells"
+  when:
+      - rhel7cis_rule_4_5_3_1
+  tags:
+      - level2-server
+      - level2-workstation
+      - automated
+      - NIST800-53R5_CM-1
+      - NIST800-53R5_CM-2
+      - NIST800-53R5_CM-6
+      - NIST800-53R5_CM-7
+      - NIST800-53R5_IA-5
+      - patch
+      - shells
+      - rule_4.5.3.1
+  ansible.builtin.replace:
+      path: /etc/shells
+      regexp: nologin
+      replace: ""
+
+- name: "4.5.3.2 | PATCH | Ensure default user shell timeout is configured"
+  when:
+      - rhel7cis_rule_4_5_3_2
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - NIST800-53R5_AC-3
+      - NIST800-53R5_MP-2
+      - shell
+      - rule_4.5.3.2
+  ansible.builtin.blockinfile:
+      path: "{{ item.path }}"
+      state: "{{ item.state }}"
+      marker: "# {mark} - CIS benchmark - Ansible-lockdown"
+      create: true
+      mode: '0644'
+      block: |
+        TMOUT={{ rhel7cis_shell_session_timeout.timeout }}
+        readonly TMOUT
+        export TMOUT
+  loop:
+      - { path: "{{ rhel7cis_shell_session_timeout.file }}", state: present }
+      - { path: /etc/profile, state: "{{ (rhel7cis_shell_session_timeout.file == '/etc/profile') | ternary('present', 'absent') }}" }
+
+- name: "4.5.3.3 | PATCH | Ensure default user umask is configured"
+  when:
+      - rhel7cis_rule_4_5_3_3
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - umask
+      - NIST800-53R5_AC-3
+      - NIST800-53R5_MP-2
+      - rule_4.5.3.3
+  ansible.builtin.replace:
+      path: "{{ item.path }}"
+      regexp: (?i)(umask\s+\d\d\d)
+      replace: '{{ item.line }} 027'
+  loop:
+      - { path: '/etc/bashrc', line: 'umask' }
+      - { path: '/etc/profile', line: 'umask' }
+      - { path: '/etc/login.defs', line: 'UMASK' }

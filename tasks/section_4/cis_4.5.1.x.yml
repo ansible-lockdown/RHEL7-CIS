@@ -1,0 +1,187 @@
+---
+
+- name: "4.5.1.1 | PATCH | Ensure strong password hashing algorithm is configured"
+  when:
+      - rhel7cis_rule_4_5_1_1
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - pam
+      - pam_unix
+      - rule_4.5.1.1
+      - NIST800-53R5_IA-5
+  block:
+      - name: "4.5.1.1 | PATCH | Ensure strong password hashing algorithm is configured | libuser.conf"
+        ansible.builtin.lineinfile:
+            path: /etc/libuser.conf
+            regexp: ^(?i)(#|)\s*crypt_style
+            line: "crypt_style = {{ rhel7cis_encryption }}"
+
+      - name: "4.5.1.1 | PATCH | Ensure strong password hashing algorithm is configured | login.defs"
+        ansible.builtin.lineinfile:
+            path: /etc/login.defs
+            regexp: ^(?i)(#|)\s*ENCRYPT_METHOD
+            line: "ENCRYPT_METHOD {{ rhel7cis_encryption | upper }}"
+
+      - name: "4.5.1.1 | PATCH | Ensure strong password hashing algorithm is configured | Captures users who need to change passwd"
+        when: rhel7cis_force_user_passwd_change
+        ansible.builtin.shell: "awk -F: '( $3>='{{ rhel7cis_uid_min }}' && $1 != 'nfsnobody' ) { print $1 }' /etc/passwd"
+        failed_when: false
+        changed_when: false
+        register: rhel7cis_4_5_1_1_user_crypt_password
+
+      - name: "4.5.1.1 | PATCH | Ensure strong password hashing algorithm is configured | force user password change"
+        when:
+            - rhel7cis_force_user_passwd_change
+            - rhel7cis_4_5_1_1_user_crypt_password.stdout | length > 0
+        ansible.builtin.shell: "chage -d 0 {{ item }}"
+        loop: "{{ rhel7cis_4_5_1_1_user_crypt_password.stdout_lines }}"
+
+- name: "4.5.1.2 | PATCH | Ensure password expiration is 365 days or less"
+  when:
+      - rhel7cis_rule_4_5_1_2
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - pam
+      - pam_unix
+      - rule_4.5.1.2
+      - NIST800-53R5_CM-1
+      - NIST800-53R5_CM-2
+      - NIST800-53R5_CM-6
+      - NIST800-53R5_CM-7
+      - NIST800-53R5_IA-5
+  block:
+      - name: "4.5.1.2 | PATCH | Ensure password expiration is 365 days or less | Set /etc/login.defs PASS_MAX_DAYS"
+        ansible.builtin.lineinfile:
+            path: /etc/login.defs
+            regexp: '^PASS_MAX_DAYS|^#PASS_MAX_DAYS'
+            line: 'PASS_MAX_DAYS {{ rhel7cis_pass.max_days }}'
+            insertafter: '# Password aging controls'
+
+      - name: "4.5.1.2 | PATCH | Ensure password expiration is 365 days or less | Get existing users PASS_MAX_DAYS"
+        ansible.builtin.shell: "awk -F: '(/^[^:]+:[^!*]/ && ($5>{{ rhel7cis_pass.max_days }} || $5<{{ rhel7cis_pass.min_days }} || $5 == -1)){print $1}' /etc/shadow"
+        changed_when: false
+        failed_when: false
+        register: rhel7cis_4_5_1_2_max_days
+
+      - name: "4.5.1.2 | PATCH | Ensure password expiration is 365 days or less | Set existing users PASS_MAX_DAYS"
+        ansible.builtin.shell: chage --maxdays {{ rhel7cis_pass.max_days }} {{ item }}
+        failed_when: false
+        changed_when: rhel7cis_4_5_1_2_max_days.stdout | length > 0
+        loop: "{{ rhel7cis_4_5_1_2_max_days.stdout_lines }}"
+        when:
+            - rhel7cis_disruption_high
+            - (item != 'root') or (not rhel7cis_uses_root)
+
+- name: "4.5.1.3 | PATCH | Ensure password expiration warning days is 7 or more"
+  when:
+      - rhel7cis_rule_4_5_1_3
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - rule_4.5.1.3
+      - accounts
+      - password
+  block:
+      - name: "4.5.1.3 | PATCH | Ensure password expiration warning days is 7 or more"
+        ansible.builtin.lineinfile:
+            path: /etc/login.defs
+            regexp: '^PASS_WARN_AGE'
+            line: "PASS_WARN_AGE {{ rhel7cis_pass['warn_age'] }}"
+
+      - name: "4.5.1.3 | PATCH | Ensure password expiration warning days is 7 or more | Get existing users WARN_DAYS"
+        ansible.builtin.shell: "awk -F: '(/^[^:]+:[^!*]/ && ($5>{{ rhel7cis_pass['max_days'] }} || $5<{{ rhel7cis_pass['min_days'] }} || $5 == -1)){print $1}' /etc/shadow"
+        changed_when: false
+        failed_when: rhel7cis_users_warn_days.rc not in [ 0, 1 ]
+        register: rhel7cis_users_warn_days
+
+      - name: "4.5.1.3 | PATCH | Ensure password expiration warning days is 7 or more | change users not matching req"
+        when:
+            - rhel7cis_users_warn_days is defined
+            - rhel7cis_users_warn_days.stdout | length > 0
+        ansible.builtin.shell: chage --warndays {{ rhel7cis_pass['warn_age'] }} {{ item }}
+        loop: "{{ rhel7cis_users_warn_days.stdout_lines }}"
+
+- name: "4.5.1.4 | PATCH | Ensure inactive password lock is 30 days or less"
+  when:
+      - rhel7cis_rule_4_5_1_4
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - shadow_suite
+      - rule_4.5.1.4
+  block:
+      - name: "4.5.1.4 | AUDIT | Ensure inactive password lock is 30 days or less | capture default state"
+        ansible.builtin.shell: useradd -D | grep INACTIVE | cut -d= -f2
+        changed_when: false
+        failed_when: rhel7cis_users_inactive_def.rc not in [ 0, 1 ]
+        register: rhel7cis_users_inactive_def
+
+      - name: "4.5.1.4 | PATCH | Ensure inactive password lock is 30 days or less | change default"
+        when:
+            - rhel7cis_users_inactive_def is defined
+            - (rhel7cis_pass.inactive | string) not in rhel7cis_users_inactive_def.stdout
+        ansible.builtin.shell: "useradd -D -f {{ rhel7cis_pass.inactive }}"
+
+      - name: "4.5.1.4 | AUDIT | Ensure inactive password lock is 30 days or less | capture users not matching"
+        ansible.builtin.shell: |
+            awk -F: '/^[^#:]+:[^!*:]*:[^:]*:[^:]*:[^:]*:[^:]*:(\s*|-1|3[1-9]|[4-9][0-9]|[1-9][0-9][0-9]+):[^:]*:[^:]*\s*$/ {print $1}' /etc/shadow
+        changed_when: false
+        failed_when: rhel7cis_users_inactive.rc not in [ 0, 1 ]
+        register: rhel7cis_users_inactive
+
+      - name: "4.5.1.4 | PATCH | Ensure inactive password lock is 30 days or less | change users not matching req"
+        when:
+            - rhel7cis_users_inactive is defined
+            - rhel7cis_users_inactive.stdout | length > 0
+        ansible.builtin.shell: "chage --inactive {{ rhel7cis_pass.inactive }} {{ item }}"
+        loop: "{{ rhel7cis_users_inactive.stdout_lines }}"
+
+- name: "4.5.1.5 | PATCH | Ensure all users last password change date is in the past"
+  when:
+      - rhel7cis_rule_4_5_1_5
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - shadow_suite
+      - rule_4.5.1.5
+  vars:
+      warn_control_id: '4.5.1.5'
+  block:
+      - name: "4.5.1.5 | FACT | Ensure inactive password lock is 30 days or less | set fact days since_epoch"
+        ansible.builtin.set_fact:
+            days_since_epoch: "{{ (ansible_facts['date_time']['epoch']|int)/86400 }}"
+
+      - name: "4.5.1.5 | AUDIT | Ensure inactive password lock is 30 days or less | capture users date in future"
+        ansible.builtin.shell: |
+            awk -F: '{ if ($3 > "{{ days_since_epoch }}") { print $1 }  }' /etc/shadow
+        changed_when: false
+        failed_when: rhel7cis_users_user_future.rc not in [ 0, 1 ]
+        register: rhel7cis_users_user_future
+
+      - name: "4.5.1.5 | WARN | Ensure inactive password lock is 30 days or less | Warn Users in future"
+        when:
+            - rhel7cis_users_user_future
+            - rhel7cis_users_user_future.stdout | length > 0
+        ansible.builtin.debug:
+            msg:
+                - "Warning!! - The following users have passwords set in the future please investigate"
+                - "{{ rhel7cis_users_user_future.stdout_lines }}"
+
+      - name: "4.5.1.5 | WARN | Ensure inactive password lock is 30 days or less | Warn Users in future"
+        when:
+            - rhel7cis_users_user_future
+            - rhel7cis_users_user_future.stdout | length > 0
+        ansible.builtin.import_tasks:
+            file: warning_facts.yml

@@ -2,7 +2,7 @@
 
 ## Configure a RHEL/Centos 7 machine to be [CIS](https://www.cisecurity.org/cis-benchmarks/) compliant
 
-### Based on [CIS RedHat Enterprise Linux 7 Benchmark v3.1.1 - 05-21-2021 ](https://www.cisecurity.org/cis-benchmarks/)
+### Based on [CIS RedHat Enterprise Linux 7 Benchmark v4.0.0 - 21-12-2023 ](https://www.cisecurity.org/cis-benchmarks/)
 
 ---
 ![Org Stars](https://img.shields.io/github/stars/ansible-lockdown?label=Org%20Stars&style=social)
@@ -59,10 +59,10 @@ To use release version please point to main branch and relevant release for the 
 It is possible to to only run level 1 or level 2 controls for CIS.
 This is managed using tags:
 
-- level1_server
-- level1_workstation
-- level2_server
-- level2_workstation
+- level1-server
+- level1-workstation
+- level2-server
+- level2-workstation
 
 The control found in defaults main also need to reflect this as this control the testing thet takes place if you are using the audit component.
 

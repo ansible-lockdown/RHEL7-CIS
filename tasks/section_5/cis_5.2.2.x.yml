@@ -1,0 +1,81 @@
+---
+
+- name: "5.2.2.1 | PATCH | Ensure audit log storage size is configured"
+  when:
+      - rhel7cis_rule_5_2_2_1
+  tags:
+      - level2-server
+      - level2-workstation
+      - automated
+      - patch
+      - NIST800-53R5_AU-8
+      - auditd
+      - rule_5.2.2.1
+  notify: Restart_auditd
+  ansible.builtin.lineinfile:
+      path: /etc/audit/auditd.conf
+      regexp: ^max_log_file(\s|=)
+      line: "max_log_file = {{ rhel7cis_max_log_file_size }}"
+
+- name: "5.2.2.2 | PATCH | Ensure audit logs are not automatically deleted"
+  when:
+      - rhel7cis_rule_5_2_2_2
+  tags:
+      - level2-server
+      - level2-workstation
+      - automated
+      - patch
+      - NIST800-53R5_AU-8
+      - auditd
+      - rule_5.2.2.2
+  notify: Restart_auditd
+  ansible.builtin.lineinfile:
+      path: /etc/audit/auditd.conf
+      regexp: "^max_log_file_action"
+      line: "max_log_file_action = {{ rhel7cis_auditd['max_log_file_action'] }}"
+
+- name: "5.2.2.3 | PATCH | Ensure system is disabled when audit logs are full"
+  when:
+      - rhel7cis_rule_5_2_2_3
+  tags:
+      - level2-server
+      - level2-workstation
+      - automated
+      - patch
+      - NIST800-53R5_AU-2
+      - NIST800-53R5_AU-8
+      - NIST800-53R5_AU-12
+      - NIST800-53R5_SI-5
+      - auditd
+      - rule_5.2.2.3
+  ansible.builtin.lineinfile:
+      path: /etc/audit/auditd.conf
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+  notify: Restart_auditd
+  loop:
+      - { regexp: '^disk_full_action', line: 'disk_full_action = {{ rhel7cis_auditd.disk_full_action }}' }
+      - { regexp: '^disk_error_action', line: 'disk_error_action = {{ rhel7cis_auditd.disk_error_action }}' }
+
+- name: "5.2.2.4 | PATCH | Ensure system warns when audit logs are low on space"
+  when:
+      - rhel7cis_rule_5_2_2_4
+  tags:
+      - level2-server
+      - level2-workstation
+      - automated
+      - patch
+      - NIST800-53R5_AU-2
+      - NIST800-53R5_AU-8
+      - NIST800-53R5_AU-12
+      - NIST800-53R5_SI-5
+      - auditd
+      - rule_5.2.2.4
+  ansible.builtin.lineinfile:
+      path: /etc/audit/auditd.conf
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+  notify: Restart_auditd
+  loop:
+      - { regexp: '^admin_space_left_action', line: 'admin_space_left_action = {{ rhel7cis_auditd.admin_space_left_action }}' }
+      - { regexp: '^space_left_action', line: 'space_left_action = {{ rhel7cis_auditd.space_left_action }}' }

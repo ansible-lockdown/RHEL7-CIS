@@ -1,0 +1,58 @@
+---
+
+- name: "1.1.2.2.1 | AUDIT | Ensure /dev/shm is a separate partition"
+  when:
+      - required_mount not in mount_names
+      - rhel7cis_rule_1_1_2_2_1
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - rule_1.1.2.2.1
+      - mounts
+      - NIST800-53R5_CM-7
+  vars:
+      warn_control_id: '1.1.2.2.1'
+      required_mount: '/dev/shm'
+  block:
+      - name: "1.1.2.2.1 | AUDIT | Ensure /dev/shm is a separate partition | Absent"
+        ansible.builtin.debug:
+            msg: "Warning!! {{ required_mount }} doesn't exist. This is a manual task"
+
+      - name: "1.1.2.2.1 | AUDIT | Ensure /dev/shm is a separate partition | Warn Count"
+        ansible.builtin.import_tasks:
+            file: warning_facts.yml
+
+- name: |
+         "1.1.2.2.2 | PATCH | Ensure nodev option set on /dev/shm partition
+          1.1.2.2.3 | PATCH | Ensure nosuid option set on /dev/shm partition
+          1.1.2.2.4 | PATCH | Ensure noexec option set on /dev/shm partition"
+  when:
+      - item.mount == "/dev/shm"
+      - rhel7cis_tmp_svc
+      - rhel7cis_rule_1_1_2_2_2 or
+        rhel7cis_rule_1_1_2_2_3 or
+        rhel7cis_rule_1_1_2_2_4
+  tags:
+      - level1-server
+      - level1-workstation
+      - automated
+      - patch
+      - rule_1.1.2.2.2
+      - rule_1.1.2.2.3
+      - rule_1.1.2.2.4
+      - mounts
+      - NIST800-53R5_AC-3
+      - NIST800-53R5_MP-2
+  ansible.posix.mount:
+      name: /dev/shm
+      src: "{{ item.device }}"
+      fstype: "{{ item.fstype }}"
+      state: present
+      opts: defaults,{% if rhel7cis_rule_1_1_2_2_2 %}nodev,{% endif %}{% if rhel7cis_rule_1_1_2_2_3 %}nosuid,{% endif %}{% if rhel7cis_rule_1_1_2_2_4 %}noexec{% endif %}
+  notify: Remount_dev_shm
+  with_items:
+      - "{{ ansible_mounts }}"
+  loop_control:
+      label: "{{ item.device }}"

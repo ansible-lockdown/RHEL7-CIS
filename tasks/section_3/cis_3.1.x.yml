@@ -1,40 +1,109 @@
 ---
 
-- name: "3.1.1 | PATCH | Disable IPv6 | grub"
-  ansible.builtin.replace:
-      dest: /etc/default/grub
-      regexp: '(^GRUB_CMDLINE_LINUX\s*\=\s*)(?:")(.+)(?<!ipv6.disable=1)(?:")'
-      replace: '\1"\2 ipv6.disable=1"'
-  register: grub_ipv6
-  notify:
-      - grub2cfg
-      - reboot_required
+# The CIS Control wants IPv6 disabled if not in use.
+# We are using the rhel7cis_ipv6_required to specify if you have IPv6 in use
 
+- name: "3.1.1 | PATCH | Verify if IPv6 is enabled on the system"
   when:
       - not rhel7cis_ipv6_required
       - rhel7cis_rule_3_1_1
   tags:
-      - level2-server
-      - level2-workstation
-      - rule_3.1.1
+      - level1-server
+      - level1-workstation
+      - manual
       - patch
-
-- name: "3.1.2| Ensure wireless interfaces are disabled"
+      - ipv6
+      - networking
+      - NIST800-53R5_CM-7
+      - rule_3.1.1
+  notify: Change_requires_reboot
   block:
-      - name: "3.1.2 | PATCH | Ensure wireless interfaces are disabled | Check if wifi is enabled"
-        ansible.builtin.shell: nmcli radio wifi
-        register: rhel_07_wifi_enabled
-        check_mode: false
-        changed_when: rhel_07_wifi_enabled.stdout != "disabled"
+      - name: "3.1.1 | PATCH | Verify if IPv6 is enabled on the system | disable all except localhost"
+        ansible.posix.sysctl:
+            name: "{{ item }}"
+            value: '1'
+            sysctl_set: true
+            sysctl_file: "{{ rhel7cis_sysctl_file }}"
+        loop:
+            - net.ipv6.conf.all.disable_ipv6
+            - net.ipv6.conf.default.disable_ipv6
 
-      - name: "3.1.2 | PATCH | Ensure wireless interfaces are disabled | Disable wifi if enabled"
-        ansible.builtin.command: nmcli radio wifi off
-        when: rhel_07_wifi_enabled is changed  # noqa: no-handler
+      - name: "3.1.1 | PATCH | Verify if IPv6 is enabled on the system | disable localhost sysctl"
+        when:
+            - rhel7cis_ipv6_disable_localhost
+        ansible.posix.sysctl:
+            name: net.ipv6.conf.lo.disable_ipv6
+            value: '1'
+            sysctl_set: true
+            sysctl_file: "{{ rhel7cis_sysctl_file }}"
 
+      - name: "3.1.1 | PATCH | Verify if IPv6 is enabled on the system | disable localhost /etc/hosts"
+        when:
+            - rhel7cis_ipv6_disable_localhost
+        ansible.builtin.lineinfile:
+            path: /etc/hosts
+            regexp: '^(::1.*)'
+            line: '#\1'
+            backrefs: true
+
+- name: "3.1.2 | PATCH | Ensure wireless interfaces are disabled"
   when:
       - rhel7cis_rule_3_1_2
-      - "'NetworkManager' in ansible_facts.packages"
+  tags:
+      - level1-server
+      - automated
+      - patch
+      - wireless
+      - NIST800-53R5_CM-7
+      - rule_3.1.2
+  block:
+      - name: "3.1.2 | AUDIT | Ensure wireless interfaces are disabled | Check if nmcli command is available"
+        ansible.builtin.shell: rpm -q NetworkManager
+        changed_when: false
+        failed_when: false
+        register: rhel7cis_nmcli_available
+        check_mode: false
+
+      - name: "3.1.2 | AUDIT | Ensure wireless interfaces are disabled | Check if wifi is enabled"
+        when: rhel7cis_nmcli_available.rc == 0
+        ansible.builtin.shell: nmcli radio wifi
+        changed_when: rhel7cis_wifi_enabled.stdout != "disabled"
+        failed_when: false
+        register: rhel7cis_wifi_enabled
+
+      - name: "3.1.2 | PATCH | Ensure wireless interfaces are disabled | Disable wifi if enabled"
+        when: rhel7cis_wifi_enabled is changed  # noqa: no-handler
+        ansible.builtin.shell: nmcli radio all off
+        changed_when: false
+        failed_when: false
+
+- name: "3.1.3 | PATCH | Ensure bluetooth services are not in use"
+  when:
+      - rhel7cis_rule_3_1_3
   tags:
       - level1-server
       - level2-workstation
-      - rule_3.1.2
+      - automated
+      - patch
+      - sctp
+      - NIST800-53R5_CM-7
+      - rule_3.1.3
+  block:
+      - name: "3.1.3 | PATCH | Ensure bluetooth services are not in use | pkg"
+        when:
+            - not rhel7cis_bluetooth_service
+            - not rhel7cis_bluetooth_mask
+        ansible.builtin.package:
+            name: bluez
+            state: absent
+
+      - name: "3.1.3 | PATCH | Ensure bluetooth services are not in use | mask"
+        when:
+            - not rhel7cis_bluetooth_service
+            - rhel7cis_bluetooth_mask
+        notify: Systemd_daemon_reload
+        ansible.builtin.systemd:
+            name: bluetooth.service
+            enabled: false
+            state: stopped
+            masked: true

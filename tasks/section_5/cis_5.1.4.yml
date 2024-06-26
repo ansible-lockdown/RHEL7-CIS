@@ -1,0 +1,37 @@
+---
+
+- name: "5.1.4 | PATCH | Ensure all logfiles have appropriate access configured"
+  when:
+      - rhel7cis_rule_5_1_4
+  tags:
+      - level1-server
+      - level1-workstation
+      - patch
+      - NIST800-53R5_AU-2
+      - NIST800-53R5_AU-12
+      - logfiles
+      - rule_5.1.4
+  block:
+      - name: "5.1.4 | AUDIT | Ensure all logfiles have appropriate access configured | find files"
+        ansible.builtin.shell: find /var/log/ -type f -perm /g+wx,o+rwx -exec ls {} \;
+        changed_when: false
+        failed_when: false
+        register: rhel7cis_5_1_4_logfiles
+
+      - name: "5.1.4 | AUDIT | Ensure all logfiles have appropriate access configured | set_fact"
+        ansible.builtin.set_fact:
+            rhel7cis_4_2_3_logfiles_flattened: "{{ rhel7cis_5_1_4_logfiles | json_query('stdout_lines[*]') | flatten }}"  # noqa: jinja[invalid]
+        when:
+            - rhel7cis_5_1_4_logfiles.stdout_lines | length > 0
+            - rhel7cis_5_1_4_logfiles is defined
+
+      - name: "5.1.4 | PATCH | Ensure all logfiles have appropriate access configured | change permissions"
+        ansible.builtin.file:
+            path: "{{ item }}"
+            mode: '0640'
+        loop: "{{ rhel7cis_5_1_4_logfiles_flattened }}"
+        when:
+            - rhel7cis_5_1_4_logfiles_flattened is defined
+            - item != "/var/log/btmp"
+            - item != "/var/log/utmp"
+            - item != "/var/log/wtmp"
