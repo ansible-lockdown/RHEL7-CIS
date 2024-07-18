@@ -21,26 +21,24 @@
   when:
       - audit_format == "json"
   block:
-      - name: Post Audit | Capture data {{ post_audit_outfile }}
-        ansible.builtin.shell: "cat {{ post_audit_outfile }}"
-        register: discovered_post_audit
+      - name: Post Audit | Capture audit data if json format
+        ansible.builtin.shell: grep -E '"summary-line.*Count:.*Failed' "{{ post_audit_outfile }}" | cut -d'"' -f4
         changed_when: false
+        register: post_audit_summary
 
-      - name: Post Audit | Capture post-audit result
+      - name: Post Audit | Set Fact for audit summary
         ansible.builtin.set_fact:
-            post_audit_summary: "{{ discovered_post_audit.stdout | from_json | json_query(summary) }}"
-        vars:
-            summary: summary."summary-line"
+            post_audit_results: "{{ post_audit_summary.stdout }}"
 
 - name: Post Audit | Capture audit data if documentation format
   when:
       - audit_format == "documentation"
   block:
-      - name: Post Audit | Capture data {{ post_audit_outfile }}
-        ansible.builtin.shell: "tail -2 {{ post_audit_outfile }}"
-        register: discovered_post_audit
+      - name: Post Audit | Capture audit data if documentation format
+        ansible.builtin.shell: "tail -2 /opt/audit_ubuntu2204-CIS-UBUNTU22_1720624848.documentation"
         changed_when: false
+        register: post_audit_summary
 
-      - name: Post Audit | Capture post-audit result
+      - name: Post Audit | Set Fact for audit summary
         ansible.builtin.set_fact:
-            post_audit_summary: "{{ discovered_post_audit.stdout_lines }}"
+            post_audit_results: "{{ post_audit_summary.stdout }}"
