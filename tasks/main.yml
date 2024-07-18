@@ -76,6 +76,18 @@
         when:
             - system_is_container
 
+- name: Update CentOS repo for packages - Use vaulted/archive URL - backup original
+  ansible.builtin.template:
+      src: etc/yum.repos.d/CentOS-Base.repo.j2
+      dest: /etc/yum.repos.d/CentOS-Base.repo
+      owner: root
+      group: root
+      mode: '0644'
+      backup: true
+  when:
+      - rhel7cis_add_updated_repo
+      - ansible_distribution == "CentOS"
+
 - name: Run pre-reqs
   tags:
       - always

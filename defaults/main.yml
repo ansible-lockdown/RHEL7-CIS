@@ -29,6 +29,12 @@ benchmark_version: v4.0.0
 ## Level are used heavily in audit
 rhel7cis_level_1: true
 rhel7cis_level_2: true
+
+# With CentOS being EoL many mirrors no longer exist and fail for updates
+# setting to true will replace the default /etc/yum.repos.d/CentOS-Base.repo
+# It will add the new vaulted location where it is possible to get updates and package
+rhel7cis_add_updated_repo: false
+
 ###
 ### Settings for associated Audit role using Goss
 ###
