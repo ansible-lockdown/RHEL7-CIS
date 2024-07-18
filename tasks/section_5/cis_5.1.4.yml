@@ -18,20 +18,13 @@
         failed_when: false
         register: rhel7cis_5_1_4_logfiles
 
-      - name: "5.1.4 | AUDIT | Ensure all logfiles have appropriate access configured | set_fact"
-        ansible.builtin.set_fact:
-            rhel7cis_4_2_3_logfiles_flattened: "{{ rhel7cis_5_1_4_logfiles | json_query('stdout_lines[*]') | flatten }}"  # noqa: jinja[invalid]
-        when:
-            - rhel7cis_5_1_4_logfiles.stdout_lines | length > 0
-            - rhel7cis_5_1_4_logfiles is defined
-
       - name: "5.1.4 | PATCH | Ensure all logfiles have appropriate access configured | change permissions"
         ansible.builtin.file:
             path: "{{ item }}"
             mode: '0640'
-        loop: "{{ rhel7cis_5_1_4_logfiles_flattened }}"
+        loop: "{{ rhel7cis_5_1_4_logfiles.stdout_lines }}"
         when:
-            - rhel7cis_5_1_4_logfiles_flattened is defined
+            - rhel7cis_5_1_4_logfiles.stdout_lines | length > 0
             - item != "/var/log/btmp"
             - item != "/var/log/utmp"
             - item != "/var/log/wtmp"

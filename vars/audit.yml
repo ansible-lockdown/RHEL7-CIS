@@ -34,7 +34,7 @@ audit_format: json
 
 audit_vars_path: "{{ audit_conf_dir }}/vars/{{ ansible_facts.hostname }}.yml"
 audit_results: |
-      The audit results are: {{ pre_audit_summary }}
-      {% if not audit_only %}The post remediation audit results are: {{ post_audit_summary }}{% endif %}
+      The{% if not audit_only %} pre remediation{% endif %} audit results are: {{ pre_audit_results }}
+      {% if not audit_only %}The post remediation audit results are: {{ post_audit_results }}{% endif %}
 
       Full breakdown can be found in {{ audit_log_dir }}

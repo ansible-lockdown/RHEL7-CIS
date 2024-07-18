@@ -1,5 +1,15 @@
 # Release CIS RedHat Enterprise Linux 7 Benchmark
 
+## CIS v4.0.0 21-12-2023
+
+- updated workflows files
+- updated audit and layout
+  - audit_only option added
+- added new option for centos to update to archived repo for packages if required
+  if set to true will update and backup the CentOS-Base file to use new url
+  - rhel7cis_add_updated_repo
+- rule 5.14 updated to remove jmespath reqirement
+
 ## v4.0.0 - 21-12-2023
 
 - Rewrite to address v4.0.0 changes - refer to full changelog in release
