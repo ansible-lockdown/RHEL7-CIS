@@ -90,29 +90,27 @@
   when:
       - audit_format == "json"
   block:
-      - name: Pre Audit | Capture data {{ pre_audit_outfile }}
-        ansible.builtin.shell: "cat {{ pre_audit_outfile }}"
-        register: discovered_pre_audit
+      - name: Pre Audit | Capture audit data if json format
+        ansible.builtin.shell: grep -E '\"summary-line.*Count:.*Failed' "{{ pre_audit_outfile }}" | cut -d'"' -f4
         changed_when: false
+        register: pre_audit_summary
 
-      - name: Pre Audit | Capture pre-audit result
+      - name: Pre Audit | Set Fact for audit summary
         ansible.builtin.set_fact:
-            pre_audit_summary: "{{ discovered_pre_audit.stdout | from_json | json_query(summary) }}"
-        vars:
-            summary: summary."summary-line"
+            pre_audit_results: "{{ pre_audit_summary.stdout }}"
 
 - name: Pre Audit | Capture audit data if documentation format
   when:
       - audit_format == "documentation"
   block:
-      - name: Pre Audit | Capture data {{ pre_audit_outfile }} | documentation format
-        ansible.builtin.shell: "tail -2 {{ pre_audit_outfile }}"
-        register: discovered_pre_audit
+      - name: Pre Audit | Capture audit data if documentation format
+        ansible.builtin.shell: tail -2 "{{ pre_audit_outfile }}"  | tac | tr '\n' ' '
         changed_when: false
+        register: pre_audit_summary
 
-      - name: Pre Audit | Capture pre-audit result | documentation format
+      - name: Pre Audit | Set Fact for audit summary
         ansible.builtin.set_fact:
-            pre_audit_summary: "{{ discovered_pre_audit.stdout_lines }}"
+            pre_audit_results: "{{ pre_audit_summary.stdout }}"
 
 - name: Audit_Only | Run Audit Only
   when:
