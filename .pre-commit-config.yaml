@@ -7,7 +7,7 @@ ci:
 
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.6.0
+  rev: v5.0.0
   hooks:
   # Safety
   - id: detect-aws-credentials
@@ -35,7 +35,7 @@ repos:
   - id: detect-secrets
 
 - repo: https://github.com/gitleaks/gitleaks
-  rev: v8.19.2
+  rev: v8.20.1
   hooks:
   - id: gitleaks
 
