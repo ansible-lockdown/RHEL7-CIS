@@ -7,6 +7,7 @@
         types: [opened, reopened, synchronize]
         branches:
             - main
+            - latest
         paths:
             - '**.yml'
             - '**.sh'
@@ -23,17 +24,6 @@
   # A workflow run is made up of one or more jobs
   # that can run sequentially or in parallel
   jobs:
-    # This will create messages for first time contributers and direct them to the Discord server
-      welcome:
-        runs-on: self-hosted
-
-        steps:
-            - uses: actions/first-interaction@main
-              with:
-                repo-token: ${{ secrets.GITHUB_TOKEN }}
-                pr-message: |-
-                    Congrats on opening your first pull request and thank you for taking the time to help improve Ansible-Lockdown!
-                    Please join in the conversation happening on the [Discord Server](https://www.lockdownenterprise.com/discord) as well.
 
       # This workflow contains a single job that tests the playbook
       playbook-test:
