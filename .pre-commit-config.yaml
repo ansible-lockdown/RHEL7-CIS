@@ -35,12 +35,12 @@ repos:
   - id: detect-secrets
 
 - repo: https://github.com/gitleaks/gitleaks
-  rev: v8.27.0
+  rev: v8.28.0
   hooks:
   - id: gitleaks
 
 - repo: https://github.com/ansible-community/ansible-lint
-  rev: v25.5.0
+  rev: v25.6.1
   hooks:
   - id: ansible-lint
     name: Ansible-lint
