@@ -464,7 +464,7 @@
             - not rhel7cis_net_snmp_server
             - not rhel7cis_net_snmp_mask
         ansible.builtin.package:
-            name: rsync-daemon
+            name: net-snmp
             state: absent
 
       - name: "2.2.14 | PATCH | Ensure snmp services are not in use | Mask service"
