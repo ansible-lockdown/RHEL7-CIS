@@ -1,4 +1,5 @@
 ---
+# Added pre_task for CI validation
 - hosts: all
   become: true
 
